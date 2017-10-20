@@ -32,8 +32,7 @@ RUN set -ex \
        build-base \
        postgresql-dev \
        imagemagick-dev \
-  && bundle install \
-  && apk del .builddeps
+  && bundle install
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD export QMAKE=/usr/lib/qt5/bin/qmake

@@ -2,5 +2,10 @@
   "name": "topics-driven-backlog",
   "version": "0.0.1",
   "private": true,
+  "scripts": {
+    "start": "docker-compose up",
+    "stop": "docker-compose down",
+    "bash": "docker exec -ti tdb-dev bash"
+  },
   "dependencies": {}
 }
