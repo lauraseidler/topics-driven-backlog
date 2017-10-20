@@ -8,8 +8,8 @@ EXPOSE 80
 WORKDIR $APP_HOME
 
 COPY Gemfile* $APP_HOME/
-COPY docker-entrypoint.sh /
-RUN chmod +x /docker-entrypoint.sh
+COPY docker/* /docker/
+RUN chmod +x /docker
 
 # general dependencies
 RUN set -ex \
@@ -34,7 +34,10 @@ RUN set -ex \
        imagemagick-dev \
   && bundle install
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+RUN chmod +x /docker/startup.sh
+RUN chmod +x /docker/wait-for-db.sh
+RUN chmod +x /docker/prepare-db.sh
+ENTRYPOINT ["/docker/startup.sh"]
 CMD export QMAKE=/usr/lib/qt5/bin/qmake
 CMD export PATH=/usr/lib/qt5/bin/qmake:$PATH
 CMD ["bundle", "exec", "unicorn", "--port", "80"]

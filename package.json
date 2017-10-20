@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "docker-compose up",
+    "start": "docker-compose up -d",
     "stop": "docker-compose down",
     "bash": "docker exec -ti tdb-dev bash"
   },

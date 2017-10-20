@@ -1,0 +1,11 @@
+sudo: required
+
+services:
+  - docker
+
+language: generic
+
+before_script:
+  - docker-compose build
+script:
+  - docker-compose run --rm tdb bash -c "bundle exec rake test"

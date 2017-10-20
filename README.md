@@ -12,4 +12,4 @@ Run `npm run bash` to open a bash shell on the docker machine.
 Edit Gemfile and then run `bundle update` in the docker bash to install new gems.
 
 ## Shutdown
-Run `npm stop` to properly shut down the container, the running prompt should exit automatically.
+Run `npm stop` to properly shut down the container.

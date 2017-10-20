@@ -2,8 +2,8 @@
 set -eo pipefail
 echo "Topics Driven Backlog entrypoint"
 
-# test if postgresql is up
-while ! nc -z postgresql 5432; do sleep 1; done
+"/docker/wait-for-db.sh"
+"/docker/prepare-db.sh"
 
 cd /usr/src/app
 exec "$@"
