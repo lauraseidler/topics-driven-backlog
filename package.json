@@ -4,8 +4,11 @@
   "private": true,
   "scripts": {
     "start": "docker-compose up -d",
+    "dev": "docker-compose up",
     "stop": "docker-compose down",
-    "bash": "docker exec -ti tdb-dev bash"
+    "bash": "docker exec -ti tdb-dev bash",
+    "db:migrate": "docker exec -ti tdb-dev bash -c \"/docker/prepare-db.sh\"",
+    "bundle:update": "docker exec -ti tdb-dev bash -c \"bundle update\""
   },
   "dependencies": {}
 }
