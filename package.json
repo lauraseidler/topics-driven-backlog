@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "docker-compose up -d",
+    "dev": "docker-compose up",
     "stop": "docker-compose down",
     "bash": "docker exec -ti tdb-dev bash"
   },
