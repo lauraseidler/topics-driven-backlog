@@ -8,4 +8,4 @@ language: generic
 before_script:
   - docker-compose build
 script:
-  - docker-compose run --rm tdb bash -c "bundle exec rake test"
+  - docker-compose run --rm tdb bash -c "/docker/wait-for-db.sh && bundle exec rake test"
