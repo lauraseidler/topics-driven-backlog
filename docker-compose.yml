@@ -3,11 +3,7 @@ services:
   postgresql:
     image: postgres:10-alpine
     container_name: postgresql-dev
-    environment:
-      - APPLICATION=tdb
-      - POSTGRES_PASSWORD=tdb
-      - POSTGRES_USER=tdb
-      - POSTGRES_DB=tdb
+    env_file: variables.env
     ports:
       - 5433:5432
 
@@ -15,16 +11,10 @@ services:
     build: .
     image: tdb:dev
     container_name: tdb-dev
-    environment:
-      - APPLICATION=tdb
-      - POSTGRES_PASSWORD=tdb
-      - POSTGRES_USER=tdb
-      - POSTGRES_DB=tdb
+    env_file: variables.env
     depends_on:
       - postgresql
     volumes:
       - .:/usr/src/app
-    links:
-      - postgresql
     ports:
       - 8080:80
