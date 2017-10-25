@@ -34,10 +34,9 @@ RUN set -ex \
        imagemagick-dev \
   && bundle install
 
-RUN chmod +x /docker/startup.sh
 RUN chmod +x /docker/wait-for-db.sh
 RUN chmod +x /docker/prepare-db.sh
-ENTRYPOINT ["/docker/startup.sh"]
+
 CMD export QMAKE=/usr/lib/qt5/bin/qmake
 CMD export PATH=/usr/lib/qt5/bin/qmake:$PATH
 CMD ["bundle", "exec", "unicorn", "--port", "80"]
