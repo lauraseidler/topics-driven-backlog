@@ -4,11 +4,3 @@
 require_relative 'config/application'
 
 Rails.application.load_tasks
-
-require 'rspec/core/rake_task'
-
-task :test do
-  Rake::Task['db:environment:set'].invoke('test')
-  Rake::Task['db:test:prepare'].invoke
-  Rake::Task['spec'].execute
-end
