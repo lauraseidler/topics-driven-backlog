@@ -13,7 +13,6 @@ class TasksController < ApplicationController
     end
   end
 
-  # GET /stories/:story_id/tasks
   # GET /tasks/:id
   def show
     json_response(@task)
