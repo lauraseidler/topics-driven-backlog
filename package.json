@@ -3,12 +3,25 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "docker-compose up -d",
     "dev": "docker-compose up",
+    "logs": "docker-compose logs",
     "stop": "docker-compose down",
     "bash": "docker exec -ti tdb-dev bash",
     "db:migrate": "docker exec -ti tdb-dev bash -c \"/docker/prepare-db.sh\"",
     "bundle:update": "docker exec -ti tdb-dev bash -c \"bundle update\""
   },
-  "dependencies": {}
+  "dependencies": {
+    "@rails/webpacker": "^3.0.2",
+    "coffeescript": "1.12.7",
+    "vue": "^2.5.2",
+    "vue-loader": "^13.3.0",
+    "vue-resource": "^1.3.4",
+    "vue-router": "^3.0.1",
+    "vue-template-compiler": "^2.5.2",
+    "vuelidate": "^0.6.1",
+    "vuex": "^3.0.0"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^2.9.3"
+  }
 }
