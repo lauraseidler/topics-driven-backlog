@@ -83,16 +83,27 @@ RSpec.describe 'Stories API', type: :request do
   # Test suite for PUT /stories/:id
   describe 'PUT /stories/:id' do
     let(:valid_attributes) { { title: 'Shopping' } }
+    before { put "/stories/#{story_id}", params: valid_attributes }
 
     context 'when the record exists' do
-      before { put "/stories/#{story_id}", params: valid_attributes }
-
       it 'updates the record' do
         expect(response.body).to be_empty
       end
 
       it 'returns status code 204' do
         expect(response).to have_http_status(204)
+      end
+    end
+
+    context 'when the record does not exist' do
+      let(:story_id) { 100 }
+
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
+
+      it 'returns a not found message' do
+        expect(response.body).to match(/Couldn't find Story/)
       end
     end
   end
