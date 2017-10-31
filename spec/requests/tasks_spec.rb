@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'database_cleaner'
 
 RSpec.describe 'Tasks API' do
 
@@ -30,6 +31,26 @@ RSpec.describe 'Tasks API' do
 
       it 'returns a not found message' do
         expect(response.body).to match(/Couldn't find Story/)
+      end
+    end
+  end
+
+  # Test suite for GET /stories
+  describe 'GET /tasks' do
+    let!(:story_2) { create(:story) }
+    let!(:tasks_2) { create_list(:task, 5, story_id: story_2.id) }
+    before { get '/tasks' }
+
+    context 'when tasks exists' do
+
+      it 'returns tasks' do
+        # Note `json` is a custom helper to parse JSON responses
+        expect(json).not_to be_empty
+        expect(json.size).to eq(25)
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
       end
     end
   end
