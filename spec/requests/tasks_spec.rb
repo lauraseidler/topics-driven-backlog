@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'database_cleaner'
 
 RSpec.describe 'Tasks API' do
 
@@ -89,6 +88,11 @@ RSpec.describe 'Tasks API' do
     context 'when request attributes are valid' do
       before { post "/stories/#{story_id}/tasks", params: valid_attributes }
 
+      it 'creates a task' do
+        expect(json['title']).to eq('Visit Narnia')
+        expect(json['description']).to eq('wow')
+      end
+
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
       end
@@ -109,7 +113,7 @@ RSpec.describe 'Tasks API' do
 
   # Test suite for PUT tasks/:id
   describe 'PUT tasks/:id' do
-    let(:valid_attributes) { { title: 'Mozart' } }
+    let(:valid_attributes) { { title: 'Mozart', description: 'wow' } }
 
     before { put "/tasks/#{id}", params: valid_attributes }
 
