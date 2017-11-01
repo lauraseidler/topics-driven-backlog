@@ -42,7 +42,7 @@ export default {
         fetch({ commit }) {
             Vue.http.get('stories').then((response) => {
                 commit('set', {
-                    stories: response.body.stories,
+                    stories: response.body,
                 });
             });
         },
