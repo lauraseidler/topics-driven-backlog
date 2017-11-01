@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  before_action :set_story, only: [:create]
+  before_action :set_story, only: [:show, :create]
   before_action :set_story_task, only: [:show, :update, :destroy]
 
   # GET /stories/:story_id/tasks
@@ -13,7 +13,7 @@ class TasksController < ApplicationController
     end
   end
 
-  # GET /tasks/:id
+  # GET /stories/:story_id/tasks/:id
   def show
     json_response(@task)
   end
@@ -24,13 +24,14 @@ class TasksController < ApplicationController
     json_response(@task, :created)
   end
 
-  # PUT /tasks/:id
+  # PUT /stories/:story_id/tasks/:id
+  # PATCH /stories/:story_id/tasks/:id
   def update
     @task.update(task_params)
     head :no_content
   end
 
-  # DELETE /tasks/:id
+  # DELETE /stories/:story_id/tasks/:id
   def destroy
     @task.destroy
     head :no_content

@@ -19,6 +19,7 @@ class StoriesController < ApplicationController
   end
 
   # PUT /stories/:id
+  # PATCH /stories/:id
   def update
     @story.update(story_params)
     head :no_content
