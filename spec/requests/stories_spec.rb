@@ -125,10 +125,10 @@ RSpec.describe 'Stories API', type: :request do
       end
     end
 
-    context 'updating the last story of the backlog' do
+    context 'updating the last story of the backlog to the first position' do
       before { get "/backlogs/#{backlog_id}/stories/#{last_story.id}" }
 
-      it 'returns the first position' do
+      it 'returns the first position value' do
         expect(json['position']).to eq(1)
       end
     end
