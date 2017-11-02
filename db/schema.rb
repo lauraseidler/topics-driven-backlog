@@ -10,10 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171101140414) do
+ActiveRecord::Schema.define(version: 20171101211220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "backlogs", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "stories", force: :cascade do |t|
     t.string "title"
@@ -21,6 +26,8 @@ ActiveRecord::Schema.define(version: 20171101140414) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "position"
+    t.bigint "backlog_id"
+    t.index ["backlog_id"], name: "index_stories_on_backlog_id"
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -32,5 +39,6 @@ ActiveRecord::Schema.define(version: 20171101140414) do
     t.index ["story_id"], name: "index_tasks_on_story_id"
   end
 
+  add_foreign_key "stories", "backlogs"
   add_foreign_key "tasks", "stories"
 end
