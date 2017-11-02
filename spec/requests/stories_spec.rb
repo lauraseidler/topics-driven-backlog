@@ -111,6 +111,37 @@ RSpec.describe 'Stories API', type: :request do
     end
   end
 
+  # Test suite for PATCH /backlogs/:backlog_id/stories/:id
+  describe 'PATCH /backlogs/:backlog_id/stories/:id' do
+    let(:first_story) {stories.first}
+    let(:last_story) {stories.last}
+    let(:position_attribute) { { position: 1 } }
+    before { patch "/backlogs/#{backlog_id}/stories/#{last_story.id}", params: position_attribute }
+
+    context 'updating the last story of the backlog' do
+
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+      end
+    end
+
+    context 'updating the last story of the backlog' do
+      before { get "/backlogs/#{backlog_id}/stories/#{last_story.id}" }
+
+      it 'returns the first position' do
+        expect(json['position']).to eq(1)
+      end
+    end
+
+    context 'updating the last story of the backlog to the first position' do
+      before { get "/backlogs/#{backlog_id}/stories/#{first_story.id}" }
+
+      it 'leads to the second position for the former first one' do
+        expect(json['position']).to eq(2)
+      end
+    end
+  end
+
   # Test suite for DELETE /backlogs/:backlog_id/stories/:id
   describe 'DELETE /backlogs/:backlog_id/stories/:id' do
     before { delete "/backlogs/#{backlog_id}/stories/#{story_id}" }
