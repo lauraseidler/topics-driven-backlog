@@ -1,7 +1,6 @@
 class Story < ApplicationRecord
   has_many :tasks, dependent: :destroy
-  belongs_to :backlog
-  acts_as_list scope: :backlog
+  acts_as_list :column => :position
 
   validates_presence_of :title
 end

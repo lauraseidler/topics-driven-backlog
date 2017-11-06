@@ -1,27 +1,26 @@
 class StoriesController < ApplicationController
-  before_action :set_backlog
   before_action :set_story, only: [:show, :update, :destroy]
 
-  # GET /backlogs/:backlog_id/stories
+  # GET /stories
   def index
-    @stories = @backlog.stories
+    @stories = Story.all
     json_response(@stories)
   end
 
-  # POST /backlogs/:backlog_id/stories
+  # POST /stories
   def create
-    @story = @backlog.stories.create!(story_params)
+    @story = Story.create!(story_params)
     @story.move_to_bottom
     json_response(@story, :created)
   end
 
-  # GET /backlogs/:backlog_id/stories/:id
+  # GET /stories/:id
   def show
     json_response(@story)
   end
 
-  # PUT /backlogs/:backlog_id/stories/:id
-  # PATCH /backlogs/:backlog_id/stories/:id
+  # PUT /stories/:id
+  # PATCH /stories/:id
   def update
     if params[:position]
       @story.set_list_position(params[:position])
@@ -30,7 +29,7 @@ class StoriesController < ApplicationController
     head :no_content
   end
 
-  # DELETE /backlogs/:backlog_id/stories/:id
+  # DELETE /stories/:id
   def destroy
     @story.remove_from_list
     @story.destroy!
@@ -44,12 +43,8 @@ class StoriesController < ApplicationController
     params.permit(:title, :description)
   end
 
-  def set_backlog
-    @backlog = Backlog.find(params[:backlog_id])
-  end
-
   def set_story
-    @story = @backlog.stories.find_by!(id: params[:id]) if @backlog
+    @story = Story.find_by!(id: params[:id])
   end
 
 end
