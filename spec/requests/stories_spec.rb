@@ -2,15 +2,13 @@ require 'rails_helper'
 
 RSpec.describe 'Stories API', type: :request do
 
-  let!(:backlog) { create(:backlog) }
-  let(:backlog_id) { backlog.id }
-  let!(:stories) { create_list(:story, 10, backlog_id: backlog_id) }
+  let!(:stories) { create_list(:story, 10) }
   let(:story_id) { stories.first.id }
 
-  # Test suite for GET /backlogs/:backlog_id/stories
-  describe 'GET /backlogs/:backlog_id/stories' do
+  # Test suite for GET /stories
+  describe 'GET /stories' do
     # make HTTP get request before each example
-    before { get "/backlogs/#{backlog_id}/stories" }
+    before { get '/stories' }
 
     it 'returns stories' do
       # Note `json` is a custom helper to parse JSON responses
@@ -23,9 +21,9 @@ RSpec.describe 'Stories API', type: :request do
     end
   end
 
-  # Test suite for GET /backlogs/:backlog_id/stories/:id
-  describe 'GET /backlogs/:backlog_id/stories/:id' do
-    before { get "/backlogs/#{backlog_id}/stories/#{story_id}" }
+  # Test suite for GET /stories/:id
+  describe 'GET /stories/:id' do
+    before { get "/stories/#{story_id}" }
 
     context 'when the record exists' do
       it 'returns the story' do
@@ -51,13 +49,13 @@ RSpec.describe 'Stories API', type: :request do
     end
   end
 
-  # Test suite for POST /backlogs/:backlog_id/stories
-  describe 'POST /backlogs/:backlog_id/stories' do
+  # Test suite for POST /stories
+  describe 'POST /stories' do
     # valid payload
     let(:valid_attributes) { { title: 'Learn Elm', description: 'Foobar' } }
 
     context 'when the request is valid' do
-      before { post "/backlogs/#{backlog_id}/stories", params: valid_attributes }
+      before { post '/stories', params: valid_attributes }
 
       it 'creates a story' do
         expect(json['title']).to eq('Learn Elm')
@@ -70,7 +68,7 @@ RSpec.describe 'Stories API', type: :request do
     end
 
     context 'when the request is invalid' do
-      before { post "/backlogs/#{backlog_id}/stories", params: { description: 'Foobar' } }
+      before { post '/stories', params: { description: 'Foobar' } }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -83,10 +81,10 @@ RSpec.describe 'Stories API', type: :request do
     end
   end
 
-  # Test suite for PUT /backlogs/:backlog_id/stories/:id
-  describe 'PUT /backlogs/:backlog_id/stories/:id' do
+  # Test suite for PUT /stories/:id
+  describe 'PUT /stories/:id' do
     let(:valid_attributes) { { title: 'Shopping', description: 'Foobar' } }
-    before { put "/backlogs/#{backlog_id}/stories/#{story_id}", params: valid_attributes }
+    before { put "/stories/#{story_id}", params: valid_attributes }
 
     context 'when the record exists' do
       it 'updates the record' do
@@ -111,12 +109,13 @@ RSpec.describe 'Stories API', type: :request do
     end
   end
 
-  # Test suite for PATCH /backlogs/:backlog_id/stories/:id
-  describe 'PATCH /backlogs/:backlog_id/stories/:id' do
+
+  # Test suite for PATCH /stories/:id
+  describe 'PATCH /stories/:id' do
     let(:first_story) {stories.first}
     let(:last_story) {stories.last}
     let(:position_attribute) { { position: 1 } }
-    before { patch "/backlogs/#{backlog_id}/stories/#{last_story.id}", params: position_attribute }
+    before { patch "/stories/#{last_story.id}", params: position_attribute }
 
     context 'updating the last story of the backlog' do
 
@@ -126,7 +125,7 @@ RSpec.describe 'Stories API', type: :request do
     end
 
     context 'updating the last story of the backlog to the first position' do
-      before { get "/backlogs/#{backlog_id}/stories/#{last_story.id}" }
+      before { get "//stories/#{last_story.id}" }
 
       it 'returns the first position value' do
         expect(json['position']).to eq(1)
@@ -134,7 +133,7 @@ RSpec.describe 'Stories API', type: :request do
     end
 
     context 'updating the last story of the backlog to the first position' do
-      before { get "/backlogs/#{backlog_id}/stories/#{first_story.id}" }
+      before { get "stories/#{first_story.id}" }
 
       it 'leads to the second position for the former first one' do
         expect(json['position']).to eq(2)
@@ -142,9 +141,9 @@ RSpec.describe 'Stories API', type: :request do
     end
   end
 
-  # Test suite for DELETE /backlogs/:backlog_id/stories/:id
-  describe 'DELETE /backlogs/:backlog_id/stories/:id' do
-    before { delete "/backlogs/#{backlog_id}/stories/#{story_id}" }
+  # Test suite for DELETE /stories/:id
+  describe 'DELETE /stories/:id' do
+    before { delete "/stories/#{story_id}"}
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

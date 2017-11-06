@@ -1,20 +1,15 @@
 class TasksController < ApplicationController
-  before_action :set_story, only: [:show, :create, :update, :destroy]
+  before_action :set_story, only: [:show, :create]
   before_action :set_story_task, only: [:show, :update, :destroy]
 
   # GET /stories/:story_id/tasks
   # GET /tasks
   def index
-    if params[:story_id]
+    if params.has_key?(:story_id)
       set_story
       json_response(@story.tasks)
     else
-      @stories = Story.all
-      task_list = []
-      @stories.each do |story|
-        task_list.concat(story.tasks.all)
-      end
-      json_response(task_list)
+      json_response(Task.all)
     end
   end
 
