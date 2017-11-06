@@ -10,6 +10,9 @@
 import Vue from 'vue';
 import VueResource from 'vue-resource';
 import Vuelidate from 'vuelidate';
+import BootstrapVue from 'bootstrap-vue';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 import App from '../components/App.vue';
 import router from '../router/index';
@@ -17,18 +20,17 @@ import store from '../store/index';
 
 Vue.use(VueResource);
 Vue.use(Vuelidate);
+Vue.use(BootstrapVue);
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.body.appendChild(document.createElement('app'));
-
-    store.dispatch('init');
-
-    const app = new Vue({
-        el: 'app',
-        router,
-        store,
-        template: '<App/>',
-        render: h => h(App),
-        components: {App}
+    store.dispatch('init').then(() => {
+        new Vue({
+            el: '#app',
+            router,
+            store,
+            template: '<App/>',
+            render: h => h(App),
+            components: {App}
+        });
     });
 });

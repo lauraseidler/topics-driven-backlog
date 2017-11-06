@@ -4,34 +4,20 @@
 
         <h2>New story</h2>
 
-        <form>
-            <p>
-                <label for="story-title">Title</label> <br>
-                <input type="text" id="story-title" v-model="newStory.title">
-            </p>
-            <p>
-                <label for="story-description">Title</label> <br>
-                <textarea id="story-description" v-model="newStory.description"></textarea>
-            </p>
-            <p>
-                <button :disabled="$v.newStory.$invalid" @click="saveStory()">Save</button>
-            </p>
-        </form>
+        <b-form @submit="saveStory" class="mb-5">
+            <b-form-group label="Title" label-for="story-title">
+                <b-form-input id="story-title" v-model="newStory.title" required></b-form-input>
+            </b-form-group>
 
-        <table>
-            <thead>
-            <tr>
-                <th>Title</th>
-                <th>Description</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="story in $store.state.stories.data">
-                <td>{{ story.title}}</td>
-                <td>{{ story.description }}</td>
-            </tr>
-            </tbody>
-        </table>
+            <b-form-group label="Description" label-for="story-description">
+                <b-form-textarea id="story-description" v-model="newStory.description" required></b-form-textarea>
+            </b-form-group>
+
+            <b-button type="submit" variant="primary" :disabled="$v.newStory.$invalid">Save</b-button>
+        </b-form>
+
+        <h2>Existing stories</h2>
+        <b-table :items="$store.state.stories.data" :fields="['title', 'description']"></b-table>
     </section>
 </template>
 
