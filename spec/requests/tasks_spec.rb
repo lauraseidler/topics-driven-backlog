@@ -34,9 +34,29 @@ RSpec.describe 'Tasks API' do
     end
   end
 
-  # Test suite for GET /tasks/:id
-  describe 'GET /tasks/:id' do
-    before { get "/tasks/#{id}" }
+  # Test suite for GET /stories
+  describe 'GET /tasks' do
+    let!(:story_2) { create(:story) }
+    let!(:tasks_2) { create_list(:task, 5, story_id: story_2.id) }
+    before { get '/tasks' }
+
+    context 'when tasks exists' do
+
+      it 'returns tasks' do
+        # Note `json` is a custom helper to parse JSON responses
+        expect(json).not_to be_empty
+        expect(json.size).to eq(25)
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+    end
+  end
+
+  # Test suite for GET /stories/:story_id/tasks/:id
+  describe 'GET /stories/:story_id/tasks/:id' do
+    before { get "/stories/#{story_id}/tasks/#{id}" }
 
     context 'when story task exists' do
       it 'returns status code 200' do
@@ -68,6 +88,11 @@ RSpec.describe 'Tasks API' do
     context 'when request attributes are valid' do
       before { post "/stories/#{story_id}/tasks", params: valid_attributes }
 
+      it 'creates a task' do
+        expect(json['title']).to eq('Visit Narnia')
+        expect(json['description']).to eq('wow')
+      end
+
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
       end
@@ -86,11 +111,11 @@ RSpec.describe 'Tasks API' do
     end
   end
 
-  # Test suite for PUT tasks/:id
-  describe 'PUT tasks/:id' do
-    let(:valid_attributes) { { title: 'Mozart' } }
+  # Test suite for PUT /stories/:story_id/tasks/:id
+  describe 'PUT /stories/:story_id/tasks/:id' do
+    let(:valid_attributes) { { title: 'Mozart', description: 'wow' } }
 
-    before { put "/tasks/#{id}", params: valid_attributes }
+    before { put "/stories/#{story_id}/tasks/#{id}", params: valid_attributes }
 
     context 'when task exists' do
       it 'returns status code 204' do
@@ -116,9 +141,9 @@ RSpec.describe 'Tasks API' do
     end
   end
 
-  # Test suite for DELETE /tasks/:id
-  describe 'DELETE /tasks/:id' do
-    before { delete "/tasks/#{id}" }
+  # Test suite for DELETE /stories/:story_id/tasks/:id
+  describe 'DELETE /stories/:story_id/tasks/:id' do
+    before { delete "/stories/#{story_id}/tasks/#{id}" }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

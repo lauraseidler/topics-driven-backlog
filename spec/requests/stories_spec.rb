@@ -52,13 +52,14 @@ RSpec.describe 'Stories API', type: :request do
   # Test suite for POST /stories
   describe 'POST /stories' do
     # valid payload
-    let(:valid_attributes) { { title: 'Learn Elm' } }
+    let(:valid_attributes) { { title: 'Learn Elm', description: 'Foobar' } }
 
     context 'when the request is valid' do
       before { post '/stories', params: valid_attributes }
 
       it 'creates a story' do
         expect(json['title']).to eq('Learn Elm')
+        expect(json['description']).to eq('Foobar')
       end
 
       it 'returns status code 201' do
@@ -82,17 +83,28 @@ RSpec.describe 'Stories API', type: :request do
 
   # Test suite for PUT /stories/:id
   describe 'PUT /stories/:id' do
-    let(:valid_attributes) { { title: 'Shopping' } }
+    let(:valid_attributes) { { title: 'Shopping', description: 'Foobar' } }
+    before { put "/stories/#{story_id}", params: valid_attributes }
 
     context 'when the record exists' do
-      before { put "/stories/#{story_id}", params: valid_attributes }
-
       it 'updates the record' do
         expect(response.body).to be_empty
       end
 
       it 'returns status code 204' do
         expect(response).to have_http_status(204)
+      end
+    end
+
+    context 'when the record does not exist' do
+      let(:story_id) { 100 }
+
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
+
+      it 'returns a not found message' do
+        expect(response.body).to match(/Couldn't find Story/)
       end
     end
   end
