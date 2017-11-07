@@ -15,6 +15,9 @@ RUN chmod +x /docker
 RUN set -ex \
   && apk add --no-cache libpq imagemagick nodejs bash
 
+# install yarn
+RUN npm install --global yarn
+
 # build deps
 RUN set -ex \
   && apk add --no-cache --virtual .builddeps \
@@ -24,6 +27,7 @@ RUN set -ex \
        build-base \
        postgresql-dev \
        imagemagick-dev \
+  && gem install bundler \
   && bundle install
 
 RUN chmod +x /docker/wait-for-db.sh
@@ -31,4 +35,3 @@ RUN chmod +x /docker/prepare-db.sh
 
 CMD export QMAKE=/usr/lib/qt5/bin/qmake
 CMD export PATH=/usr/lib/qt5/bin/qmake:$PATH
-CMD ["bundle", "exec", "unicorn", "--port", "80"]

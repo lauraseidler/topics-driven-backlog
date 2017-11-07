@@ -5,11 +5,12 @@ services:
     container_name: postgresql-dev
     env_file: variables.env
     ports:
-      - 5432
+      - 5433:5432
 
   tdb:
     build: .
     image: tdb:dev
+    command: rails s --port 4000 --binding 0.0.0.0
     container_name: tdb-dev
     env_file: variables.env
     depends_on:
@@ -17,4 +18,5 @@ services:
     volumes:
       - .:/usr/src/app
     ports:
-      - 8080:80
+      - 8080:4000
+      - 3035:3035
