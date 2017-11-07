@@ -10,6 +10,7 @@ services:
   tdb:
     build: .
     image: tdb:dev
+    command: foreman start
     container_name: tdb-dev
     env_file: variables.env
     depends_on:
@@ -17,4 +18,5 @@ services:
     volumes:
       - .:/usr/src/app
     ports:
-      - 8080:80
+      - 8080:4000
+      - 3035:3035

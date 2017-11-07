@@ -55,5 +55,6 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 # gem 'tzinfo-data'
 
-# Use unicorn as the app server
-gem 'unicorn'
+# Stuff for Vue installation
+gem 'webpacker'
+gem 'foreman'
