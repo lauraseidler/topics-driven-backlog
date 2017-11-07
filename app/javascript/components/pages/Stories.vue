@@ -46,7 +46,7 @@
         },
         computed: {
             stories(){
-                return this.$store.state.stories.data;
+                return this.$store.getters['stories/all'];
             }
         },
         methods: {

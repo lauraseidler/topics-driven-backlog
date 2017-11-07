@@ -8,7 +8,8 @@
     "stop": "docker-compose down",
     "bash": "docker exec -ti tdb-dev bash",
     "db:migrate": "docker exec -ti tdb-dev bash -c \"/docker/prepare-db.sh\"",
-    "bundle:update": "docker exec -ti tdb-dev bash -c \"bundle update\""
+    "bundle:update": "docker exec -ti tdb-dev bash -c \"bundle update\"",
+    "bundle:install": "docker exec -ti tdb-dev bash -c \"bundle install\""
   },
   "dependencies": {
     "@rails/webpacker": "^3.0.2",

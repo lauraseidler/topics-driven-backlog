@@ -88,7 +88,7 @@ export default {
          * @returns {Promise}
          */
         reorder({getters, dispatch}, payload) {
-            const story = getters.byFieldOne(payload.oldIndex, 'position');
+            const story = getters.all[payload.oldIndex];
 
             return new Promise((resolve, reject) => {
                 if (!story) {
@@ -106,12 +106,6 @@ export default {
          * All stories
          * @param state
          */
-        all: state => state.data,
-
-        /**
-         * First story that matches a given value and field
-         * @param state
-         */
-        byFieldOne: state => (value, field) => state.data.find(item => item[field] === value),
+        all: state => state.data.sort((a, b) => a.position > b.position),
     }
 }
