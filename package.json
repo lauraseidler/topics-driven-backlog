@@ -8,13 +8,17 @@
     "stop": "docker-compose down",
     "bash": "docker exec -ti tdb-dev bash",
     "db:migrate": "docker exec -ti tdb-dev bash -c \"/docker/prepare-db.sh\"",
-    "bundle:update": "docker exec -ti tdb-dev bash -c \"bundle update\""
+    "bundle:update": "docker exec -ti tdb-dev bash -c \"bundle update\"",
+    "bundle:install": "docker exec -ti tdb-dev bash -c \"bundle install\""
   },
   "dependencies": {
     "@rails/webpacker": "^3.0.2",
-    "bootstrap-vue": "^1.0.0-beta.9",
+    "bootstrap": "4.0.0-beta.2",
+    "bootstrap-vue": "^1.0.0",
     "coffeescript": "1.12.7",
+    "sortablejs": "^1.7.0",
     "vue": "^2.5.2",
+    "vue-awesome": "^2.3.3",
     "vue-loader": "^13.3.0",
     "vue-resource": "^1.3.4",
     "vue-router": "^3.0.1",
@@ -23,6 +27,8 @@
     "vuex": "^3.0.0"
   },
   "devDependencies": {
+    "babel-polyfill": "^6.26.0",
+    "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.3"
   }
 }

@@ -10,6 +10,7 @@ class StoriesController < ApplicationController
   # POST /stories
   def create
     @story = Story.create!(story_params)
+    @story.move_to_bottom
     json_response(@story, :created)
   end
 
@@ -21,13 +22,17 @@ class StoriesController < ApplicationController
   # PUT /stories/:id
   # PATCH /stories/:id
   def update
+    if params[:position]
+      @story.set_list_position(params[:position])
+    end
     @story.update(story_params)
     head :no_content
   end
 
   # DELETE /stories/:id
   def destroy
-    @story.destroy
+    @story.remove_from_list
+    @story.destroy!
     head :no_content
   end
 
@@ -39,7 +44,7 @@ class StoriesController < ApplicationController
   end
 
   def set_story
-    @story = Story.find(params[:id])
+    @story = Story.find_by!(id: params[:id])
   end
 
 end
