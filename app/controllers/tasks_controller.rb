@@ -44,7 +44,7 @@ class TasksController < ApplicationController
   end
 
   def set_story
-    @story = Story.find(params[:story_id])
+    @story = Story.find_by!(id: params[:story_id])
   end
 
   def set_story_task
