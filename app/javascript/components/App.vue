@@ -1,5 +1,5 @@
 <template>
-    <b-container>
+    <b-container class="mt-4">
         <router-view></router-view>
     </b-container>
 </template>

@@ -10,7 +10,7 @@ services:
   tdb:
     build: .
     image: tdb:dev
-    command: rails s --port 4000 --binding 0.0.0.0
+    command: foreman start
     container_name: tdb-dev
     env_file: variables.env
     depends_on:

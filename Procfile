@@ -1,2 +1,2 @@
-backend: rm tmp/pids/server.pid && bin/rails server -p 3000 -b 0.0.0.0
-frontend: bin/webpack-dev-server --public LOCALDOCKERIP:8080
+backend: rm -f tmp/pids/server.pid && rails s --port 4000 --binding 0.0.0.0
+frontend: webpack-dev-server --hot
