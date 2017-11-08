@@ -5,4 +5,5 @@ RSpec.describe Story, type: :model do
   it { should have_many(:tasks).dependent(:destroy) }
   # Validation tests
   it { should validate_presence_of(:title) }
+  it { should validate_presence_of(:identifier) }
 end

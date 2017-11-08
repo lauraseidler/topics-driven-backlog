@@ -29,6 +29,7 @@ RSpec.describe 'Stories API', type: :request do
       it 'returns the story' do
         expect(json).not_to be_empty
         expect(json['id']).to eq(story_id)
+        expect(json['identifier']).to eq('S-'+story_id.to_s)
       end
 
       it 'returns status code 200' do
