@@ -23,6 +23,7 @@ RSpec.describe 'Stories API', type: :request do
 
   # Test suite for GET /stories/:id
   describe 'GET /stories/:id' do
+    before { stories.first.save! }
     before { get "/stories/#{story_id}" }
 
     context 'when the record exists' do
