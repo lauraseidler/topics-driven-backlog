@@ -9,7 +9,11 @@
                         <icon name="bars" label="Drag and drop to change order"></icon>
                     </span>
 
-                    <h4 class="card-title">{{ story.title }}</h4>
+                    <h4 class="card-title">
+                        {{ story.title }}
+                        <small class="text-muted">{{ story.identifier }}</small>
+                    </h4>
+
                     <p class="card-text" v-if="story.description">
                         {{ story.description }}
                     </p>
