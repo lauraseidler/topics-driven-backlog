@@ -1,6 +1,6 @@
 class StorySerializer < ActiveModel::Serializer
   # attributes to be serialized
-  attributes :id, :title, :description, :created_at, :updated_at, :position
+  attributes :id, :title, :description, :created_at, :updated_at, :position, :identifier
   # model association
   has_many :tasks
 end
