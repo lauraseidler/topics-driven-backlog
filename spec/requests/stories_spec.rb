@@ -91,11 +91,12 @@ RSpec.describe 'Stories API', type: :request do
 
     context 'when the record exists' do
       it 'updates the record' do
-        expect(response.body).to be_empty
+        expect(json['title']).to eq('Shopping')
+        expect(json['description']).to eq('Foobar')
       end
 
-      it 'returns status code 204' do
-        expect(response).to have_http_status(204)
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
       end
     end
 
@@ -122,8 +123,8 @@ RSpec.describe 'Stories API', type: :request do
 
     context 'updating the last story of the backlog' do
 
-      it 'returns status code 204' do
-        expect(response).to have_http_status(204)
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
       end
     end
 
@@ -153,9 +154,12 @@ RSpec.describe 'Stories API', type: :request do
     before { patch "/stories/#{last_story.id}", params: status_attribute }
 
     context 'updating a story status' do
+      it 'updates the record' do
+        expect(json['status']).to eq(Story.statuses[:progressing])
+      end
 
-      it 'returns status code 204' do
-        expect(response).to have_http_status(204)
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
       end
     end
 

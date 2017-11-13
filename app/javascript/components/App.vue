@@ -12,5 +12,15 @@
     }
 </script>
 
-<style>
+<style lang="scss">
+    .b-dropdown-minimal {
+        .btn {
+            padding: 0;
+        }
+
+        .dropdown-item {
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+    }
 </style>
