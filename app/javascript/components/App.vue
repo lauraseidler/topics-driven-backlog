@@ -12,5 +12,16 @@
     }
 </script>
 
-<style>
+<style lang="scss">
+    @import "~bootstrap/scss/bootstrap";
+
+    .link-unstyled {
+        color: inherit;
+        text-decoration: inherit;
+
+        &:hover {
+            color: $primary;
+            text-decoration: none;
+        }
+    }
 </style>

@@ -10,7 +10,7 @@
                     </span>
 
                     <h4 class="card-title">
-                        {{ story.title }}
+                        <router-link :to="`/stories/${story.identifier}`" class="link-unstyled">{{ story.title }}</router-link>
                         <small class="text-muted">{{ story.identifier }}</small>
                     </h4>
 

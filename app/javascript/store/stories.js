@@ -14,7 +14,7 @@ export default {
          */
         set: (state, payload) => {
             if (payload.stories) {
-                state.data = payload.stories;
+                Vue.set(state, 'data', payload.stories);
             }
 
             if (payload.story) {
@@ -22,9 +22,9 @@ export default {
                     .find(story => story.id === payload.story.id);
 
                 if (isPresent) {
-                    state.data = state.data.map(story =>
+                    Vue.set(state, 'data', state.data.map(story =>
                         (story.id === payload.story.id ? payload.story : story),
-                    );
+                    ));
                 } else {
                     state.data.push(payload.story);
                 }
@@ -106,6 +106,16 @@ export default {
          * All stories
          * @param state
          */
-        all: state => state.data.sort((a, b) => a.position > b.position),
+        all: state => state.initialised
+            ? state.data.sort((a, b) => a.position > b.position)
+            : [],
+
+        /**
+         * Find a story by identifier
+         * @param state
+         */
+        byIdentifier: state => value => state.initialised
+            ? state.data.find(s => s.identifier === value)
+            : null,
     }
 }
