@@ -26,7 +26,8 @@ class StoriesController < ApplicationController
       @story.set_list_position(params[:position])
     end
     @story.update(story_params)
-    head :no_content
+
+    json_response(@story)
   end
 
   # DELETE /stories/:id
