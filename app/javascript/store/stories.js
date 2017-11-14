@@ -4,6 +4,11 @@ export default {
     namespaced: true,
     state: {
         initialised: false,
+        statusMap: [
+            {name: 'open', css: 'badge-dark'},
+            {name: 'in progress', css: 'badge-warning'},
+            {name: 'closed', css: 'badge-success'}
+        ],
         data: []
     },
     mutations: {
@@ -65,12 +70,33 @@ export default {
         /**
          * Saves a story to the API and updates store
          * @param commit
-         * @param payload
+         * @param payload (story)
          * @returns {Promise}
          */
         save({commit}, payload) {
             return new Promise((resolve, reject) => {
                 Vue.http.post('/stories', payload.story).then((response) => {
+                    commit('set', {
+                        story: response.body,
+                    });
+
+                    resolve(response.body);
+                }, reject);
+            });
+        },
+
+        /**
+         * Patches a given field of a given story with a given value
+         * @param commit
+         * @param payload (id, field, value)
+         * @returns {Promise}
+         */
+        patch({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                const data = {};
+                data[payload.field] = payload.value;
+
+                Vue.http.patch(`/stories/${payload.id}`, data).then((response) => {
                     commit('set', {
                         story: response.body,
                     });

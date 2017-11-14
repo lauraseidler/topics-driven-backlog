@@ -26,7 +26,8 @@ class StoriesController < ApplicationController
       @story.set_list_position(params[:position])
     end
     @story.update(story_params)
-    head :no_content
+
+    json_response(@story)
   end
 
   # DELETE /stories/:id
@@ -40,7 +41,7 @@ class StoriesController < ApplicationController
 
   def story_params
     # whitelist params
-    params.permit(:title, :description)
+    params.permit(:title, :description, :status)
   end
 
   def set_story

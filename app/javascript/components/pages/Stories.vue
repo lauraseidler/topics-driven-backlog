@@ -9,11 +9,22 @@
                         <icon name="bars" label="Drag and drop to change order"></icon>
                     </span>
 
-                    <h4 class="card-title">
-                        <router-link :to="`/stories/${story.identifier}`" class="link-unstyled">{{ story.title }}</router-link>
+                    <h4 class="card-title"><router-link :to="`/stories/${story.identifier}`" class="link-unstyled">{{ story.title }}</router-link>
                         <small class="text-muted">{{ story.identifier }}</small>
                     </h4>
-
+                    <p class="card-text">
+                        <b-dropdown size="sm" variant="link" no-caret class="b-dropdown-minimal">
+                            <template slot="button-content">
+                                <span class="badge" :class="statusMap[story.status].css">
+                                    {{ statusMap[story.status].name }}
+                                </span>
+                            </template>
+                            <b-dropdown-item v-for="(status, index) in statusMap" :key="index"
+                                             @click="saveStatus(story.id, index)">
+                                <span class="badge" :class="[status.css]">{{ status.name }}</span>
+                            </b-dropdown-item>
+                        </b-dropdown>
+                    </p>
                     <p class="card-text" v-if="story.description">
                         {{ story.description }}
                     </p>
@@ -46,10 +57,11 @@
             return {
                 showForm: false,
                 newStory: {},
+                statusMap: this.$store.state.stories.statusMap,
             };
         },
         computed: {
-            stories(){
+            stories() {
                 return this.$store.getters['stories/all'];
             }
         },
@@ -78,6 +90,19 @@
                 this.$store.dispatch('stories/reorder', {
                     oldIndex: evt.oldIndex,
                     newIndex: evt.newIndex,
+                });
+            },
+
+            /**
+             * Save new status of story
+             * @param storyId
+             * @param statusId
+             */
+            saveStatus(storyId, statusId) {
+                this.$store.dispatch('stories/patch', {
+                    id: storyId,
+                    field: 'status',
+                    value: statusId,
                 });
             }
         },

@@ -31,6 +31,8 @@ RSpec.describe 'Stories API', type: :request do
         expect(json).not_to be_empty
         expect(json['id']).to eq(story_id)
         expect(json['identifier']).to eq('S-'+story_id.to_s)
+        expect(json['status']).to be >= Story.statuses[:open]
+        expect(json['status']).to be <= Story.statuses[:closed]
       end
 
       it 'returns status code 200' do
@@ -62,6 +64,7 @@ RSpec.describe 'Stories API', type: :request do
       it 'creates a story' do
         expect(json['title']).to eq('Learn Elm')
         expect(json['description']).to eq('Foobar')
+        expect(json['status']).to eq(Story.statuses[:open])
       end
 
       it 'returns status code 201' do
@@ -90,11 +93,12 @@ RSpec.describe 'Stories API', type: :request do
 
     context 'when the record exists' do
       it 'updates the record' do
-        expect(response.body).to be_empty
+        expect(json['title']).to eq('Shopping')
+        expect(json['description']).to eq('Foobar')
       end
 
-      it 'returns status code 204' do
-        expect(response).to have_http_status(204)
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
       end
     end
 
@@ -113,7 +117,7 @@ RSpec.describe 'Stories API', type: :request do
 
 
   # Test suite for PATCH /stories/:id
-  describe 'PATCH /stories/:id' do
+  describe 'PATCH /stories/:id for position attribute' do
     let(:first_story) {stories.first}
     let(:last_story) {stories.last}
     let(:position_attribute) { { position: 1 } }
@@ -121,8 +125,8 @@ RSpec.describe 'Stories API', type: :request do
 
     context 'updating the last story of the backlog' do
 
-      it 'returns status code 204' do
-        expect(response).to have_http_status(204)
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
       end
     end
 
@@ -141,6 +145,35 @@ RSpec.describe 'Stories API', type: :request do
         expect(json['position']).to eq(2)
       end
     end
+  end
+
+  # Test suite for PATCH /stories/:id
+  describe 'PATCH /stories/:id for status attribute' do
+    let(:first_story) {stories.first}
+    let(:last_story) {stories.last}
+    let(:status_attribute) { { :status => Story.statuses[:progressing] } }
+
+    before { patch "/stories/#{last_story.id}", params: status_attribute }
+
+    context 'updating a story status' do
+      it 'updates the record' do
+        expect(json['status']).to eq(Story.statuses[:progressing])
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+    end
+
+    context 'when the record exists' do
+      before { get "/stories/#{last_story.id}" }
+
+      it 'provides the story status' do
+        expect(json['status']).to eq(Story.statuses[:progressing])
+      end
+    end
+
+
   end
 
   # Test suite for DELETE /stories/:id
