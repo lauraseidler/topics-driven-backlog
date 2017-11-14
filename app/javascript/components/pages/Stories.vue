@@ -9,8 +9,9 @@
                         <icon name="bars" label="Drag and drop to change order"></icon>
                     </span>
 
-                    <h4 class="card-title">{{ story.title }}</h4>
-
+                    <h4 class="card-title"><router-link :to="`/stories/${story.identifier}`" class="link-unstyled">{{ story.title }}</router-link>
+                        <small class="text-muted">{{ story.identifier }}</small>
+                    </h4>
                     <p class="card-text">
                         <b-dropdown size="sm" variant="link" no-caret class="b-dropdown-minimal">
                             <template slot="button-content">
@@ -24,7 +25,6 @@
                             </b-dropdown-item>
                         </b-dropdown>
                     </p>
-
                     <p class="card-text" v-if="story.description">
                         {{ story.description }}
                     </p>

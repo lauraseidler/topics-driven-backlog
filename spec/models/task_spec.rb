@@ -5,4 +5,5 @@ RSpec.describe Task, type: :model do
   it { should belong_to(:story) }
   # Validation tests
   it { should validate_presence_of(:title) }
+  it { should validate_presence_of(:story_id) }
 end

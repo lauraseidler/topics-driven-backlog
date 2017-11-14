@@ -18,7 +18,7 @@ import * as Sortable from 'sortablejs/Sortable';
 
 // bootstrap
 import BootstrapVue from 'bootstrap-vue';
-import 'bootstrap/dist/css/bootstrap.css';
+// bootstrap SCSS is imported in App.Vue
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 // font awesome
@@ -27,6 +27,7 @@ import Icon from 'vue-awesome/components/Icon.vue';
 
 // our own stuff
 import App from '../components/App.vue';
+import RouterBack from '../components/elements/RouterBack.vue';
 import router from '../router/index';
 import store from '../store/index';
 
@@ -41,6 +42,9 @@ Vue.directive('sortable', {
         new Sortable(el, binding.value || {});
     }
 });
+
+// <router-back> component
+Vue.component('router-back', RouterBack);
 
 document.addEventListener('DOMContentLoaded', () => {
     store.dispatch('init').then(() => {

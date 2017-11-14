@@ -23,12 +23,14 @@ RSpec.describe 'Stories API', type: :request do
 
   # Test suite for GET /stories/:id
   describe 'GET /stories/:id' do
+    before { stories.first.save! }
     before { get "/stories/#{story_id}" }
 
     context 'when the record exists' do
       it 'returns the story' do
         expect(json).not_to be_empty
         expect(json['id']).to eq(story_id)
+        expect(json['identifier']).to eq('S-'+story_id.to_s)
         expect(json['status']).to be >= Story.statuses[:open]
         expect(json['status']).to be <= Story.statuses[:closed]
       end

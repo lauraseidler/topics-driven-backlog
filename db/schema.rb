@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20171109222317) do
     t.datetime "updated_at", null: false
     t.integer "position"
     t.integer "status", default: 0
+    t.string "identifier"
   end
 
   create_table "tasks", force: :cascade do |t|

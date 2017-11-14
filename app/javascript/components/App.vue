@@ -13,6 +13,18 @@
 </script>
 
 <style lang="scss">
+    @import "~bootstrap/scss/bootstrap";
+
+    .link-unstyled {
+        color: inherit;
+        text-decoration: inherit;
+
+        &:hover {
+            color: $primary;
+            text-decoration: none;
+        }
+    }
+
     .b-dropdown-minimal {
         .btn {
             padding: 0;
