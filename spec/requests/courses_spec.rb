@@ -138,7 +138,7 @@ RSpec.describe 'Courses API', type: :request do
     let(:valid_date_attributes) { { start_date: Date.today.to_s, end_date: Date.tomorrow.to_s } }
     let(:invalid_dates_attribute) {{ start_date: Date.tomorrow.to_s, end_date: Date.today.to_s } }
 
-    context 'updating a valid end date' do
+    context 'updating with a valid end date' do
       before { patch "/courses/#{course_id}", params: valid_date_attributes }
 
       it 'returns status code 200' do
@@ -146,11 +146,16 @@ RSpec.describe 'Courses API', type: :request do
       end
     end
 
-    context 'updating an invalid end date' do
+    context 'updating with an invalid end date' do
       before { patch "/courses/#{course_id}", params: invalid_dates_attribute }
 
-      it 'returns status code 200' do
-        expect(response).to have_http_status(200)
+      it 'returns status code 422' do
+        expect(response).to have_http_status(422)
+      end
+
+      it 'returns a validation failure message' do
+        expect(response.body)
+            .to match(/Validation failed: End date cannot be before the start date/)
       end
     end
   end
