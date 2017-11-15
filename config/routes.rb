@@ -8,4 +8,6 @@ Rails.application.routes.draw do
   end
   resources :tasks, only: [:index]
 
+  resources :courses, only: [:index, :create, :show, :update, :destroy]
+
 end
