@@ -30,8 +30,8 @@ ActiveRecord::Schema.define(version: 20171115001910) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "position"
-    t.integer "status", default: 0
     t.string "identifier"
+    t.integer "status", default: 0
   end
 
   create_table "tasks", force: :cascade do |t|

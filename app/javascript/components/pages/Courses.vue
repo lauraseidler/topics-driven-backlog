@@ -1,0 +1,100 @@
+<template>
+    <section id="courses">
+        <h1>Courses</h1>
+
+        <ul v-if="courses.length" class="list-unstyled">
+            <li class="card mb-3" v-for="course in courses" :key="course.id">
+                <div class="card-body">
+                    <h4 class="card-title">{{ course.title }}</h4>
+                    <h5 class="h6 text-muted card-subtitle mb-2" v-if="course.start_date || course.end_date">
+                        {{ course.start_date }} - {{ course.end_date }}
+                    </h5>
+
+                    <p class="card-text" v-if="course.hyperlink">
+                        <a :href="course.hyperlink">{{ course.hyperlink }}</a>
+                    </p>
+                </div>
+            </li>
+        </ul>
+
+        <p v-else>No courses yet.</p>
+
+        <b-form v-if="showForm" @submit="saveCourse">
+            <b-form-group label="Title" label-for="course-title">
+                <b-form-input id="course-title" v-model="newCourse.title" required></b-form-input>
+            </b-form-group>
+
+            <b-form-group label="Link" label-for="course-hyperlink">
+                <b-form-input id="course-hyperlink" v-model="newCourse.hyperlink"></b-form-input>
+            </b-form-group>
+
+            <b-form-group label="Start date" label-for="course-start-date">
+                <b-form-input id="course-start-date" type="date" v-model="newCourse.start_date"></b-form-input>
+            </b-form-group>
+
+            <b-form-group label="End date" label-for="course-end-date">
+                <b-form-input id="course-end-date" type="date" v-model="newCourse.end_date"></b-form-input>
+            </b-form-group>
+
+            <b-button type="submit" variant="primary" :disabled="$v.newCourse.$invalid">Save</b-button>
+            <b-button type="button" variant="secondary" @click="showForm = false">Cancel</b-button>
+        </b-form>
+
+        <b-button v-else type="button" variant="primary" @click="showForm = true">Add course</b-button>
+    </section>
+</template>
+
+<script>
+    import {required, url} from 'vuelidate/lib/validators';
+    import smallerOrEqualThan from '../../validators/smallerOrEqualThan';
+    import largerOrEqualThan from '../../validators/largerOrEqualThan';
+
+    export default {
+        data() {
+            return {
+                showForm: false,
+                newCourse: {},
+            };
+        },
+        computed: {
+            courses() {
+                return this.$store.getters['courses/all'];
+            }
+        },
+        methods: {
+            /**
+             * Save current form state as new story
+             */
+            saveCourse() {
+                if (this.$v.newCourse.$invalid) {
+                    this.$v.newCourse.$touch();
+                    return;
+                }
+
+                this.$store.dispatch('courses/save', {
+                    course: this.newCourse
+                }).then(() => {
+                    this.newCourse = {};
+                });
+            },
+        },
+        validations: {
+            newCourse: {
+                title: { required },
+                hyperlink: { url },
+                start_date: {
+                    required,
+                    smallerThanEnd: smallerOrEqualThan('end_date')
+                },
+                end_date: {
+                    required,
+                    largerThanStart: largerOrEqualThan('start_date')
+                },
+            },
+        },
+    };
+</script>
+
+<style scoped>
+
+</style>
