@@ -1,5 +1,7 @@
 import Vue from 'vue';
 
+import { current } from '../helper/semester';
+
 export default {
     namespaced: true,
     state: {
@@ -109,5 +111,15 @@ export default {
         all: state => state.initialised
             ? state.data.sort((a, b) => a.position > b.position)
             : [],
+
+        /**
+         * A template for a new course
+         * @returns {{semester: string}}
+         */
+        new: () => {
+            return {
+                semester: current().value,
+            }
+        }
     }
 }

@@ -6,11 +6,11 @@
             <li class="card mb-3" v-for="course in courses" :key="course.id">
                 <div class="card-body">
                     <h4 class="card-title">{{ course.title }}</h4>
-                    <h5 class="h6 text-muted card-subtitle mb-2" v-if="course.start_date || course.end_date">
-                        {{ course.start_date }} - {{ course.end_date }}
+                    <h5 class="h6 text-muted card-subtitle">
+                        {{ course.semester }}
                     </h5>
 
-                    <p class="card-text" v-if="course.hyperlink">
+                    <p class="card-text mt-2" v-if="course.hyperlink">
                         <a :href="course.hyperlink">{{ course.hyperlink }}</a>
                     </p>
                 </div>
@@ -28,12 +28,11 @@
                 <b-form-input id="course-hyperlink" v-model="newCourse.hyperlink"></b-form-input>
             </b-form-group>
 
-            <b-form-group label="Start date" label-for="course-start-date">
-                <b-form-input id="course-start-date" type="date" v-model="newCourse.start_date"></b-form-input>
-            </b-form-group>
-
-            <b-form-group label="End date" label-for="course-end-date">
-                <b-form-input id="course-end-date" type="date" v-model="newCourse.end_date"></b-form-input>
+            <b-form-group label="Semester" label-for="course-semester">
+                <b-form-select id="course-semester" v-model="newCourse.semester">
+                    <option :value="currentSemester.value">{{ currentSemester.value }}</option>
+                    <option :value="nextSemester.value">{{ nextSemester.value }}</option>
+                </b-form-select>
             </b-form-group>
 
             <b-button type="submit" variant="primary" :disabled="$v.newCourse.$invalid">Save</b-button>
@@ -48,17 +47,24 @@
     import {required, url} from 'vuelidate/lib/validators';
     import smallerOrEqualThan from '../../validators/smallerOrEqualThan';
     import largerOrEqualThan from '../../validators/largerOrEqualThan';
+    import {current, next} from '../../helper/semester';
 
     export default {
         data() {
             return {
                 showForm: false,
-                newCourse: {},
+                newCourse: this.$store.getters['courses/new'],
             };
         },
         computed: {
             courses() {
                 return this.$store.getters['courses/all'];
+            },
+            currentSemester() {
+                return current();
+            },
+            nextSemester() {
+                return next();
             }
         },
         methods: {
@@ -74,22 +80,15 @@
                 this.$store.dispatch('courses/save', {
                     course: this.newCourse
                 }).then(() => {
-                    this.newCourse = {};
+                    this.newCourse = this.$store.getters['courses/new'];
                 });
             },
         },
         validations: {
             newCourse: {
-                title: { required },
-                hyperlink: { url },
-                start_date: {
-                    required,
-                    smallerThanEnd: smallerOrEqualThan('end_date')
-                },
-                end_date: {
-                    required,
-                    largerThanStart: largerOrEqualThan('start_date')
-                },
+                title: {required},
+                hyperlink: {url},
+                semester: {required},
             },
         },
     };
