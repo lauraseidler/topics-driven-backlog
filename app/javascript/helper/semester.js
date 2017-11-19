@@ -7,6 +7,13 @@ const startDay = 1;
 export const WS = 0;
 export const SS = 1;
 
+/**
+ * Find when the start of a semester was from a given semester, month and year
+ * @param semester
+ * @param month
+ * @param year
+ * @returns {*}
+ */
 function findSemesterStart(semester, month, year) {
     // if we're already in the new year, semester started last year
     if (semester === WS && month < ssMonth) {
