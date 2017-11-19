@@ -2,9 +2,23 @@ import moment from 'moment';
 
 const ssMonth = 4;
 const wsMonth = 10;
+const startDay = 1;
 
 export const WS = 0;
 export const SS = 1;
+
+function findSemesterStart(semester, month, year) {
+    // if we're already in the new year, semester started last year
+    if (semester === WS && month < ssMonth) {
+        year -= 1;
+    }
+
+    return moment().set({
+        year,
+        month: (semester === WS ? wsMonth : ssMonth) - 1,
+        date: startDay,
+    });
+}
 
 /**
  * A human-readable string for the current year(s) of the semester
@@ -39,7 +53,7 @@ function getFullString(semester, year) {
 /**
  * An object with the calculated semester data from a given moment
  * @param date
- * @returns {{semester: number, semesterString: string, year: number, yearString: string, value: string}}
+ * @returns {{semester: number, semesterString: string, year: number, yearString: string, value: string, startDate: string}}
  */
 function calculateSemester(date) {
     const year = date.year();
@@ -47,18 +61,21 @@ function calculateSemester(date) {
 
     const semester = month >= ssMonth && month < wsMonth ? SS : WS;
 
+    const semesterStart = findSemesterStart(semester, month, year);
+
     return {
         semester,
         semesterString: getSemesterString(semester),
         year,
-        yearString: getYearString(semester, year),
-        value: getFullString(semester, year),
+        yearString: getYearString(semester, semesterStart.year()),
+        value: getFullString(semester, semesterStart.year()),
+        startDate: semesterStart.format('YYYY-MM-DD'),
     };
 }
 
 /**
  * Calculate the current semester
- * @returns {{semester: number, semesterString: string, year: number, yearString: string, value: string}}
+ * @returns {{semester: number, semesterString: string, year: number, yearString: string, value: string, startDate: string}}
  */
 export function current() {
     return calculateSemester(moment());
@@ -66,7 +83,7 @@ export function current() {
 
 /**
  * Calculate the next semester
- * @returns {{semester: number, semesterString: string, year: number, yearString: string, value: string}}
+ * @returns {{semester: number, semesterString: string, year: number, yearString: string, value: string, startDate: string}}
  */
 export function next() {
     return calculateSemester(moment().add(6, 'months'));

@@ -114,11 +114,11 @@ export default {
 
         /**
          * A template for a new course
-         * @returns {{semester: string}}
+         * @returns {{start_date: string}}
          */
         new: () => {
             return {
-                semester: current().value,
+                start_date: current().value,
             }
         }
     }

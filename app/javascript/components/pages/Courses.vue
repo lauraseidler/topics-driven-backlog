@@ -29,9 +29,9 @@
             </b-form-group>
 
             <b-form-group label="Semester" label-for="course-semester">
-                <b-form-select id="course-semester" v-model="newCourse.semester">
-                    <option :value="currentSemester.value">{{ currentSemester.value }}</option>
-                    <option :value="nextSemester.value">{{ nextSemester.value }}</option>
+                <b-form-select id="course-semester" v-model="newCourse.start_date">
+                    <option :value="currentSemester.startDate">{{ currentSemester.value }}</option>
+                    <option :value="nextSemester.startDate">{{ nextSemester.value }}</option>
                 </b-form-select>
             </b-form-group>
 
@@ -88,7 +88,7 @@
             newCourse: {
                 title: {required},
                 hyperlink: {url},
-                semester: {required},
+                start_date: {required},
             },
         },
     };
