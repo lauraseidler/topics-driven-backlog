@@ -7,7 +7,7 @@
                 <div class="card-body">
                     <h4 class="card-title">{{ course.title }}</h4>
                     <h5 class="h6 text-muted card-subtitle">
-                        {{ course.semester }}
+                        {{ getSemesterInfo(course.semester_type, course.semester_year).fullString }}
                     </h5>
 
                     <p class="card-text mt-2" v-if="course.hyperlink">
@@ -47,7 +47,7 @@
     import {required, url} from 'vuelidate/lib/validators';
     import smallerOrEqualThan from '../../validators/smallerOrEqualThan';
     import largerOrEqualThan from '../../validators/largerOrEqualThan';
-    import {current, next} from '../../helper/semester';
+    import {current, next, info} from '../../helper/semester';
 
     export default {
         data() {
@@ -83,6 +83,16 @@
                     this.newCourse = this.$store.getters['courses/new'];
                 });
             },
+
+            /**
+             * Semester info for given type and year
+             * @param type
+             * @param year
+             * @returns {{semesterStart: *, semester: string, year: number, fullString: string, valueString: string}}
+             */
+            getSemesterInfo(type, year) {
+                return info(type, year);
+            }
         },
         validations: {
             newCourse: {

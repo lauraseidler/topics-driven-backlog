@@ -96,4 +96,14 @@ export function next() {
     return calculateSemester(moment().add(6, 'months'));
 }
 
-export default {WS, SS, current, next};
+/**
+ * Get full semester info from given type and year
+ * @param type
+ * @param year
+ * @returns {{semesterStart: *, semester: string, year: number, fullString: string, valueString: string}}
+ */
+export function info(type, year) {
+    return calculateSemester(moment().year(year).month((type === WS ? wsMonth : ssMonth) - 1));
+}
+
+export default {WS, SS, current, next, info};
