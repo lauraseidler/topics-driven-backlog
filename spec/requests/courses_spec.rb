@@ -90,7 +90,7 @@ RSpec.describe 'Courses API', type: :request do
 
       it 'returns a validation failure message' do
         expect(response.body)
-          .to match(/Semester year must be in format YYYY, Semester type must be "S" or "W"/)
+            .to match(/Validation failed: Semester year must be in format YYYY, Semester type must be `S` or `W`/)
       end
     end
   end
@@ -139,7 +139,7 @@ RSpec.describe 'Courses API', type: :request do
       { semester_type: Course.semester_types[:summer], semester_year: Date.today.year }
     }
     let(:invalid_semester_attributes) {
-      { semester_type: 'Q', semester_year: 100.to_s }
+      { semester_type: 'Q', semester_year: 100 }
     }
 
     context 'updating with a valid semester attributes' do
@@ -159,7 +159,7 @@ RSpec.describe 'Courses API', type: :request do
 
       it 'returns a validation failure message' do
         expect(response.body)
-            .to match(/Validation failed: Semester year is the wrong length (should be 4 characters), Semester year is not a number, Semester type is not included in the list/)
+            .to match(/Validation failed: Semester year must be in format YYYY, Semester type must be `S` or `W`/)
       end
     end
   end
