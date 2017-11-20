@@ -4,8 +4,8 @@ const ssMonth = 4;
 const wsMonth = 10;
 const startDay = 1;
 
-export const WS = 0;
-export const SS = 1;
+export const WS = 'W';
+export const SS = 'S';
 
 /**
  * Find when the start of a semester was from a given semester, month and year
@@ -60,7 +60,7 @@ function getFullString(semester, year) {
 /**
  * An object with the calculated semester data from a given moment
  * @param date
- * @returns {{semester: number, semesterString: string, year: number, yearString: string, value: string, startDate: string}}
+ * @returns {{semesterStart: *, semester: string, year: number, fullString: string, valueString: string}}
  */
 function calculateSemester(date) {
     const year = date.year();
@@ -69,20 +69,20 @@ function calculateSemester(date) {
     const semester = month >= ssMonth && month < wsMonth ? SS : WS;
 
     const semesterStart = findSemesterStart(semester, month, year);
+    const semesterStartYear = semesterStart.year();
 
     return {
+        semesterStart,
         semester,
-        semesterString: getSemesterString(semester),
-        year,
-        yearString: getYearString(semester, semesterStart.year()),
-        value: getFullString(semester, semesterStart.year()),
-        startDate: semesterStart.format('YYYY-MM-DD'),
+        year: semesterStartYear,
+        fullString: getFullString(semester, semesterStartYear),
+        valueString: semester + '*' + semesterStartYear
     };
 }
 
 /**
  * Calculate the current semester
- * @returns {{semester: number, semesterString: string, year: number, yearString: string, value: string, startDate: string}}
+ * @returns {{semesterStart: *, semester: string, year: number, fullString: string, valueString: string}}
  */
 export function current() {
     return calculateSemester(moment());
@@ -90,7 +90,7 @@ export function current() {
 
 /**
  * Calculate the next semester
- * @returns {{semester: number, semesterString: string, year: number, yearString: string, value: string, startDate: string}}
+ * @returns {{semesterStart: *, semester: string, year: number, fullString: string, valueString: string}}
  */
 export function next() {
     return calculateSemester(moment().add(6, 'months'));
