@@ -5,7 +5,7 @@
         <ul v-if="courses.length" class="list-unstyled">
             <li class="card mb-3" v-for="course in courses" :key="course.id">
                 <div class="card-body">
-                    <h4 class="card-title">{{ course.title }}</h4>
+                    <router-link class="h4 card-title" :to="`/courses/${course.id}`">{{ course.title }}</router-link>
                     <h5 class="h6 text-muted card-subtitle mb-2" v-if="course.start_date || course.end_date">
                         {{ course.start_date }} - {{ course.end_date }}
                     </h5>
