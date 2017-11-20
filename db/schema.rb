@@ -15,23 +15,14 @@ ActiveRecord::Schema.define(version: 20171119182005) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "courses", force: :cascade do |t|
-    t.string "title"
-    t.string "hyperlink"
-    t.date "start_date"
-    t.date "end_date"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "stories", force: :cascade do |t|
     t.string "title"
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "position"
-    t.integer "status", default: 0
     t.string "identifier"
+    t.integer "status", default: 0
     t.integer "points"
   end
 
