@@ -35,7 +35,7 @@ class CoursesController < ApplicationController
 
   def course_params
     # whitelist params
-    params.permit(:title, :hyperlink, :start_date, :end_date)
+    params.permit(:title, :hyperlink, :semester_type, :semester_year)
   end
 
   def set_course
