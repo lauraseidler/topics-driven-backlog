@@ -4,5 +4,6 @@ FactoryBot.define do
     description { Faker::Lorem.word }
     identifier nil
     status {rand(0..3)}
+    points {[rand(1..3), nil].sample}
   end
 end
