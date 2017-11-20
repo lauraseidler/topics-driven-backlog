@@ -1,7 +1,24 @@
 <template>
-    <b-container class="mt-4">
-        <router-view></router-view>
-    </b-container>
+    <div id="app">
+        <b-navbar toggleable="md" type="dark" variant="primary">
+            <b-container>
+                <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+
+                <b-navbar-brand href="#">TDB</b-navbar-brand>
+
+                <b-collapse is-nav id="nav_collapse">
+                    <b-navbar-nav>
+                        <b-nav-item to="/stories">Backlog</b-nav-item>
+                        <b-nav-item to="/courses">Courses</b-nav-item>
+                    </b-navbar-nav>
+                </b-collapse>
+            </b-container>
+        </b-navbar>
+
+        <b-container class="mt-4">
+            <router-view></router-view>
+        </b-container>
+    </div>
 </template>
 
 <script>
