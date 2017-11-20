@@ -2,7 +2,11 @@ FactoryBot.define do
   factory :course do
     title { Faker::Lorem.word }
     hyperlink { Faker::Internet.url }
-    start_date { Faker::Date.between(20.days.ago, Date.today) }
-    end_date { Faker::Date.between(Date.tomorrow, 20.days.from_now) }
+    semester_type {
+      [
+          Course.semester_types[:summer],
+          Course.semester_types[:winter]
+      ].sample }
+    semester_year { rand(2018..2050) }
   end
 end
