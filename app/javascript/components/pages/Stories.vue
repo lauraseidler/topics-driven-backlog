@@ -33,9 +33,18 @@
         </ul>
 
         <b-form v-if="showForm" @submit="saveStory">
-            <b-form-group label="Story" label-for="story-title">
-                <b-form-input id="story-title" v-model="newStory.title" required></b-form-input>
-            </b-form-group>
+            <b-row>
+                <b-col md="10">
+                    <b-form-group label="Story *" label-for="story-title">
+                        <b-form-input id="story-title" v-model="newStory.title" required></b-form-input>
+                    </b-form-group>
+                </b-col>
+                <b-col md="2">
+                    <b-form-group label="Story points" label-for="story-points">
+                        <b-form-input id="story-points" type="number" min="0" v-model="newStory.points"></b-form-input>
+                    </b-form-group>
+                </b-col>
+            </b-row>
 
             <b-form-group label="Notes" label-for="story-description">
                 <b-form-textarea id="story-description" v-model="newStory.description"></b-form-textarea>
@@ -50,7 +59,7 @@
 </template>
 
 <script>
-    import {required} from 'vuelidate/lib/validators';
+    import {required, numeric, minValue} from 'vuelidate/lib/validators';
 
     export default {
         data() {
@@ -109,6 +118,7 @@
         validations: {
             newStory: {
                 title: {required},
+                points: {numeric, minValue: minValue(0)}
             },
         },
     };
