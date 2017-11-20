@@ -32,8 +32,8 @@ RSpec.describe 'Courses API', type: :request do
         expect(json['id']).to eq(course_id)
         expect(json['title']).to eq(course.title)
         expect(json['hyperlink']).to eq(course.hyperlink)
-        expect(json['start_date']).to eq(course.start_date.to_s)
-        expect(json['end_date']).to eq(course.end_date.to_s)
+        expect(json['semester_type']).to eq(course.semester_type)
+        expect(json['semester_year']).to eq(course.semester_year)
       end
 
       it 'returns status code 200' do
@@ -60,9 +60,9 @@ RSpec.describe 'Courses API', type: :request do
     let(:valid_attributes) {
       {
         title: 'Learn Elm',
-        hyperlink: 'example@foo.com',
-        start_date: Date.today.to_s,
-        end_date: Date.tomorrow.to_s
+        hyperlink: 'example.com',
+        semester_type: Course.semester_types[:summer],
+        semester_year: Date.today.year.to_s
       }
     }
 
@@ -71,9 +71,9 @@ RSpec.describe 'Courses API', type: :request do
 
       it 'creates a course' do
         expect(json['title']).to eq('Learn Elm')
-        expect(json['hyperlink']).to eq('example@foo.com')
-        expect(json['start_date']).to eq(Date.today.to_s)
-        expect(json['end_date']).to eq(Date.tomorrow.to_s)
+        expect(json['hyperlink']).to eq('example.com')
+        expect(json['semester_type']).to eq(Course.semester_types[:summer])
+        expect(json['semester_year']).to eq(Date.today.year)
       end
 
       it 'returns status code 201' do
@@ -90,7 +90,7 @@ RSpec.describe 'Courses API', type: :request do
 
       it 'returns a validation failure message' do
         expect(response.body)
-          .to match(/Validation failed: Start date can't be blank, End date can't be blank/)
+            .to match(/Validation failed: Semester year must be in format YYYY, Semester type must be `S` or `W`/)
       end
     end
   end
@@ -100,9 +100,9 @@ RSpec.describe 'Courses API', type: :request do
     let(:valid_attributes) {
       {
           title: 'Learn Elm',
-          hyperlink: 'example@foo.com',
-          start_date: Date.today.to_s,
-          end_date: Date.tomorrow.to_s
+          hyperlink: 'example.com',
+          semester_type: Course.semester_types[:summer],
+          semester_year: Date.today.year.to_s
       }
     }
     before { put "/courses/#{course_id}", params: valid_attributes }
@@ -110,9 +110,9 @@ RSpec.describe 'Courses API', type: :request do
     context 'when the record exists' do
       it 'updates the record' do
         expect(json['title']).to eq('Learn Elm')
-        expect(json['hyperlink']).to eq('example@foo.com')
-        expect(json['start_date']).to eq(Date.today.to_s)
-        expect(json['end_date']).to eq(Date.tomorrow.to_s)
+        expect(json['hyperlink']).to eq('example.com')
+        expect(json['semester_type']).to eq(Course.semester_types[:summer])
+        expect(json['semester_year']).to eq(Date.today.year)
       end
 
       it 'returns status code 200' do
@@ -134,20 +134,24 @@ RSpec.describe 'Courses API', type: :request do
   end
 
   # Test suite for PATCH /courses/:id
-  describe 'PATCH /courses/:id for date attributes' do
-    let(:valid_date_attributes) { { start_date: Date.today.to_s, end_date: Date.tomorrow.to_s } }
-    let(:invalid_dates_attribute) {{ start_date: Date.tomorrow.to_s, end_date: Date.today.to_s } }
+  describe 'PATCH /courses/:id for semester attributes' do
+    let(:valid_semester_attributes) {
+      { semester_type: Course.semester_types[:summer], semester_year: Date.today.year }
+    }
+    let(:invalid_semester_attributes) {
+      { semester_type: 'Q', semester_year: 100 }
+    }
 
-    context 'updating with a valid end date' do
-      before { patch "/courses/#{course_id}", params: valid_date_attributes }
+    context 'updating with a valid semester attributes' do
+      before { patch "/courses/#{course_id}", params: valid_semester_attributes }
 
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
       end
     end
 
-    context 'updating with an invalid end date' do
-      before { patch "/courses/#{course_id}", params: invalid_dates_attribute }
+    context 'updating with invalid semester attributes' do
+      before { patch "/courses/#{course_id}", params: invalid_semester_attributes }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -155,7 +159,7 @@ RSpec.describe 'Courses API', type: :request do
 
       it 'returns a validation failure message' do
         expect(response.body)
-            .to match(/Validation failed: End date cannot be before the start date/)
+            .to match(/Validation failed: Semester year must be in format YYYY, Semester type must be `S` or `W`/)
       end
     end
   end

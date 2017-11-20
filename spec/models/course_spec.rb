@@ -4,20 +4,25 @@ RSpec.describe Course, type: :model do
 
   # Validation tests
   it { should validate_presence_of(:title) }
-  it { should validate_presence_of(:end_date) }
-  it { should validate_presence_of(:start_date) }
 
-  it "is valid end date comes after start date" do
+  it "is valid with semester type and date" do
     subject.title = "Anything"
-    subject.start_date = DateTime.now
-    subject.end_date = DateTime.now + 1.week
+    subject.semester_type = 'W'
+    subject.semester_year = DateTime.now.year
     expect(subject).to be_valid
   end
 
-  it "is not valid start date comes after end date" do
+  it "is not valid without proper semester_year" do
     subject.title = "Anything"
-    subject.start_date = DateTime.now + 1.week
-    subject.end_date = DateTime.now
+    subject.semester_type = 'W'
+    subject.semester_year = 100
+    expect(subject).not_to be_valid
+  end
+
+  it "is not valid without proper semester_type" do
+    subject.title = "Anything"
+    subject.semester_type = 'Q'
+    subject.semester_year = DateTime.now.year
     expect(subject).not_to be_valid
   end
 
