@@ -163,7 +163,6 @@ export default {
         all: state => state.initialised
             ? state.data.sort((a, b) => a.position > b.position)
             : [],
-        },
 
         /**
          * Find a course by id
@@ -181,6 +180,6 @@ export default {
             return {
                 semester: current().valueString,
             }
-        }
+        },
     }
 }

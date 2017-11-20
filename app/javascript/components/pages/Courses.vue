@@ -5,8 +5,11 @@
         <ul v-if="courses.length" class="list-unstyled">
             <li class="card mb-3" v-for="course in courses" :key="course.id">
                 <div class="card-body">
-                    <router-link class="h4 card-title" :to="`/courses/${course.id}`">{{ course.title }}</router-link>
-                    <h5 class="h6 text-muted card-subtitle">
+                    <router-link :to="`/courses/${course.id}`" class="h4 card-title link-unstyled">
+                        {{ course.title }}
+                    </router-link>
+
+                    <h5 class="h6 text-muted card-subtitle mt-0">
                         {{ getSemesterInfo(course.semester_type, course.semester_year).fullString }}
                     </h5>
 

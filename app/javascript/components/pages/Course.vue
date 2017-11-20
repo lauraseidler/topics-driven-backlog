@@ -3,19 +3,21 @@
         <template v-if="course">
             <h1>
                 {{ course.title }}
-                <small class="text-muted">{{ getSemesterInfo(course.semester_type, course.semester_year)</small>
+                <small class="text-muted">{{ getSemesterInfo(course.semester_type, course.semester_year).fullString }}</small>
             </h1>
 
             <p>
-                <a v-if="story.hyperlink" :href="course.hyperlink">{{ course.hyperlink }}</a>
+                <a v-if="course.hyperlink" :href="course.hyperlink">{{ course.hyperlink }}</a>
             </p>
 
             <h2>Sprints</h2>
 
-            <ul>
+            <ul v-if="sprints.length">
                 <li v-for="sprint in sprints">{{ sprint.name }} ({{sprint.start_date}} - {{sprint.end_date}})
                 </li>
             </ul>
+
+            <p v-else>No sprints in this course yet.</p>
 
             <b-form v-if="showForm" @submit="addSprint">
                 <b-form-group label="Name" label-for="sprint-name">
@@ -59,10 +61,10 @@
         },
         computed: {
             course() {
-                return this.$store.getters['courses/byId'](this.$route.params.id);
+                return this.$store.getters['courses/byId'](parseInt(this.$route.params.id, 10));
             },
             sprints() {
-                return this.course.sprints.sort((a, b) => a.start_date < b.start_date);
+                return this.course.sprints ? this.course.sprints.sort((a, b) => a.start_date < b.start_date) : [];
             }
         },
         methods: {
