@@ -1,5 +1,7 @@
 import Vue from 'vue';
 
+import { current } from '../helper/semester';
+
 export default {
     namespaced: true,
     state: {
@@ -69,8 +71,17 @@ export default {
          * @returns {Promise}
          */
         save({commit}, payload) {
+            // clone course object so we can change stuff
+            const course = Object.assign({}, payload.course);
+
+            // extract semester year and type from semester info
+            const semesterSplit = course.semester.split('*');
+            course.semester_type = semesterSplit[0];
+            course.semester_year = parseInt(semesterSplit[1], 10);
+            delete course.semester;
+
             return new Promise((resolve, reject) => {
-                Vue.http.post('/courses', payload.course).then((response) => {
+                Vue.http.post('/courses', course).then((response) => {
                     commit('set', {
                         course: response.body,
                     });
@@ -109,5 +120,15 @@ export default {
         all: state => state.initialised
             ? state.data.sort((a, b) => a.position > b.position)
             : [],
+
+        /**
+         * A template for a new course
+         * @returns {{semester: string}}
+         */
+        new: () => {
+            return {
+                semester: current().valueString,
+            }
+        }
     }
 }
