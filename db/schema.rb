@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20171119212328) do
     t.integer "position"
     t.string "identifier"
     t.integer "status", default: 0
+    t.integer "points"
   end
 
   create_table "tasks", force: :cascade do |t|

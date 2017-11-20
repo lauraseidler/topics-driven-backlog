@@ -32,7 +32,8 @@ RSpec.describe 'Stories API', type: :request do
         expect(json['id']).to eq(story_id)
         expect(json['identifier']).to eq('S-'+story_id.to_s)
         expect(json['status']).to be >= Story.statuses[:open]
-        expect(json['status']).to be <= Story.statuses[:closed]
+        expect(json['status']).to be <= Story.statuses[:canceled]
+        expect(json['points'].to_i).to be_an_instance_of(Integer).or(be_nil)
       end
 
       it 'returns status code 200' do
@@ -65,6 +66,7 @@ RSpec.describe 'Stories API', type: :request do
         expect(json['title']).to eq('Learn Elm')
         expect(json['description']).to eq('Foobar')
         expect(json['status']).to eq(Story.statuses[:open])
+        expect(json['points'].to_i).to be_an_instance_of(Integer).or(be_nil)
       end
 
       it 'returns status code 201' do

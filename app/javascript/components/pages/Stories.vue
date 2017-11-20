@@ -3,39 +3,28 @@
         <h1>Backlog</h1>
 
         <ul v-sortable="{handle: '.js-drag-drop', onEnd: saveOrder}" class="mt-3 pl-0">
-            <li class="card mb-3" v-for="story in stories" :key="story.id">
-                <div class="card-body">
+            <story class="mb-3" v-for="story in stories" :data="story" :key="story.id">
+                <template slot="drag-handle">
                     <span class="js-drag-drop float-right p-1">
                         <icon name="bars" label="Drag and drop to change order"></icon>
                     </span>
-
-                    <h4 class="card-title"><router-link :to="`/stories/${story.identifier}`" class="link-unstyled">{{ story.title }}</router-link>
-                        <small class="text-muted">{{ story.identifier }}</small>
-                    </h4>
-                    <p class="card-text">
-                        <b-dropdown size="sm" variant="link" no-caret class="b-dropdown-minimal">
-                            <template slot="button-content">
-                                <span class="badge" :class="statusMap[story.status].css">
-                                    {{ statusMap[story.status].name }}
-                                </span>
-                            </template>
-                            <b-dropdown-item v-for="(status, index) in statusMap" :key="index"
-                                             @click="saveStatus(story.id, index)">
-                                <span class="badge" :class="[status.css]">{{ status.name }}</span>
-                            </b-dropdown-item>
-                        </b-dropdown>
-                    </p>
-                    <p class="card-text" v-if="story.description">
-                        {{ story.description }}
-                    </p>
-                </div>
-            </li>
+                </template>
+            </story>
         </ul>
 
         <b-form v-if="showForm" @submit="saveStory">
-            <b-form-group label="Story" label-for="story-title">
-                <b-form-input id="story-title" v-model="newStory.title" required></b-form-input>
-            </b-form-group>
+            <b-row>
+                <b-col md="10">
+                    <b-form-group label="Story *" label-for="story-title">
+                        <b-form-input id="story-title" v-model="newStory.title" required></b-form-input>
+                    </b-form-group>
+                </b-col>
+                <b-col md="2">
+                    <b-form-group label="Story points" label-for="story-points">
+                        <b-form-input id="story-points" type="number" min="0" v-model="newStory.points"></b-form-input>
+                    </b-form-group>
+                </b-col>
+            </b-row>
 
             <b-form-group label="Notes" label-for="story-description">
                 <b-form-textarea id="story-description" v-model="newStory.description"></b-form-textarea>
@@ -50,14 +39,15 @@
 </template>
 
 <script>
-    import {required} from 'vuelidate/lib/validators';
+    import {required, numeric, minValue} from 'vuelidate/lib/validators';
+    import Story from "../elements/Story.vue";
 
     export default {
+        components: {Story},
         data() {
             return {
                 showForm: false,
                 newStory: {},
-                statusMap: this.$store.state.stories.statusMap,
             };
         },
         computed: {
@@ -92,23 +82,11 @@
                     newIndex: evt.newIndex,
                 });
             },
-
-            /**
-             * Save new status of story
-             * @param storyId
-             * @param statusId
-             */
-            saveStatus(storyId, statusId) {
-                this.$store.dispatch('stories/patch', {
-                    id: storyId,
-                    field: 'status',
-                    value: statusId,
-                });
-            }
         },
         validations: {
             newStory: {
                 title: {required},
+                points: {numeric, minValue: minValue(0)}
             },
         },
     };
