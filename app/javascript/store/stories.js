@@ -7,7 +7,8 @@ export default {
         statusMap: [
             {name: 'open', css: 'badge-dark'},
             {name: 'in progress', css: 'badge-warning'},
-            {name: 'closed', css: 'badge-success'}
+            {name: 'closed', css: 'badge-success'},
+            {name: 'cancelled', css: 'badge-danger'}
         ],
         data: []
     },
