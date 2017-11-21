@@ -1,4 +1,6 @@
 class Course < ApplicationRecord
+  has_many :sprints, dependent: :destroy
+
   def self.semester_types
     {:summer => 'S', :winter => 'W'}
   end
