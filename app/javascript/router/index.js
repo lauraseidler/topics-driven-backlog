@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import Story from '../components/pages/Story.vue';
-import Stories from '../components/pages/Stories.vue';
-import Course from '../components/pages/Course.vue';
-import Courses from '../components/pages/Courses.vue';
+import StoryPage from '../components/pages/StoryPage.vue';
+import StoriesPage from '../components/pages/StoriesPage.vue';
+import CoursePage from '../components/pages/CoursePage.vue';
+import CoursesPage from '../components/pages/CoursesPage.vue';
 
 Vue.use(Router);
 
@@ -12,19 +12,19 @@ const router = new Router({
    routes: [{
        path: '/stories/:identifier',
        name: 'story',
-       component: Story,
+       component: StoryPage,
    }, {
        path: '/stories',
        name: 'stories',
-       component: Stories,
+       component: StoriesPage,
    },{
        path: '/courses/:id',
        name: 'course',
-       component: Course,
+       component: CoursePage,
    },  {
        path: '/courses',
        name: 'courses',
-       component: Courses,
+       component: CoursesPage,
    }, {
        path: '*',
        redirect: '/stories'

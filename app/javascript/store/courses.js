@@ -32,8 +32,8 @@ export default {
                 }
             }
 
-            if (payload.sprint && payload.courseId) {
-                const courseIndex = state.data.findIndex(c => c.id === payload.courseId);
+            if (payload.sprint) {
+                const courseIndex = state.data.findIndex(c => c.id === payload.sprint.course_id);
 
                 if (courseIndex < 0) {
                     throw new Error('Cannot add sprint to non existing course!');
@@ -146,7 +146,6 @@ export default {
             return new Promise((resolve, reject) => {
                 Vue.http.post(`/courses/${payload.id}/sprints`, payload.sprint).then((response) => {
                     commit('set', {
-                        courseId: payload.id,
                         sprint: response.body,
                     });
 
