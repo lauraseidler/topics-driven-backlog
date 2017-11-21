@@ -2,7 +2,7 @@ class SprintsController < ApplicationController
   before_action :set_course, only: [:create]
   before_action :set_sprint, only: [:update, :destroy]
 
-  # POST courses/course_id/sprints
+  # POST /courses/course_id/sprints
   def create
     @sprint = @course.sprints.create!(sprint_params)
     json_response(@sprint, :created)
