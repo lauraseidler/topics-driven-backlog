@@ -1,7 +1,7 @@
 class Sprint < ApplicationRecord
   belongs_to :course
 
-  validates_presence_of :name, :start_date, :end_date
+  validates_presence_of :name, :start_date, :end_date, :course_id
 
   validate :end_date_is_after_start_date
 
