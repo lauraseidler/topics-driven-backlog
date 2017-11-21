@@ -10,7 +10,7 @@ export default {
     },
     mutations: {
         /**
-         * Set one or all stories
+         * Set one or all courses or their sprints
          * @param state
          * @param payload
          */
@@ -24,14 +24,56 @@ export default {
                     .find(course => course.id === payload.course.id);
 
                 if (isPresent) {
-                    Vue.set(state, 'data', state.data.map(course =>
-                        (course.id === payload.course.id ? payload.course : course),
+                    Vue.set(state, 'data', state.data.map(c =>
+                        (c.id === payload.course.id ? payload.course : c),
                     ));
                 } else {
                     state.data.push(payload.course);
                 }
             }
+
+            if (payload.sprint) {
+                const courseIndex = state.data.findIndex(c => c.id === payload.sprint.course_id);
+
+                if (courseIndex < 0) {
+                    throw new Error('Cannot add sprint to non existing course!');
+                }
+
+                const course = state.data[courseIndex];
+
+                if (!course.sprints || course.sprints.length < 1) {
+                    course.sprints = [payload.sprint];
+                } else {
+                    const isPresent = course.sprints.find(sprint => sprint.id === payload.sprint.id);
+
+                    if (isPresent) {
+                        course.sprints = course.sprints.map(sprint => (sprint.id === payload.sprint.id ? payload.sprint : sprint));
+                    } else {
+                        course.sprints.push(payload.sprint);
+                    }
+                }
+
+                Vue.set(state.data, courseIndex, course);
+            }
         },
+
+        /**
+         * Remove a sprint from a course
+         * @param state
+         * @param payload
+         */
+        removeSprint: (state, payload) => {
+            const courseIndex = state.data.findIndex(c => c.id === payload.course_id);
+
+            if (courseIndex < 0) {
+                throw new Error('Cannot remove sprint from non existing course!');
+            }
+
+            const course = state.data[courseIndex];
+            course.sprints = course.sprints.filter(s => s.id !== payload.id);
+
+            Vue.set(state.data, courseIndex, course);
+        }
     },
     actions: {
         /**
@@ -111,6 +153,24 @@ export default {
                 }, reject);
             });
         },
+
+        /**
+         * Add a sprint to a given course
+         * @param commit
+         * @param payload (id, sprint)
+         * @returns {Promise}
+         */
+        addSprint({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                Vue.http.post(`/courses/${payload.id}/sprints`, payload.sprint).then((response) => {
+                    commit('set', {
+                        sprint: response.body,
+                    });
+
+                    resolve(response.body);
+                }, reject);
+            });
+        },
     },
     getters: {
         /**
@@ -122,6 +182,14 @@ export default {
             : [],
 
         /**
+         * Find a course by id
+         * @param state
+         */
+        byId: state => id => state.initialised
+            ? state.data.find(c => c.id === id)
+            : null,
+
+        /**
          * A template for a new course
          * @returns {{semester: string}}
          */
@@ -129,6 +197,6 @@ export default {
             return {
                 semester: current().valueString,
             }
-        }
+        },
     }
 }
