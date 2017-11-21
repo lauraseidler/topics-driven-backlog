@@ -8,7 +8,7 @@ class Story < ApplicationRecord
     {:open => 0, :progressing => 1, :closed => 2, :canceled => 3}
   end
 
-  validates_presence_of :title
+  validates_presence_of :title, :status
 
   private
 

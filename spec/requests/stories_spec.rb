@@ -174,8 +174,39 @@ RSpec.describe 'Stories API', type: :request do
         expect(json['status']).to eq(Story.statuses[:progressing])
       end
     end
+  end
 
+  # Test suite for PATCH /stories/:id
+  describe 'PATCH /stories/:id for sprint attribute' do
+    let(:first_story) {stories.first}
+    let(:last_story) {stories.last}
+    let(:sprint_id) {
+      create(
+          :sprint,
+          :course_id => create(:course).id
+      ).id
+    }
+    let(:sprint_attribute) { { :sprint_id => sprint_id } }
 
+    before { patch "/stories/#{last_story.id}", params: sprint_attribute }
+
+    context 'assigning a story to a sprint' do
+      it 'updates the record' do
+        expect(json['sprint_id']).to eq(sprint_id)
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+    end
+
+    context 'when the record exists' do
+      before { get "/stories/#{last_story.id}" }
+
+      it 'provides the sprint id for a story' do
+        expect(json['sprint_id']).to eq(sprint_id)
+      end
+    end
   end
 
   # Test suite for DELETE /stories/:id
