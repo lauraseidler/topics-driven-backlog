@@ -4,9 +4,9 @@ export default {
     namespaced: true,
     actions: {
         /**
-         * Patches a given field of a given course with a given value
+         * Patches a given sprint with the given values
          * @param commit
-         * @param payload (id, field, value)
+         * @param payload (id, values)
          * @returns {Promise}
          */
         patch({commit}, payload) {
@@ -21,6 +21,12 @@ export default {
             });
         },
 
+        /**
+         * Deletes a given sprint
+         * @param commit
+         * @param payload (id, course_id)
+         * @returns {Promise}
+         */
         delete({commit}, payload) {
             return new Promise((resolve, reject) => {
                 Vue.http.delete(`/sprints/${payload.id}`).then(() => {

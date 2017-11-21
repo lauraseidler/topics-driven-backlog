@@ -62,6 +62,7 @@
                     this.newSprint = {};
                 });
             },
+
             /**
              * Semester info for given type and year
              * @param type

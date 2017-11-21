@@ -32,10 +32,17 @@
             }
         },
         methods: {
+            /**
+             * Start editing process of this sprint
+             */
             startEditing() {
                 this.editing = true;
                 this.editingData = _.pick(this.data, ['name', 'start_date', 'end_date']);
             },
+
+            /**
+             * Save the edited parameters of this sprint
+             */
             saveSprint() {
                 this.$store.dispatch('sprints/patch', {
                     id: this.data.id,
@@ -44,6 +51,10 @@
                     this.editing = false;
                 });
             },
+
+            /**
+             * Delete this sprint
+             */
             deleteSprint() {
                 this.$store.dispatch('sprints/delete', {
                     id: this.data.id,

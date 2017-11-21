@@ -57,6 +57,11 @@ export default {
             }
         },
 
+        /**
+         * Remove a sprint from a course
+         * @param state
+         * @param payload
+         */
         removeSprint: (state, payload) => {
             const courseIndex = state.data.findIndex(c => c.id === payload.course_id);
 
