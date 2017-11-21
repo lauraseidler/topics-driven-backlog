@@ -56,6 +56,19 @@ export default {
                 Vue.set(state.data, courseIndex, course);
             }
         },
+
+        removeSprint: (state, payload) => {
+            const courseIndex = state.data.findIndex(c => c.id === payload.course_id);
+
+            if (courseIndex < 0) {
+                throw new Error('Cannot remove sprint from non existing course!');
+            }
+
+            const course = state.data[courseIndex];
+            course.sprints = course.sprints.filter(s => s.id !== payload.id);
+
+            Vue.set(state.data, courseIndex, course);
+        }
     },
     actions: {
         /**
