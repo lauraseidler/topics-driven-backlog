@@ -42,7 +42,6 @@ class Story < ApplicationRecord
   def is_sprint_finished(sprint)
     if sprint.end_date < Date.today
       errors.add(:sprint_id, 'was finished and cannot be changed')
-      raise ActiveRecord::RecordInvalid.new(self)
     end
   end
 

@@ -25,7 +25,7 @@ class StoriesController < ApplicationController
     if params[:position]
       @story.set_list_position(params[:position])
     end
-    @story.update(story_params)
+    @story.update!(story_params)
 
     json_response(@story)
   end
