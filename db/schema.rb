@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171121152439) do
+ActiveRecord::Schema.define(version: 20171126223508) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20171121152439) do
     t.datetime "updated_at", null: false
     t.string "semester_type"
     t.integer "semester_year", limit: 2
+    t.string "alias"
   end
 
   create_table "sprints", force: :cascade do |t|
@@ -43,6 +44,8 @@ ActiveRecord::Schema.define(version: 20171121152439) do
     t.string "identifier"
     t.integer "status", default: 0
     t.integer "points"
+    t.bigint "sprint_id"
+    t.index ["sprint_id"], name: "index_stories_on_sprint_id"
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -55,5 +58,6 @@ ActiveRecord::Schema.define(version: 20171121152439) do
   end
 
   add_foreign_key "sprints", "courses"
+  add_foreign_key "stories", "sprints"
   add_foreign_key "tasks", "stories"
 end
