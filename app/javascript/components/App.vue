@@ -30,6 +30,39 @@
 </script>
 
 <style lang="scss">
+    @font-face {
+        font-family: 'HTWBerlin';
+        src: url('/assets/HTWBerlinWeb-Regular.woff') format('woff');
+        font-weight: 300;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: 'HTWBerlin';
+        src: url('/assets/HTWBerlinWeb-Bold.woff') format('woff');
+        font-weight: 700;
+        font-style: normal;
+    }
+
+    $blue: #0082D1;
+    $indigo: #124E78;
+    $purple: #C200FB;
+    $pink: #BA274A;
+    $red: #9A031E;
+    $orange: #FF5F00;
+    $yellow: #FFCA3A;
+    $green: #76B900;
+    $teal: #06D6A0;
+    $cyan: #6DAEDB;
+
+    $primary: $green;
+    $secondary: $blue;
+
+    $enable-rounded: false;
+
+    $font-family-sans-serif: HTWBerlin, Verdana, Arial, sans-serif;
+    $headings-font-weight: 700;
+
     @import "~bootstrap/scss/bootstrap";
 
     .link-unstyled {
