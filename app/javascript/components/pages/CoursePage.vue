@@ -11,18 +11,27 @@
                 <a v-if="course.hyperlink" :href="course.hyperlink">{{ course.hyperlink }}</a>
             </p>
 
-            <h2>Sprints</h2>
+            <b-card no-body>
+                <b-tabs card>
+                    <b-tab title="Projects">
+                        <p>No projects in this course yet.</p>
+                    </b-tab>
+                    <b-tab title="Topics">
+                        <p>No topics in this course yet.</p>
+                    </b-tab>
+                    <b-tab title="Sprints">
+                        <ul class="list-unstyled" v-if="sprints.length">
+                            <sprint class="mb-2" v-for="sprint in sprints" :data="sprint" :key="sprint.id"></sprint>
+                        </ul>
 
-            <ul class="list-unstyled" v-if="sprints.length">
-                <sprint class="mb-2" v-for="sprint in sprints" :data="sprint" :key="sprint.id"></sprint>
-            </ul>
+                        <p v-else>No sprints in this course yet.</p>
 
-            <p v-else>No sprints in this course yet.</p>
+                        <sprint-form v-if="showForm" v-model="newSprint" @cancel="showForm = false" @submit="addSprint"></sprint-form>
 
-            <sprint-form v-if="showForm" v-model="newSprint" @cancel="showForm = false" @submit="addSprint"></sprint-form>
-
-            <b-button v-else type="button" variant="primary" @click="showForm = true">Add sprint</b-button>
-
+                        <b-button v-else type="button" variant="primary" @click="showForm = true">Add sprint</b-button>
+                    </b-tab>
+                </b-tabs>
+            </b-card>
         </template>
         <not-found v-else></not-found>
     </section>
