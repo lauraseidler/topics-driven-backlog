@@ -6,7 +6,7 @@
             <story class="mb-3" v-for="story in stories" :data="story" :key="story.id">
                 <template slot="drag-handle">
                     <span class="js-drag-drop float-right p-1">
-                        <icon name="bars" label="Drag and drop to change order"></icon>
+                        <icon name="arrows" label="Drag and drop to change order"></icon>
                     </span>
                 </template>
             </story>
