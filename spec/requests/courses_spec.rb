@@ -31,6 +31,7 @@ RSpec.describe 'Courses API', type: :request do
         expect(json).not_to be_empty
         expect(json['id']).to eq(course_id)
         expect(json['title']).to eq(course.title)
+        expect(json['short_title']).to eq(course.short_title)
         expect(json['hyperlink']).to eq(course.hyperlink)
         expect(json['semester_type']).to eq(course.semester_type)
         expect(json['semester_year']).to eq(course.semester_year)
@@ -60,6 +61,7 @@ RSpec.describe 'Courses API', type: :request do
     let(:valid_attributes) {
       {
         title: 'Learn Elm',
+        short_title: 'LE',
         hyperlink: 'example.com',
         semester_type: Course.semester_types[:summer],
         semester_year: Date.today.year.to_s
@@ -71,6 +73,7 @@ RSpec.describe 'Courses API', type: :request do
 
       it 'creates a course' do
         expect(json['title']).to eq('Learn Elm')
+        expect(json['short_title']).to eq('LE')
         expect(json['hyperlink']).to eq('example.com')
         expect(json['semester_type']).to eq(Course.semester_types[:summer])
         expect(json['semester_year']).to eq(Date.today.year)
