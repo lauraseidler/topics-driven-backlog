@@ -25,7 +25,7 @@ class StoriesController < ApplicationController
     if params[:position]
       @story.set_list_position(params[:position])
     end
-    @story.update(story_params)
+    @story.update!(story_params)
 
     json_response(@story)
   end
@@ -41,7 +41,7 @@ class StoriesController < ApplicationController
 
   def story_params
     # whitelist params
-    params.permit(:title, :description, :status, :points)
+    params.permit(:title, :description, :status, :points, :sprint_id)
   end
 
   def set_story
