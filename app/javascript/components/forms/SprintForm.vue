@@ -1,5 +1,5 @@
 <template>
-    <b-form @submit="$v.value.$invalid || $emit('submit')">
+    <b-form @submit.prevent="$v.value.$invalid || $emit('submit')">
         <b-form-group label="Name" label-for="sprint-name">
             <b-form-input id="sprint-name" v-model="value.name" required></b-form-input>
         </b-form-group>
