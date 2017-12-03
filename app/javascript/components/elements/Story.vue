@@ -6,11 +6,11 @@
 
         <template v-else>
             <!-- Drag and drop -->
-            <td v-if="isView('backlog')">
+            <td v-if="isView(['backlog', 'planning-sprint'])">
                 <span class="js-drag-drop">
                     <icon name="arrows" label="Drag and drop to change order"></icon>
                 </span>
-                {{ data.position }}
+                <!--{{ data.position }}-->
             </td>
 
             <!-- Identifier -->
@@ -56,9 +56,18 @@
                 </b-button>
             </td>
 
-            <td v-if="isView('planning')">
+            <td v-if="isView('planning-backlog')">
+                <b-button size="sm" variant="primary" title="Edit" @click="startEditing">
+                    <icon name="pencil"></icon>
+                </b-button>
                 <b-button size="sm" variant="primary" title="Add to sprint" @click="addToSprint">
                     <icon name="plus"></icon>
+                </b-button>
+            </td>
+
+            <td v-if="isView('planning-sprint')">
+                <b-button size="sm" variant="danger" title="Remove from sprint" @click="removeFromSprint">
+                    <icon name="minus"></icon>
                 </b-button>
             </td>
         </template>
@@ -133,6 +142,20 @@
                     field: 'status',
                     value: statusId,
                 });
+            },
+
+            /**
+             * Emit addToSprint event to parent
+             */
+            addToSprint() {
+               this.$emit('addToSprint');
+            },
+
+            /**
+             * Emit removeFromSprint event to parent
+             */
+            removeFromSprint() {
+                this.$emit('removeFromSprint');
             },
         },
     };

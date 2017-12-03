@@ -159,5 +159,13 @@ export default {
         byIdentifier: state => value => state.initialised
             ? state.data.find(s => s.identifier === value)
             : null,
+
+        /**
+         * Find stories by field and value
+         * @param state
+         */
+        find: state => (field, value) => state.initialised
+            ? state.data.filter(s => s[field] === value)
+            : [],
     }
 }
