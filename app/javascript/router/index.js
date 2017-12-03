@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import StoryPage from '../components/pages/StoryPage.vue';
-import StoriesPage from '../components/pages/StoriesPage.vue';
+import BacklogPage from '../components/pages/BacklogPage.vue';
 import CoursePage from '../components/pages/CoursePage.vue';
 import CoursesPage from '../components/pages/CoursesPage.vue';
 
@@ -14,9 +14,9 @@ const router = new Router({
        name: 'story',
        component: StoryPage,
    }, {
-       path: '/stories',
-       name: 'stories',
-       component: StoriesPage,
+       path: '/backlog',
+       name: 'backlog',
+       component: BacklogPage,
    },{
        path: '/courses/:id',
        name: 'course',
@@ -27,7 +27,7 @@ const router = new Router({
        component: CoursesPage,
    }, {
        path: '*',
-       redirect: '/stories'
+       redirect: '/backlog'
    }]
 });
 

@@ -1,66 +1,122 @@
 <template>
-    <li class="card mb-3">
-        <div class="card-body">
-            <slot name="drag-handle"></slot>
+    <tr>
+        <td v-if="editing" colspan="5">
+            <story-form v-model="editingData" @cancel="editing = false" @submit="save"></story-form>
+        </td>
 
-            <h4 class="card-title">
-                <router-link :to="`/stories/${data.identifier}`" class="link-unstyled">{{ data.title }}</router-link>
-                <small class="text-muted">{{ data.identifier }}</small>
-            </h4>
-            <p class="card-text">
+        <template v-else>
+            <!-- Drag and drop -->
+            <td v-if="isView('backlog')">
+                <span class="js-drag-drop">
+                    <icon name="arrows" label="Drag and drop to change order"></icon>
+                </span>
+                {{ data.position }}
+            </td>
+
+            <!-- Identifier -->
+            <td>
+                {{ data.identifier }}
+            </td>
+
+            <!-- Story -->
+            <td>
+                {{ data.title }}
+            </td>
+
+            <!-- Story points -->
+            <td>
+                {{ data.points ? data.points + ' SP' : 'not&nbsp;estimated' }}
+            </td>
+
+            <!-- Sprint -->
+            <td v-if="isView('history')">
+
+            </td>
+
+            <!-- Status -->
+            <td v-if="isView(['sprint', 'history'])">
                 <b-dropdown variant="link" no-caret class="b-dropdown-minimal">
                     <template slot="button-content">
                         <span class="badge" :class="statusMap[data.status].css">
                             {{ statusMap[data.status].name }}
                         </span>
                     </template>
-                    <b-dropdown-item v-for="(status, index) in statusMap" :key="index"
-                                     @click="saveStatus(index)">
+                    <b-dropdown-item v-for="(status, index) in statusMap" :key="index" @click="saveStatus(index)">
                         <span class="badge" :class="[status.css]">{{ status.name }}</span>
                     </b-dropdown-item>
                 </b-dropdown>
+            </td>
 
-                <template>
-                    <b-form-group v-if="showPointsField" class="points-form">
-                        <b-form-input size="sm" id="story-points" type="number" min="0" v-model="points"></b-form-input>
-                        <b-button size="sm" variant="primary" @click="savePoints">Save</b-button>
-                        <b-button size="sm" @click="showPointsField = !showPointsField">Cancel</b-button>
-                    </b-form-group>
-
-                    <small v-else @click="showPointsField = !showPointsField">
-                        {{ data.points ? data.points + ' SP' : 'not estimated' }}
-                    </small>
-                </template>
-            </p>
-            <p class="card-text" v-if="data.description">
-                {{ data.description }}
-            </p>
-        </div>
-    </li>
+            <td v-if="isView('backlog')">
+                <b-button size="sm" variant="primary" title="Edit" @click="startEditing">
+                    <icon name="pencil"></icon>
+                </b-button>
+                <b-button size="sm" variant="danger" title="Delete" @click="remove">
+                    <icon name="trash"></icon>
+                </b-button>
+            </td>
+        </template>
+    </tr>
 </template>
 
 <script>
+    import * as _ from "lodash";
+    import StoryForm from "../forms/StoryForm.vue";
+
     export default {
+        components: {StoryForm},
         name: 'story',
-        props: ['data'],
+        props: ['data', 'view'],
         data() {
             return {
+                editing: false,
+                editingData: null,
                 statusMap: this.$store.state.stories.statusMap,
-                showPointsField: false,
-                newPoints: null,
-            }
-        },
-        computed: {
-            points: {
-                get() {
-                    return this.data.points;
-                },
-                set(points) {
-                    this.newPoints = points || null;
-                }
             }
         },
         methods: {
+            /**
+             * Check if we're operating in a given view
+             * @param view
+             */
+            isView(view) {
+                if (Array.isArray(view)) {
+                    return view.indexOf(this.view) > -1;
+                } else {
+                    return this.view === view;
+                }
+            },
+
+            /**
+             * Start editing process of this story
+             */
+            startEditing() {
+                this.editing = true;
+                this.editingData = _.pick(this.data, ['title', 'description', 'points']);
+            },
+
+            /**
+             * Save the edited parameters of this story
+             */
+            save() {
+                this.$store.dispatch('stories/patch', {
+                    id: this.data.id,
+                    values: this.editingData,
+                }).then(() => {
+                    this.editing = false;
+                });
+            },
+
+            /**
+             * Delete this story
+             */
+            remove() {
+                this.$store.dispatch('stories/delete', {
+                    id: this.data.id,
+                });
+            },
+
+
             /**
              * Save new status of story
              * @param statusId
@@ -72,31 +128,6 @@
                     value: statusId,
                 });
             },
-
-            /**
-             * Save points of story
-             */
-            savePoints() {
-                this.$store.dispatch('stories/patch', {
-                    id: this.data.id,
-                    field: 'points',
-                    value: this.newPoints,
-                }).then(() => {
-                    this.showPointsField = false;
-                    this.newPoints = null;
-                });
-            },
-        }
-    }
+        },
+    };
 </script>
-
-<style lang="scss">
-    .points-form {
-        display: inline;
-
-        input {
-            display: inline;
-            width: 4em;
-        }
-    }
-</style>
