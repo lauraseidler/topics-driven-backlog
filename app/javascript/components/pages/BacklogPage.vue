@@ -1,16 +1,21 @@
 <template>
-    <section id="stories">
+    <section id="backlog-page">
         <h1>Backlog</h1>
 
-        <ul v-sortable="{handle: '.js-drag-drop', onEnd: saveOrder}" class="mt-3 pl-0">
-            <story class="mb-3" v-for="story in stories" :data="story" :key="story.id">
-                <template slot="drag-handle">
-                    <span class="js-drag-drop float-right p-1">
-                        <icon name="arrows" label="Drag and drop to change order"></icon>
-                    </span>
-                </template>
-            </story>
-        </ul>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>Identifier</th>
+                    <th>Story</th>
+                    <th>Story&nbsp;points</th>
+                    <th>Operations</th>
+                </tr>
+            </thead>
+            <tbody v-sortable="{handle: '.js-drag-drop', onEnd: saveOrder}" >
+                <tr is="story" v-for="story in stories" :key="story.id" :data="story" class="mb-3" view="backlog"></tr>
+            </tbody>
+        </table>
 
         <story-form v-if="showForm" v-model="newStory" @cancel="showForm = false" @submit="save"></story-form>
         <b-button v-else type="button" variant="primary" @click="showForm = true">Add story</b-button>
@@ -32,8 +37,10 @@
         },
         computed: {
             stories() {
-                return this.$store.getters['stories/all'];
-            }
+                return this.$store.getters['stories/all']
+                    .filter(s => s.status === this.$store.state.stories.STATUS.OPEN)
+                    .sort((a, b) => a.position - b.position);
+            },
         },
         methods: {
             /**
@@ -52,9 +59,17 @@
              * @param evt
              */
             saveOrder(evt) {
-                this.$store.dispatch('stories/reorder', {
-                    oldIndex: evt.oldIndex,
-                    newIndex: evt.newIndex,
+                const story = this.stories[evt.oldIndex];
+
+                if (!story) {
+                    return;
+                }
+
+                this.$store.dispatch('stories/patch', {
+                    id: story.id,
+                    field: 'position',
+                    value: evt.newIndex + 1, // act_as_list is 1-indexed
+                    fetch: true,
                 });
             },
         }
