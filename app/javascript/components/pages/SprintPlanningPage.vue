@@ -1,19 +1,21 @@
 <template>
     <section id="backlog-page">
-        <h1>Backlog</h1>
+        <h1>Sprint planning</h1>
 
+        <p>TBC</p>
+
+        <h2>Backlog</h2>
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>&nbsp;</th>
                     <th>Identifier</th>
                     <th>Story</th>
                     <th>Story&nbsp;points</th>
                     <th>Operations</th>
                 </tr>
             </thead>
-            <tbody v-sortable="{handle: '.js-drag-drop', onEnd: saveOrder}" >
-                <tr is="story" v-for="story in stories" :key="story.id" :data="story" view="backlog"></tr>
+            <tbody >
+                <tr is="story" v-for="story in backlog" :key="story.id" :data="story" view="planning"></tr>
             </tbody>
         </table>
 
@@ -25,9 +27,12 @@
 <script>
     import Story from "../elements/Story.vue";
     import StoryForm from "../forms/StoryForm.vue";
+    import Sprint from "../elements/Sprint.vue";
 
     export default {
-        components: {StoryForm, Story},
+        components: {
+            Sprint,
+            StoryForm, Story},
         data() {
             return {
                 showForm: false,
@@ -35,7 +40,7 @@
             };
         },
         computed: {
-            stories() {
+            backlog() {
                 return this.$store.getters['stories/all']
                     .filter(s => s.status === this.$store.state.stories.STATUS.OPEN)
                     .sort((a, b) => a.position - b.position);
@@ -50,25 +55,6 @@
                     story: this.newStory
                 }).then(() => {
                     this.newStory = {};
-                });
-            },
-
-            /**
-             * Save new position of dragged story
-             * @param evt
-             */
-            saveOrder(evt) {
-                const story = this.stories[evt.oldIndex];
-
-                if (!story) {
-                    return;
-                }
-
-                this.$store.dispatch('stories/patch', {
-                    id: story.id,
-                    field: 'position',
-                    value: evt.newIndex + 1, // act_as_list is 1-indexed
-                    fetch: true,
                 });
             },
         }

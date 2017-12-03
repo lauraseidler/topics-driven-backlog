@@ -55,6 +55,12 @@
                     <icon name="trash"></icon>
                 </b-button>
             </td>
+
+            <td v-if="isView('planning')">
+                <b-button size="sm" variant="primary" title="Add to sprint" @click="addToSprint">
+                    <icon name="plus"></icon>
+                </b-button>
+            </td>
         </template>
     </tr>
 </template>
