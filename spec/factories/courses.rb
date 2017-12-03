@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :course do
-    title { Faker::Lorem.word }
+    title { Faker::Lorem.sentence }
+    short_title { Faker::Lorem.word }
     hyperlink { Faker::Internet.url }
     semester_type {
       [
