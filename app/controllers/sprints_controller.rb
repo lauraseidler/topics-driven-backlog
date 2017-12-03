@@ -1,4 +1,6 @@
 class SprintsController < ApplicationController
+  include SprintsHelper
+
   before_action :set_course, only: [:create, :create_collection]
   before_action :set_sprint, only: [:update, :destroy]
 
@@ -10,23 +12,11 @@ class SprintsController < ApplicationController
 
   # POST /courses/course_id/sprint-collection
   def create_collection
-    sprints = []
-    duration = params[:duration].to_i
-    start_date = params[:start_date].to_date
-    end_date = params[:end_date].to_date
-    days = (start_date...end_date).count
-    number_of_sprints = days/duration
-    number_of_sprints.times do |i|
-      end_date = start_date + duration.days
-      sprint = @course.sprints.create!(
-          { :name => "#{i+1}. Sprint",
-            :start_date => start_date,
-            :end_date => end_date
-          }
-      )
-      sprints.append(sprint)
-      start_date = end_date
-    end
+    sprints = create_sprint_collection(
+        params[:duration].to_i,
+        params[:start_date].to_date,
+        params[:end_date].to_date
+    )
     json_response(sprints)
   end
 
