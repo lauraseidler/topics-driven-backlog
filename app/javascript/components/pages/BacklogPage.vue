@@ -37,7 +37,7 @@
         computed: {
             stories() {
                 return this.$store.getters['stories/all']
-                    .filter(s => s.status === this.$store.state.stories.STATUS.OPEN)
+                    .filter(s => s.sprint_id === null && s.status === this.$store.state.stories.STATUS.OPEN)
                     .sort((a, b) => a.position - b.position);
             },
         },
