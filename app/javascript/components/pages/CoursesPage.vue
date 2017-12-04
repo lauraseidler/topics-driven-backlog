@@ -6,7 +6,7 @@
             <li class="card mb-3" v-for="course in courses" :key="course.id">
                 <div class="card-body">
                     <router-link :to="`/courses/${course.id}`" class="h4 card-title link-unstyled">
-                        {{ course.title }}
+                        {{ course.short_title }} <small>{{ course.title }}</small>
                     </router-link>
 
                     <h5 class="h6 text-muted card-subtitle mt-0">
@@ -23,9 +23,19 @@
         <p v-else>No courses yet.</p>
 
         <b-form v-if="showForm" @submit="saveCourse">
-            <b-form-group label="Title" label-for="course-title">
-                <b-form-input id="course-title" v-model="newCourse.title" required></b-form-input>
-            </b-form-group>
+            <b-row>
+                <b-col md="4">
+                    <b-form-group label="Shorthand" label-for="course-shorthand">
+                        <b-form-input id="course-shorthand" v-model="newCourse.short_title" required></b-form-input>
+                    </b-form-group>
+                </b-col>
+                <b-col md="8">
+                    <b-form-group label="Title" label-for="course-title">
+                        <b-form-input id="course-title" v-model="newCourse.title" required></b-form-input>
+                    </b-form-group>
+                </b-col>
+            </b-row>
+
 
             <b-form-group label="Link" label-for="course-hyperlink">
                 <b-form-input id="course-hyperlink" v-model="newCourse.hyperlink"></b-form-input>
