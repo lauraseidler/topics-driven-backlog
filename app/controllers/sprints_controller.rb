@@ -1,11 +1,24 @@
 class SprintsController < ApplicationController
-  before_action :set_course, only: [:create]
+  include SprintsHelper
+
+  before_action :validate_sprint_collection_params, only: [:create_collection]
+  before_action :set_course, only: [:create, :create_collection]
   before_action :set_sprint, only: [:update, :destroy]
 
   # POST /courses/course_id/sprints
   def create
     @sprint = @course.sprints.create!(sprint_params)
     json_response(@sprint, :created)
+  end
+
+  # POST /courses/course_id/sprint-collection
+  def create_collection
+    sprints = create_sprint_collection(
+        params[:duration].to_i,
+        params[:start_date].to_date,
+        params[:end_date].to_date
+    )
+    json_response(sprints, :created)
   end
 
   # PUT /sprints/:id
@@ -25,7 +38,7 @@ class SprintsController < ApplicationController
 
   def sprint_params
     # whitelist params
-    params.permit(:name, :end_date, :start_date)
+    params.permit(:name, :end_date, :start_date, :duration)
   end
 
   def set_course
