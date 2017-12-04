@@ -6,27 +6,34 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+Story.destroy_all
+Sprint.destroy_all
 Course.destroy_all
+
+
 info3 = Course.create(
           title: 'Informatics 3',
+          short_title: 'INFO3',
           hyperlink: 'http://home.htw-berlin.de/~kleinen/classes/ws2017/info3',
           semester_type: 'W',
           semester_year: '2017'
 )
 m1 = Course.create(
     title: 'M1 Media Programming: Web Technology',
+    short_title: 'M1 Rails',
     hyperlink: 'http://home.htw-berlin.de/~kleinen/classes/ws2017/media-programming-rails',
     semester_type: 'W',
     semester_year: '2017'
 )
 wtat2 = Course.create(
     title: 'WTAT 2 - Agile Web Development',
+    short_title: 'WTAT2',
     hyperlink: 'http://home.htw-berlin.de/~kleinen/classes/ws2017/wtat2',
     semester_type: 'W',
     semester_year: '2017'
 )
 
-Sprint.destroy_all
+
 t1 = Sprint.create(
     name: 'Rails and Active Record',
     start_date: Date.new(2017,10,19),
@@ -52,7 +59,6 @@ t4 = Sprint.create(
     course_id: wtat2.id
 )
 
-Story.destroy_all
 s1 = Story.new(
   title: 'As the Studiengangssprecher, I want to announce events relevant for IMI-Students.',
   status: Story.statuses[:closed],
