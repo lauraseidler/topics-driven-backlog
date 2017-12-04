@@ -12,7 +12,7 @@ Course.destroy_all
 
 
 info3 = Course.create(
-          title: 'Informatics 3',
+          title: 'B15.1 Informatik 3',
           short_title: 'INFO3',
           hyperlink: 'http://home.htw-berlin.de/~kleinen/classes/ws2017/info3',
           semester_type: 'W',
@@ -26,7 +26,7 @@ m1 = Course.create(
     semester_year: '2017'
 )
 wtat2 = Course.create(
-    title: 'WTAT 2 - Agile Web Development',
+    title: 'B21.1 - B23.1 WTAT2: Agile Web Development',
     short_title: 'WTAT2',
     hyperlink: 'http://home.htw-berlin.de/~kleinen/classes/ws2017/wtat2',
     semester_type: 'W',
