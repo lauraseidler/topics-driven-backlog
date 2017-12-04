@@ -1,6 +1,7 @@
 class SprintsController < ApplicationController
   include SprintsHelper
 
+  before_action :validate_sprint_collection_params, only: [:create_collection]
   before_action :set_course, only: [:create, :create_collection]
   before_action :set_sprint, only: [:update, :destroy]
 
@@ -17,7 +18,7 @@ class SprintsController < ApplicationController
         params[:start_date].to_date,
         params[:end_date].to_date
     )
-    json_response(sprints)
+    json_response(sprints, :created)
   end
 
   # PUT /sprints/:id
