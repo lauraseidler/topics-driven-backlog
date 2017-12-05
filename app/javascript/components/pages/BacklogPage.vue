@@ -13,7 +13,7 @@
                 </tr>
             </thead>
             <tbody v-sortable="{handle: '.js-drag-drop', onEnd: saveOrder}" >
-                <tr is="story" v-for="story in stories" :key="story.id" :data="story" class="mb-3" view="backlog"></tr>
+                <tr is="story" v-for="story in stories" :key="story.id" :data="story" view="backlog"></tr>
             </tbody>
         </table>
 
@@ -23,7 +23,6 @@
 </template>
 
 <script>
-    import {required, numeric, minValue} from 'vuelidate/lib/validators';
     import Story from "../elements/Story.vue";
     import StoryForm from "../forms/StoryForm.vue";
 
@@ -38,7 +37,7 @@
         computed: {
             stories() {
                 return this.$store.getters['stories/all']
-                    .filter(s => s.status === this.$store.state.stories.STATUS.OPEN)
+                    .filter(s => s.sprint_id === null && s.status === this.$store.state.stories.STATUS.OPEN)
                     .sort((a, b) => a.position - b.position);
             },
         },

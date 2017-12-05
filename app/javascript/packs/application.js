@@ -25,6 +25,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'vue-awesome/icons/arrows'; // drag & drop icon
 import 'vue-awesome/icons/pencil'; // edit icon
 import 'vue-awesome/icons/trash'; // delete icon
+import 'vue-awesome/icons/plus'; // add icon
+import 'vue-awesome/icons/minus'; // remove icon
 import Icon from 'vue-awesome/components/Icon.vue';
 
 // our own stuff

@@ -5,6 +5,7 @@ import StoryPage from '../components/pages/StoryPage.vue';
 import BacklogPage from '../components/pages/BacklogPage.vue';
 import CoursePage from '../components/pages/CoursePage.vue';
 import CoursesPage from '../components/pages/CoursesPage.vue';
+import SprintPlanningPage from '../components/pages/SprintPlanningPage.vue';
 
 Vue.use(Router);
 
@@ -17,7 +18,11 @@ const router = new Router({
        path: '/backlog',
        name: 'backlog',
        component: BacklogPage,
-   },{
+   }, {
+       path: '/sprint-planning',
+       name: 'sprint-planning',
+       component: SprintPlanningPage,
+   }, {
        path: '/courses/:id',
        name: 'course',
        component: CoursePage,
