@@ -28,13 +28,14 @@
                 {{ data.points ? data.points + ' SP' : 'not&nbsp;estimated' }}
             </td>
 
-            <!-- Sprint -->
+            <!-- Status -->
             <td v-if="isView('history')">
-
+                <span class="badge" :class="statusMap[data.status].css">
+                    {{ statusMap[data.status].name }}
+                </span>
             </td>
 
-            <!-- Status -->
-            <td v-if="isView(['sprint', 'history'])">
+            <td v-if="isView('sprint')">
                 <b-dropdown variant="link" no-caret class="b-dropdown-minimal">
                     <template slot="button-content">
                         <span class="badge" :class="statusMap[data.status].css">
