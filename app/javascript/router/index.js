@@ -2,9 +2,11 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import StoryPage from '../components/pages/StoryPage.vue';
-import StoriesPage from '../components/pages/StoriesPage.vue';
+import BacklogPage from '../components/pages/BacklogPage.vue';
 import CoursePage from '../components/pages/CoursePage.vue';
 import CoursesPage from '../components/pages/CoursesPage.vue';
+import SprintPlanningPage from '../components/pages/SprintPlanningPage.vue';
+import HistoryPage from '../components/pages/HistoryPage.vue';
 
 Vue.use(Router);
 
@@ -14,10 +16,18 @@ const router = new Router({
        name: 'story',
        component: StoryPage,
    }, {
-       path: '/stories',
-       name: 'stories',
-       component: StoriesPage,
-   },{
+       path: '/backlog',
+       name: 'backlog',
+       component: BacklogPage,
+   }, {
+       path: '/sprint-planning',
+       name: 'sprint-planning',
+       component: SprintPlanningPage,
+   }, {
+       path: '/history',
+       name: 'history',
+       component: HistoryPage,
+   }, {
        path: '/courses/:id',
        name: 'course',
        component: CoursePage,
@@ -27,7 +37,7 @@ const router = new Router({
        component: CoursesPage,
    }, {
        path: '*',
-       redirect: '/stories'
+       redirect: '/backlog'
    }]
 });
 

@@ -31,7 +31,8 @@ export default {
             return new Promise((resolve, reject) => {
                 Vue.http.delete(`/sprints/${payload.id}`).then(() => {
                    commit('courses/removeSprint', payload, { root: true });
-                });
+                   resolve();
+                }, reject);
             });
         }
     },

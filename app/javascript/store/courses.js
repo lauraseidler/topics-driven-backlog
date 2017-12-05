@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-import { current } from '../helper/semester';
+import {current} from '../helper/semester';
 
 export default {
     namespaced: true,
@@ -197,6 +197,20 @@ export default {
             return {
                 semester: current().valueString,
             }
+        },
+
+        /**
+         * All sprints in all courses
+         * @param state
+         */
+        allSprints: state => () => {
+            let sprints = [];
+
+            state.data.forEach(course => {
+                sprints = sprints.concat(course.sprints);
+            });
+
+            return sprints;
         },
     }
 }
