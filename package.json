@@ -8,6 +8,7 @@
     "stop": "docker-compose down",
     "bash": "docker exec -ti tdb-dev bash",
     "db:migrate": "docker exec -ti tdb-dev bash -c \"/docker/prepare-db.sh\"",
+    "db:seed": "docker-compose run tdb rails db:seed",
     "bundle:update": "docker exec -ti tdb-dev bash -c \"bundle update\"",
     "bundle:install": "docker exec -ti tdb-dev bash -c \"bundle install\""
   },

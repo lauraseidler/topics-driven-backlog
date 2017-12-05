@@ -174,8 +174,64 @@ RSpec.describe 'Stories API', type: :request do
         expect(json['status']).to eq(Story.statuses[:progressing])
       end
     end
+  end
 
+  # Test suite for PATCH /stories/:id
+  describe 'PATCH /stories/:id for sprint attribute' do
+    let(:sprint_id) {
+      create(
+          :sprint,
+          :course_id => create(:course).id
+      ).id
+    }
+    let(:sprint_attribute) {{:sprint_id => sprint_id}}
 
+    context 'assigning a story to a sprint' do
+      before {patch "/stories/#{story_id}", params: sprint_attribute}
+
+      it 'updates the record' do
+        expect(json['sprint_id']).to eq(sprint_id)
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+    end
+
+    context 'when the record exists' do
+      before {patch "/stories/#{story_id}", params: sprint_attribute}
+      before {get "/stories/#{story_id}"}
+
+      it 'provides the sprint id for a story' do
+        expect(json['sprint_id']).to eq(sprint_id)
+      end
+    end
+
+    context 'assigning a story to a sprint which is already finished' do
+      let(:past_sprint_id) {
+        create(
+            :sprint,
+            :course_id => create(:course).id,
+            :start_date => Date.today - 1.week,
+            :end_date => Date.yesterday
+        ).id
+      }
+      let(:past_sprint_attribute) {{:sprint_id => past_sprint_id}}
+
+      before {patch "/stories/#{story_id}", params: past_sprint_attribute}
+
+      it 'updates the record' do
+        expect(json['sprint_id']).to eq(nil)
+      end
+
+      it 'returns status code 422' do
+        expect(response).to have_http_status(422)
+      end
+
+      it 'returns a not found message' do
+        expect(response.body).to match(/Sprint was finished and cannot be changed/)
+      end
+    end
   end
 
   # Test suite for DELETE /stories/:id
