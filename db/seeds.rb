@@ -55,27 +55,26 @@ t4 = Sprint.create(
 Story.destroy_all
 s1 = Story.new(
   title: 'As the Studiengangssprecher, I want to announce events relevant for IMI-Students.',
+  identifier: 'S-1',
   status: Story.statuses[:closed],
-  identifier: 'S-1'
+  sprint_id: t1.id
 ).save(validate: false)
 s2 = Story.new(
     title: 'As an IMI-Student, I get an overview of events coming up within the next week.',
+    identifier: 'S-2',
     status: Story.statuses[:closed],
-    identifier: 'S-2'
+    sprint_id: t1.id
 ).save(validate: false)
 s3 = Story.new(
     title: 'As an IMI-Student, I can see events that will be important for me, e.g. the Projektvergabe, or the Showtime, well ahead.',
-    status: Story.statuses[:closed],
     identifier: 'S-3'
 ).save(validate: false)
 s4 = Story.new(
     title: 'As the Studiengangssprecher, I can also keep an overview of the planning status (date set, room booked, announced etc) for each listed event.',
-    status: Story.statuses[:closed],
     identifier: 'S-4'
 ).save(validate: false)
 s5 = Story.new(
     title: 'As a Student, I can filter events that are relevant for me (B/M, Semester).',
-    status: Story.statuses[:closed],
     identifier: 'S-5'
 ).save(validate: false)
 s6 = Story.new(
@@ -84,22 +83,18 @@ s6 = Story.new(
 ).save(validate: false)
 s7 = Story.new(
     title: 'S-1 and S-4 are only available when logged in as an Admin User.',
-    status: Story.statuses[:closed],
     identifier: 'S-7'
 ).save(validate: false)
 s8 = Story.new(
     title: 'As a SGS, I can edit the Categories of an event while editing the event.',
-    status: Story.statuses[:closed],
     identifier: 'S-8'
 ).save(validate: false)
 s9 = Story.new(
     title: 'As an SGS, I can delete Categories from an Category-Maintenance View listing all the Categories.',
-    status: Story.statuses[:closed],
     identifier: 'S-9'
 ).save(validate: false)
 s10 = Story.new(
     title: 'As an SGS, I can combine two categories into one.',
-    status: Story.statuses[:closed],
     identifier: 'S-10'
 ).save(validate: false)
 s11 = Story.new(
