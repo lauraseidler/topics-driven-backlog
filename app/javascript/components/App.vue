@@ -10,6 +10,7 @@
                     <b-navbar-nav>
                         <b-nav-item to="/backlog">Backlog</b-nav-item>
                         <b-nav-item to="/sprint-planning">Sprint planning</b-nav-item>
+                        <b-nav-item to="/history">History</b-nav-item>
                         <b-nav-item to="/courses">Courses</b-nav-item>
                     </b-navbar-nav>
                 </b-collapse>

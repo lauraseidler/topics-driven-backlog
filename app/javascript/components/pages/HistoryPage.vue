@@ -1,31 +1,26 @@
 <template>
-    <section id="sprint-planning-page">
-        <h1>Sprint planning</h1>
+    <section id="history-page">
+        <h1>History</h1>
 
-        <template v-if="nextSprint">
-            <p>
-                Planning sprint: {{ nextSprint.name }} <br>
-                Start: {{ nextSprint.start_date }} <br>
-                End: {{ nextSprint.end_date }}
-            </p>
+        <template v-for="sprint in sprints">
+            <h2>{{ sprint.name }}</h2>
 
-            <table class="table table-striped">
+            <table v-if="storiesInSprint(sprint.id).length" class="table table-striped">
                 <thead>
-                <tr>
-                    <th> </th>
-                    <th>Identifier</th>
-                    <th>Story</th>
-                    <th>Story&nbsp;points</th>
-                    <th>Operations</th>
-                </tr>
+                    <tr>
+                        <th>Identifier</th>
+                        <th>Story</th>
+                        <th>Story&nbsp;points</th>
+                        <th>Status</th>
+                    </tr>
                 </thead>
-                <tbody v-sortable="{handle: '.js-drag-drop', onEnd: saveOrder}">
-                <tr is="story" v-for="story in storiesInSprint" :key="story.id" :data="story" view="planning-sprint" @removeFromSprint="removeFromSprint(story.id)"></tr>
+                <tbody>
+                    <tr is="story" v-for="story in storiesInSprint(sprint.id)" :key="story.id" :data="story" view="history"></tr>
                 </tbody>
             </table>
-        </template>
 
-        <p v-else>No sprint to plan!</p>
+            <p v-else>No stories in this sprint</p>
+        </template>
 
         <h2>Backlog</h2>
         <table class="table table-striped">
@@ -34,28 +29,24 @@
                     <th>Identifier</th>
                     <th>Story</th>
                     <th>Story&nbsp;points</th>
-                    <th>Operations</th>
+                    <th>Status</th>
                 </tr>
             </thead>
-            <tbody >
-                <tr is="story" v-for="story in backlog" :key="story.id" :data="story" view="planning-backlog" @addToSprint="addToSprint(story.id)"></tr>
+            <tbody>
+                <tr is="story" v-for="story in backlog" :key="story.id" :data="story" view="history"></tr>
             </tbody>
         </table>
-
-        <story-form v-if="showForm" v-model="newStory" @cancel="showForm = false" @submit="save"></story-form>
-        <b-button v-else type="button" variant="primary" @click="showForm = true">Add story</b-button>
     </section>
 </template>
 
 <script>
     import Story from "../elements/Story.vue";
-    import StoryForm from "../forms/StoryForm.vue";
     import Sprint from "../elements/Sprint.vue";
     import * as _ from "lodash";
     import moment from "moment";
 
     export default {
-        components: {Sprint, StoryForm, Story},
+        components: {Sprint, Story},
         data() {
             return {
                 showForm: false,
@@ -69,24 +60,21 @@
                     .sort((a, b) => a.position - b.position);
             },
 
-            nextSprint() {
-                const currentDate = moment().format('YYYY-MM-DD');
-
-                return _.first(this.$store.getters['courses/allSprints']()
-                    .filter(s => s.end_date >= currentDate)
-                    .sort((a, b) => a.start_date.localeCompare(b.start_date)));
-            },
-
-            storiesInSprint() {
-                if (this.nextSprint) {
-                    return this.$store.getters['stories/find']('sprint_id', this.nextSprint.id)
-                            .sort((a, b) => a.position - b.position);
-                } else {
-                    return [];
-                }
+            sprints() {
+                return this.$store.getters['courses/allSprints']()
+                    .sort((a, b) => a.start_date.localeCompare(b.start_date));
             },
         },
         methods: {
+            /**
+             * All stories in a specific sprint
+             * @param sprintId
+             */
+            storiesInSprint(sprintId) {
+                return this.$store.getters['stories/find']('sprint_id', sprintId)
+                    .sort((a, b) => a.position - b.position);
+            },
+
             /**
              * Save current form state as new story
              */

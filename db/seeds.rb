@@ -55,11 +55,15 @@ t4 = Sprint.create(
 Story.destroy_all
 s1 = Story.new(
   title: 'As the Studiengangssprecher, I want to announce events relevant for IMI-Students.',
-  identifier: 'S-1'
+  identifier: 'S-1',
+  status: Story.statuses[:closed],
+  sprint_id: t1.id
 ).save(validate: false)
 s2 = Story.new(
     title: 'As an IMI-Student, I get an overview of events coming up within the next week.',
-    identifier: 'S-2'
+    identifier: 'S-2',
+    status: Story.statuses[:closed],
+    sprint_id: t1.id
 ).save(validate: false)
 s3 = Story.new(
     title: 'As an IMI-Student, I can see events that will be important for me, e.g. the Projektvergabe, or the Showtime, well ahead.',
