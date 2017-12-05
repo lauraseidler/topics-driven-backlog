@@ -6,11 +6,11 @@
             <li class="card mb-3" v-for="course in courses" :key="course.id">
                 <div class="card-body">
                     <router-link :to="`/courses/${course.id}`" class="h4 card-title link-unstyled">
-                        {{ course.short_title }} <small>{{ course.title }}</small>
+                        {{ course.short_title }}
                     </router-link>
 
                     <h5 class="h6 text-muted card-subtitle mt-0">
-                        {{ getSemesterInfo(course.semester_type, course.semester_year).fullString }}
+                        {{ course.title }} ({{ getSemesterInfo(course.semester_type, course.semester_year).fullString }})
                     </h5>
 
                     <p class="card-text mt-2" v-if="course.hyperlink">

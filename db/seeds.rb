@@ -12,11 +12,11 @@ Course.destroy_all
 
 
 info3 = Course.create(
-          title: 'B15.1 Informatik 3',
-          short_title: 'INFO3',
-          hyperlink: 'http://home.htw-berlin.de/~kleinen/classes/ws2017/info3',
-          semester_type: 'W',
-          semester_year: '2017'
+    title: 'B15.1 Informatik 3',
+    short_title: 'INFO3',
+    hyperlink: 'http://home.htw-berlin.de/~kleinen/classes/ws2017/info3',
+    semester_type: 'W',
+    semester_year: '2017'
 )
 m1 = Course.create(
     title: 'M1 Media Programming: Web Technology',
@@ -36,33 +36,33 @@ wtat2 = Course.create(
 
 t1 = Sprint.create(
     name: 'Rails and Active Record',
-    start_date: Date.new(2017,10,19),
-    end_date: Date.new(2017,10,26),
+    start_date: Date.new(2017, 10, 19),
+    end_date: Date.new(2017, 10, 26),
     course_id: wtat2.id
 )
 t2 = Sprint.create(
     name: 'Authentication & Testing',
-    start_date: Date.new(2017,11,02),
-    end_date: Date.new(2017,11,16),
+    start_date: Date.new(2017, 11, 02),
+    end_date: Date.new(2017, 11, 16),
     course_id: wtat2.id
 )
 t3 = Sprint.create(
     name: 'Search Functionality, Database & Docker',
-    start_date: Date.new(2017,11,23),
-    end_date: Date.new(2017,11,30),
+    start_date: Date.new(2017, 11, 23),
+    end_date: Date.new(2017, 11, 30),
     course_id: wtat2.id
 )
 t4 = Sprint.create(
     name: 'Rails Security & Deployment',
-    start_date: Date.new(2017,12,07),
-    end_date: Date.new(2017,12,14),
+    start_date: Date.new(2017, 12, 07),
+    end_date: Date.new(2017, 12, 14),
     course_id: wtat2.id
 )
 
 s1 = Story.new(
-  title: 'As the Studiengangssprecher, I want to announce events relevant for IMI-Students.',
-  status: Story.statuses[:closed],
-  identifier: 'S-1'
+    title: 'As the Studiengangssprecher, I want to announce events relevant for IMI-Students.',
+    status: Story.statuses[:closed],
+    identifier: 'S-1'
 ).save(validate: false)
 s2 = Story.new(
     title: 'As an IMI-Student, I get an overview of events coming up within the next week.',
