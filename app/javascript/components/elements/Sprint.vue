@@ -3,7 +3,7 @@
         <div class="card-body">
             <template v-if="!editing">
                 <b-button size="sm" variant="danger" class="float-right ml-2" @click="deleteSprint">Delete</b-button>
-                <b-button size="sm" class="float-right" @click="startEditing">Edit</b-button>
+                <b-button size="sm" variant="primary" class="float-right" @click="startEditing">Edit</b-button>
 
                 <h3 class="card-title h5">{{ data.name }}</h3>
 
