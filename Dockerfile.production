@@ -41,6 +41,7 @@ RUN set -ex \
        imagemagick-dev \
   && gem install bundler \
   && bundle install --without development test \
+  && yarn \
   && bundle exec rake assets:precompile \
   && mkdir nginx-assets
 
