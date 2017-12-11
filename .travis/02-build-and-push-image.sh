@@ -4,8 +4,8 @@ echo "$0: building docker image"
 
 export DEPLOYMENT_ENVIRONMENT=staging
 
-. set-variables.sh
-. echo-variables.sh
+. .travis/set-variables.sh
+. .travis/echo-variables.sh
 
 if [ ${DEPLOYMENT_SHOULD_RUN} != "true" ]; then
   echo "***** SKIPPING BUILD AND PUSH: DEPLOYMENT_SHOULD_RUN $DEPLOYMENT_SHOULD_RUN *****"

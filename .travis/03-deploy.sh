@@ -13,8 +13,8 @@ if [ -z ${DEPLOYMENT_ENVIRONMENT} ]; then
     exit 1
 fi
 
-. set-variables.sh
-. echo-variables.sh
+. .travis/set-variables.sh
+. .travis/echo-variables.sh
 
 if [ ${DEPLOYMENT_SHOULD_RUN} != "true" ]; then
     echo "***** SKIPPING DEPLOYMENT: DEPLOYMENT_SHOULD_RUN $DEPLOYMENT_SHOULD_RUN *****"
@@ -22,7 +22,7 @@ if [ ${DEPLOYMENT_SHOULD_RUN} != "true" ]; then
     exit 0
 fi
 
-. decrypt-keys.sh ${DEPLOYMENT_ENVIRONMENT}
-. docker-deploy.sh
+. .travis/decrypt-keys.sh ${DEPLOYMENT_ENVIRONMENT}
+. .travis/docker-deploy.sh
 
 echo "end $0"
