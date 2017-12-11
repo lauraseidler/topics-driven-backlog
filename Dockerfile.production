@@ -13,7 +13,7 @@ EXPOSE 80
 WORKDIR $APP_HOME
 
 # Add gemfile stuff
-COPY Gemfile* .
+COPY Gemfile* ./
 
 # Add scripts
 COPY .docker/* .docker/
