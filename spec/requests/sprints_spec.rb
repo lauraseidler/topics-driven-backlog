@@ -4,8 +4,13 @@ RSpec.describe 'Sprints API' do
 
   let!(:course) { create(:course) }
   let(:course_id) { course.id }
-  let!(:sprints) { create_list(:sprint, 20, course_id: course.id) }
-  let(:id) { sprints.first.id }
+  let!(:sprint_1) {
+    create(:sprint, course_id: course.id, start_date: Date.new(2018,11,07), end_date: Date.new(2018,11,17))
+  }
+  let!(:sprint_2) {
+    create(:sprint, course_id: course.id, start_date: Date.new(2018,11,17), end_date: Date.new(2018,11,27))
+  }
+  let(:id) { sprint_1.id }
 
   # Test suite for GET /courses/:course_id
   describe 'GET /courses/:course_id with serialized sprints' do
@@ -17,7 +22,7 @@ RSpec.describe 'Sprints API' do
       end
 
       it 'returns all course sprints' do
-        expect(json['sprints'].size).to eq(20)
+        expect(json['sprints'].size).to eq(2)
       end
     end
 
@@ -129,8 +134,8 @@ RSpec.describe 'Sprints API' do
     context 'updating an invalid end date' do
       before { patch "/sprints/#{id}", params: invalid_dates_attribute }
 
-      it 'returns status code 422' do
-        expect(response).to have_http_status(422)
+      it 'returns status code 400' do
+        expect(response).to have_http_status(400)
       end
     end
   end
