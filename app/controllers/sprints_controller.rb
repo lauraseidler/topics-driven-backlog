@@ -1,6 +1,10 @@
 class SprintsController < ApplicationController
+  include SprintsHelper
+
   before_action :set_course, only: [:create]
   before_action :set_sprint, only: [:update, :destroy]
+  before_action :validate_sprint_date_parameter, except: [:destroy]
+  before_action :validate_sprint_collision, only: [:update]
 
   # POST /courses/course_id/sprints
   def create
