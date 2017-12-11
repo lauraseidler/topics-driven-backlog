@@ -1,0 +1,54 @@
+# Default server configuration
+
+# Redirect http --> https
+# server {
+#     listen 80 default_server;
+#     listen [::]:80 default_server;
+#     server_name _;
+#     return 301 https://$host$request_uri;
+# }
+
+# Main server, proxying rails app
+server {
+	# listen 443 ssl default_server;
+	# listen [::]:443 ssl default_server;
+	# ssl    on;
+	# ssl_certificate      /etc/ssl/{{ nginx_host_name }}.pem;
+	# ssl_certificate_key  /etc/ssl/{{ nginx_host_name }}.key;
+
+	root /var/www/html;
+
+	# Add index.php to the list if you are using PHP
+	index index.html index.htm;
+
+	server_name {{ nginx_host_name }};
+
+    # serve precompiled assets
+    location ~ ^/assets/ {
+       	root   /home/{{ ansible_user }}/nginx-assets;
+        gzip_static on;
+        expires max;
+        add_header Cache-Control public;
+    }
+
+    # serve images statically
+    # location ~ ^/images/ {
+    #     root   /home/{{ ansible_user }}/rails/public/images;
+    #     gzip_static on;
+    #     expires max;
+    #     add_header Cache-Control public;
+    # }
+
+    # serve uploads statically
+    # location ~ ^/uploads/ {
+    #     root   /home/{{ ansible_user }}/rails/public/uploads;
+    #     gzip_static on;
+    #     expires max;
+    #     add_header Cache-Control public;
+    # }
+
+    # proxy everything else to rails application server
+	location / {
+		proxy_pass http://localhost:{{ application_port }};
+	}
+}
