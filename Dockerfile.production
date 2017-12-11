@@ -3,6 +3,8 @@ FROM ruby:2.4-alpine
 # set variables
 ENV APP_HOME /usr/src/app
 ENV APPLICATION_ENVIRONMENT docker
+ENV RAILS_ENV production
+ENV RACK_ENV production
 
 # expose port 80 (rails server)
 EXPOSE 80
@@ -11,7 +13,7 @@ EXPOSE 80
 WORKDIR $APP_HOME
 
 # Add gemfile stuff
-COPY Gemfile* ./
+COPY Gemfile* .
 
 # Add scripts
 COPY .docker/* .docker/
@@ -21,6 +23,9 @@ RUN chmod +x .docker/prepare-db.sh
 # general dependencies
 RUN set -ex \
   && apk add --no-cache libpq imagemagick nodejs bash
+
+# add everything
+ADD . .
 
 # install yarn
 RUN npm install --global yarn
@@ -35,7 +40,9 @@ RUN set -ex \
        postgresql-dev \
        imagemagick-dev \
   && gem install bundler \
-  && bundle install
+  && bundle install --without development test \
+  && bundle exec rake assets:precompile \
+  && mkdir nginx-assets
 
-# start puma server AND webpack dev server (see Procfile)
-CMD ["foreman", "start"]
+# start puma server only
+CMD rails s --port 80 --binding 0.0.0.0

@@ -1,0 +1,8 @@
+# ignore tmp
+/tmp/*
+/log/*
+
+# sqlite databases
+/db/*.sqlite
+/public/uploads
+.git
