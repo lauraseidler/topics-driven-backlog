@@ -14,7 +14,7 @@ if [ ${DEPLOYMENT_SHOULD_RUN} != "true" ]; then
 fi
 
 
-docker build -f Dockerfile.production -t topicsdrivenbacklog/topicsdrivenbacklog:${DEPLOYMENT_TAG} .
+docker build -f .docker/Dockerfile.production -t topicsdrivenbacklog/topicsdrivenbacklog:${DEPLOYMENT_TAG} .
 return_code=$?
 
 if [ ${return_code} != 0 ]; then
