@@ -7,7 +7,7 @@ fi
 
 if [ ${TRAVIS} == "true" ]; then
     echo "$0: decrypting ssh keys"
-    openssl aes-256-cbc -K ${encrypted_fb365c1216b5_key} -iv ${encrypted_fb365c1216b5_iv} -in ./ssh_keys.tar.enc -out ssh_keys.tar -d
+    openssl aes-256-cbc -K ${encrypted_fb365c1216b5_key} -iv ${encrypted_fb365c1216b5_iv} -in .travis/ssh_keys.tar.enc -out ssh_keys.tar -d
     tar xvf ssh_keys.tar
     chmod 0600 id_rsa*
     echo $1
