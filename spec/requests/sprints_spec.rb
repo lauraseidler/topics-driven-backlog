@@ -129,8 +129,24 @@ RSpec.describe 'Sprints API' do
     context 'updating an invalid end date' do
       before { patch "/sprints/#{id}", params: invalid_dates_attribute }
 
-      it 'returns status code 422' do
-        expect(response).to have_http_status(422)
+      it 'returns status code 400' do
+        expect(response).to have_http_status(400)
+      end
+
+      it 'returns a failure message' do
+        expect(response.body).to match(/Validation failed: End date cannot be before the start date/)
+      end
+    end
+
+    context 'updating an start date from the past' do
+      before { patch "/sprints/#{id}", params: { start_date: Date.yesterday.to_s, end_date: Date.tomorrow.to_s } }
+
+      it 'returns status code 400' do
+        expect(response).to have_http_status(400)
+      end
+
+      it 'returns a failure message' do
+        expect(response.body).to match(/Validation failed: Start date cannot be in the past/)
       end
     end
   end
