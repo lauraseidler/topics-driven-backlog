@@ -7,7 +7,7 @@ module SprintsHelper
         valid_date_range(params[:start_date] || '', params[:end_date] || '')
     )
     errors.append(
-        begins_in_the_future(params[:start_date] || '')
+        ends_in_the_future(params[:end_date] || '')
     )
 
     raise_exception_on_validation_error(errors)
@@ -25,10 +25,10 @@ module SprintsHelper
     end
   end
 
-  def begins_in_the_future(start_date)
-    if !start_date.empty?
-      if Date.parse(start_date) < Date.today
-        'Start date cannot be in the past'
+  def ends_in_the_future(end_date)
+    if !end_date.empty?
+      if Date.parse(end_date) < Date.today
+        'End date cannot be in the past'
       end
     end
   end
