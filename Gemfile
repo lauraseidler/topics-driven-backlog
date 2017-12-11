@@ -58,3 +58,4 @@ end
 # Stuff for Vue installation
 gem 'webpacker'
 gem 'foreman'
+gem 'uglifier'
