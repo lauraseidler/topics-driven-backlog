@@ -42,7 +42,7 @@
             </tbody>
         </table>
 
-        <story-form v-if="showForm" v-model="newStory" @cancel="showForm = false" @submit="save"></story-form>
+        <story-form v-if="showSprintForm" v-model="newStory" @cancel="showForm = false" @submit="save"></story-form>
         <b-button v-else type="button" variant="primary" @click="showForm = true">Add story</b-button>
     </section>
 </template>
@@ -58,7 +58,7 @@
         components: {Sprint, StoryForm, Story},
         data() {
             return {
-                showForm: false,
+                showSprintForm: false,
                 newStory: {},
             };
         },

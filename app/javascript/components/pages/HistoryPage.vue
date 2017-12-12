@@ -49,7 +49,7 @@
         components: {Sprint, Story},
         data() {
             return {
-                showForm: false,
+                showSprintForm: false,
                 newStory: {},
             };
         },

@@ -22,7 +22,7 @@
 
         <p v-else>No courses yet.</p>
 
-        <b-form v-if="showForm" @submit="saveCourse">
+        <b-form v-if="showSprintForm" @submit="saveCourse">
             <b-row>
                 <b-col md="4">
                     <b-form-group label="Shorthand" label-for="course-shorthand">
@@ -65,7 +65,7 @@
     export default {
         data() {
             return {
-                showForm: false,
+                showSprintForm: false,
                 newCourse: this.$store.getters['courses/new'],
             };
         },
