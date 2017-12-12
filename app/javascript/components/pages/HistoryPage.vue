@@ -48,10 +48,7 @@
     export default {
         components: {Sprint, Story},
         data() {
-            return {
-                showSprintForm: false,
-                newStory: {},
-            };
+            return {};
         },
         computed: {
             backlog() {
