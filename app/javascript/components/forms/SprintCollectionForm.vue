@@ -8,7 +8,7 @@
                     This feature allows you to add multiple sprints at the same time. Just enter a sprint length in days
                     (for example 7 for week-long sprints) and the start and end date of the period you'd like to generate sprints for.
                     You can view a preview of the sprints that are going to be generated for you on the right.
-                    Please not that you can only add future sprints with this feature.
+                    Please note that you can only add future sprints with this feature.
                 </p>
 
                 <b-form-group label="Sprint length in days" label-for="sprint-collection-duration">
