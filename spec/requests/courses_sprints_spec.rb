@@ -100,17 +100,17 @@ RSpec.describe 'Courses/Sprints API' do
         expect(json[0]['name']).to eq('1. Sprint')
         expect(json[0]['course_id']).to eq(course_id)
         expect(json[0]['start_date']).to eq('2017-11-07')
-        expect(json[0]['end_date']).to eq('2017-11-14')
+        expect(json[0]['end_date']).to eq('2017-11-13')
 
         expect(json[1]['name']).to eq('2. Sprint')
         expect(json[1]['course_id']).to eq(course_id)
         expect(json[1]['start_date']).to eq('2017-11-14')
-        expect(json[1]['end_date']).to eq('2017-11-21')
+        expect(json[1]['end_date']).to eq('2017-11-20')
 
         expect(json[2]['name']).to eq('3. Sprint')
         expect(json[2]['course_id']).to eq(course_id)
         expect(json[2]['start_date']).to eq('2017-11-21')
-        expect(json[2]['end_date']).to eq('2017-11-28')
+        expect(json[2]['end_date']).to eq('2017-11-27')
       end
 
       it 'returns status code 201' do
