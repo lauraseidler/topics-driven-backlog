@@ -2,8 +2,10 @@
     <li class="card">
         <div class="card-body">
             <template v-if="!editing">
-                <b-button size="sm" variant="danger" class="float-right ml-2" @click="deleteSprint">Delete</b-button>
-                <b-button size="sm" variant="primary" class="float-right" @click="startEditing">Edit</b-button>
+                <template v-if="data.end_date >= currentDate">
+                    <b-button size="sm" variant="danger" class="float-right ml-2" @click="deleteSprint">Delete</b-button>
+                    <b-button size="sm" variant="primary" class="float-right" @click="startEditing">Edit</b-button>
+                </template>
 
                 <h3 class="card-title h5">{{ data.name }}</h3>
 
@@ -20,6 +22,7 @@
 <script>
     import SprintForm from "../forms/SprintForm.vue";
     import * as _ from "lodash";
+    import moment from "moment";
 
     export default {
         components: {SprintForm},
@@ -29,6 +32,7 @@
             return {
                 editing: false,
                 editingData: null,
+                currentDate: moment().format('YYYY-MM-DD'),
             }
         },
         methods: {
