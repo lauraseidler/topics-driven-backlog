@@ -32,6 +32,3 @@ services:
     # postgres dependency
     depends_on:
       - postgresql
-    # mount data as volume for persistence
-    volumes:
-      - .:/usr/src/app
