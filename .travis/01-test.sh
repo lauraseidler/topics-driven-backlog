@@ -23,6 +23,4 @@ else
     docker exec -e RAILS_ENV=test -ti tdb-dev rake db:migrate RAILS_ENV=test
     docker exec -e RAILS_ENV=test -ti tdb-dev rake db:migrate:status RAILS_ENV=test
     docker exec -e RAILS_ENV=test -ti tdb-dev rspec spec
-    docker exec -e RAILS_ENV=test -ti tdb-dev yarn
-    docker exec -e RAILS_ENV=test -ti tdb-dev rake assets:precompile
 fi
