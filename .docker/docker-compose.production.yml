@@ -1,7 +1,8 @@
-# This file OVERRIDES some settings of docker-compose.yml
 version: '3'
 services:
   postgresql:
+    # postgres image
+    image: postgres:10-alpine
     # rename container
     container_name: postgresql
     # load production variables
@@ -28,3 +29,9 @@ services:
     # open port for nginx proxy
     ports:
       - 4000:80
+    # postgres dependency
+    depends_on:
+      - postgresql
+    # mount data as volume for persistence
+    volumes:
+      - .:/usr/src/app
