@@ -15,12 +15,17 @@ env:
   - secure: jwc4wbqo6T8vqS+5T+qNxYLIulqVtp+4sotALcbSTT6vDGupfBqnzJ43dRaqmOL+HB+yEMxBOky2MofLFXN2fG/61I4QNlorfojAvDTLQXhJw+sX1LgO3Hs4mr4EChSXI/r4R+ZuP0a/fm+lrEXw7C+DrJEMWkj+K4J4Dcz1b+f/JLvr3iwNN/Xb9GuzDygT7z15Ir+XU9lch/fHXFNtkRmIHVtsPLIXxhj4173W2kaaS/E9NQNW6MBKtVUvP+l9InkbRAEeWoRyS3lLXznsKWYoBhhN/U4t5k6Ry9CJonkncjUyZGOu9KVCCT6+B62qfPFJVP9A+cy3dR+zlzI9lxqnhlB3STJSGaw62IzbOeHItuYSObG0lwDxyQ9jR75yXk1feikRsmeDIS+IfQSQq8y8bzcMzYONpztc/uuKy/Lqg8ISO9kSYCVzwBuNcbWzRE1nhpzN4GH4SlNWDfG8KvCWCWYtd0JK9gJ4tcC5SaTNQE8ISYUOJbfybGuLggfTru4PPIkNOGynShWZRy9fgDQGkMYmwlh5Cg5fyykaxzL5Qo9Xv4NVtCtizJKKe3cDGQSstdQcodbPKROgFzRzdGiCT50PgPSdILAkI4vLai+7bwPzlEEBpRCTA+GxWLqVzi7Y0IihID5A2WSwhruQthdMD/HCJHWvxYURljHYaGA=
   # SECRET_KEY_BASE
   - secure: Budja+a5FFjIfLeX0cZ4dMkze+yhN3t/L4lYNQFfA5zgrpknEGwOpoMc4j89JxzwrrERSB53yLTUWukQ8q7XmlmpG8xG9ye3a86tu0z+GMiYlT3jy+T9xCu7BNkNX9WGUyFgvycGuePX5rdDxfAAKiXjAcppYWDktBp50lXIPewJtnCZQh8MVpWB4efHo87W5dUjve2y39isiTBaRobszfIcZDe7Ql6aH/F1lxs00pciEAYj+rFzAUjGTnMyTb93S6IVT+Svi2ELzSYHNmybrfeAGQWQiEeZHQDN48ot6InjTUD/ZbmZRB7PRBKjxa1oYKtK7EheeK7P4HA5nB4aliAu62k/iNNIob3r7IT+YokVym+DUVoTQ16M5ialVhntkC1Y9/STYgUrfKr47oUGQodvuQeBLUoMbbR2stccDr6AEaqYO2DkDFTgy27Bal5N6l0ykCDYKqmI6l7V7xW0YMtDUkSKq1biMRlu0Hqo657DMk8u3TUz8cDAEJUlw0cZhW58+z4amFRHBnVU4UFd1TxHxUAaQRPkBhybOcdhxKRI5sC6YEJfuzkgiDlTn4ZCzd5Mu8iBBmEjzyBPV1BAVbAQKsIC3LDK1A5ovajy+bzKtKoE8lLeP9/bP+LJwdbEvzfcNuU9qeY9dkfhQ9EkaSrl/IgdqaQA8ryJeYlwvjA=
+jobs:
+  include:
+    - stage: test
+      script: ".travis/01-test.sh"
+    - stage: build
+      script: ".travis/02-build-and-push-image.sh"
+    - stage: deploy
+      script: ".travis/03-deploy.sh staging"
 stages:
-  - name: test
-    script: ".travis/01-test.sh"
-  - name: build and push docker image
-    script: ".travis/02-build-and-push-image.sh"
+  - test
+  - name: build
     if: (branch = develop) AND (NOT(type IN (push, pull_request)))
-  - name: deploy to staging
-    script: ".travis/03-deploy.sh staging"
+  - name: deploy
     if: (branch = develop) AND (NOT(type IN (push, pull_request)))
