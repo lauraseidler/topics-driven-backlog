@@ -15,7 +15,7 @@ services:
 
   app:
     # load image instead of building
-    image: topicsdrivenbacklog/topicsdrivenbacklog:${TAG}
+    image: mvuajua/topics-driven-backlog:${TAG}
     # rename container
     container_name: tdb
     # load production variables

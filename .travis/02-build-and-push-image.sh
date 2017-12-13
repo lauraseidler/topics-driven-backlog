@@ -23,7 +23,7 @@ if [ ${return_code} != 0 ]; then
 fi
 
 docker images
-echo "pushing image with tag topicsdrivenbacklog/topicsdrivenbacklog:$DEPLOYMENT_TAG"
+echo "pushing image with tag mvuajua/topics-driven-backlog:$DEPLOYMENT_TAG"
 
 docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
 docker push mvuajua/topics-driven-backlog:${DEPLOYMENT_TAG}
