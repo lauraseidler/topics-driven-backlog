@@ -7,9 +7,9 @@ fi
 
 if [ ${TRAVIS} == "true" ]; then
     echo "$0: decrypting ssh keys"
-    openssl aes-256-cbc -K ${encrypted_fb365c1216b5_key} -iv ${encrypted_fb365c1216b5_iv} -in .travis/ssh_keys.tar.enc -out ssh_keys.tar -d
-    tar xvf .travis/ssh_keys.tar
-    chmod 0600 .travis/id_rsa*
+    openssl aes-256-cbc -K ${encrypted_fb365c1216b5_key} -iv ${encrypted_fb365c1216b5_iv} -in ssh_keys.tar.enc -out ssh_keys.tar -d
+    tar xvf ssh_keys.tar
+    chmod 0600 id_rsa*
     echo $1
 
     if [ -z $1 ]; then
@@ -17,9 +17,12 @@ if [ ${TRAVIS} == "true" ]; then
         exit 0
     fi
 
+    ls -la .travis
+    ls -la .
+
     if [ $1 == "staging" ]; then
         echo "trying to ssh to staging"
-        ssh -i .travis/id_rsa_staging -o StrictHostKeyChecking=no deployer@backlog-staging.f4.htw-berlin.de "pwd  ; exit"
+        ssh -i id_rsa_staging -o StrictHostKeyChecking=no deployer@backlog-staging.f4.htw-berlin.de "pwd  ; exit"
 #    elif [ $1 == "production" ]; then
 #        echo "trying to ssh to production"
 #        ssh  -i id_rsa_production -o StrictHostKeyChecking=no deployer@backlog-production.f4.htw-berlin.de "pwd ; exit"
