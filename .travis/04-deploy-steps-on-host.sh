@@ -23,9 +23,9 @@ docker cp app:/usr/src/app/public/assets nginx-assets
 exit_on_error $?
 
 echo "+++ Wait for postgres"
-docker-compose -f docker-compose-production.yml exec app .docker/wait-for-db.sh
+docker-compose -f docker-compose.production.yml exec app .docker/wait-for-db.sh
 exit_on_error $?
 
 echo "+++ Database Migration"
-docker-compose -f docker-compose-production.yml exec app bundle exec rake db:migrate
+docker-compose -f docker-compose.production.yml exec app bundle exec rake db:migrate
 exit_on_error $?
