@@ -43,7 +43,8 @@ RUN set -ex \
   && bundle install --without development test \
   && yarn \
   && bundle exec rake assets:precompile \
-  && mkdir nginx-assets
+  && mkdir nginx-assets \
+  && rm -rf node_modules
 
 # start puma server only
 CMD rails s --port 80 --binding 0.0.0.0

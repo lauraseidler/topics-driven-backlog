@@ -14,7 +14,7 @@ if [ ${DEPLOYMENT_SHOULD_RUN} != "true" ]; then
 fi
 
 
-docker build -f .docker/Dockerfile.production -t topicsdrivenbacklog/topicsdrivenbacklog:${DEPLOYMENT_TAG} .
+docker build -f .docker/Dockerfile.production -t mvuajua/topics-driven-backlog:${DEPLOYMENT_TAG} .
 return_code=$?
 
 if [ ${return_code} != 0 ]; then
@@ -26,7 +26,7 @@ docker images
 echo "pushing image with tag topicsdrivenbacklog/topicsdrivenbacklog:$DEPLOYMENT_TAG"
 
 docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
-docker push topicsdrivenbacklog/topicsdrivenbacklog:${DEPLOYMENT_TAG}
+docker push mvuajua/topics-driven-backlog:${DEPLOYMENT_TAG}
 return_code=$?
 
 if [ ${return_code} != 0 ]; then
