@@ -19,13 +19,13 @@ env:
   - secure: Budja+a5FFjIfLeX0cZ4dMkze+yhN3t/L4lYNQFfA5zgrpknEGwOpoMc4j89JxzwrrERSB53yLTUWukQ8q7XmlmpG8xG9ye3a86tu0z+GMiYlT3jy+T9xCu7BNkNX9WGUyFgvycGuePX5rdDxfAAKiXjAcppYWDktBp50lXIPewJtnCZQh8MVpWB4efHo87W5dUjve2y39isiTBaRobszfIcZDe7Ql6aH/F1lxs00pciEAYj+rFzAUjGTnMyTb93S6IVT+Svi2ELzSYHNmybrfeAGQWQiEeZHQDN48ot6InjTUD/ZbmZRB7PRBKjxa1oYKtK7EheeK7P4HA5nB4aliAu62k/iNNIob3r7IT+YokVym+DUVoTQ16M5ialVhntkC1Y9/STYgUrfKr47oUGQodvuQeBLUoMbbR2stccDr6AEaqYO2DkDFTgy27Bal5N6l0ykCDYKqmI6l7V7xW0YMtDUkSKq1biMRlu0Hqo657DMk8u3TUz8cDAEJUlw0cZhW58+z4amFRHBnVU4UFd1TxHxUAaQRPkBhybOcdhxKRI5sC6YEJfuzkgiDlTn4ZCzd5Mu8iBBmEjzyBPV1BAVbAQKsIC3LDK1A5ovajy+bzKtKoE8lLeP9/bP+LJwdbEvzfcNuU9qeY9dkfhQ9EkaSrl/IgdqaQA8ryJeYlwvjA=
 jobs:
   include:
-  - stage: test ssh keys
-    script: ".travis/decrypt-keys.sh staging"
+#  - stage: test ssh keys
+#    script: ".travis/decrypt-keys.sh staging"
 #  - stage: test
 #    script: ".travis/01-test.sh"
-#  - stage: build and push docker image
-#    script: ".travis/02-build-and-push-image.sh"
-#    if: "(branch = task/TDB-57)"
-#  - stage: deploy to staging
-#    script: ".travis/03-deploy.sh staging"
-#    if: "(branch = task/TDB-57)"
+  - stage: build and push docker image
+    script: ".travis/02-build-and-push-image.sh"
+    if: "(branch = task/TDB-57)"
+  - stage: deploy to staging
+    script: ".travis/03-deploy.sh staging"
+    if: "(branch = task/TDB-57)"
