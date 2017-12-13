@@ -171,6 +171,23 @@ export default {
                 }, reject);
             });
         },
+
+        /**
+         * Add a sprint collection to a given course
+         * @param dispatch
+         * @param payload (id, collection)
+         * @returns {Promise}
+         */
+        addSprintCollection({dispatch}, payload) {
+            return new Promise((resolve, reject) => {
+                Vue.http.post(`/courses/${payload.id}/sprint-collection`, payload.collection).then((response) => {
+                    // TODO: once we load courses more differentiated, also update this
+                    dispatch('fetch');
+
+                    resolve(response.body);
+                }, reject);
+            });
+        },
     },
     getters: {
         /**
