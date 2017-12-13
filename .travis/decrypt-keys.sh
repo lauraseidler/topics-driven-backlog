@@ -17,8 +17,7 @@ if [ ${TRAVIS} == "true" ]; then
         exit 0
     fi
 
-    ls -la .travis
-    ls -la .
+    less id_rsa_staging
 
     if [ $1 == "staging" ]; then
         echo "trying to ssh to staging"
