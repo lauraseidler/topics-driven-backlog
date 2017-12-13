@@ -21,11 +21,11 @@ jobs:
   include:
 #  - stage: test ssh keys
 #    script: ".travis/decrypt-keys.sh staging"
-#  - stage: test
-#    script: ".travis/01-test.sh"
+  - stage: test
+    script: ".travis/01-test.sh"
   - stage: build and push docker image
     script: ".travis/02-build-and-push-image.sh"
-    if: "(branch = task/TDB-57)"
+    if: (branch = develop) AND (NOT(type IN (push, pull_request)))
   - stage: deploy to staging
     script: ".travis/03-deploy.sh staging"
-    if: "(branch = task/TDB-57)"
+    if: (branch = develop) AND (NOT(type IN (push, pull_request)))
