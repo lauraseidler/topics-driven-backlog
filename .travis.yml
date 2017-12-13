@@ -4,6 +4,11 @@ services:
 - docker
 before_script:
 - sudo /etc/init.d/postgresql stop
+addons:
+  ssh_known_hosts:
+  - backlog-staging.f4.htw-berlin.de
+  - 141.45.146.76
+
 env:
   global:
   - APPLICATION_ENVIRONMENT=docker
