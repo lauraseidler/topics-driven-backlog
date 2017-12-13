@@ -17,7 +17,8 @@ if [ ${TRAVIS} == "true" ]; then
         exit 0
     fi
 
-    less id_rsa_staging
+    # add server to known hosts
+    ssh-keyscan backlog-staging.f4.htw-berlin.de >> ~/.ssh/known_hosts
 
     if [ $1 == "staging" ]; then
         echo "trying to ssh to staging"
