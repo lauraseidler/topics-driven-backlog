@@ -34,14 +34,14 @@
 <style lang="scss">
     @font-face {
         font-family: 'HTWBerlin';
-        src: url('/assets/HTWBerlinWeb-Regular.woff') format('woff');
+        src: url('~fonts/HTWBerlinWeb-Regular.woff') format('woff');
         font-weight: 300;
         font-style: normal;
     }
 
     @font-face {
         font-family: 'HTWBerlin';
-        src: url('/assets/HTWBerlinWeb-Bold.woff') format('woff');
+        src: url('~fonts/HTWBerlinWeb-Bold.woff') format('woff');
         font-weight: 700;
         font-style: normal;
     }
