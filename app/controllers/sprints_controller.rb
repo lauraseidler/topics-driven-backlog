@@ -4,6 +4,7 @@ class SprintsController < ApplicationController
   before_action :validate_sprint_collection_params, only: [:create_collection]
   before_action :set_course, only: [:create, :create_collection]
   before_action :set_sprint, only: [:update, :destroy]
+  before_action :validate_sprint_date_parameter, only: [:update]
 
   # POST /courses/course_id/sprints
   def create
