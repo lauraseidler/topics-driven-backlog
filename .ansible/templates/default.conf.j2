@@ -26,7 +26,7 @@ server {
 	server_name {{ nginx_host_name }};
 
     # serve precompiled assets
-    location ~ ^/assets/ {
+    location ~ ^/packs/ {
        	root   /home/{{ ansible_user }}/nginx-assets;
         gzip_static on;
         expires max;

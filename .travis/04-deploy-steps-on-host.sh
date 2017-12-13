@@ -18,8 +18,8 @@ exit_on_error $?
 echo "+++ Clean assets "
 rm -rf nginx-assets
 mkdir -p nginx-assets
-echo "+++ copy assets from container to dir on host"
-docker cp app:/usr/src/app/public/assets nginx-assets
+echo "+++ copy packs from container to dir on host"
+docker cp app:/usr/src/app/public/packs nginx-assets
 exit_on_error $?
 
 echo "+++ Wait for postgres"

@@ -5,6 +5,7 @@ ENV APP_HOME /usr/src/app
 ENV APPLICATION_ENVIRONMENT docker
 ENV RAILS_ENV production
 ENV RACK_ENV production
+ENV NODE_ENV production
 
 # expose port 80 (rails server)
 EXPOSE 80
@@ -42,7 +43,7 @@ RUN set -ex \
   && gem install bundler \
   && bundle install --without development test \
   && yarn \
-  && bundle exec rake assets:precompile \
+  && bundle exec rake webpacker:compile \
   && mkdir nginx-assets \
   && rm -rf node_modules
 
