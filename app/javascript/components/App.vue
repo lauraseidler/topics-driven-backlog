@@ -17,7 +17,7 @@
             </b-container>
         </b-navbar>
 
-        <b-container class="mt-4">
+        <b-container class="mt-4 mb-5">
             <router-view></router-view>
         </b-container>
     </div>

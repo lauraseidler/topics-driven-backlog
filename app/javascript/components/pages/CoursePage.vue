@@ -26,9 +26,15 @@
 
                         <p v-else>No sprints in this course yet.</p>
 
-                        <sprint-form v-if="showForm" v-model="newSprint" @cancel="showForm = false" @submit="addSprint"></sprint-form>
+                        <sprint-form v-if="showSprintForm" v-model="newSprint" @cancel="showSprintForm = false" @submit="addSprint"></sprint-form>
 
-                        <b-button v-else type="button" variant="primary" @click="showForm = true">Add sprint</b-button>
+                        <sprint-collection-form v-else-if="showCollectionForm" v-model="newCollection"
+                                                @cancel="showCollectionForm = false"
+                                                @submit="addCollection"></sprint-collection-form>
+                        <template v-else>
+                            <b-button type="button" variant="primary" @click="showSprintForm = true">Add sprint</b-button>
+                            <b-button type="button" variant="primary" @click="showCollectionForm = true">Add multiple sprints</b-button>
+                        </template>
                     </b-tab>
                 </b-tabs>
             </b-card>
@@ -42,13 +48,16 @@
     import {info} from '../../helper/semester';
     import Sprint from "../elements/Sprint.vue";
     import SprintForm from "../forms/SprintForm.vue";
+    import SprintCollectionForm from "../forms/SprintCollectionForm.vue";
 
     export default {
-        components: {SprintForm, Sprint, NotFound},
+        components: {SprintCollectionForm, SprintForm, Sprint, NotFound},
         data() {
             return {
-                showForm: false,
+                showSprintForm: false,
+                showCollectionForm: false,
                 newSprint: {},
+                newCollection: {},
             };
         },
         computed: {
@@ -69,6 +78,18 @@
                     sprint: this.newSprint
                 }).then(() => {
                     this.newSprint = {};
+                });
+            },
+
+            /**
+             * Add a sprint collection to the given course
+             */
+            addCollection() {
+                this.$store.dispatch('courses/addSprintCollection', {
+                    id: this.course.id,
+                    collection: this.newCollection
+                }).then(() => {
+                    this.newCollection = {};
                 });
             },
 
