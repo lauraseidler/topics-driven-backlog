@@ -19,7 +19,7 @@ if [ ${TRAVIS} == "true" ]; then
 
     if [ $1 == "staging" ]; then
         echo "trying to ssh to staging"
-        ssh -i id_rsa_staging -o StrictHostKeyChecking=no deployer@backlog-staging.f4.htw-berlin.de "pwd  ; exit"
+        ssh -i id_rsa_staging -o StrictHostKeyChecking=no -o BatchMode=yes deployer@backlog-staging.f4.htw-berlin.de "pwd  ; exit"
 #    elif [ $1 == "production" ]; then
 #        echo "trying to ssh to production"
 #        ssh  -i id_rsa_production -o StrictHostKeyChecking=no deployer@backlog-production.f4.htw-berlin.de "pwd ; exit"
