@@ -18,9 +18,9 @@ exit_on_error () {
 }
 
 echo "copying docker-compose files to $DEPLOYMENT_HOST"
-scp -i id_rsa_${DEPLOYMENT_ENVIRONMENT} .docker/variables.env ${DEPLOYMENT_USER}@${DEPLOYMENT_HOST}:~/.docker/
-scp -i id_rsa_${DEPLOYMENT_ENVIRONMENT} .docker/variables.production.env ${DEPLOYMENT_USER}@${DEPLOYMENT_HOST}:~/.docker/
-scp -i id_rsa_${DEPLOYMENT_ENVIRONMENT} .docker/docker-compose.production.yml ${DEPLOYMENT_USER}@${DEPLOYMENT_HOST}:~/.docker/
+scp -i id_rsa_${DEPLOYMENT_ENVIRONMENT} .docker/variables.env ${DEPLOYMENT_USER}@${DEPLOYMENT_HOST}:~/.docker/.variables.env
+scp -i id_rsa_${DEPLOYMENT_ENVIRONMENT} .docker/variables.production.env ${DEPLOYMENT_USER}@${DEPLOYMENT_HOST}:~/.docker/.variables.production.env
+scp -i id_rsa_${DEPLOYMENT_ENVIRONMENT} .docker/docker-compose.production.yml ${DEPLOYMENT_USER}@${DEPLOYMENT_HOST}:~/.docker/docker-compose.production.yml
 scp -i id_rsa_${DEPLOYMENT_ENVIRONMENT} docker-compose.yml ${DEPLOYMENT_USER}@${DEPLOYMENT_HOST}:~
 exit_on_error $?
 
