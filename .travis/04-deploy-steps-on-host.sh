@@ -12,7 +12,7 @@ exit_on_error () {
 }
 
 echo "+++ pulling and starting docker containers"
-docker-compose -f docker-compose.yml -f docker-compose-production.yml up -d
+docker-compose -f docker-compose.yml -f docker-compose.production.yml up -d
 exit_on_error $?
 
 echo "+++ Clean assets "
