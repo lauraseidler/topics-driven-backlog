@@ -76,8 +76,6 @@
     <orderEntry type="library" scope="PROVIDED" name="sprockets-rails (v3.2.1, Remote:ruby-2.4.2-p198) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="thor (v0.20.0, Remote:ruby-2.4.2-p198) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="thread_safe (v0.3.6, Remote:ruby-2.4.2-p198) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="turbolinks (v5.0.1, Remote:ruby-2.4.2-p198) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="turbolinks-source (v5.0.3, Remote:ruby-2.4.2-p198) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="tzinfo (v1.2.3, Remote:ruby-2.4.2-p198) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="web-console (v3.5.1, Remote:ruby-2.4.2-p198) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="webpacker (v3.0.2, Remote:ruby-2.4.2-p198) [gem]" level="application" />
