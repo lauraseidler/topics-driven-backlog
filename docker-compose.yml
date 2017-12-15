@@ -3,20 +3,20 @@ services:
   postgresql:
     image: postgres:10-alpine
     container_name: postgresql-dev
-    env_file: variables.env
+    env_file: .docker/variables.env
     ports:
       - 5433:5432
 
-  tdb:
-    build: .
-    image: tdb:dev
-    command: foreman start
+  app:
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
     container_name: tdb-dev
-    env_file: variables.env
+    env_file: .docker/variables.env
     depends_on:
       - postgresql
     volumes:
       - .:/usr/src/app
     ports:
-      - 8080:4000
+      - 8080:80
       - 3035:3035

@@ -1,0 +1,31 @@
+---
+- hosts: all
+  become: true
+
+  roles:
+    # Make sure docker is installed
+    - role: geerlingguy.docker
+      tags:
+        - docker
+
+    # Make sure nginx is installed with correct vhost
+    - role: jdauphant.nginx
+      tags:
+        - nginx
+      nginx_sites:
+        vhost:
+          template: templates/default.conf.j2
+
+  tasks:
+    # Make sure our user is allowed to run docker commands
+    - name: Ensure user is in docker group
+      user:
+        name: "{{ ansible_user }}"
+        group: docker
+        append: yes
+
+    # Make sure the Travis key is added on the server
+    - name: Ensure Travis Key
+      authorized_key:
+        user: "{{ ansible_user }}"
+        key: "{{ cicd_pubkey }}"

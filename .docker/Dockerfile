@@ -1,15 +1,22 @@
 FROM ruby:2.4-alpine
 
+# set variables
 ENV APP_HOME /usr/src/app
-ENV TDB_ENVIRONMENT docker
+ENV APPLICATION_ENVIRONMENT docker
 
+# expose port 80 (rails server)
 EXPOSE 80
 
+# work in app dir
 WORKDIR $APP_HOME
 
-COPY Gemfile* $APP_HOME/
-COPY docker/* /docker/
-RUN chmod +x /docker
+# Add gemfile stuff
+COPY Gemfile* ./
+
+# Add scripts
+COPY .docker/* .docker/
+RUN chmod +x .docker/wait-for-db.sh
+RUN chmod +x .docker/prepare-db.sh
 
 # general dependencies
 RUN set -ex \
@@ -30,8 +37,5 @@ RUN set -ex \
   && gem install bundler \
   && bundle install
 
-RUN chmod +x /docker/wait-for-db.sh
-RUN chmod +x /docker/prepare-db.sh
-
-CMD export QMAKE=/usr/lib/qt5/bin/qmake
-CMD export PATH=/usr/lib/qt5/bin/qmake:$PATH
+# start puma server AND webpack dev server (see Procfile)
+CMD ["foreman", "start"]
