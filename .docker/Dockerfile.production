@@ -1,0 +1,51 @@
+FROM ruby:2.4-alpine
+
+# set variables
+ENV APP_HOME /usr/src/app
+ENV APPLICATION_ENVIRONMENT docker
+ENV RAILS_ENV production
+ENV RACK_ENV production
+ENV NODE_ENV production
+
+# expose port 80 (rails server)
+EXPOSE 80
+
+# work in app dir
+WORKDIR $APP_HOME
+
+# Add gemfile stuff
+COPY Gemfile* ./
+
+# Add scripts
+COPY .docker/* .docker/
+RUN chmod +x .docker/wait-for-db.sh
+RUN chmod +x .docker/prepare-db.sh
+
+# general dependencies
+RUN set -ex \
+  && apk add --no-cache libpq imagemagick nodejs bash
+
+# add everything
+ADD . .
+
+# install yarn
+RUN npm install --global yarn
+
+# build deps
+RUN set -ex \
+  && apk add --no-cache --virtual .builddeps \
+       linux-headers \
+       libpq \
+       tzdata \
+       build-base \
+       postgresql-dev \
+       imagemagick-dev \
+  && gem install bundler \
+  && bundle install --without development test \
+  && yarn \
+  && bundle exec rake webpacker:compile \
+  && mkdir nginx-assets \
+  && rm -rf node_modules
+
+# start puma server only
+CMD rails s --port 80 --binding 0.0.0.0
