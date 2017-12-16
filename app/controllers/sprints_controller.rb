@@ -23,6 +23,12 @@ class SprintsController < ApplicationController
     json_response(sprints, :created)
   end
 
+  # PATCH /courses/course_id/sprint-collection
+  def update_collection
+   # todo
+    json_response([], :created)
+  end
+
   # PUT /sprints/:id
   # PATCH /sprints/:id
   def update
