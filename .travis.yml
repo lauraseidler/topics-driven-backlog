@@ -21,7 +21,7 @@ jobs:
       script: ".travis/01-test.sh"
     - stage: build
       script: ".travis/02-build-and-push-image.sh"
-      if: (branch = develop) AND (NOT (type IN (push, pull_request)))
+      if: branch = develop
     - stage: deploy
       script: ".travis/03-deploy.sh staging"
-      if: (branch = develop) AND (NOT (type IN (push, pull_request)))
+      if: branch = develop
