@@ -14,42 +14,25 @@ import "babel-polyfill";
 import Vue from 'vue';
 import VueResource from 'vue-resource';
 import Vuelidate from 'vuelidate';
-import * as Sortable from 'sortablejs/Sortable';
 
 // bootstrap
 import BootstrapVue from 'bootstrap-vue';
-// bootstrap SCSS is imported in App.Vue
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-
-// font awesome
-import 'vue-awesome/icons/arrows'; // drag & drop icon
-import 'vue-awesome/icons/pencil'; // edit icon
-import 'vue-awesome/icons/trash'; // delete icon
-import 'vue-awesome/icons/plus'; // add icon
-import 'vue-awesome/icons/minus'; // remove icon
-import Icon from 'vue-awesome/components/Icon.vue';
 
 // our own stuff
 import App from '../components/App.vue';
-import RouterBack from '../components/elements/RouterBack.vue';
 import router from '../router/index';
 import store from '../store/index';
 
+// custom directives
+import '../directives/confirm';
+import '../directives/sortable';
+
+// register plugins
 Vue.use(VueResource);
 Vue.use(Vuelidate);
 Vue.use(BootstrapVue);
-Vue.component('icon', Icon);
 
-// custom sortable directive
-Vue.directive('sortable', {
-    inserted: function (el, binding) {
-        new Sortable(el, binding.value || {});
-    }
-});
-
-// <router-back> component
-Vue.component('router-back', RouterBack);
-
+// init store and app once dom is loaded
 document.addEventListener('DOMContentLoaded', () => {
     store.dispatch('init').then(() => {
         new Vue({

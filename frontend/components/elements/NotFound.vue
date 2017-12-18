@@ -12,7 +12,10 @@
 </template>
 
 <script>
+    import RouterBack from "./RouterBack.vue";
+
     export default {
+        components: {RouterBack},
         name: 'not-found'
     }
 </script>
