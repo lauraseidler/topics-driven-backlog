@@ -19,6 +19,7 @@ RSpec.describe 'Stories API', type: :request do
         expect(json['status']).to be >= Story.statuses[:open]
         expect(json['status']).to be <= Story.statuses[:canceled]
         expect(json['points'].to_i).to be_an_instance_of(Integer).or(be_nil)
+        expect(json['project_id'].to_i).to eq(project.id)
       end
 
       it 'returns status code 200' do
