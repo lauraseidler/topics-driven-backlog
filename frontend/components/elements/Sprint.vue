@@ -3,7 +3,7 @@
         <div class="card-body">
             <template v-if="!editing">
                 <template v-if="data.end_date >= currentDate">
-                    <b-button size="sm" variant="danger" class="float-right ml-2" @click="deleteSprint">Delete</b-button>
+                    <b-button size="sm" variant="danger" class="float-right ml-2" v-confirm="deleteSprint">Delete</b-button>
                     <b-button size="sm" variant="primary" class="float-right" @click="startEditing">Edit</b-button>
                 </template>
 
