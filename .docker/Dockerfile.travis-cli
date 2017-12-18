@@ -1,0 +1,12 @@
+FROM ruby
+
+WORKDIR /home
+
+RUN gem install travis -v 1.8.8 --no-rdoc --no-ri
+
+RUN travis version
+
+ADD .travis.yml .
+ADD id_rsa_* .
+
+CMD /bin/bash
