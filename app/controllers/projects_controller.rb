@@ -2,7 +2,7 @@ class ProjectsController < ApplicationController
   before_action :set_course, only: [:create]
   before_action :set_project, only: [:show, :update, :destroy]
 
-  # GET /stories/:id
+  # GET /projects/:id
   def show
     json_response(@project)
   end
