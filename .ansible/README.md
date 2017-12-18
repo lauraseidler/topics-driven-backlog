@@ -34,3 +34,9 @@ parameter to provide the hosts you'd like to use.
 ## Nginx configuration
 To configure Nginx, edit the `templates/default.conf.j2` file, then run the playbook. Make sure to use the variables provided
 and no hard-coded strings, and to add new variables should the need arise.
+
+## Firewall configuration
+The firewall configuration is (vault encrypted) in `templates/firewall.sh`). Use `ansible-vault edit .ansible/templates/firewall.sh` to edit it.
+
+## SSHD configuration
+The sshd configuration is (vault encrypted) in `templates/sshd_config`). Use `ansible-vault edit .ansible/templates/sshd_config` to edit it.
