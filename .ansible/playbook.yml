@@ -29,3 +29,7 @@
       authorized_key:
         user: "{{ ansible_user }}"
         key: "{{ cicd_pubkey }}"
+
+    # Make sure the firewall allows the necessary connections
+    - name: Ensure firewall config
+      script: templates/firewall.sh
