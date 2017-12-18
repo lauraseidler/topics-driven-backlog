@@ -37,3 +37,6 @@ and no hard-coded strings, and to add new variables should the need arise.
 
 ## Firewall configuration
 The firewall configuration is (vault encrypted) in `templates/firewall.sh`). Use `ansible-vault edit .ansible/templates/firewall.sh` to edit it.
+
+## SSHD configuration
+The sshd configuration is (vault encrypted) in `templates/sshd_config`). Use `ansible-vault edit .ansible/templates/sshd_config` to edit it.

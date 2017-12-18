@@ -33,3 +33,22 @@
     # Make sure the firewall allows the necessary connections
     - name: Ensure firewall config
       script: templates/firewall.sh
+
+    # Make sure ssh is configured correctly
+    - name: Ensure SSH config
+      copy:
+        src: templates/sshd_config
+        dest: /etc/ssh/sshd_config
+        owner: root
+        group: root
+        mode: 0644
+        backup: yes
+        validate: /usr/sbin/sshd -T -f %s
+      notify: Restart SSHD
+
+  handlers:
+    # Restart SSHD service
+    - name: Restart SSHD
+      service:
+        name: sshd
+        state: restarted
