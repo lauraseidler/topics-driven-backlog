@@ -1,10 +1,9 @@
 # Database configuration for Topics Driven Backlog
 # The default is to use SQLite; if the Postgres configuration should be
-# used set the environment variable TDB_ENVIRONMENT to docker. This is done
+# used set the environment variable APPLICATION_ENVIRONMENT to docker. This is done
 # in Dockerfile for the docker deployments.
-# export set TDB_ENVIRONMENT=docker
 
-<% if ENV['TDB_ENVIRONMENT'] == "docker" %>
+<% if ENV['APPLICATION_ENVIRONMENT'] == "docker" %>
 
 development:
   adapter: postgresql
@@ -38,7 +37,7 @@ production:
 
 
 <% else
-  puts "ENV['TDB_ENVIRONMENT'] not set to \"docker\", using default: SQLITE"
+  puts "ENV['APPLICATION_ENVIRONMENT'] not set to \"docker\", using default: SQLITE"
 %>
 
 development:

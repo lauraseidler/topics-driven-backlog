@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :tasks, only: [:index]
 
   resources :courses, only: [:index, :create, :show, :update, :destroy] do
+    post 'sprint-collection', to: 'sprints#create_collection'
     resources :sprints, only: [:create]
     resources :projects, only: [:create]
   end

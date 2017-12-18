@@ -1,0 +1,34 @@
+version: '3'
+services:
+  postgresql:
+    # postgres image
+    image: postgres:10-alpine
+    # rename container
+    container_name: postgresql
+    # load production variables
+    env_file: variables.production.env
+    # open standard port
+    ports:
+      - 5432:5432
+    # mount data as volume for persistence
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+
+  app:
+    # load image instead of building
+    image: mvuajua/topics-driven-backlog:${TAG}
+    # rename container
+    container_name: app
+    # load production variables
+    env_file: variables.production.env
+    # set some more environment variables specific for this container
+    environment:
+      - TAG
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+      - RAILS_SERVE_STATIC_FILES=true
+    # open port for nginx proxy
+    ports:
+      - 4000:80
+    # postgres dependency
+    depends_on:
+      - postgresql
