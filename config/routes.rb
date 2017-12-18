@@ -10,7 +10,9 @@ Rails.application.routes.draw do
 
   resources :courses, only: [:index, :create, :show, :update, :destroy] do
     resources :sprints, only: [:create]
+    resources :projects, only: [:create]
   end
     resources :sprints, only: [:update, :destroy]
+    resources :projects, only: [:update, :destroy]
 
 end
