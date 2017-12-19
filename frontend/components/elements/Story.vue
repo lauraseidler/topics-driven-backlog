@@ -52,7 +52,7 @@
                 <b-button size="sm" variant="primary" title="Edit" @click="startEditing">
                     <icon name="pencil"></icon>
                 </b-button>
-                <b-button size="sm" variant="danger" title="Delete" @click="remove">
+                <b-button size="sm" variant="danger" title="Delete" v-confirm="remove">
                     <icon name="trash"></icon>
                 </b-button>
             </td>
@@ -76,11 +76,18 @@
 </template>
 
 <script>
+    import 'vue-awesome/icons/arrows';
+    import 'vue-awesome/icons/pencil';
+    import 'vue-awesome/icons/trash';
+    import 'vue-awesome/icons/plus';
+    import 'vue-awesome/icons/minus';
+
+    import Icon from "vue-awesome/components/Icon.vue";
     import * as _ from "lodash";
     import StoryForm from "../forms/StoryForm.vue";
 
     export default {
-        components: {StoryForm},
+        components: {Icon, StoryForm},
         name: 'story',
         props: ['data', 'view'],
         data() {
