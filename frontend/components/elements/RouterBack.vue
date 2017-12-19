@@ -1,5 +1,7 @@
 <script>
     export default {
+        name: 'router-back',
+
         render(createElement) {
 
             const $root = this.$root;
@@ -31,6 +33,6 @@
                 type: String,
                 default: 'a'
             }
-        }
+        },
     }
 </script>
