@@ -1,5 +1,6 @@
 class Story < ApplicationRecord
   has_many :tasks, dependent: :destroy
+  belongs_to :project
 
   def self.statuses
     {:open => 0, :progressing => 1, :closed => 2, :canceled => 3}
@@ -10,7 +11,7 @@ class Story < ApplicationRecord
   after_save :set_identifier
   before_validation :set_status
 
-  validates_presence_of :title, :status
+  validates_presence_of :title, :status, :project_id
   validate :can_be_edited
 
   private
