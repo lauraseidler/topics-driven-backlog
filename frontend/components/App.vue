@@ -66,6 +66,7 @@
     $headings-font-weight: 700;
 
     @import "~bootstrap/scss/bootstrap";
+    @import "~bootstrap-vue/dist/bootstrap-vue.css";
 
     .link-unstyled {
         color: inherit;
