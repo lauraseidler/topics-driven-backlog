@@ -22,13 +22,13 @@ module SprintsHelper
   def update_sprint_collection(collection)
     sprints = []
 
-    collection.each do |s|
-      validate_sprint_date_parameter(s[:start_date], s[:end_date])
-      sprint = Sprint.find_by!(id: s[:id])
-      sprint.update_columns(
-          :start_date => s[:start_date], :end_date => s[:end_date]
-      )
-      sprints.append(sprint)
+    ActiveRecord::Base.transaction do
+      collection.each do |s|
+        validate_sprint_date_parameter(s[:start_date], s[:end_date])
+        sprint = Sprint.find_by!(id: s[:id])
+        sprint.update!(s.permit(:start_date, :end_date))
+        sprints.append(sprint)
+      end
     end
 
     sprints
@@ -60,16 +60,6 @@ module SprintsHelper
     raise_exception_on_validation_error(errors)
   end
 
-  def validate_sprint_collision(sprint, start_date, end_date)
-    errors = []
-
-    errors.append(
-        sprint_does_not_collide(sprint, start_date, end_date)
-    )
-
-    raise_exception_on_validation_error(errors)
-  end
-
   private
 
   def duration_cannot_be_empty(duration)
@@ -93,20 +83,6 @@ module SprintsHelper
       if Date.parse(end_date) < Date.today
         'End date cannot be in the past'
       end
-    end
-  end
-
-  def sprint_does_not_collide(sprint, start_date, end_date)
-    course = sprint.course
-    collision = Sprint.where(
-        '(end_date > ? AND start_date < ?) AND course_id = ?',
-        start_date,
-        end_date,
-        course.id
-    )
-
-    if !collision.empty?
-      'Sprint dates collide with other sprints.'
     end
   end
 

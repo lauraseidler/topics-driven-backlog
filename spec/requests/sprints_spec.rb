@@ -93,25 +93,6 @@ RSpec.describe 'Sprints API' do
     end
   end
 
-  # Test suite for PATCH /sprints/:id
-  describe 'PATCH /sprints/:id for colliding date attributes' do
-    let(:colliding_date_attributes) {
-      { start_date: Date.new(2018,11,10), end_date: Date.new(2018,11,16) }
-    }
-
-    context 'updating colliding dates' do
-      before { patch "/sprints/#{id}", params: colliding_date_attributes }
-
-      it 'returns status code 400' do
-        expect(response).to have_http_status(400)
-      end
-
-      it 'returns a failure message' do
-        expect(response.body).to match(/Validation failed: Sprint dates collide with other sprints./)
-      end
-    end
-  end
-
   # Test suite for DELETE /sprints/:id
   describe 'DELETE /sprints/:id' do
     before { delete "/sprints/#{id}"}

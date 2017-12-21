@@ -27,13 +27,13 @@ class TasksController < ApplicationController
   # PUT /stories/:story_id/tasks/:id
   # PATCH /stories/:story_id/tasks/:id
   def update
-    @task.update(task_params)
+    @task.update!(task_params)
     head :no_content
   end
 
   # DELETE /stories/:story_id/tasks/:id
   def destroy
-    @task.destroy
+    @task.destroy!
     head :no_content
   end
 

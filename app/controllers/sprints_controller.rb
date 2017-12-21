@@ -9,9 +9,6 @@ class SprintsController < ApplicationController
   before_action only:[:update] {
     validate_sprint_date_parameter(params[:start_date], params[:end_date])
   }
-  before_action only: [:update] {
-    validate_sprint_collision(@sprint, params[:start_date], params[:end_date])
-  }
 
   # POST /courses/course_id/sprints
   def create
@@ -38,7 +35,7 @@ class SprintsController < ApplicationController
   # PUT /sprints/:id
   # PATCH /sprints/:id
   def update
-    @sprint.update_attributes!(sprint_params)
+    @sprint.update!(sprint_params)
     json_response(@sprint)
   end
 

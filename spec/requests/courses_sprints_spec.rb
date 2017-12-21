@@ -135,24 +135,24 @@ RSpec.describe 'Courses/Sprints API' do
 
   # Test suite for PATCH /courses/:course_id/sprint-collection
   describe 'PATCH /courses/:course_id/sprint-collection' do
-    let(:valid_parameters) {
-      {
-          collection: [
-              {
-                  id: id,
-                  start_date: Date.new(2200,11,07).to_s,
-                  end_date: Date.new(2200,11,30).to_s
-              },
-              {
-                  id: id_2,
-                  start_date: Date.new(2200,12,01).to_s,
-                  end_date: Date.new(2200,12,8).to_s
-              }
-          ]
-      }
-    }
 
     context 'updating a valid parameter collection' do
+      let(:valid_parameters) {
+        {
+            collection: [
+                {
+                    id: id,
+                    start_date: Date.new(2200,11,07).to_s,
+                    end_date: Date.new(2200,11,30).to_s
+                },
+                {
+                    id: id_2,
+                    start_date: Date.new(2200,12,01).to_s,
+                    end_date: Date.new(2200,12,8).to_s
+                }
+            ]
+        }
+      }
       before { patch "/courses/#{course_id}/sprint-collection", params: valid_parameters }
 
       it 'updates the records' do
@@ -170,6 +170,34 @@ RSpec.describe 'Courses/Sprints API' do
 
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
+      end
+    end
+
+    context 'updating an invalid parameter collection' do
+      let(:invalid_parameters) {
+        {
+            collection: [
+                {
+                    id: id,
+                    start_date: Date.new(2200,11,07).to_s,
+                    end_date: Date.new(2200,11,30).to_s
+                },
+                {
+                    id: id_2,
+                    start_date: Date.new(2200,12,01).to_s,
+                    end_date: Date.new(2001,12,8).to_s
+                }
+            ]
+        }
+      }
+      before { patch "/courses/#{course_id}/sprint-collection", params: invalid_parameters }
+
+      it 'returns status code 400' do
+        expect(response).to have_http_status(400)
+      end
+
+      it 'returns a failure message' do
+        expect(response.body).to match(/Validation failed: End date cannot be before the start date, End date cannot be in the past/)
       end
     end
   end
