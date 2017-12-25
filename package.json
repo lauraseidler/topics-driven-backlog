@@ -39,6 +39,7 @@
     "webpack-dev-server": "^2.9.3"
   },
   "jest": {
+    "collectCoverageFrom": ["frontend/**/*.js", "frontend/**/*.vue"],
     "testPathIgnorePatterns": ["<rootDir>/node_modules/", "<rootDir>/config/"],
     "transformIgnorePatterns": [
       "node_modules/(?!(bootstrap-vue)/)"
