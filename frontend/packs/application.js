@@ -15,9 +15,6 @@ import Vue from 'vue';
 import VueResource from 'vue-resource';
 import Vuelidate from 'vuelidate';
 
-// bootstrap
-import BootstrapVue from 'bootstrap-vue';
-
 // our own stuff
 import App from '../components/App.vue';
 import router from '../router/index';
@@ -30,7 +27,6 @@ import '../directives/sortable';
 // register plugins
 Vue.use(VueResource);
 Vue.use(Vuelidate);
-Vue.use(BootstrapVue);
 
 // init store and app once dom is loaded
 document.addEventListener('DOMContentLoaded', () => {

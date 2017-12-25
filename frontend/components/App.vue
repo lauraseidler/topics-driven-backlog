@@ -24,7 +24,24 @@
 </template>
 
 <script>
+    import BNavbar from 'bootstrap-vue/es/components/navbar/navbar';
+    import BContainer from 'bootstrap-vue/es/components/layout/container';
+    import BNavbarToggle from 'bootstrap-vue/es/components/navbar/navbar-toggle';
+    import BNavbarBrand from 'bootstrap-vue/es/components/navbar/navbar-brand';
+    import BCollapse from 'bootstrap-vue/es/components/collapse/collapse';
+    import BNavbarNav from 'bootstrap-vue/es/components/navbar/navbar-nav';
+    import BNavItem from 'bootstrap-vue/es/components/nav/nav-item';
+
     export default {
+        components: {
+            BNavbar, 
+            BContainer, 
+            BNavbarToggle, 
+            BNavbarBrand, 
+            BCollapse, 
+            BNavbarNav, 
+            BNavItem
+        },
         data() {
             return {};
         }
