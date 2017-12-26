@@ -1,5 +1,5 @@
 <template>
-    <section id="not-found">
+    <section class="not-found">
         <h1>The page you're trying to view does not exist.</h1>
 
         <p>You can:</p>
@@ -16,6 +16,6 @@
 
     export default {
         components: {RouterBack},
-        name: 'not-found'
+        name: 'NotFound'
     }
 </script>

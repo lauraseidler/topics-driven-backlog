@@ -39,7 +39,7 @@
                 </b-tabs>
             </b-card>
         </template>
-        <not-found v-else></not-found>
+        <NotFound v-else></NotFound>
     </section>
 </template>
 

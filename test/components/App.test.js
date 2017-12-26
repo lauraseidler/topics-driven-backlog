@@ -10,7 +10,7 @@ describe('App.test.js', () => {
     });
 
     it('is a div with id app', () => {
-        expect(cmp.is('#app')).toBe(true);
+        expect(cmp.is('div#app')).toBe(true);
     });
 
     it('has the expected html structure', () => {
