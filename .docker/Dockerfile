@@ -20,7 +20,7 @@ RUN chmod +x .docker/prepare-db.sh
 
 # general dependencies
 RUN set -ex \
-  && apk add --no-cache libpq imagemagick nodejs bash
+  && apk add --no-cache libpq imagemagick nodejs bash git
 
 # install yarn
 RUN npm install --global yarn

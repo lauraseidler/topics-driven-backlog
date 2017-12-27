@@ -15,12 +15,12 @@ else
     docker ps
 
     echo "starting tests in docker image"
-    docker-compose exec app .docker/wait-for-db.sh
-    docker-compose exec app rake db:create RAILS_ENV=test
-    docker-compose exec app rake db:migrate RAILS_ENV=test
-    docker-compose exec app rake db:migrate:status RAILS_ENV=test
-    docker-compose exec app rspec spec
-    docker-compose exec app ./node_modules/.bin/jest
+    docker exec tdb-dev-app .docker/wait-for-db.sh
+    docker exec tdb-dev-app rake db:create RAILS_ENV=test
+    docker exec tdb-dev-app rake db:migrate RAILS_ENV=test
+    docker exec tdb-dev-app rake db:migrate:status RAILS_ENV=test
+    docker exec tdb-dev-app rspec spec
+    docker exec tdb-dev-app ./node_modules/.bin/jest
 
     echo "uploading coverage reports"
     bash <(curl -s https://codecov.io/bash) -f coverage/.resultset.json -cF rails
