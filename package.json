@@ -3,9 +3,12 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "start": "docker-compose up -d",
+    "stop": "docker-compose down",
+    "test": "docker-compose exec app rspec && docker-compose exec app ./node_modules/jest-cli/bin/jest.js",
+    "test:watch": "docker-compose exec app ./node_modules/.bin/jest --watch",
     "dev": "docker-compose up",
     "logs": "docker-compose logs",
-    "stop": "docker-compose down",
     "bash": "docker-compose exec app bash",
     "db:migrate": "docker-compose exec app rails db:migrate",
     "db:seed": "docker-compose exec app rails db:seed",
@@ -41,7 +44,6 @@
     "webpack-dev-server": "^2.9.7"
   },
   "jest": {
-    "coverageDirectory": "./test/__coverage__",
     "collectCoverage": true,
     "collectCoverageFrom": [
       "frontend/**/*.js",

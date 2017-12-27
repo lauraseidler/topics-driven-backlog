@@ -37,6 +37,4 @@ else
 
     echo "uploading coverage reports"
     curl -s https://codecov.io/bash | bash -s -
-
-    docker-compose logs
 fi
