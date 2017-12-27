@@ -41,6 +41,8 @@
     "webpack-dev-server": "^2.9.7"
   },
   "jest": {
+    "coverageDirectory": "./test/__coverage__",
+    "collectCoverage": true,
     "collectCoverageFrom": [
       "frontend/**/*.js",
       "frontend/**/*.vue"
