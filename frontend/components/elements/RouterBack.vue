@@ -8,7 +8,7 @@ export default {
             default: 'a',
         },
     },
-    
+
     render(createElement) {
         const $root = this.$root;
 
