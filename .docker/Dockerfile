@@ -37,5 +37,11 @@ RUN set -ex \
   && gem install bundler \
   && bundle install
 
+# add all to be able to install yarn modules
+ADD . .
+
+# install yarn modules
+RUN yarn install
+
 # start puma server AND webpack dev server (see Procfile)
 CMD ["foreman", "start"]

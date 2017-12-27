@@ -33,11 +33,10 @@ else
     docker-compose exec app rspec spec
 
     echo "running jest tests"
-    docker-compose exec app ./node_modules/.bin/jest
+    docker-compose exec app ./node_modules/jest-cli/bin/jest.js
 
     echo "uploading coverage reports"
-    bash <(curl -s https://codecov.io/bash) -f coverage/.resultset.json -cF rails
-    bash <(curl -s https://codecov.io/bash) -f test/__coverage__/coverage-final.json -cF javascript
+    curl -s https://codecov.io/bash | bash -s -
 
     docker-compose logs
 fi
