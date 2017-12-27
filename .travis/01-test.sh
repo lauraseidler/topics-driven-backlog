@@ -5,7 +5,7 @@ echo "$0: starting build"
 echo "--------- sudo netstat -nlp | grep 5432"
 sudo netstat -nlp | grep 5432
 
-docker-compose up -d
+docker-compose -f docker-compose.yml -f .docker/docker-compose.test.yml up -d
 
 if [ $? != 0 ]; then
     echo "ERROR: docker-compose up -d FAILED"
