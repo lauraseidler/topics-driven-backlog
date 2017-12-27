@@ -15,7 +15,7 @@
                         class="float-right" 
                         @click="startEditing">Edit</BButton>
                 </template>
-
+                
                 <h3 class="card-title h5">{{ data.name }}</h3>
 
                 <p class="card-text">
@@ -61,7 +61,11 @@ export default {
          */
         startEditing() {
             this.editing = true;
-            this.editingData = _.pick(this.data, ['name', 'start_date', 'end_date']);
+            this.editingData = _.pick(this.data, [
+                'name',
+                'start_date',
+                'end_date',
+            ]);
         },
 
         /**
