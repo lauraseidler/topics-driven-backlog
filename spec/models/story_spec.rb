@@ -6,6 +6,14 @@ RSpec.describe Story, type: :model do
   # Validation tests
   it { should validate_presence_of(:title) }
 
+  it "should get a default status on save" do
+    subject = create(:story)
+    subject.status = nil
+    expect(subject).to be_valid
+    subject.save
+    expect(subject.status).to be(Story.statuses[:open])
+  end
+
   it "is not valid if new assigned Sprint is finished" do
     subject = create(:story)
     finished_sprint = create(
@@ -19,7 +27,9 @@ RSpec.describe Story, type: :model do
   end
 
   it "is valid if new assigned Sprint is not finished" do
-    subject = create(:story)
+    subject = create(:story, sprint_id: nil)
+    subject.save
+    expect(subject).to be_valid
     sprint = create(
         :sprint,
         course_id: create(:course).id,
@@ -27,6 +37,7 @@ RSpec.describe Story, type: :model do
         end_date: Date.tomorrow
     )
     subject.sprint_id = sprint.id
+    subject.save
     expect(subject).to be_valid
   end
 
