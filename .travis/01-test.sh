@@ -23,5 +23,6 @@ else
     docker-compose exec app ./node_modules/.bin/jest
 
     echo "uploading coverage reports"
+    bash <(curl -s https://codecov.io/bash) -f coverage/.resultset.json -cF rails
     bash <(curl -s https://codecov.io/bash) -f test/__coverage__/coverage-final.json -cF javascript
 fi
