@@ -27,6 +27,7 @@ else
     docker-compose config --services
     docker-compose exec app rake db:create RAILS_ENV=test
 
+    docker-compose logs
     echo "migrating db"
     docker ps
     docker-compose config --services
