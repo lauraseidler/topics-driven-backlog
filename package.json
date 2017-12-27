@@ -55,7 +55,7 @@
       "<rootDir>/config/"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!(bootstrap-vue)/)"
+      "node_modules/(?!(bootstrap-vue|vue-awesome)/)"
     ],
     "moduleNameMapper": {
       "^vue$": "vue/dist/vue.common.js",

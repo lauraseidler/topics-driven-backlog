@@ -3,6 +3,7 @@
         <td 
             v-if="editing" 
             colspan="5">
+            
             <StoryForm 
                 v-model="editingData" 
                 @cancel="editing = false" 
@@ -49,6 +50,7 @@
                     variant="link" 
                     no-caret 
                     class="b-dropdown-minimal">
+
                     <template slot="button-content">
                         <span 
                             class="badge" 
@@ -56,10 +58,12 @@
                             {{ statusMap[data.status].name }}
                         </span>
                     </template>
+
                     <BDropdownItem 
                         v-for="(status, index) in statusMap" 
                         :key="index" 
                         @click="saveStatus(index)">
+
                         <span 
                             class="badge" 
                             :class="[status.css]">{{ status.name }}</span>
@@ -76,6 +80,7 @@
 
                     <VIcon name="pencil"/>
                 </BButton>
+
                 <BButton 
                     size="sm" 
                     variant="danger" 
@@ -95,6 +100,7 @@
 
                     <VIcon name="pencil"/>
                 </BButton>
+
                 <BButton 
                     size="sm" 
                     variant="primary" 
@@ -138,7 +144,7 @@ export default {
     components: { VIcon, StoryForm, BButton, BDropdown, BDropdownItem },
     props: {
         data: {
-            type: Object, 
+            type: Object,
             default: () => {},
         },
         view: {
@@ -172,7 +178,11 @@ export default {
          */
         startEditing() {
             this.editing = true;
-            this.editingData = _.pick(this.data, ['title', 'description', 'points']);
+            this.editingData = _.pick(this.data, [
+                'title',
+                'description',
+                'points',
+            ]);
         },
 
         /**
