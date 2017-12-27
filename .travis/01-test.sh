@@ -2,7 +2,7 @@
 
 echo "$0: starting build"
 
-echo "--------- sudo netstat -nlp | grep 5432"		
+echo "--------- sudo netstat -nlp | grep 5432"
 sudo netstat -nlp | grep 5432
 
 docker-compose up -d
@@ -19,11 +19,11 @@ else
 
     echo "starting tests in docker image"
     docker exec -ti tdb-dev-app .docker/wait-for-db.sh
-    docker exec -ti tdb-dev-app rake db:create RAILS_ENV=test
-    docker exec -ti tdb-dev-app rake db:migrate RAILS_ENV=test
-    docker exec -ti tdb-dev-app rake db:migrate:status RAILS_ENV=test
-    docker exec -ti tdb-dev-app rspec spec
-    docker exec -ti tdb-dev-app ./node_modules/.bin/jest
+    docker exec -e RAILS_ENV=test -ti tdb-dev-app rake db:create RAILS_ENV=test
+    docker exec -e RAILS_ENV=test -ti tdb-dev-app rake db:migrate RAILS_ENV=test
+    docker exec -e RAILS_ENV=test -ti tdb-dev-app rake db:migrate:status RAILS_ENV=test
+    docker exec -e RAILS_ENV=test -ti tdb-dev-app rspec spec
+    docker exec -e RAILS_ENV=test -ti tdb-dev-app ./node_modules/.bin/jest
 
     echo "uploading coverage reports"
     bash <(curl -s https://codecov.io/bash) -f coverage/.resultset.json -cF rails
