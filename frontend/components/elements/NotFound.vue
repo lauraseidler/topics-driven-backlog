@@ -5,17 +5,17 @@
         <p>You can:</p>
 
         <ul>
-            <li><router-back>Go back</router-back></li>
+            <li><RouterBack>Go back</RouterBack></li>
             <li><router-link to="/">Go to homepage</router-link></li>
         </ul>
     </section>
 </template>
 
 <script>
-    import RouterBack from "./RouterBack.vue";
+import RouterBack from '@/components/elements/RouterBack';
 
-    export default {
-        components: {RouterBack},
-        name: 'NotFound'
-    }
+export default {
+    name: 'NotFound',
+    components: { RouterBack },
+};
 </script>

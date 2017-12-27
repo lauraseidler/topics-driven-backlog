@@ -2,7 +2,7 @@ version: '3'
 services:
   postgresql:
     image: postgres:10-alpine
-    container_name: postgresql-dev
+    container_name: tdb-dev-postgres
     env_file: .docker/variables.env
     ports:
       - 5433:5432
@@ -11,7 +11,7 @@ services:
     build:
       context: .
       dockerfile: .docker/Dockerfile
-    container_name: tdb-dev
+    container_name: tdb-dev-app
     env_file: .docker/variables.env
     depends_on:
       - postgresql

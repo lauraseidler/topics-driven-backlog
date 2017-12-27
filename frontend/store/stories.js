@@ -4,20 +4,20 @@ export default {
     namespaced: true,
     state: {
         initialised: false,
-        STATUS: {OPEN: 0, IN_PROGRESS: 1, CLOSED: 2, CANCELLED: 3},
+        STATUS: { OPEN: 0, IN_PROGRESS: 1, CLOSED: 2, CANCELLED: 3 },
         statusMap: [
-            {name: 'open', css: 'badge-dark'},
-            {name: 'in progress', css: 'badge-warning'},
-            {name: 'closed', css: 'badge-success'},
-            {name: 'cancelled', css: 'badge-danger'}
+            { name: 'open', css: 'badge-dark' },
+            { name: 'in progress', css: 'badge-warning' },
+            { name: 'closed', css: 'badge-success' },
+            { name: 'cancelled', css: 'badge-danger' },
         ],
-        data: []
+        data: [],
     },
     mutations: {
         /**
          * Set one or all stories
-         * @param state
-         * @param payload
+         * @param {object} state
+         * @param {object} payload
          */
         set: (state, payload) => {
             if (payload.stories) {
@@ -25,13 +25,21 @@ export default {
             }
 
             if (payload.story) {
-                const isPresent = state.data
-                    .find(story => story.id === payload.story.id);
+                const isPresent = state.data.find(
+                    story => story.id === payload.story.id
+                );
 
                 if (isPresent) {
-                    Vue.set(state, 'data', state.data.map(story =>
-                        (story.id === payload.story.id ? payload.story : story),
-                    ));
+                    Vue.set(
+                        state,
+                        'data',
+                        state.data.map(
+                            story =>
+                                story.id === payload.story.id
+                                    ? payload.story
+                                    : story
+                        )
+                    );
                 } else {
                     state.data.push(payload.story);
                 }
@@ -40,20 +48,24 @@ export default {
 
         /**
          * Remove story from data set
-         * @param state
-         * @param payload
+         * @param {object} state
+         * @param {object} payload
          */
         remove: (state, payload) => {
-            Vue.set(state, 'data', state.data.filter(story => (story.id !== payload.id)));
+            Vue.set(
+                state,
+                'data',
+                state.data.filter(story => story.id !== payload.id)
+            );
         },
     },
     actions: {
         /**
          * Initialises the stories store
-         * @param state
-         * @param dispatch
+         * @param {object} state
+         * @param {function} dispatch
          */
-        init({state, dispatch}) {
+        init({ state, dispatch }) {
             if (!state.initialised) {
                 dispatch('fetch').then(() => {
                     state.initialised = true;
@@ -63,12 +75,12 @@ export default {
 
         /**
          * Fetches all stories from the API and updates store
-         * @param commit
+         * @param {function} commit
          * @returns {Promise}
          */
-        fetch({commit}) {
+        fetch({ commit }) {
             return new Promise((resolve, reject) => {
-                Vue.http.get('/stories').then((response) => {
+                Vue.http.get('/stories').then(response => {
                     commit('set', {
                         stories: response.body,
                     });
@@ -80,13 +92,13 @@ export default {
 
         /**
          * Saves a story to the API and updates store
-         * @param commit
-         * @param payload (story)
+         * @param {function} commit
+         * @param {object} payload (story)
          * @returns {Promise}
          */
-        save({commit}, payload) {
+        save({ commit }, payload) {
             return new Promise((resolve, reject) => {
-                Vue.http.post('/stories', payload.story).then((response) => {
+                Vue.http.post('/stories', payload.story).then(response => {
                     commit('set', {
                         story: response.body,
                     });
@@ -98,11 +110,11 @@ export default {
 
         /**
          * Patches a given field of a given story with a given value or all given values
-         * @param commit
-         * @param payload (id, field, value, values)
+         * @param {function} commit
+         * @param {object} payload (id, field, value, values)
          * @returns {Promise}
          */
-        patch({commit, dispatch}, payload) {
+        patch({ commit, dispatch }, payload) {
             return new Promise((resolve, reject) => {
                 let values = {};
 
@@ -112,27 +124,29 @@ export default {
                     values[payload.field] = payload.value;
                 }
 
-                Vue.http.patch(`/stories/${payload.id}`, values).then((response) => {
-                    if (payload.fetch) {
-                        dispatch('fetch').then(resolve, reject);
-                    } else {
-                        commit('set', {
-                            story: response.body,
-                        });
+                Vue.http
+                    .patch(`/stories/${payload.id}`, values)
+                    .then(response => {
+                        if (payload.fetch) {
+                            dispatch('fetch').then(resolve, reject);
+                        } else {
+                            commit('set', {
+                                story: response.body,
+                            });
 
-                        resolve(response.body);
-                    }
-                }, reject);
+                            resolve(response.body);
+                        }
+                    }, reject);
             });
         },
 
         /**
          * Deletes a given story
-         * @param commit
-         * @param payload (id)
+         * @param {function} commit
+         * @param {object} payload (id)
          * @returns {Promise}
          */
-        delete({commit}, payload) {
+        delete({ commit }, payload) {
             return new Promise((resolve, reject) => {
                 Vue.http.delete(`/stories/${payload.id}`).then(() => {
                     commit('remove', payload);
@@ -140,32 +154,32 @@ export default {
                     resolve();
                 }, reject);
             });
-        }
-
+        },
     },
     getters: {
         /**
          * All stories
-         * @param state
+         * @param {object} state
+         * @returns {array}
          */
-        all: state => state.initialised
-            ? state.data
-            : [],
+        all: state => (state.initialised ? state.data : []),
 
         /**
          * Find a story by identifier
-         * @param state
+         * @param {object} state
+         * @returns {(object|null)}
          */
-        byIdentifier: state => value => state.initialised
-            ? state.data.find(s => s.identifier === value)
-            : null,
+        byIdentifier: state => value =>
+            state.initialised
+                ? state.data.find(s => s.identifier === value)
+                : null,
 
         /**
          * Find stories by field and value
-         * @param state
+         * @param {object} state
+         * @returns {array}
          */
-        find: state => (field, value) => state.initialised
-            ? state.data.filter(s => s[field] === value)
-            : [],
-    }
-}
+        find: state => (field, value) =>
+            state.initialised ? state.data.filter(s => s[field] === value) : [],
+    },
+};

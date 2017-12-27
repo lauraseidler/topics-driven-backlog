@@ -8,7 +8,7 @@
 // layout file, like app/views/layouts/application.html.erb
 
 // polyfill for async await etc.
-import "babel-polyfill";
+import 'babel-polyfill';
 
 // base vue, http client and validation plugin
 import Vue from 'vue';
@@ -16,13 +16,13 @@ import VueResource from 'vue-resource';
 import Vuelidate from 'vuelidate';
 
 // our own stuff
-import App from '../components/App.vue';
-import router from '../router/index';
-import store from '../store/index';
+import App from '@/components/App';
+import router from '@/router';
+import store from '@/store';
 
 // custom directives
-import '../directives/confirm';
-import '../directives/sortable';
+import '@/directives/confirm';
+import '@/directives/sortable';
 
 // register plugins
 Vue.use(VueResource);
@@ -35,9 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
             el: '#app',
             router,
             store,
+            components: { App },
             template: '<App/>',
             render: h => h(App),
-            components: {App}
         });
     });
 });

@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import NotFound from '../../../frontend/components/elements/NotFound';
+import NotFound from '@/components/elements/NotFound';
 import { mount } from 'vue-test-utils';
 
 describe('NotFound.test.js', () => {

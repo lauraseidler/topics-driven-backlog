@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import App from '../../frontend/components/App';
+import App from '@/components/App';
 import {shallow} from 'vue-test-utils';
 
 describe('App.test.js', () => {
