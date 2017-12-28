@@ -30,12 +30,20 @@ describe('semester.test.js', () => {
     });
 
     it('calculates correct semester info', () => {
-        const info = semester.info(semester.SS, 2222);
+        const infoSS = semester.info(semester.SS, 2222);
 
-        expect(info.semesterStart.format('YYYY-MM-DD')).toBe('2222-04-01');
-        expect(info.semester).toBe(semester.SS);
-        expect(info.year).toBe(2222);
-        expect(info.fullString).toBe('SS 22');
-        expect(info.valueString).toBe('S*2222');
+        expect(infoSS.semesterStart.format('YYYY-MM-DD')).toBe('2222-04-01');
+        expect(infoSS.semester).toBe(semester.SS);
+        expect(infoSS.year).toBe(2222);
+        expect(infoSS.fullString).toBe('SS 22');
+        expect(infoSS.valueString).toBe('S*2222');
+
+        const infoWS = semester.info(semester.WS, 2221);
+
+        expect(infoWS.semesterStart.format('YYYY-MM-DD')).toBe('2221-10-01');
+        expect(infoWS.semester).toBe(semester.WS);
+        expect(infoWS.year).toBe(2221);
+        expect(infoWS.fullString).toBe('WS 21/22');
+        expect(infoWS.valueString).toBe('W*2221');
     });
 });

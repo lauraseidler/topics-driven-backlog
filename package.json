@@ -46,6 +46,7 @@
   },
   "jest": {
     "collectCoverage": true,
+    "mapCoverage": true,
     "collectCoverageFrom": [
       "frontend/**/*.js",
       "frontend/**/*.vue"
