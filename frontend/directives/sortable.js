@@ -5,7 +5,7 @@ import * as Sortable from 'sortablejs/Sortable';
  * v-sortable directive, binding Sortable plugin to a list
  */
 Vue.directive('sortable', {
-    inserted: function(el, binding) {
-        new Sortable(el, binding.value || {});
+    inserted: function(el, binding, vnode) {        
+        vnode.context.sortableInstance = Sortable.create(el, binding.value || {});        
     },
 });
