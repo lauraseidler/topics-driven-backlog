@@ -1,7 +1,11 @@
 // spy on console warnings
 const consoleSpy = jest.spyOn(console, 'info').mockImplementation(text => text);
 
+import { mockResponse } from '../util';
 import '@/packs/application.js';
+
+// mock responses with empty arrays to prevent promise errors
+mockResponse(null, null, []);
 
 // div to mount app needs to be created manually
 const div = document.createElement('div');

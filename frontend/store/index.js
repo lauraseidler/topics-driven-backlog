@@ -8,22 +8,26 @@ import sprints from '@/store/sprints';
 
 Vue.use(Vuex);
 
+export const state = {
+    initialised: false,
+    currentDate: moment().format('YYYY-MM-DD'),
+};
+
+export const actions = {
+    /**
+     * Initialise store and submodules
+     * @param {object} state
+     * @param {function} dispatch
+     */
+    init({ state, dispatch }) {
+        dispatch('stories/init');
+        dispatch('courses/init');
+        state.initialised = true;
+    },
+};
+
 export default new Vuex.Store({
     modules: { stories, courses, sprints },
-    state: {
-        initialised: false,
-        currentDate: moment().format('YYYY-MM-DD'),
-    },
-    actions: {
-        /**
-         * Initialise store and submodules
-         * @param {object} state
-         * @param {function} dispatch
-         */
-        init({ state, dispatch }) {
-            dispatch('stories/init');
-            dispatch('courses/init');
-            state.initialised = true;
-        },
-    },
+    state,
+    actions,
 });
