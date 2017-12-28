@@ -1,7 +1,7 @@
 # Topics Driven Backlog
 
 [![Build Status](https://travis-ci.org/mvuajua/topics-driven-backlog.svg?branch=master)](https://travis-ci.org/mvuajua/topics-driven-backlog)
-
+[![Coverage Status](https://coveralls.io/repos/github/mvuajua/topics-driven-backlog/badge.svg?branch=develop)](https://coveralls.io/github/mvuajua/topics-driven-backlog?branch=develop)
 ## Requirements
 - Installation of Docker and Docker Compose
 
