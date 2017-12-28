@@ -6,6 +6,9 @@ import SprintItem from '@/components/elements/SprintItem';
 import SprintForm from '@/components/forms/SprintForm';
 import '@/directives/confirm';
 
+// take a date far in the future so validations pass
+Date.now = jest.fn(() => 7956915742000);
+
 const localVue = createLocalVue();
 localVue.use(Vuex);
 localVue.use(Vuelidate);
@@ -74,7 +77,7 @@ describe('SprintItem.test.js', () => {
     it('triggers sprint save when sprint form triggers submit', () => {
         cmp.vm.startEditing();
         cmp.vm.saveSprint = jest.fn();
-        cmp.update();
+        cmp.update();        
 
         cmp.find(SprintForm).trigger('submit');
         expect(cmp.vm.saveSprint).toBeCalled();

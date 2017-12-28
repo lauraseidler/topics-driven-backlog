@@ -59,7 +59,7 @@ exports[`SprintItem.test.js is in edit mode after startEditing was called 1`] = 
             aria-required="true"
             class="form-control"
             id="sprint-start-date"
-            max="2018-01-03"
+            max="2222-03-01"
             required="required"
             type="date"
           />
@@ -89,7 +89,7 @@ exports[`SprintItem.test.js is in edit mode after startEditing was called 1`] = 
             aria-required="true"
             class="form-control"
             id="sprint-end-date"
-            min="2018-01-01"
+            min="2222-02-27"
             required="required"
             type="date"
           />
@@ -148,10 +148,10 @@ exports[`SprintItem.test.js shows edit and delete buttons when end_date not in t
       class="card-text"
     >
       
-                Start: 2018-01-01 
+                Start: 2222-02-27 
       <br />
       
-                End: 2018-01-03
+                End: 2222-03-01
             
     </p>
   </div>
