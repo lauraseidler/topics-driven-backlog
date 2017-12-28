@@ -126,7 +126,7 @@ export default {
          * @returns {int}
          */
         numberOfSprints() {
-            return this.numberOfDays ? Math.floor(this.numberOfDays / this.data.duration) : 0;
+            return this.numberOfDays >= 0 ? Math.floor(this.numberOfDays / this.data.duration) : 0;
         },
     },
     methods: {
