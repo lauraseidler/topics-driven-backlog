@@ -1,5 +1,7 @@
-require 'simplecov'
-SimpleCov.start 'rails'
+require 'coveralls'
+Coveralls.wear!
+# require 'simplecov'
+# SimpleCov.start 'rails'
 require 'database_cleaner'
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
