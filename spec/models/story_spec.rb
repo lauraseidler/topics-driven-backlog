@@ -9,7 +9,9 @@ RSpec.describe Story, type: :model do
   it { should validate_presence_of(:project_id) }
 
   it "should get a default status on save" do
-    subject = create(:story)
+    course = create(:course)
+    project = create(:project, course_id: course.id)
+    subject = create(:story, project_id: project.id)
     subject.status = nil
     expect(subject).to be_valid
     subject.save
@@ -34,6 +36,7 @@ RSpec.describe Story, type: :model do
     course = create(:course)
     project = create(:project, course_id: course.id)
     subject = create(:story, project_id: project.id)
+    subject.save
     sprint = create(
         :sprint,
         course_id: create(:course).id,
