@@ -26,7 +26,9 @@ describe('SprintForm.test.js', () => {
                 data: {
                     name: 'Test Sprint',
                     start_date: moment().format('YYYY-MM-DD'),
-                    end_date: moment().add(5, 'days').format('YYYY-MM-DD'),
+                    end_date: moment()
+                        .add(5, 'days')
+                        .format('YYYY-MM-DD'),
                 },
             },
         });

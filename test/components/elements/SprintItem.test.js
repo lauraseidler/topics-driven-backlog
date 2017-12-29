@@ -77,7 +77,7 @@ describe('SprintItem.test.js', () => {
     it('triggers sprint save when sprint form triggers submit', () => {
         cmp.vm.startEditing();
         cmp.vm.saveSprint = jest.fn();
-        cmp.update();        
+        cmp.update();
 
         cmp.find(SprintForm).trigger('submit');
         expect(cmp.vm.saveSprint).toBeCalled();

@@ -1,0 +1,394 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HistoryPage.test.js has the expected html structure 1`] = `
+<section
+  id="history-page"
+>
+  <h1>
+    History
+  </h1>
+   
+  <div>
+    <h2>
+      
+    </h2>
+     
+    <table
+      class="table table-striped"
+    >
+      <thead>
+        <tr>
+          <th>
+            Identifier
+          </th>
+           
+          <th>
+            Story
+          </th>
+           
+          <th>
+            Story points
+          </th>
+           
+          <th>
+            Status
+          </th>
+        </tr>
+      </thead>
+       
+      <tbody>
+        <tr
+          class="story-item"
+        >
+          <!---->
+           
+          <td>
+            
+            
+        
+          </td>
+           
+          <td>
+            
+            
+        
+          </td>
+           
+          <td>
+            
+            not estimated
+        
+          </td>
+           
+          <td>
+            <span
+              class="badge badge-dark"
+            >
+              
+                open
+            
+            </span>
+          </td>
+           
+          <!---->
+           
+          <!---->
+           
+          <!---->
+           
+          <!---->
+        </tr>
+        <tr
+          class="story-item"
+        >
+          <!---->
+           
+          <td>
+            
+            
+        
+          </td>
+           
+          <td>
+            
+            
+        
+          </td>
+           
+          <td>
+            
+            not estimated
+        
+          </td>
+           
+          <td>
+            <span
+              class="badge badge-dark"
+            >
+              
+                open
+            
+            </span>
+          </td>
+           
+          <!---->
+           
+          <!---->
+           
+          <!---->
+           
+          <!---->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <h2>
+      
+    </h2>
+     
+    <table
+      class="table table-striped"
+    >
+      <thead>
+        <tr>
+          <th>
+            Identifier
+          </th>
+           
+          <th>
+            Story
+          </th>
+           
+          <th>
+            Story points
+          </th>
+           
+          <th>
+            Status
+          </th>
+        </tr>
+      </thead>
+       
+      <tbody>
+        <tr
+          class="story-item"
+        >
+          <!---->
+           
+          <td>
+            
+            
+        
+          </td>
+           
+          <td>
+            
+            
+        
+          </td>
+           
+          <td>
+            
+            not estimated
+        
+          </td>
+           
+          <td>
+            <span
+              class="badge badge-dark"
+            >
+              
+                open
+            
+            </span>
+          </td>
+           
+          <!---->
+           
+          <!---->
+           
+          <!---->
+           
+          <!---->
+        </tr>
+        <tr
+          class="story-item"
+        >
+          <!---->
+           
+          <td>
+            
+            
+        
+          </td>
+           
+          <td>
+            
+            
+        
+          </td>
+           
+          <td>
+            
+            not estimated
+        
+          </td>
+           
+          <td>
+            <span
+              class="badge badge-dark"
+            >
+              
+                open
+            
+            </span>
+          </td>
+           
+          <!---->
+           
+          <!---->
+           
+          <!---->
+           
+          <!---->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+   
+  <h2>
+    Backlog
+  </h2>
+   
+  <table
+    class="table table-striped"
+  >
+    <thead>
+      <tr>
+        <th>
+          Identifier
+        </th>
+         
+        <th>
+          Story
+        </th>
+         
+        <th>
+          Story points
+        </th>
+         
+        <th>
+          Status
+        </th>
+      </tr>
+    </thead>
+     
+    <tbody>
+      <tr
+        class="story-item"
+      >
+        <!---->
+         
+        <td>
+          
+            
+        
+        </td>
+         
+        <td>
+          
+            
+        
+        </td>
+         
+        <td>
+          
+            not estimated
+        
+        </td>
+         
+        <td>
+          <span
+            class="badge badge-dark"
+          >
+            
+                open
+            
+          </span>
+        </td>
+         
+        <!---->
+         
+        <!---->
+         
+        <!---->
+         
+        <!---->
+      </tr>
+      <tr
+        class="story-item"
+      >
+        <!---->
+         
+        <td>
+          
+            
+        
+        </td>
+         
+        <td>
+          
+            
+        
+        </td>
+         
+        <td>
+          
+            not estimated
+        
+        </td>
+         
+        <td>
+          <span
+            class="badge badge-dark"
+          >
+            
+                open
+            
+          </span>
+        </td>
+         
+        <!---->
+         
+        <!---->
+         
+        <!---->
+         
+        <!---->
+      </tr>
+      <tr
+        class="story-item"
+      >
+        <!---->
+         
+        <td>
+          
+            
+        
+        </td>
+         
+        <td>
+          
+            
+        
+        </td>
+         
+        <td>
+          
+            not estimated
+        
+        </td>
+         
+        <td>
+          <span
+            class="badge badge-warning"
+          >
+            
+                in progress
+            
+          </span>
+        </td>
+         
+        <!---->
+         
+        <!---->
+         
+        <!---->
+         
+        <!---->
+      </tr>
+    </tbody>
+  </table>
+</section>
+`;

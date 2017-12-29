@@ -69,7 +69,7 @@ export default {
          */
         backlog() {
             return this.$store.getters['stories/all']
-                .filter(s => s.sprint_id === null)
+                .filter(s => !s.sprint_id)
                 .sort((a, b) => a.position - b.position);
         },
 
@@ -89,66 +89,6 @@ export default {
          */
         storiesInSprint(sprintId) {
             return this.$store.getters['stories/find']('sprint_id', sprintId).sort((a, b) => a.position - b.position);
-        },
-
-        /**
-         * Save current form state as new story
-         */
-        save() {
-            this.$store
-                .dispatch('stories/save', {
-                    story: this.newStory,
-                })
-                .then(() => {
-                    this.newStory = {};
-                });
-        },
-
-        /**
-         * Save new position of dragged story
-         * @param {Event} evt
-         */
-        saveOrder(evt) {
-            const story = this.storiesInSprint[evt.oldIndex];
-
-            if (!story) {
-                return;
-            }
-
-            this.$store.dispatch('stories/patch', {
-                id: story.id,
-                field: 'position',
-                value: evt.newIndex + 1, // act_as_list is 1-indexed
-                fetch: true,
-            });
-        },
-
-        /**
-         * Add story to next sprint
-         * @param {int} storyId
-         */
-        addToSprint(storyId) {
-            if (!this.nextSprint) {
-                return;
-            }
-
-            this.$store.dispatch('stories/patch', {
-                id: storyId,
-                field: 'sprint_id',
-                value: this.nextSprint.id,
-            });
-        },
-
-        /**
-         * Remove story from next sprint
-         * @param {int} storyId
-         */
-        removeFromSprint(storyId) {
-            this.$store.dispatch('stories/patch', {
-                id: storyId,
-                field: 'sprint_id',
-                value: null,
-            });
         },
     },
 };

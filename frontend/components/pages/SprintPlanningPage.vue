@@ -91,7 +91,7 @@ export default {
          */
         backlog() {
             return this.$store.getters['stories/all']
-                .filter(s => s.sprint_id === null)
+                .filter(s => !s.sprint_id)
                 .sort((a, b) => a.position - b.position);
         },
 
@@ -113,7 +113,7 @@ export default {
          * Stories in next sprint
          * @returns {array}
          */
-        storiesInSprint() {
+        storiesInSprint() {                        
             if (this.nextSprint) {
                 return this.$store.getters['stories/find']('sprint_id', this.nextSprint.id)
                     .sort((a, b) => a.position - b.position);

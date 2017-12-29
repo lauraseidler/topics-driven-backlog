@@ -50,7 +50,7 @@ export function mockResponse(
         mockStatus.correctRequest =
             mockStatus.correctMethod &&
             mockStatus.correctRoute &&
-            mockStatus.correctPayload;        
+            mockStatus.correctPayload;
 
         next(
             request.respondWith(payload || responseBody, {

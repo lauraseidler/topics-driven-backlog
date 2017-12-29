@@ -1,0 +1,158 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CoursePage.test.js has the expected html structure 1`] = `
+<section
+  id="course-page"
+>
+  <h1>
+    
+            Test course
+            
+    <small
+      class="text-muted"
+    >
+      WS 17/18
+            
+    </small>
+  </h1>
+   
+  <!---->
+   
+  <div
+    class="card"
+  >
+    <div
+      class="tabs"
+      id="__BVID__59_"
+    >
+      <!---->
+      <div
+        class="card-header"
+      >
+        <ul
+          class="nav nav-tabs card-header-tabs"
+          id="__BVID__59___BV_tab_controls_"
+          role="tablist"
+          tabindex="0"
+        >
+          <li
+            class="nav-item"
+            role="presentation"
+          >
+            <a
+              aria-controls="__BVID__59___BV_tab_container_"
+              aria-posinset="1"
+              aria-selected="true"
+              aria-setsize="3"
+              class="nav-link active"
+              href="#"
+              id="__BVID__60____BV_tab_button__"
+              role="tab"
+              tabindex="-1"
+            >
+              Projects
+            </a>
+          </li>
+          <li
+            class="nav-item"
+            role="presentation"
+          >
+            <a
+              aria-controls="__BVID__59___BV_tab_container_"
+              aria-posinset="2"
+              aria-selected="false"
+              aria-setsize="3"
+              class="nav-link"
+              href="#"
+              id="__BVID__62____BV_tab_button__"
+              role="tab"
+              tabindex="-1"
+            >
+              Topics
+            </a>
+          </li>
+          <li
+            class="nav-item"
+            role="presentation"
+          >
+            <a
+              aria-controls="__BVID__59___BV_tab_container_"
+              aria-posinset="3"
+              aria-selected="false"
+              aria-setsize="3"
+              class="nav-link"
+              href="#"
+              id="__BVID__64____BV_tab_button__"
+              role="tab"
+              tabindex="-1"
+            >
+              Sprints
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div
+        class="tab-content"
+        id="__BVID__59___BV_tab_container_"
+      >
+        <div
+          aria-expanded="true"
+          aria-hidden="false"
+          aria-lablelledby="__BVID__60____BV_tab_button__"
+          class="tab-pane card-body fade active v-enter v-enter-active"
+          id="__BVID__60_"
+          role="tabpanel"
+          style=""
+        >
+          <p>
+            No projects in this course yet.
+          </p>
+        </div>
+         
+        <div
+          aria-expanded="false"
+          aria-hidden="true"
+          aria-lablelledby="__BVID__62____BV_tab_button__"
+          class="tab-pane card-body fade"
+          id="__BVID__62_"
+          role="tabpanel"
+          style="display: none;"
+        >
+          <p>
+            No topics in this course yet.
+          </p>
+        </div>
+         
+        <div
+          aria-expanded="false"
+          aria-hidden="true"
+          aria-lablelledby="__BVID__64____BV_tab_button__"
+          class="tab-pane card-body fade"
+          id="__BVID__64_"
+          role="tabpanel"
+          style="display: none;"
+        >
+          <p>
+            No sprints in this course yet.
+          </p>
+           
+          <button
+            class="btn btn-primary"
+            type="button"
+          >
+            Add sprint
+          </button>
+           
+          <button
+            class="btn btn-primary"
+            type="button"
+          >
+            Add multiple sprints
+          </button>
+        </div>
+        <!---->
+      </div>
+    </div>
+  </div>
+</section>
+`;

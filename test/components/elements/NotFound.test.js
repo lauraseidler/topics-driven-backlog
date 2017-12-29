@@ -19,7 +19,7 @@ describe('NotFound.test.js', () => {
     });
 
     it('has a link to go to the homepage', () => {
-        const routerLink = cmp.find('router-link');        
+        const routerLink = cmp.find('router-link');
         expect(routerLink.exists()).toBe(true);
         expect(routerLink.element.getAttribute('to')).toBe('/');
         expect(routerLink.text()).toBe('Go to homepage');

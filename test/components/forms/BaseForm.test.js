@@ -45,7 +45,7 @@ describe('BaseForm.test.js', () => {
 
     it('emits input event on data change', () => {
         cmp.setProps({ data: { test: 1 } });
-        
+
         const stub = jest.fn();
         cmp.vm.$on('input', stub);
         cmp.update();

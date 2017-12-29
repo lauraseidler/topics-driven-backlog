@@ -42,10 +42,10 @@ describe('application.test.js', () => {
     });
 
     it('has initialised router', () => {
-        expect(cmp.$router).toBeTruthy();        
+        expect(cmp.$router).toBeTruthy();
     });
 
     it('has loaded plugins', () => {
-        expect(cmp.$http).toBeTruthy();        
+        expect(cmp.$http).toBeTruthy();
     });
 });

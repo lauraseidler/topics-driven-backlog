@@ -2,8 +2,7 @@ import { shallow } from 'vue-test-utils';
 import mockRouter from 'mock-vue-router';
 import RouterBack from '@/components/elements/RouterBack';
 
-const {$router, $route} = mockRouter(['/test', '/test2'], '/test');
-
+const { $router, $route } = mockRouter(['/test', '/test2'], '/test');
 
 describe('RouterBack.test.js', () => {
     let cmp;
@@ -34,7 +33,7 @@ describe('RouterBack.test.js', () => {
                 tag: 'button',
             },
         });
-        
+
         expect(cmp.is('button')).toBe(true);
     });
 });

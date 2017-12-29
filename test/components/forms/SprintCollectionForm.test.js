@@ -26,7 +26,9 @@ describe('SprintCollectionForm.test.js', () => {
                 data: {
                     duration: 2,
                     start_date: moment().format('YYYY-MM-DD'),
-                    end_date: moment().add(5, 'days').format('YYYY-MM-DD'),
+                    end_date: moment()
+                        .add(5, 'days')
+                        .format('YYYY-MM-DD'),
                 },
             },
         });
@@ -45,7 +47,9 @@ describe('SprintCollectionForm.test.js', () => {
             data: {
                 duration: 2,
                 start_date: moment().format('YYYY-MM-DD'),
-                end_date: moment().subtract(1, 'days').format('YYYY-MM-DD'),
+                end_date: moment()
+                    .subtract(1, 'days')
+                    .format('YYYY-MM-DD'),
             },
         });
 

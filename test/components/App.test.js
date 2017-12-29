@@ -1,5 +1,5 @@
 import App from '@/components/App';
-import {shallow} from 'vue-test-utils';
+import { shallow } from 'vue-test-utils';
 
 describe('App.test.js', () => {
     let cmp;
