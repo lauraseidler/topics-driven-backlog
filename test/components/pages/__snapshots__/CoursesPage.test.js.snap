@@ -1,0 +1,244 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CoursesPage.test.js has the expected html structure 1`] = `
+<section
+  id="courses-page"
+>
+  <h1>
+    Courses
+  </h1>
+   
+  <ul
+    class="list-unstyled"
+  >
+    <li
+      class="card mb-3"
+    >
+      <div
+        class="card-body"
+      >
+        <router-link
+          class="h4 card-title link-unstyled"
+          to="/courses/undefined"
+        >
+          
+                    
+                
+        </router-link>
+         
+        <h5
+          class="h6 text-muted card-subtitle mt-0"
+        >
+          
+                    Test course (WS 17/18)
+                
+        </h5>
+         
+        <!---->
+      </div>
+    </li>
+  </ul>
+   
+  <button
+    class="btn btn-primary"
+    type="button"
+  >
+    Add course
+  </button>
+</section>
+`;
+
+exports[`CoursesPage.test.js has the expected html structure when form visible 1`] = `
+<section
+  id="courses-page"
+>
+  <h1>
+    Courses
+  </h1>
+   
+  <ul
+    class="list-unstyled"
+  >
+    <li
+      class="card mb-3"
+    >
+      <div
+        class="card-body"
+      >
+        <router-link
+          class="h4 card-title link-unstyled"
+          to="/courses/undefined"
+        >
+          
+                    
+                
+        </router-link>
+         
+        <h5
+          class="h6 text-muted card-subtitle mt-0"
+        >
+          
+                    Test course (WS 17/18)
+                
+        </h5>
+         
+        <!---->
+      </div>
+    </li>
+  </ul>
+   
+  <form
+    class=""
+  >
+    <div
+      class="row"
+    >
+      <div
+        class="col-md-4"
+      >
+        <div
+          aria-labelledby="__BVID__36___BV_label_"
+          class="b-form-group form-group"
+          id="__BVID__36_"
+          role="group"
+        >
+          <label
+            class="col-form-label pt-0"
+            for="course-shorthand"
+            id="__BVID__36___BV_label_"
+          >
+            Shorthand
+          </label>
+          <div
+            class=""
+          >
+            <input
+              aria-required="true"
+              class="form-control"
+              id="course-shorthand"
+              required="required"
+              type="text"
+            />
+            <!---->
+            <!---->
+            <!---->
+          </div>
+        </div>
+      </div>
+       
+      <div
+        class="col-md-8"
+      >
+        <div
+          aria-labelledby="__BVID__38___BV_label_"
+          class="b-form-group form-group"
+          id="__BVID__38_"
+          role="group"
+        >
+          <label
+            class="col-form-label pt-0"
+            for="course-title"
+            id="__BVID__38___BV_label_"
+          >
+            Title
+          </label>
+          <div
+            class=""
+          >
+            <input
+              aria-required="true"
+              class="form-control"
+              id="course-title"
+              required="required"
+              type="text"
+            />
+            <!---->
+            <!---->
+            <!---->
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <div
+      aria-labelledby="__BVID__40___BV_label_"
+      class="b-form-group form-group"
+      id="__BVID__40_"
+      role="group"
+    >
+      <label
+        class="col-form-label pt-0"
+        for="course-hyperlink"
+        id="__BVID__40___BV_label_"
+      >
+        Link
+      </label>
+      <div
+        class=""
+      >
+        <input
+          class="form-control"
+          id="course-hyperlink"
+          type="text"
+        />
+        <!---->
+        <!---->
+        <!---->
+      </div>
+    </div>
+     
+    <div
+      aria-labelledby="__BVID__42___BV_label_"
+      class="b-form-group form-group"
+      id="__BVID__42_"
+      role="group"
+    >
+      <label
+        class="col-form-label pt-0"
+        for="course-semester"
+        id="__BVID__42___BV_label_"
+      >
+        Semester
+      </label>
+      <div
+        class=""
+      >
+        <select
+          class="form-control custom-select"
+          id="course-semester"
+        >
+          <option
+            value="W*2017"
+          >
+            WS 17/18
+          </option>
+           
+          <option
+            value="S*2018"
+          >
+            SS 18
+          </option>
+        </select>
+        <!---->
+        <!---->
+        <!---->
+      </div>
+    </div>
+     
+    <button
+      class="btn btn-primary disabled"
+      disabled="disabled"
+      type="submit"
+    >
+      Save
+    </button>
+     
+    <button
+      class="btn btn-secondary"
+      type="button"
+    >
+      Cancel
+    </button>
+  </form>
+</section>
+`;

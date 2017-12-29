@@ -5,22 +5,36 @@ echo "$0: starting build"
 echo "--------- sudo netstat -nlp | grep 5432"
 sudo netstat -nlp | grep 5432
 
-docker-compose up -d
+docker-compose -f docker-compose.yml -f .docker/docker-compose.test.yml up -d
 
 if [ $? != 0 ]; then
     echo "ERROR: docker-compose up -d FAILED"
     exit 1
 else
-    echo "--------- docker exec -ti postgresql-dev netstat -nlp | grep 5432"
-    docker exec -ti postgresql-dev netstat -nlp | grep 5432
+    echo "--------- docker-compose exec postgresql netstat -nlp | grep 5432"
+    docker-compose exec postgresql netstat -nlp | grep 5432
 
     echo "done building and starting image"
-    docker ps
 
-    echo "starting tests in docker image"
-    docker exec -ti tdb-dev .docker/wait-for-db.sh
-    docker exec -e RAILS_ENV=test -ti tdb-dev rake db:create RAILS_ENV=test
-    docker exec -e RAILS_ENV=test -ti tdb-dev rake db:migrate RAILS_ENV=test
-    docker exec -e RAILS_ENV=test -ti tdb-dev rake db:migrate:status RAILS_ENV=test
-    docker exec -e RAILS_ENV=test -ti tdb-dev rspec spec
+
+    echo "waiting for db"
+    docker-compose exec app .docker/wait-for-db.sh
+
+    echo "creating db"
+    docker-compose exec app rake db:create RAILS_ENV=test
+
+    echo "migrating db"
+    docker-compose exec app rake db:migrate RAILS_ENV=test
+
+    echo "db migration status"
+    docker-compose exec app rake db:migrate:status RAILS_ENV=test
+
+    echo "running rspec tests"
+    docker-compose exec app rspec spec
+
+    echo "running jest tests"
+    docker-compose exec app ./node_modules/jest-cli/bin/jest.js
+
+    echo "uploading coverage reports"
+    curl -s https://codecov.io/bash | bash -s -
 fi
