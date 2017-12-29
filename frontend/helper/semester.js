@@ -9,10 +9,10 @@ export const SS = 'S';
 
 /**
  * Find when the start of a semester was from a given semester, month and year
- * @param semester
- * @param month
- * @param year
- * @returns {*}
+ * @param {string} semester
+ * @param {int} month
+ * @param {int} year
+ * @returns {Moment}
  */
 function findSemesterStart(semester, month, year) {
     // if we're already in the new year, semester started last year
@@ -29,18 +29,17 @@ function findSemesterStart(semester, month, year) {
 
 /**
  * A human-readable string for the current year(s) of the semester
- * @param semester
- * @param year
+ * @param {string} semester
+ * @param {int} year
  * @returns {string}
  */
 function getYearString(semester, year) {
-    return year.toString().substring(2)
-        + (semester === WS ? '/' + (year + 1).toString().substring(2) : '');
+    return year.toString().substring(2) + (semester === WS ? '/' + (year + 1).toString().substring(2) : '');
 }
 
 /**
  * A human-readable string for the current semester
- * @param semester
+ * @param {string} semester
  * @returns {string}
  */
 function getSemesterString(semester) {
@@ -49,8 +48,8 @@ function getSemesterString(semester) {
 
 /**
  * A human-readable string for the current semester + year(s)
- * @param semester
- * @param year
+ * @param {string} semester
+ * @param {int} year
  * @returns {string}
  */
 function getFullString(semester, year) {
@@ -59,7 +58,7 @@ function getFullString(semester, year) {
 
 /**
  * An object with the calculated semester data from a given moment
- * @param date
+ * @param {Moment} date
  * @returns {{semesterStart: *, semester: string, year: number, fullString: string, valueString: string}}
  */
 function calculateSemester(date) {
@@ -76,7 +75,7 @@ function calculateSemester(date) {
         semester,
         year: semesterStartYear,
         fullString: getFullString(semester, semesterStartYear),
-        valueString: semester + '*' + semesterStartYear
+        valueString: semester + '*' + semesterStartYear,
     };
 }
 
@@ -98,12 +97,16 @@ export function next() {
 
 /**
  * Get full semester info from given type and year
- * @param type
- * @param year
+ * @param {string} type
+ * @param {string} year
  * @returns {{semesterStart: *, semester: string, year: number, fullString: string, valueString: string}}
  */
 export function info(type, year) {
-    return calculateSemester(moment().year(year).month((type === WS ? wsMonth : ssMonth) - 1));
+    return calculateSemester(
+        moment()
+            .year(year)
+            .month((type === WS ? wsMonth : ssMonth) - 1)
+    );
 }
 
-export default {WS, SS, current, next, info};
+export default { WS, SS, current, next, info };

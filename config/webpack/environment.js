@@ -1,10 +1,9 @@
-const { environment } = require('@rails/webpacker')
+const { environment } = require('@rails/webpacker');
+const vue =  require('./loaders/vue');
+const customConfig = require('./custom');
 
+environment.loaders.append('vue', vue);
 
-environment.resolve = {
-    alias: {
-        vue: 'vue/dist/vue.esm'
-    }
-}
+environment.config.merge(customConfig);
 
-module.exports = environment
+module.exports = environment;

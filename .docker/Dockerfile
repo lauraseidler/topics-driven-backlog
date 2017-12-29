@@ -20,7 +20,7 @@ RUN chmod +x .docker/prepare-db.sh
 
 # general dependencies
 RUN set -ex \
-  && apk add --no-cache libpq imagemagick nodejs bash
+  && apk add --no-cache libpq imagemagick nodejs bash git
 
 # install yarn
 RUN npm install --global yarn
@@ -36,6 +36,12 @@ RUN set -ex \
        imagemagick-dev \
   && gem install bundler \
   && bundle install
+
+# add all to be able to install yarn modules
+ADD . .
+
+# install yarn modules
+RUN yarn install
 
 # start puma server AND webpack dev server (see Procfile)
 CMD ["foreman", "start"]

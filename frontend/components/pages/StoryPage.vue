@@ -1,5 +1,5 @@
 <template>
-    <section id="story">
+    <section id="story-page">
         <template v-if="story">
             <h1>
                 {{ story.title }}
@@ -10,26 +10,26 @@
                 {{ story.description }}
             </p>
         </template>
-        <not-found v-else></not-found>
+        <NotFound v-else/>
     </section>
 </template>
 
 <script>
-    import NotFound from "../elements/NotFound.vue";
+import NotFound from '@/components/elements/NotFound';
 
-    export default {
-        components: {NotFound},
-        data() {
-            return {};
+export default {
+    components: { NotFound },
+    data() {
+        return {};
+    },
+    computed: {
+        /**
+         * Story to display
+         * @returns {object}
+         */
+        story() {
+            return this.$store.getters['stories/byIdentifier'](this.$route.params.identifier);
         },
-        computed: {
-            story() {
-                return this.$store.getters['stories/byIdentifier'](this.$route.params.identifier);
-            }
-        },
-    };
+    },
+};
 </script>
-
-<style scoped>
-
-</style>
