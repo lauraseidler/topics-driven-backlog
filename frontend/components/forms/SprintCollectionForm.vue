@@ -1,8 +1,10 @@
 <template>
-    <b-form @submit.prevent="submit">
+    <BForm 
+        @submit.prevent="submit" 
+        class="sprint-collection-form">
 
-        <b-row>
-            <b-col md="6">
+        <BRow>
+            <BCol md="6">
                 <h4>Add multiple sprints</h4>
                 <p>
                     This feature allows you to add multiple sprints at the same time. Just enter a sprint length in days
@@ -11,22 +13,54 @@
                     Please note that you can only add future sprints with this feature.
                 </p>
 
-                <b-form-group label="Sprint length in days" label-for="sprint-collection-duration">
-                    <b-form-input id="sprint-collection-duration" type="number" min="1" step="1" v-model="data.duration" required></b-form-input>
-                </b-form-group>
+                <BFormGroup 
+                    label="Sprint length in days" 
+                    label-for="sprint-collection-duration">
 
-                <b-form-group label="Start date" label-for="sprint-collection-start-date">
-                    <b-form-input id="sprint-collection-start-date" :min="$store.state.currentDate" type="date" v-model="data.start_date" required></b-form-input>
-                </b-form-group>
+                    <BFormInput 
+                        id="sprint-collection-duration" 
+                        type="number" 
+                        min="1" 
+                        step="1" 
+                        v-model="data.duration" 
+                        required/>
+                </BFormGroup>
 
-                <b-form-group label="End date" label-for="sprint-collection-end-date">
-                    <b-form-input id="sprint-collection-end-date" :min="data.start_date" type="date" v-model="data.end_date" required></b-form-input>
-                </b-form-group>
+                <BFormGroup 
+                    label="Start date" 
+                    label-for="sprint-collection-start-date">
 
-                <b-button type="submit" variant="primary" :disabled="isInvalid">Add sprints</b-button>
-                <b-button type="button" variant="grey" @click="cancel">Cancel</b-button>
-            </b-col>
-            <b-col md="6">
+                    <BFormInput 
+                        id="sprint-collection-start-date" 
+                        :min="$store.state.currentDate" 
+                        type="date" 
+                        v-model="data.start_date" 
+                        required/>
+                </BFormGroup>
+
+                <BFormGroup 
+                    label="End date" 
+                    label-for="sprint-collection-end-date">
+
+                    <BFormInput 
+                        id="sprint-collection-end-date" 
+                        :min="data.start_date" 
+                        type="date" 
+                        v-model="data.end_date" 
+                        required/>
+                </BFormGroup>
+
+                <BButton 
+                    type="submit" 
+                    variant="primary" 
+                    :disabled="isInvalid">Add sprints</BButton>
+
+                <BButton 
+                    type="button" 
+                    variant="grey" 
+                    @click="cancel">Cancel</BButton>
+            </BCol>
+            <BCol md="6">
                 <h4>Preview</h4>
                 <p v-if="isInvalid">
                     Please fill out all fields correctly to generate the preview.
@@ -37,68 +71,90 @@
                 </p>
 
                 <template v-else>
-                    <div v-for="i in numberOfSprints">
-                        <strong>{{i}}. Sprint:</strong>
+                    <div 
+                        v-for="i in numberOfSprints" 
+                        :key="i">
+
+                        <strong>{{ i }}. Sprint:</strong>
+
                         {{ datePlusDays(data.start_date, (i - 1) * data.duration) }}
                         -
                         {{ datePlusDays(data.start_date, i * data.duration - 1) }}
                     </div>
                 </template>
-            </b-col>
-        </b-row>
-    </b-form>
+            </BCol>
+        </BRow>
+    </BForm>
 </template>
 
 <script>
-    import {required, minValue} from 'vuelidate/lib/validators';
-    import smallerOrEqualThan from '../../validators/smallerOrEqualThan';
-    import largerOrEqualThan from '../../validators/largerOrEqualThan';
-    import BaseForm from './BaseForm.vue';
-    import moment from "moment";
+import moment from 'moment';
+import { required } from 'vuelidate/lib/validators';
+import BForm from '@bootstrap/form/form';
+import BFormGroup from '@bootstrap/form-group/form-group';
+import BFormInput from '@bootstrap/form-input/form-input';
+import BRow from '@bootstrap/layout/row';
+import BCol from '@bootstrap/layout/col';
+import BButton from '@bootstrap/button/button';
+import smallerOrEqualThan from '@/validators/smallerOrEqualThan';
+import largerOrEqualThan from '@/validators/largerOrEqualThan';
+import BaseForm from '@/components/forms/BaseForm';
 
-    export default {
-        name: 'sprint-collection-form',
-        extends: BaseForm,
-        computed: {
-            numberOfDays() {
-                if (this.isInvalid) {
-                    return -1;
-                }
+export default {
+    name: 'SprintCollectionForm',
+    components: { BForm, BFormGroup, BFormInput, BRow, BCol, BButton },
+    extends: BaseForm,
+    computed: {
+        /**
+         * Number of days between start and end date in data
+         * @returns {int}
+         */
+        numberOfDays() {
+            if (this.isInvalid) {
+                return -1;
+            }
 
-                const start = moment(this.data.start_date, 'YYYY-MM-DD');
-                const end = moment(this.data.end_date, 'YYYY-MM-DD');
+            const start = moment(this.data.start_date, 'YYYY-MM-DD');
+            const end = moment(this.data.end_date, 'YYYY-MM-DD');
 
-                // add 1 since both start and end date are included
-                return end.diff(start, 'days') + 1;
+            // add 1 since both start and end date are included
+            return end.diff(start, 'days') + 1;
+        },
+
+        /**
+         * Number of sprints that fit into the number of days between dates
+         * @returns {int}
+         */
+        numberOfSprints() {
+            return this.numberOfDays >= 0 ? Math.floor(this.numberOfDays / this.data.duration) : 0;
+        },
+    },
+    methods: {
+        /**
+         * Add a number of days to a given date
+         * @param {string} date
+         * @param {int} days
+         * @returns {string}
+         */
+        datePlusDays(date, days) {
+            return moment(date, 'YYYY-MM-DD')
+                .add(days, 'days')
+                .format('YYYY-MM-DD');
+        },
+    },
+    validations: {
+        data: {
+            duration: { required },
+            start_date: {
+                required,
+                smallerThanEnd: smallerOrEqualThan('end_date'),
+                largerThanToday: largerOrEqualThan(moment().format('YYYY-MM-DD'), true),
             },
-            numberOfSprints() {
-                return this.numberOfDays ? Math.floor(this.numberOfDays/this.data.duration) : 0;
+            end_date: {
+                required,
+                largerThanStart: largerOrEqualThan('start_date'),
             },
         },
-        methods: {
-            /**
-             * Add a number of days to a given date
-             * @param date
-             * @param days
-             * @returns {string}
-             */
-            datePlusDays(date, days) {
-                return moment(date, 'YYYY-MM-DD').add(days, 'days').format('YYYY-MM-DD');
-            },
-        },
-        validations: {
-            data: {
-                duration: {required},
-                start_date: {
-                    required,
-                    smallerThanEnd: smallerOrEqualThan('end_date'),
-                    largerThanToday: largerOrEqualThan(moment().format('YYYY-MM-DD'), true),
-                },
-                end_date: {
-                    required,
-                    largerThanStart: largerOrEqualThan('start_date')
-                },
-            },
-        },
-    }
+    },
+};
 </script>

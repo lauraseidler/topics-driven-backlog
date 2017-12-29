@@ -1,5 +1,5 @@
 <template>
-    <section id="course">
+    <section id="course-page">
         <template v-if="course">
             <h1>
                 {{ course.title }}
@@ -7,105 +7,138 @@
                 </small>
             </h1>
 
-            <p>
-                <a v-if="course.hyperlink" :href="course.hyperlink">{{ course.hyperlink }}</a>
+            <p v-if="course.hyperlink" >
+                <a :href="course.hyperlink">{{ course.hyperlink }}</a>
             </p>
 
-            <b-card no-body>
-                <b-tabs card>
-                    <b-tab title="Projects">
+            <BCard no-body>
+                <BTabs card>
+                    <BTab title="Projects">
                         <p>No projects in this course yet.</p>
-                    </b-tab>
-                    <b-tab title="Topics">
+                    </BTab>
+                    <BTab title="Topics">
                         <p>No topics in this course yet.</p>
-                    </b-tab>
-                    <b-tab title="Sprints">
-                        <ul class="list-unstyled" v-if="sprints.length">
-                            <sprint class="mb-2" v-for="sprint in sprints" :data="sprint" :key="sprint.id"></sprint>
+                    </BTab>
+                    <BTab title="Sprints">
+                        <ul 
+                            class="list-unstyled" 
+                            v-if="sprints.length">
+
+                            <SprintItem 
+                                class="mb-2" 
+                                v-for="sprint in sprints" 
+                                :data="sprint" 
+                                :key="sprint.id"/>
                         </ul>
 
                         <p v-else>No sprints in this course yet.</p>
 
-                        <sprint-form v-if="showSprintForm" v-model="newSprint" @cancel="showSprintForm = false" @submit="addSprint"></sprint-form>
+                        <SprintForm 
+                            v-if="showSprintForm" 
+                            v-model="newSprint" 
+                            @cancel="showSprintForm = false" 
+                            @submit="addSprint"/>
 
-                        <sprint-collection-form v-else-if="showCollectionForm" v-model="newCollection"
-                                                @cancel="showCollectionForm = false"
-                                                @submit="addCollection"></sprint-collection-form>
+                        <SprintCollectionForm 
+                            v-else-if="showCollectionForm" 
+                            v-model="newCollection"
+                            @cancel="showCollectionForm = false"
+                            @submit="addCollection"/>
+
                         <template v-else>
-                            <b-button type="button" variant="primary" @click="showSprintForm = true">Add sprint</b-button>
-                            <b-button type="button" variant="primary" @click="showCollectionForm = true">Add multiple sprints</b-button>
+                            <BButton 
+                                type="button" 
+                                variant="primary" 
+                                @click="showSprintForm = true">Add sprint</BButton>
+                            
+                            <BButton 
+                                type="button" 
+                                variant="primary" 
+                                @click="showCollectionForm = true">Add multiple sprints</BButton>
                         </template>
-                    </b-tab>
-                </b-tabs>
-            </b-card>
+                    </BTab>
+                </BTabs>
+            </BCard>
         </template>
-        <not-found v-else></not-found>
+        <NotFound v-else/>
     </section>
 </template>
 
 <script>
-    import NotFound from "../elements/NotFound.vue";
-    import {info} from '../../helper/semester';
-    import Sprint from "../elements/Sprint.vue";
-    import SprintForm from "../forms/SprintForm.vue";
-    import SprintCollectionForm from "../forms/SprintCollectionForm.vue";
+import BCard from '@bootstrap/card/card';
+import BTabs from '@bootstrap/tabs/tabs';
+import BTab from '@bootstrap/tabs/tab';
+import BButton from '@bootstrap/button/button';
+import NotFound from '@/components/elements/NotFound';
+import SprintItem from '@/components/elements/SprintItem';
+import SprintForm from '@/components/forms/SprintForm';
+import SprintCollectionForm from '@/components/forms/SprintCollectionForm';
+import { info } from '@/helper/semester';
 
-    export default {
-        components: {SprintCollectionForm, SprintForm, Sprint, NotFound},
-        data() {
-            return {
-                showSprintForm: false,
-                showCollectionForm: false,
-                newSprint: {},
-                newCollection: {},
-            };
+export default {
+    components: { SprintCollectionForm, SprintForm, SprintItem, NotFound, BCard, BTabs, BTab, BButton },
+    data() {
+        return {
+            showSprintForm: false,
+            showCollectionForm: false,
+            newSprint: {},
+            newCollection: {},
+        };
+    },
+    computed: {
+        /**
+         * Course to display
+         * @returns {object}
+         */
+        course() {
+            return this.$store.getters['courses/byId'](parseInt(this.$route.params.id, 10));
         },
-        computed: {
-            course() {
-                return this.$store.getters['courses/byId'](parseInt(this.$route.params.id, 10));
-            },
-            sprints() {
-                return this.course.sprints ? this.course.sprints.sort((a, b) => a.start_date > b.start_date) : [];
-            }
+        /**
+         * Sprints in course sorted by start date
+         * @returns {array}
+         */
+        sprints() {
+            return this.course.sprints ? this.course.sprints.slice().sort((a, b) => a.start_date > b.start_date) : [];
         },
-        methods: {
-            /**
-             * Add a sprint to the given course
-             */
-            addSprint() {
-                this.$store.dispatch('courses/addSprint', {
+    },
+    methods: {
+        /**
+         * Add a sprint to the given course
+         */
+        addSprint() {
+            this.$store
+                .dispatch('courses/addSprint', {
                     id: this.course.id,
-                    sprint: this.newSprint
-                }).then(() => {
+                    sprint: this.newSprint,
+                })
+                .then(() => {
                     this.newSprint = {};
                 });
-            },
+        },
 
-            /**
-             * Add a sprint collection to the given course
-             */
-            addCollection() {
-                this.$store.dispatch('courses/addSprintCollection', {
+        /**
+         * Add a sprint collection to the given course
+         */
+        addCollection() {
+            this.$store
+                .dispatch('courses/addSprintCollection', {
                     id: this.course.id,
-                    collection: this.newCollection
-                }).then(() => {
+                    collection: this.newCollection,
+                })
+                .then(() => {
                     this.newCollection = {};
                 });
-            },
-
-            /**
-             * Semester info for given type and year
-             * @param type
-             * @param year
-             * @returns {{semesterStart: *, semester: string, year: number, fullString: string, valueString: string}}
-             */
-            getSemesterInfo(type, year) {
-                return info(type, year);
-            },
         },
-    };
+
+        /**
+         * Semester info for given type and year
+         * @param {string} type
+         * @param {string} year
+         * @returns {{semesterStart: *, semester: string, year: number, fullString: string, valueString: string}}
+         */
+        getSemesterInfo(type, year) {
+            return info(type, year);
+        },
+    },
+};
 </script>
-
-<style scoped>
-
-</style>

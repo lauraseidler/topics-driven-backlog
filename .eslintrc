@@ -1,0 +1,25 @@
+{
+    "extends": ["eslint:recommended", "plugin:vue/recommended"],
+    "rules": {
+        "import/no-unresolved": 0,
+        "import/no-unassigned-import": 0,
+        "no-console": "off",
+        "comma-dangle": ["error", "always-multiline"],
+        "indent": ["error", 4],
+        "vue/html-indent": ["error", 4],
+        "quotes": ["error", "single"],
+        "require-jsdoc": "error",
+        "valid-jsdoc": ["error", {
+            "requireReturn": false,
+            "requireReturnDescription": false,
+            "requireParamDescription": false,
+            "prefer": {
+              "return": "returns"
+            }
+          }]
+    },
+    "env": {
+        "node": true,
+        "jest": true
+    }
+}

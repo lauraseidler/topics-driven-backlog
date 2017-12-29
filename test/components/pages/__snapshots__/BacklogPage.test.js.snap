@@ -1,0 +1,598 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BacklogPage.test.js has the expected html structure 1`] = `
+<section
+  id="backlog-page"
+>
+  <h1>
+    Backlog
+  </h1>
+   
+  <table
+    class="table table-striped"
+  >
+    <thead>
+      <tr>
+        <th>
+           
+        </th>
+         
+        <th>
+          Identifier
+        </th>
+         
+        <th>
+          Story
+        </th>
+         
+        <th>
+          Story points
+        </th>
+         
+        <th>
+          Operations
+        </th>
+      </tr>
+    </thead>
+     
+    <tbody>
+      <tr
+        class="story-item"
+      >
+        <td>
+          <span
+            class="js-drag-drop"
+          >
+            <svg
+              aria-label="Drag and drop to change order"
+              class="fa-icon"
+              height="16"
+              role="img"
+              version="1.1"
+              viewBox="0 0 1792 1792"
+              width="16"
+            >
+              <path
+                d="M1792 896q0 26-19 45l-256 256q-19 19-45 19t-45-19-19-45v-128h-384v384h128q26 0 45 19t19 45-19 45l-256 256q-19 19-45 19t-45-19l-256-256q-19-19-19-45t19-45 45-19h128v-384h-384v128q0 26-19 45t-45 19-45-19l-256-256q-19-19-19-45t19-45l256-256q19-19 45-19t45 19 19 45v128h384v-384h-128q-26 0-45-19t-19-45 19-45l256-256q19-19 45-19t45 19l256 256q19 19 19 45t-19 45-45 19h-128v384h384v-128q0-26 19-45t45-19 45 19l256 256q19 19 19 45z"
+              />
+               
+    
+              <!---->
+            </svg>
+          </span>
+        </td>
+         
+        <td>
+          
+            
+        
+        </td>
+         
+        <td>
+          
+            
+        
+        </td>
+         
+        <td>
+          
+            not estimated
+        
+        </td>
+         
+        <!---->
+         
+        <!---->
+         
+        <td>
+          <button
+            class="btn btn-primary btn-sm"
+            title="Edit"
+            type="button"
+          >
+            <svg
+              class="fa-icon"
+              height="16"
+              role="presentation"
+              version="1.1"
+              viewBox="0 0 1536 1792"
+              width="13.714285714285714"
+            >
+              <path
+                d="M363 1536l91-91-235-235-91 91v107h128v128h107zM886 608q0-22-22-22-10 0-17 7l-542 542q-7 7-7 17 0 22 22 22 10 0 17-7l542-542q7-7 7-17zM832 416l416 416-832 832h-416v-416zM1515 512q0 53-37 90l-166 166-416-416 166-165q36-38 90-38 53 0 91 38l235 234q37 39 37 91z"
+              />
+               
+    
+              <!---->
+            </svg>
+          </button>
+           
+          <button
+            class="btn btn-danger btn-sm"
+            title="Delete"
+            type="button"
+          >
+            <svg
+              class="fa-icon"
+              height="16"
+              role="presentation"
+              version="1.1"
+              viewBox="0 0 1408 1792"
+              width="12.571428571428571"
+            >
+              <path
+                d="M512 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zM768 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zM1024 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zM480 384h448l-48-117q-7-9-17-11h-317q-10 2-17 11zM1408 416v64q0 14-9 23t-23 9h-96v948q0 83-47 143.5t-113 60.5h-832q-66 0-113-58.5t-47-141.5v-952h-96q-14 0-23-9t-9-23v-64q0-14 9-23t23-9h309l70-167q15-37 54-63t79-26h320q40 0 79 26t54 63l70 167h309q14 0 23 9t9 23z"
+              />
+               
+    
+              <!---->
+            </svg>
+          </button>
+        </td>
+         
+        <!---->
+         
+        <!---->
+      </tr>
+      <tr
+        class="story-item"
+      >
+        <td>
+          <span
+            class="js-drag-drop"
+          >
+            <svg
+              aria-label="Drag and drop to change order"
+              class="fa-icon"
+              height="16"
+              role="img"
+              version="1.1"
+              viewBox="0 0 1792 1792"
+              width="16"
+            >
+              <path
+                d="M1792 896q0 26-19 45l-256 256q-19 19-45 19t-45-19-19-45v-128h-384v384h128q26 0 45 19t19 45-19 45l-256 256q-19 19-45 19t-45-19l-256-256q-19-19-19-45t19-45 45-19h128v-384h-384v128q0 26-19 45t-45 19-45-19l-256-256q-19-19-19-45t19-45l256-256q19-19 45-19t45 19 19 45v128h384v-384h-128q-26 0-45-19t-19-45 19-45l256-256q19-19 45-19t45 19l256 256q19 19 19 45t-19 45-45 19h-128v384h384v-128q0-26 19-45t45-19 45 19l256 256q19 19 19 45z"
+              />
+               
+    
+              <!---->
+            </svg>
+          </span>
+        </td>
+         
+        <td>
+          
+            
+        
+        </td>
+         
+        <td>
+          
+            
+        
+        </td>
+         
+        <td>
+          
+            not estimated
+        
+        </td>
+         
+        <!---->
+         
+        <!---->
+         
+        <td>
+          <button
+            class="btn btn-primary btn-sm"
+            title="Edit"
+            type="button"
+          >
+            <svg
+              class="fa-icon"
+              height="16"
+              role="presentation"
+              version="1.1"
+              viewBox="0 0 1536 1792"
+              width="13.714285714285714"
+            >
+              <path
+                d="M363 1536l91-91-235-235-91 91v107h128v128h107zM886 608q0-22-22-22-10 0-17 7l-542 542q-7 7-7 17 0 22 22 22 10 0 17-7l542-542q7-7 7-17zM832 416l416 416-832 832h-416v-416zM1515 512q0 53-37 90l-166 166-416-416 166-165q36-38 90-38 53 0 91 38l235 234q37 39 37 91z"
+              />
+               
+    
+              <!---->
+            </svg>
+          </button>
+           
+          <button
+            class="btn btn-danger btn-sm"
+            title="Delete"
+            type="button"
+          >
+            <svg
+              class="fa-icon"
+              height="16"
+              role="presentation"
+              version="1.1"
+              viewBox="0 0 1408 1792"
+              width="12.571428571428571"
+            >
+              <path
+                d="M512 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zM768 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zM1024 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zM480 384h448l-48-117q-7-9-17-11h-317q-10 2-17 11zM1408 416v64q0 14-9 23t-23 9h-96v948q0 83-47 143.5t-113 60.5h-832q-66 0-113-58.5t-47-141.5v-952h-96q-14 0-23-9t-9-23v-64q0-14 9-23t23-9h309l70-167q15-37 54-63t79-26h320q40 0 79 26t54 63l70 167h309q14 0 23 9t9 23z"
+              />
+               
+    
+              <!---->
+            </svg>
+          </button>
+        </td>
+         
+        <!---->
+         
+        <!---->
+      </tr>
+    </tbody>
+  </table>
+   
+  <button
+    class="btn btn-primary"
+    type="button"
+  >
+    Add story
+  </button>
+</section>
+`;
+
+exports[`BacklogPage.test.js has the expected html structure when form is displayed 1`] = `
+<section
+  id="backlog-page"
+>
+  <h1>
+    Backlog
+  </h1>
+   
+  <table
+    class="table table-striped"
+  >
+    <thead>
+      <tr>
+        <th>
+           
+        </th>
+         
+        <th>
+          Identifier
+        </th>
+         
+        <th>
+          Story
+        </th>
+         
+        <th>
+          Story points
+        </th>
+         
+        <th>
+          Operations
+        </th>
+      </tr>
+    </thead>
+     
+    <tbody>
+      <tr
+        class="story-item"
+      >
+        <td>
+          <span
+            class="js-drag-drop"
+          >
+            <svg
+              aria-label="Drag and drop to change order"
+              class="fa-icon"
+              height="16"
+              role="img"
+              version="1.1"
+              viewBox="0 0 1792 1792"
+              width="16"
+            >
+              <path
+                d="M1792 896q0 26-19 45l-256 256q-19 19-45 19t-45-19-19-45v-128h-384v384h128q26 0 45 19t19 45-19 45l-256 256q-19 19-45 19t-45-19l-256-256q-19-19-19-45t19-45 45-19h128v-384h-384v128q0 26-19 45t-45 19-45-19l-256-256q-19-19-19-45t19-45l256-256q19-19 45-19t45 19 19 45v128h384v-384h-128q-26 0-45-19t-19-45 19-45l256-256q19-19 45-19t45 19l256 256q19 19 19 45t-19 45-45 19h-128v384h384v-128q0-26 19-45t45-19 45 19l256 256q19 19 19 45z"
+              />
+               
+    
+              <!---->
+            </svg>
+          </span>
+        </td>
+         
+        <td>
+          
+            
+        
+        </td>
+         
+        <td>
+          
+            
+        
+        </td>
+         
+        <td>
+          
+            not estimated
+        
+        </td>
+         
+        <!---->
+         
+        <!---->
+         
+        <td>
+          <button
+            class="btn btn-primary btn-sm"
+            title="Edit"
+            type="button"
+          >
+            <svg
+              class="fa-icon"
+              height="16"
+              role="presentation"
+              version="1.1"
+              viewBox="0 0 1536 1792"
+              width="13.714285714285714"
+            >
+              <path
+                d="M363 1536l91-91-235-235-91 91v107h128v128h107zM886 608q0-22-22-22-10 0-17 7l-542 542q-7 7-7 17 0 22 22 22 10 0 17-7l542-542q7-7 7-17zM832 416l416 416-832 832h-416v-416zM1515 512q0 53-37 90l-166 166-416-416 166-165q36-38 90-38 53 0 91 38l235 234q37 39 37 91z"
+              />
+               
+    
+              <!---->
+            </svg>
+          </button>
+           
+          <button
+            class="btn btn-danger btn-sm"
+            title="Delete"
+            type="button"
+          >
+            <svg
+              class="fa-icon"
+              height="16"
+              role="presentation"
+              version="1.1"
+              viewBox="0 0 1408 1792"
+              width="12.571428571428571"
+            >
+              <path
+                d="M512 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zM768 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zM1024 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zM480 384h448l-48-117q-7-9-17-11h-317q-10 2-17 11zM1408 416v64q0 14-9 23t-23 9h-96v948q0 83-47 143.5t-113 60.5h-832q-66 0-113-58.5t-47-141.5v-952h-96q-14 0-23-9t-9-23v-64q0-14 9-23t23-9h309l70-167q15-37 54-63t79-26h320q40 0 79 26t54 63l70 167h309q14 0 23 9t9 23z"
+              />
+               
+    
+              <!---->
+            </svg>
+          </button>
+        </td>
+         
+        <!---->
+         
+        <!---->
+      </tr>
+      <tr
+        class="story-item"
+      >
+        <td>
+          <span
+            class="js-drag-drop"
+          >
+            <svg
+              aria-label="Drag and drop to change order"
+              class="fa-icon"
+              height="16"
+              role="img"
+              version="1.1"
+              viewBox="0 0 1792 1792"
+              width="16"
+            >
+              <path
+                d="M1792 896q0 26-19 45l-256 256q-19 19-45 19t-45-19-19-45v-128h-384v384h128q26 0 45 19t19 45-19 45l-256 256q-19 19-45 19t-45-19l-256-256q-19-19-19-45t19-45 45-19h128v-384h-384v128q0 26-19 45t-45 19-45-19l-256-256q-19-19-19-45t19-45l256-256q19-19 45-19t45 19 19 45v128h384v-384h-128q-26 0-45-19t-19-45 19-45l256-256q19-19 45-19t45 19l256 256q19 19 19 45t-19 45-45 19h-128v384h384v-128q0-26 19-45t45-19 45 19l256 256q19 19 19 45z"
+              />
+               
+    
+              <!---->
+            </svg>
+          </span>
+        </td>
+         
+        <td>
+          
+            
+        
+        </td>
+         
+        <td>
+          
+            
+        
+        </td>
+         
+        <td>
+          
+            not estimated
+        
+        </td>
+         
+        <!---->
+         
+        <!---->
+         
+        <td>
+          <button
+            class="btn btn-primary btn-sm"
+            title="Edit"
+            type="button"
+          >
+            <svg
+              class="fa-icon"
+              height="16"
+              role="presentation"
+              version="1.1"
+              viewBox="0 0 1536 1792"
+              width="13.714285714285714"
+            >
+              <path
+                d="M363 1536l91-91-235-235-91 91v107h128v128h107zM886 608q0-22-22-22-10 0-17 7l-542 542q-7 7-7 17 0 22 22 22 10 0 17-7l542-542q7-7 7-17zM832 416l416 416-832 832h-416v-416zM1515 512q0 53-37 90l-166 166-416-416 166-165q36-38 90-38 53 0 91 38l235 234q37 39 37 91z"
+              />
+               
+    
+              <!---->
+            </svg>
+          </button>
+           
+          <button
+            class="btn btn-danger btn-sm"
+            title="Delete"
+            type="button"
+          >
+            <svg
+              class="fa-icon"
+              height="16"
+              role="presentation"
+              version="1.1"
+              viewBox="0 0 1408 1792"
+              width="12.571428571428571"
+            >
+              <path
+                d="M512 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zM768 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zM1024 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zM480 384h448l-48-117q-7-9-17-11h-317q-10 2-17 11zM1408 416v64q0 14-9 23t-23 9h-96v948q0 83-47 143.5t-113 60.5h-832q-66 0-113-58.5t-47-141.5v-952h-96q-14 0-23-9t-9-23v-64q0-14 9-23t23-9h309l70-167q15-37 54-63t79-26h320q40 0 79 26t54 63l70 167h309q14 0 23 9t9 23z"
+              />
+               
+    
+              <!---->
+            </svg>
+          </button>
+        </td>
+         
+        <!---->
+         
+        <!---->
+      </tr>
+    </tbody>
+  </table>
+   
+  <form
+    class="story-form"
+  >
+    <div
+      class="row"
+    >
+      <div
+        class="col-md-10"
+      >
+        <div
+          aria-labelledby="__BVID__99___BV_label_"
+          class="b-form-group form-group"
+          id="__BVID__99_"
+          role="group"
+        >
+          <label
+            class="col-form-label pt-0"
+            for="story-title"
+            id="__BVID__99___BV_label_"
+          >
+            Story *
+          </label>
+          <div
+            class=""
+          >
+            <input
+              aria-required="true"
+              class="form-control"
+              id="story-title"
+              required="required"
+              type="text"
+            />
+            <!---->
+            <!---->
+            <!---->
+          </div>
+        </div>
+      </div>
+       
+      <div
+        class="col-md-2"
+      >
+        <div
+          aria-labelledby="__BVID__101___BV_label_"
+          class="b-form-group form-group"
+          id="__BVID__101_"
+          role="group"
+        >
+          <label
+            class="col-form-label pt-0"
+            for="story-points"
+            id="__BVID__101___BV_label_"
+          >
+            Story points
+          </label>
+          <div
+            class=""
+          >
+            <input
+              class="form-control"
+              id="story-points"
+              min="0"
+              type="number"
+            />
+            <!---->
+            <!---->
+            <!---->
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <div
+      aria-labelledby="__BVID__103___BV_label_"
+      class="b-form-group form-group"
+      id="__BVID__103_"
+      role="group"
+    >
+      <label
+        class="col-form-label pt-0"
+        for="story-description"
+        id="__BVID__103___BV_label_"
+      >
+        Notes
+      </label>
+      <div
+        class=""
+      >
+        <textarea
+          class="form-control"
+          id="story-description"
+          rows="1"
+          wrap="soft"
+        />
+        <!---->
+        <!---->
+        <!---->
+      </div>
+    </div>
+     
+    <button
+      class="btn btn-primary disabled"
+      disabled="disabled"
+      type="submit"
+    >
+      Save
+    </button>
+     
+    <button
+      class="btn btn-grey"
+      type="button"
+    >
+      Cancel
+    </button>
+  </form>
+</section>
+`;

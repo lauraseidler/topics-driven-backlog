@@ -1,38 +1,40 @@
 <script>
-    export default {
-        name: 'router-back',
+export default {
+    name: 'RouterBack',
 
-        render(createElement) {
+    props: {
+        tag: {
+            type: String,
+            default: 'a',
+        },
+    },
 
-            const $root = this.$root;
+    render(createElement) {
+        const $root = this.$root;
 
-            return createElement(
-                // Tag
-                this.tag,
+        return createElement(
+            // Tag
+            this.tag,
 
-                // Attributes
-                {
-                    attrs: Object.assign({
+            // Attributes
+            {
+                attrs: Object.assign(
+                    {
                         href: this.tag === 'a' ? 'javascript:' : null,
-                        type: this.tag === 'button' ? 'button' : null
-                    }, this.$attrs),
-                    on: {
-                        click() {
-                            $root.$router.back();
-                        }
-                    }
+                        type: this.tag === 'button' ? 'button' : null,
+                    },
+                    this.$attrs
+                ),
+                on: {
+                    click() {
+                        $root.$router.back();
+                    },
                 },
+            },
 
-                // Children
-                this.$slots.default
-            );
-        },
-
-        props: {
-            'tag': {
-                type: String,
-                default: 'a'
-            }
-        },
-    }
+            // Children
+            this.$slots.default
+        );
+    },
+};
 </script>

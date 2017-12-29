@@ -1,0 +1,159 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SprintItem.test.js is in edit mode after startEditing was called 1`] = `
+<li
+  class="sprint-item card"
+>
+  <div
+    class="card-body"
+  >
+    <form
+      class="sprint-form"
+    >
+      <div
+        aria-labelledby="__BVID__22___BV_label_"
+        class="b-form-group form-group"
+        id="__BVID__22_"
+        role="group"
+      >
+        <label
+          class="col-form-label pt-0"
+          for="sprint-name"
+          id="__BVID__22___BV_label_"
+        >
+          Name
+        </label>
+        <div
+          class=""
+        >
+          <input
+            aria-required="true"
+            class="form-control"
+            id="sprint-name"
+            required="required"
+            type="text"
+          />
+          <!---->
+          <!---->
+          <!---->
+        </div>
+      </div>
+       
+      <div
+        aria-labelledby="__BVID__24___BV_label_"
+        class="b-form-group form-group"
+        id="__BVID__24_"
+        role="group"
+      >
+        <label
+          class="col-form-label pt-0"
+          for="sprint-start-date"
+          id="__BVID__24___BV_label_"
+        >
+          Start date
+        </label>
+        <div
+          class=""
+        >
+          <input
+            aria-required="true"
+            class="form-control"
+            id="sprint-start-date"
+            max="2222-03-01"
+            required="required"
+            type="date"
+          />
+          <!---->
+          <!---->
+          <!---->
+        </div>
+      </div>
+       
+      <div
+        aria-labelledby="__BVID__26___BV_label_"
+        class="b-form-group form-group"
+        id="__BVID__26_"
+        role="group"
+      >
+        <label
+          class="col-form-label pt-0"
+          for="sprint-end-date"
+          id="__BVID__26___BV_label_"
+        >
+          End date
+        </label>
+        <div
+          class=""
+        >
+          <input
+            aria-required="true"
+            class="form-control"
+            id="sprint-end-date"
+            min="2222-02-27"
+            required="required"
+            type="date"
+          />
+          <!---->
+          <!---->
+          <!---->
+        </div>
+      </div>
+       
+      <button
+        class="btn btn-primary"
+        type="submit"
+      >
+        Save
+      </button>
+       
+      <button
+        class="btn btn-grey"
+        type="button"
+      >
+        Cancel
+      </button>
+    </form>
+  </div>
+</li>
+`;
+
+exports[`SprintItem.test.js shows edit and delete buttons when end_date not in the past 1`] = `
+<li
+  class="sprint-item card"
+>
+  <div
+    class="card-body"
+  >
+    <button
+      class="btn float-right ml-2 btn-danger btn-sm"
+      type="button"
+    >
+      Delete
+    </button>
+     
+    <button
+      class="btn float-right btn-primary btn-sm"
+      type="button"
+    >
+      Edit
+    </button>
+     
+    <h3
+      class="card-title h5"
+    >
+      Test Sprint
+    </h3>
+     
+    <p
+      class="card-text"
+    >
+      
+                Start: 2222-02-27 
+      <br />
+      
+                End: 2222-03-01
+            
+    </p>
+  </div>
+</li>
+`;

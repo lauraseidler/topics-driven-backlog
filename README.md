@@ -1,6 +1,7 @@
 # Topics Driven Backlog
 
 [![Build Status](https://travis-ci.org/mvuajua/topics-driven-backlog.svg?branch=master)](https://travis-ci.org/mvuajua/topics-driven-backlog)
+[![codecov](https://codecov.io/gh/mvuajua/topics-driven-backlog/branch/develop/graph/badge.svg)](https://codecov.io/gh/mvuajua/topics-driven-backlog)
 
 ## Requirements
 - Installation of Docker and Docker Compose
