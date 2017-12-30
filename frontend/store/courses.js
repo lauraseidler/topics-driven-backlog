@@ -7,86 +7,91 @@ export const state = {
     data: [],
 };
 
+export const mutationTypes = {
+    SET_ALL: 'setAll',
+    SET_ONE: 'setOne',
+    SET_SPRINT: 'setSprint',
+    REMOVE_SPRINT: 'removeSprint',
+};
+
 export const mutations = {
     /**
-     * Set one or all courses or their sprints
+     * Set all courses
      * @param {object} state
-     * @param {object} payload
+     * @param {array} courses
      */
-    set: (state, payload) => {
-        if (payload.courses) {
-            Vue.set(state, 'data', payload.courses);
-        }
+    [mutationTypes.SET_ALL]: (state, courses) => {
+        Vue.set(state, 'data', courses);
+    },
 
-        if (payload.course) {
-            const isPresent = state.data.find(
-                course => course.id === payload.course.id
+    /**
+     * Set one course. If the course already exists (determined by ID) it will be replaced,
+     * otherwise it will be added to the existing courses.
+     * @param {object} state
+     * @param {object} course
+     */
+    [mutationTypes.SET_ONE]: (state, course) => {
+        const alreadyExists = state.data.find(c => c.id === course.id);
+
+        if (alreadyExists) {
+            Vue.set(
+                state,
+                'data',
+                state.data.map(c => (c.id === course.id ? course : c))
             );
+        } else {
+            state.data.push(course);
+        }
+    },
 
-            if (isPresent) {
-                Vue.set(
-                    state,
-                    'data',
-                    state.data.map(
-                        c =>
-                            c.id === payload.course.id ? payload.course : c
-                    )
-                );
-            } else {
-                state.data.push(payload.course);
-            }
+    /**
+     * Set one sprint in a course identified by the course_id field of the sprint.
+     * If the sprint already exists in the course, it will be replaced,
+     * otherwise it will be added to the existing sprints in the course.
+     * @param {object} state
+     * @param {object} sprint
+     */
+    [mutationTypes.SET_SPRINT]: (state, sprint) => {
+        const courseIndex = state.data.findIndex(
+            c => c.id === sprint.course_id
+        );
+
+        if (courseIndex < 0) {
+            throw new Error('Cannot add sprint to non existing course!');
         }
 
-        if (payload.sprint) {
-            const courseIndex = state.data.findIndex(
-                c => c.id === payload.sprint.course_id
+        const course = state.data[courseIndex];
+
+        // ensure we actually have an array to work with
+        if (!course.sprints) {
+            course.sprints = [];
+        }
+
+        const alreadyExists = course.sprints.find(s => s.id === sprint.id);
+
+        if (alreadyExists) {
+            course.sprints = course.sprints.map(
+                s => (s.id === sprint.id ? sprint : s)
             );
-
-            if (courseIndex < 0) {
-                throw new Error(
-                    'Cannot add sprint to non existing course!'
-                );
-            }
-
-            const course = state.data[courseIndex];
-
-            if (!course.sprints || course.sprints.length < 1) {
-                course.sprints = [payload.sprint];
-            } else {
-                const isPresent = course.sprints.find(
-                    sprint => sprint.id === payload.sprint.id
-                );                
-
-                if (isPresent) {
-                    course.sprints = course.sprints.map(
-                        sprint =>
-                            sprint.id === payload.sprint.id
-                                ? payload.sprint
-                                : sprint
-                    );
-                } else {
-                    course.sprints.push(payload.sprint);
-                }
-            }
-
-            Vue.set(state.data, courseIndex, course);
+        } else {
+            course.sprints.push(sprint);
         }
+
+        Vue.set(state.data, courseIndex, course);
     },
 
     /**
      * Remove a sprint from a course
      * @param {object} state
-     * @param {object} payload
+     * @param {{course_id: int, id: int}} payload
      */
-    removeSprint: (state, payload) => {
+    [mutationTypes.REMOVE_SPRINT]: (state, payload) => {
         const courseIndex = state.data.findIndex(
             c => c.id === payload.course_id
         );
 
         if (courseIndex < 0) {
-            throw new Error(
-                'Cannot remove sprint from non existing course!'
-            );
+            throw new Error('Cannot remove sprint from non existing course!');
         }
 
         const course = state.data[courseIndex];
@@ -101,45 +106,36 @@ export const actions = {
      * Initialises the courses store
      * @param {object} state
      * @param {function} dispatch
-     * @returns {Promise}
      */
-    init({ state, dispatch }) {
-        return new Promise((resolve, reject) => {
-            if (!state.initialised) {
-                dispatch('fetch').then(() => {
-                    state.initialised = true;
-                    resolve();
-                }, reject);
-            } else {
-                resolve();
-            }
-        });
+    async init({ state, dispatch }) {
+        if (!state.initialised) {
+            await dispatch('fetch');
+            state.initialised = true;
+        }
     },
 
     /**
      * Fetches all courses from the API and updates store
      * @param {function} commit
-     * @returns {Promise}
+     * @returns {object}
      */
-    fetch({ commit }) {
-        return new Promise((resolve, reject) => {
-            Vue.http.get('/courses').then(response => {
-                commit('set', {
-                    courses: response.body,
-                });
-
-                resolve(response.body);
-            }, reject);
-        });
+    async fetch({ commit }) {
+        try {
+            const response = await Vue.http.get('/courses');
+            commit(mutationTypes.SET_ALL, response.body);
+            return response.body;
+        } catch (err) {
+            return err;
+        }
     },
 
     /**
      * Saves a course to the API and updates store
      * @param {function} commit
      * @param {object} payload (course)
-     * @returns {Promise}
+     * @returns {object}
      */
-    save({ commit }, payload) {
+    async save({ commit }, payload) {
         // clone course object so we can change stuff
         const course = Object.assign({}, payload.course);
 
@@ -149,58 +145,54 @@ export const actions = {
         course.semester_year = parseInt(semesterSplit[1], 10);
         delete course.semester;
 
-        return new Promise((resolve, reject) => {
-            Vue.http.post('/courses', course).then(response => {
-                commit('set', {
-                    course: response.body,
-                });
-
-                resolve(response.body);
-            }, reject);
-        });
+        try {
+            const response = await Vue.http.post('/courses', course);
+            commit(mutationTypes.SET_ONE, response.body);
+            return response.body;
+        } catch (err) {
+            return err;
+        }
     },
 
     /**
      * Patches a given field of a given course with a given value
      * @param {function} commit
      * @param {object} payload (id, field, value)
-     * @returns {Promise}
+     * @returns {object}
      */
-    patch({ commit }, payload) {
-        return new Promise((resolve, reject) => {
-            const data = {};
-            data[payload.field] = payload.value;
+    async patch({ commit }, payload) {
+        const data = {};
+        data[payload.field] = payload.value;
 
-            Vue.http
-                .patch(`/courses/${payload.id}`, data)
-                .then(response => {
-                    commit('set', {
-                        course: response.body,
-                    });
-
-                    resolve(response.body);
-                }, reject);
-        });
+        try {
+            const response = await Vue.http.patch(
+                `/courses/${payload.id}`,
+                data
+            );
+            commit(mutationTypes.SET_ONE, response.body);
+            return response.body;
+        } catch (err) {
+            return err;
+        }
     },
 
     /**
      * Add a sprint to a given course
      * @param {function} commit
      * @param {object} payload (id, sprint)
-     * @returns {Promise}
+     * @returns {object}
      */
-    addSprint({ commit }, payload) {
-        return new Promise((resolve, reject) => {
-            Vue.http
-                .post(`/courses/${payload.id}/sprints`, payload.sprint)
-                .then(response => {
-                    commit('set', {
-                        sprint: response.body,
-                    });
-
-                    resolve(response.body);
-                }, reject);
-        });
+    async addSprint({ commit }, payload) {
+        try {
+            const response = await Vue.http.post(
+                `/courses/${payload.id}/sprints`,
+                payload.sprint
+            );
+            commit(mutationTypes.SET_SPRINT, response.body);
+            return response.body;
+        } catch (err) {
+            return err;
+        }
     },
 
     /**
@@ -209,20 +201,19 @@ export const actions = {
      * @param {object} payload (id, collection)
      * @returns {Promise}
      */
-    addSprintCollection({ dispatch }, payload) {
-        return new Promise((resolve, reject) => {
-            Vue.http
-                .post(
-                    `/courses/${payload.id}/sprint-collection`,
-                    payload.collection
-                )
-                .then(response => {
-                    // TODO: once we load courses more differentiated, also update this
-                    dispatch('fetch');
-
-                    resolve(response.body);
-                }, reject);
-        });
+    async addSprintCollection({ dispatch }, payload) {
+        try {
+            const response = await Vue.http.post(
+                `/courses/${payload.id}/sprint-collection`,
+                payload.collection
+            );
+            
+            // TODO: once we load courses more differentiated, also update this
+            dispatch('fetch');
+            return response.body;
+        } catch (err) {
+            return err;
+        }
     },
 };
 
