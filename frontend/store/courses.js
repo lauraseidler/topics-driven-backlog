@@ -12,6 +12,8 @@ export const mutationTypes = {
     SET_ONE: 'setOne',
     SET_SPRINT: 'setSprint',
     REMOVE_SPRINT: 'removeSprint',
+    SET_PROJECT: 'setProject',
+    REMOVE_PROJECT: 'removeProject',
 };
 
 export const mutations = {
@@ -96,6 +98,62 @@ export const mutations = {
 
         const course = state.data[courseIndex];
         course.sprints = course.sprints.filter(s => s.id !== payload.id);
+
+        Vue.set(state.data, courseIndex, course);
+    },
+
+    /**
+     * Set one project in a course identified by the course_id field of the project.
+     * If the project already exists in the course, it will be replaced,
+     * otherwise it will be added to the existing projects in the course.
+     * @param {object} state
+     * @param {object} project
+     */
+    [mutationTypes.SET_PROJECT]: (state, project) => {
+        const courseIndex = state.data.findIndex(
+            c => c.id === project.course_id
+        );
+
+        if (courseIndex < 0) {
+            throw new Error('Cannot add project to non existing course!');
+        }
+
+        const course = state.data[courseIndex];
+
+        // ensure we actually have an array to work with
+        if (!course.projects) {
+            course.projects = [];
+        }
+
+        const alreadyExists = course.projects.find(p => p.id === project.id);        
+
+        if (alreadyExists) {
+            course.projects = course.projects.map(
+                p => (p.id === project.id ? project : p)
+            );
+        } else {
+            course.projects.push(project);
+        }
+
+        Vue.set(state.data, courseIndex, course);
+    },
+    
+    /**
+     * Remove a project from a course
+     * @param {object} state
+     * @param {{course_id: int, id: int}} payload
+     */
+    [mutationTypes.REMOVE_PROJECT]: (state, payload) => {
+        const courseIndex = state.data.findIndex(
+            c => c.id === payload.course_id
+        );
+
+        if (courseIndex < 0) {
+            throw new Error('Cannot remove project from non existing course!');
+        }
+
+        const course = state.data[courseIndex];
+        course.projects = course.projects.filter(p => p.id !== payload.id);
 
         Vue.set(state.data, courseIndex, course);
     },

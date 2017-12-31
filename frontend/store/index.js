@@ -5,6 +5,7 @@ import moment from 'moment';
 import stories from '@/store/stories';
 import courses from '@/store/courses';
 import sprints from '@/store/sprints';
+import projects from '@/store/projects';
 
 Vue.use(Vuex);
 
@@ -27,7 +28,7 @@ export const actions = {
 };
 
 export default new Vuex.Store({
-    modules: { stories, courses, sprints },
+    modules: { stories, courses, sprints, projects },
     state,
     actions,
 });

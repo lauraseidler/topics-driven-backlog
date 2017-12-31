@@ -40,7 +40,13 @@ describe('courses store mutations', () => {
             test: 1,
         });
 
-        expect(state.data[0].sprints.length).toBe(1);
+        mutations[mutationTypes.SET_SPRINT](state, {
+            id: 100,
+            course_id: 1,
+            test: 100,
+        });
+
+        expect(state.data[0].sprints.length).toBe(2);
         expect(state.data[0].sprints[0].test).toBe(1);
     });
 
@@ -51,7 +57,7 @@ describe('courses store mutations', () => {
             test: 2,
         });
 
-        expect(state.data[0].sprints.length).toBe(1);
+        expect(state.data[0].sprints.length).toBe(2);
         expect(state.data[0].sprints[0].test).toBe(2);
     });
 
@@ -68,13 +74,65 @@ describe('courses store mutations', () => {
     it('removes a sprint from a course', () => {
         mutations[mutationTypes.REMOVE_SPRINT](state, { id: 1, course_id: 1 });
 
-        expect(state.data[0].sprints.length).toBe(0);
+        expect(state.data[0].sprints.length).toBe(1);
     });
 
     it('throws an error when removing a sprint from a non-existent course', () => {
         expect(() => {
             mutations[mutationTypes.REMOVE_SPRINT](state, {
                 sprint: { id: 1, course_id: 5 },
+            });
+        }).toThrow();
+    });
+
+    it('adds a new project to a course', () => {
+        mutations[mutationTypes.SET_PROJECT](state, {
+            id: 1,
+            course_id: 1,
+            test: 1,
+        });
+
+        mutations[mutationTypes.SET_PROJECT](state, {
+            id: 100,
+            course_id: 1,
+            test: 100,
+        });
+
+        expect(state.data[0].projects.length).toBe(2);
+        expect(state.data[0].projects[0].test).toBe(1);
+    });
+
+    it('updates an existing project in a course', () => {
+        mutations[mutationTypes.SET_PROJECT](state, {
+            id: 1,
+            course_id: 1,
+            test: 2,
+        });  
+
+        expect(state.data[0].projects.length).toBe(2);
+        expect(state.data[0].projects[0].test).toBe(2);
+    });
+
+    it('throws an error when adding a project to a non-existent course', () => {
+        expect(() => {
+            mutations[mutationTypes.SET_PROJECT](state, {
+                id: 1,
+                course_id: 5,
+                test: 2,
+            });
+        }).toThrow();
+    });
+
+    it('removes a project from a course', () => {
+        mutations[mutationTypes.REMOVE_PROJECT](state, { id: 1, course_id: 1 });
+
+        expect(state.data[0].projects.length).toBe(1);
+    });
+
+    it('throws an error when removing a project from a non-existent course', () => {
+        expect(() => {
+            mutations[mutationTypes.REMOVE_PROJECT](state, {
+                project: { id: 1, course_id: 5 },
             });
         }).toThrow();
     });

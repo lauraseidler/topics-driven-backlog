@@ -16,7 +16,11 @@ export const actions = {
                 payload.sprint
             );
 
-            commit(coursesMutationTypes.SET_SPRINT, response.body);
+            commit(
+                'courses/' + coursesMutationTypes.SET_SPRINT,
+                response.body,
+                { root: true }
+            );
             return response.body;
         } catch (err) {
             return err;
@@ -48,39 +52,35 @@ export const actions = {
      * Patches a given sprint with the given values
      * @param {function} commit
      * @param {object} payload (id, values)
-     * @returns {Promise}
+     * @returns {object}
      */
-    patch({ commit }, payload) {
-        return new Promise((resolve, reject) => {
-            Vue.http
-                .patch(`/sprints/${payload.id}`, payload.values)
-                .then(response => {
-                    commit(
-                        'courses/set',
-                        {
-                            sprint: response.body,
-                        },
-                        { root: true }
-                    );
+    async patch({ commit }, payload) {
+        try {
+            const response = await Vue.http.patch(
+                `/sprints/${payload.id}`,
+                payload.values
+            );
 
-                    resolve(response.body);
-                }, reject);
-        });
+            commit(
+                'courses/' + coursesMutationTypes.SET_SPRINT,
+                response.body,
+                { root: true }
+            );
+
+            return response.body;
+        } catch (err) {
+            return err;
+        }
     },
 
     /**
      * Deletes a given sprint
      * @param {function} commit
      * @param {object} payload (id, course_id)
-     * @returns {Promise}
      */
-    delete({ commit }, payload) {
-        return new Promise((resolve, reject) => {
-            Vue.http.delete(`/sprints/${payload.id}`).then(() => {
-                commit('courses/removeSprint', payload, { root: true });
-                resolve();
-            }, reject);
-        });
+    async delete({ commit }, payload) {
+        await Vue.http.delete(`/sprints/${payload.id}`);
+        commit('courses/' + coursesMutationTypes.REMOVE_SPRINT, payload, { root: true });
     },
 };
 

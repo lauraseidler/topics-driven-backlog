@@ -14,7 +14,30 @@
             <BCard no-body>
                 <BTabs card>
                     <BTab title="Projects">
-                        <p>No projects in this course yet.</p>
+                        <ul 
+                            class="list-unstyled" 
+                            v-if="projects.length">
+
+                            <ProjectItem
+                                class="mb-2"
+                                v-for="project in projects"
+                                :data="project"
+                                :key="project.id"/>
+                        </ul>
+
+                        <p v-else>No projects in this course yet.</p>
+
+                        <ProjectForm
+                            v-if="showProjectForm"
+                            v-model="newProject"
+                            @cancel="showProjectForm = false"
+                            @submit="addProject"/>
+
+                        <BButton 
+                            v-else
+                            type="button" 
+                            variant="primary" 
+                            @click="showProjectForm = true">Add project</BButton>
                     </BTab>
                     <BTab title="Topics">
                         <p>No topics in this course yet.</p>
@@ -73,16 +96,31 @@ import NotFound from '@/components/elements/NotFound';
 import SprintItem from '@/components/elements/SprintItem';
 import SprintForm from '@/components/forms/SprintForm';
 import SprintCollectionForm from '@/components/forms/SprintCollectionForm';
+import ProjectForm from '@/components/forms/ProjectForm';
+import ProjectItem from '@/components/elements/ProjectItem';
 import { info } from '@/helper/semester';
 
 export default {
-    components: { SprintCollectionForm, SprintForm, SprintItem, NotFound, BCard, BTabs, BTab, BButton },
+    components: {
+        SprintCollectionForm,
+        SprintForm,
+        ProjectForm,
+        SprintItem,
+        ProjectItem,
+        NotFound,
+        BCard,
+        BTabs,
+        BTab,
+        BButton,
+    },
     data() {
         return {
             showSprintForm: false,
             showCollectionForm: false,
+            showProjectForm: false,
             newSprint: {},
             newCollection: {},
+            newProject: {},
         };
     },
     computed: {
@@ -91,21 +129,36 @@ export default {
          * @returns {object}
          */
         course() {
-            return this.$store.getters['courses/byId'](parseInt(this.$route.params.id, 10));
+            return this.$store.getters['courses/byId'](
+                parseInt(this.$route.params.id, 10)
+            );
         },
+
         /**
          * Sprints in course sorted by start date
          * @returns {array}
          */
         sprints() {
-            return this.course.sprints ? this.course.sprints.slice().sort((a, b) => a.start_date > b.start_date) : [];
+            return this.course.sprints
+                ? this.course.sprints
+                    .slice()
+                    .sort((a, b) => a.start_date > b.start_date)
+                : [];
+        },
+
+        /** 
+         * Projects in course
+         * @returns {array}
+         */
+        projects() {
+            return this.course.projects || [];
         },
     },
     methods: {
         /**
          * Add a sprint to the given course
          */
-        addSprint() {            
+        addSprint() {
             this.$store
                 .dispatch('sprints/save', {
                     course_id: this.course.id,
@@ -128,6 +181,19 @@ export default {
                 .then(() => {
                     this.newCollection = {};
                 });
+        },
+
+        async addProject() {
+            try {
+                await this.$store.dispatch('projects/save', {
+                    course_id: this.course.id,
+                    project: this.newProject,
+                });
+
+                this.newProject = {};
+            } catch (err) {
+                // TODO handle errors in UI
+            }
         },
 
         /**
