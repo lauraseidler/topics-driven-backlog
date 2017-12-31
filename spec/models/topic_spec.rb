@@ -13,4 +13,11 @@ RSpec.describe Topic, type: :model do
     subject.url = 'foo/bar'
     expect(subject).not_to be_valid
   end
+
+  it "is valid when url is valid" do
+    subject.title = 'Anything'
+    subject.course_id = create(:course).id
+    subject.url = Faker::Internet::url
+    expect(subject).to be_valid
+  end
 end
