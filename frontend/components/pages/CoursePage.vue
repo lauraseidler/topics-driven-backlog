@@ -105,10 +105,10 @@ export default {
         /**
          * Add a sprint to the given course
          */
-        addSprint() {
+        addSprint() {            
             this.$store
-                .dispatch('courses/addSprint', {
-                    id: this.course.id,
+                .dispatch('sprints/save', {
+                    course_id: this.course.id,
                     sprint: this.newSprint,
                 })
                 .then(() => {
@@ -121,8 +121,8 @@ export default {
          */
         addCollection() {
             this.$store
-                .dispatch('courses/addSprintCollection', {
-                    id: this.course.id,
+                .dispatch('sprints/saveCollection', {
+                    course_id: this.course.id,
                     collection: this.newCollection,
                 })
                 .then(() => {

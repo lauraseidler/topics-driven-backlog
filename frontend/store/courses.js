@@ -175,46 +175,6 @@ export const actions = {
             return err;
         }
     },
-
-    /**
-     * Add a sprint to a given course
-     * @param {function} commit
-     * @param {object} payload (id, sprint)
-     * @returns {object}
-     */
-    async addSprint({ commit }, payload) {
-        try {
-            const response = await Vue.http.post(
-                `/courses/${payload.id}/sprints`,
-                payload.sprint
-            );
-            commit(mutationTypes.SET_SPRINT, response.body);
-            return response.body;
-        } catch (err) {
-            return err;
-        }
-    },
-
-    /**
-     * Add a sprint collection to a given course
-     * @param {function} dispatch
-     * @param {object} payload (id, collection)
-     * @returns {Promise}
-     */
-    async addSprintCollection({ dispatch }, payload) {
-        try {
-            const response = await Vue.http.post(
-                `/courses/${payload.id}/sprint-collection`,
-                payload.collection
-            );
-            
-            // TODO: once we load courses more differentiated, also update this
-            dispatch('fetch');
-            return response.body;
-        } catch (err) {
-            return err;
-        }
-    },
 };
 
 export const getters = {
@@ -244,21 +204,6 @@ export const getters = {
         return {
             semester: current().valueString,
         };
-    },
-
-    /**
-     * All sprints in all courses
-     * @param {object} state
-     * @returns {array}
-     */
-    allSprints: state => () => {
-        let sprints = [];
-
-        state.data.forEach(course => {
-            sprints = sprints.concat(course.sprints);
-        });
-
-        return sprints;
     },
 };
 

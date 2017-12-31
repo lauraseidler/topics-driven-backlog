@@ -15,8 +15,8 @@ describe('CoursePage.test.js', () => {
 
     beforeEach(() => {
         actions = {
-            addSprint: jest.fn(),
-            addSprintCollection: jest.fn(),
+            save: jest.fn(),
+            saveCollection: jest.fn(),
         };
 
         getters = {
@@ -47,8 +47,11 @@ describe('CoursePage.test.js', () => {
             modules: {
                 courses: {
                     namespaced: true,
-                    actions,
                     getters,
+                },
+                sprints: {
+                    namespaced: true,
+                    actions,
                 },
             },
         });
@@ -81,14 +84,14 @@ describe('CoursePage.test.js', () => {
     it('adds a sprint and resets form', () => {
         cmp.vm.addSprint();
 
-        expect(actions.addSprint).toBeCalled();
+        expect(actions.save).toBeCalled();
         expect(cmp.vm.newSprint).toEqual({});
     });
 
     it('adds a sprint collection and resets form', () => {
         cmp.vm.addCollection();
 
-        expect(actions.addSprintCollection).toBeCalled();
+        expect(actions.saveCollection).toBeCalled();
         expect(cmp.vm.newCollection).toEqual({});
     });
 

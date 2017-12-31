@@ -151,33 +151,6 @@ describe('courses.test.js actions', () => {
         expect(mock.correctRequest).toBe(true);
         expect(commit).toHaveBeenCalledWith(mutationTypes.SET_ONE, payload);
     });
-
-    it('adds a sprint and calls set mutation', async () => {
-        const payload = { test: 1 };
-        mock = mockResponse('/courses/1/sprints', 'POST', payload);
-
-        await expect(
-            actions.addSprint({ commit }, { id: 1, sprint: payload })
-        ).resolves.toEqual(payload);
-
-        expect(mock.correctRequest).toBe(true);
-        expect(commit).toHaveBeenCalledWith(mutationTypes.SET_SPRINT, payload);
-    });
-
-    it('adds a sprint collection and fetches data', async () => {
-        const payload = { test: 1 };
-        mock = mockResponse('/courses/1/sprint-collection', 'POST', payload);
-
-        await expect(
-            actions.addSprintCollection(
-                { dispatch },
-                { id: 1, collection: payload }
-            )
-        ).resolves.toEqual(payload);
-        
-        expect(mock.correctRequest).toBe(true);
-        expect(dispatch).toHaveBeenCalledWith('fetch');
-    });
 });
 
 describe('courses.test.js getters', () => {
@@ -205,9 +178,5 @@ describe('courses.test.js getters', () => {
 
     it('returns a template for a new course', () => {
         expect(getters.new().semester).toBeTruthy();
-    });
-
-    it('returns all sprints across all courses', () => {
-        expect(getters.allSprints(state)().length).toBe(3);
     });
 });
