@@ -17,6 +17,7 @@ RSpec.describe 'Courses/Topics API' do
       end
 
       it 'returns all course topics' do
+        expect(json).not_to be_empty
         expect(json['topics'].size).to eq(20)
       end
     end
@@ -47,7 +48,7 @@ RSpec.describe 'Courses/Topics API' do
       before { post "/courses/#{course_id}/topics", params: valid_attributes }
 
       it 'creates a topic' do
-        expect(json['title']).to eq('Visit Narnia')
+        expect(json['title']).to eq('Learn Elm')
         expect(json['url'])
             .to eq('http://home.htw-berlin.de/~kleinen/classes/ws2017/wtat2/topics/a1-activerecord/')
         expect(json['course_id']).to eq(course_id)
