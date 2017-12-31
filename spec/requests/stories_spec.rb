@@ -63,6 +63,7 @@ RSpec.describe 'Stories API', type: :request do
       before { post '/stories', params: valid_attributes }
 
       it 'creates a story' do
+        expect(json).not_to be_empty
         expect(json['title']).to eq('Learn Elm')
         expect(json['description']).to eq('Foobar')
         expect(json['status']).to eq(Story.statuses[:open])
@@ -95,6 +96,7 @@ RSpec.describe 'Stories API', type: :request do
 
     context 'when the record exists' do
       it 'updates the record' do
+        expect(json).not_to be_empty
         expect(json['title']).to eq('Shopping')
         expect(json['description']).to eq('Foobar')
       end
@@ -221,6 +223,7 @@ RSpec.describe 'Stories API', type: :request do
       before {patch "/stories/#{story_id}", params: past_sprint_attribute}
 
       it 'updates the record' do
+        expect(json).not_to be_empty
         expect(json['sprint_id']).to eq(nil)
       end
 
