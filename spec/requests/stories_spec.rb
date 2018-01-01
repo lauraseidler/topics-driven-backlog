@@ -138,6 +138,7 @@ RSpec.describe 'Stories API', type: :request do
       before { get "/stories/#{last_story.id}" }
 
       it 'returns the first position value' do
+        expect(json).not_to be_empty
         expect(json['position']).to eq(1)
       end
     end
@@ -146,6 +147,7 @@ RSpec.describe 'Stories API', type: :request do
       before { get "/stories/#{first_story.id}" }
 
       it 'leads to the second position for the former first one' do
+        expect(json).not_to be_empty
         expect(json['position']).to eq(2)
       end
     end
@@ -173,7 +175,36 @@ RSpec.describe 'Stories API', type: :request do
       before { get "/stories/#{last_story.id}" }
 
       it 'provides the story status' do
+        expect(json).not_to be_empty
         expect(json['status']).to eq(Story.statuses[:progressing])
+      end
+    end
+  end
+
+  # Test suite for PATCH /stories/:id
+  describe 'PATCH /stories/:id for topic attribute' do
+    let(:course_id) { create(:course).id }
+    let(:topic_id) { create(:topic, :course_id => course_id).id }
+    let(:topic_attribute) { { :topic_id => topic_id } }
+
+    before { patch "/stories/#{story_id}", params: topic_attribute }
+
+    context 'updating a story status' do
+      it 'updates the record' do
+        expect(json['topic_id']).to eq(topic_id)
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+    end
+
+    context 'when the record exists' do
+      before { get "/stories/#{story_id}" }
+
+      it 'provides the story status' do
+        expect(json).not_to be_empty
+        expect(json['topic_id']).to eq(topic_id)
       end
     end
   end
