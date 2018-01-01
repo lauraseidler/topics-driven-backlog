@@ -104,7 +104,7 @@ export const actions = {
      */
     save({ commit }, payload) {
         return new Promise((resolve, reject) => {
-            Vue.http.post('/stories', payload.story).then(response => {
+            Vue.http.post(`/projects/${payload.project_id}/stories`, payload.story).then(response => {
                 commit('set', {
                     story: response.body,
                 });
@@ -170,6 +170,10 @@ export const getters = {
      * @returns {array}
      */
     all: state => (state.initialised ? state.data : []),
+
+    byProject: (state, getters, rootState, rootGetters) => (id) => {
+        return rootGetters['projects/byId'](id).stories || [];
+    },
 
     /**
      * Find a story by identifier

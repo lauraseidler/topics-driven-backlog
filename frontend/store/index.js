@@ -21,7 +21,7 @@ export const actions = {
      * @param {function} dispatch
      */
     init({ state, dispatch }) {
-        dispatch('stories/init');
+        // dispatch('stories/init');
         dispatch('courses/init');
         state.initialised = true;
     },

@@ -67,14 +67,18 @@ export const getters = {
      * @param {object} rootState
      * @returns {array}
      */
-    allProjects: (state, getters, rootState) => {
+    all: (state, getters, rootState) => {
         let projects = [];
 
-        rootState.courses.state.data.forEach(course => {
+        rootState.courses.data.forEach(course => {
             projects = projects.concat(course.projects);
         });
 
         return projects;
+    },
+
+    byId: (state, getters) => (id) => {
+        return getters.all.find(p => p.id === id);
     },
 };
 

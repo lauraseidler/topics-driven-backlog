@@ -93,9 +93,9 @@ export const getters = {
      * @returns {array}
      */
     allSprints: (state, getters, rootState) => {
-        let sprints = [];
+        let sprints = [];        
 
-        rootState.courses.state.data.forEach(course => {
+        rootState.courses.data.forEach(course => {
             sprints = sprints.concat(course.sprints);
         });
 

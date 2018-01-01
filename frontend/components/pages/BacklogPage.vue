@@ -50,14 +50,20 @@ export default {
         };
     },
     computed: {
+        project() {
+            return this.$store.getters['projects/byId'](parseInt(this.$route.params.id, 10));
+        },
+
         /**
          * All stories in backlog that are open and not already in sprints, sorted by position
          * @returns {array}
          */
         stories() {            
-            return this.$store.getters['stories/all']
-                .filter(s => !s.sprint_id && s.status === this.$store.state.stories.STATUS.OPEN)
-                .sort((a, b) => a.position - b.position);
+            return this.project 
+                ? this.$store.getters['stories/byProject'](this.project.id)
+                    .filter(s => !s.sprint_id && s.status === this.$store.state.stories.STATUS.OPEN)
+                    .sort((a, b) => a.position - b.position)
+                : [];
         },
     },
     methods: {
@@ -68,6 +74,7 @@ export default {
             this.$store
                 .dispatch('stories/save', {
                     story: this.newStory,
+                    project_id: this.project.id,
                 })
                 .then(() => {
                     this.newStory = {};

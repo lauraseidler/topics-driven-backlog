@@ -1,6 +1,9 @@
 <template>
     <li class="project-item card">
-        <div class="card-body">
+        <div 
+            v-if="view === 'manage'" 
+            class="card-body">
+
             <template v-if="!editing">
                 <BButton 
                     size="sm" 
@@ -23,6 +26,19 @@
                 @cancel="editing = false" 
                 @submit="saveProject"/>
         </div>
+
+        <div 
+            v-else 
+            class="card-body">
+
+            <h3 class="card-title h5">{{ data.title }}</h3>
+
+            <p class="card-text">
+                <router-link 
+                    class="btn btn-primary btn-sm mr-2" 
+                    :to="`/projects/${data.id}-${slugify(data.title)}/backlog`">Backlog</router-link>
+            </p>
+        </div> 
     </li>
 </template>
 
@@ -38,6 +54,10 @@ export default {
         data: {
             type: Object,
             default: () => {},
+        },
+        view: {
+            type: String,
+            default: 'manage',
         },
     },
     data() {
@@ -79,6 +99,15 @@ export default {
                 id: this.data.id,
                 course_id: this.data.course_id,
             });
+        },
+
+        slugify(text) {
+            return text.toString().toLowerCase()
+                .replace(/\s+/g, '-')           // Replace spaces with -
+                .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+                .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+                .replace(/^-+/, '')             // Trim - from start of text
+                .replace(/-+$/, '');            // Trim - from end of text
         },
     },
 };

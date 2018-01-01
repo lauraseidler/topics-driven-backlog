@@ -7,21 +7,32 @@ import CoursePage from '@/components/pages/CoursePage';
 import CoursesPage from '@/components/pages/CoursesPage';
 import SprintPlanningPage from '@/components/pages/SprintPlanningPage';
 import HistoryPage from '@/components/pages/HistoryPage';
+import ProjectsPage from '@/components/pages/ProjectsPage';
 
 Vue.use(Router);
 
 const router = new Router({
     routes: [
         {
+            path: '/projects',
+            name: 'projects',
+            component: ProjectsPage,
+        },
+        {
+            path: '/projects/:id-(.*)/backlog',
+            name: 'backlog',
+            component: BacklogPage,
+        },
+        {
             path: '/stories/:identifier',
             name: 'story',
             component: StoryPage,
         },
-        {
-            path: '/backlog',
-            name: 'backlog',
-            component: BacklogPage,
-        },
+        // {
+        //     path: '/backlog',
+        //     name: 'backlog',
+        //     component: BacklogPage,
+        // },
         {
             path: '/sprint-planning',
             name: 'sprint-planning',
@@ -44,7 +55,7 @@ const router = new Router({
         },
         {
             path: '*',
-            redirect: '/backlog',
+            redirect: '/projects',
         },
     ],
 });
