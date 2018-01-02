@@ -4,7 +4,7 @@ import { current } from '@/helper/semester';
 
 const resourceModule = generate({
     resource: resources.COURSES,
-    children: [resources.SPRINTS, resources.PROJECTS],
+    children: [resources.SPRINTS, resources.PROJECTS, resources.TOPICS],
     template: () => {
         return {
             semester: current().valueString,
