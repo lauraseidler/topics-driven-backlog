@@ -19,8 +19,8 @@ class StoriesController < ApplicationController
   # PATCH /stories/:id
   def update
     @story.update!(story_params)
-    set_positions(params[:sprint_position] || nil, params[:project_position] || nil)
-
+    set_positions(params[:sprint_position], params[:project_position])
+    @story.reload
     json_response(@story)
   end
 
@@ -49,9 +49,15 @@ class StoriesController < ApplicationController
 
   def set_positions(sprint_pos, project_pos)
     if sprint_pos.present? & @story.sprint_id.present?
-      sprint_position = SprintPosition.find_by!(id: @story.sprint_position_id)
-      if @story.sprint_id != sprint_position.sprint_id
-        sprint_position.sprint_id = @story.sprint_id
+      if @story.sprint_position_id.present?
+        sprint_position = SprintPosition.find_by!(id: @story.sprint_position_id)
+        if @story.sprint_id != sprint_position.sprint_id
+          sprint_position.sprint_id = @story.sprint_id
+        end
+      else
+        sprint_position = SprintPosition.create(:sprint_id => @story.sprint_id)
+        sprint_position.move_to_bottom
+        @story.sprint_position_id = sprint_position.id
       end
       sprint_position.set_list_position(sprint_pos)
     end
@@ -73,6 +79,7 @@ class StoriesController < ApplicationController
   def create_project_position
     project_position = ProjectPosition.create(:project_id => @project.id)
     project_position.move_to_bottom
+    @story.project_position_id = project_position.id
   end
 
 end
