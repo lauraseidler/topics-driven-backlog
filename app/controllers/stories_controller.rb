@@ -6,6 +6,7 @@ class StoriesController < ApplicationController
   def create
     @story = @project.stories.create!(story_params)
     create_project_position
+    @story.reload
     json_response(@story, :created)
   end
 
@@ -70,10 +71,8 @@ class StoriesController < ApplicationController
   end
 
   def create_project_position
-    project_position = ProjectPosition.find_by!(id: @story.project_position_id)
-    project_position.create(:project_id => @project.id)
+    project_position = ProjectPosition.create(:project_id => @project.id)
     project_position.move_to_bottom
-    set_story
   end
 
 end

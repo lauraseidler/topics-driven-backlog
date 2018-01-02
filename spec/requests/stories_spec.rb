@@ -111,7 +111,6 @@ RSpec.describe 'Stories API', type: :request do
 
       it 'returns the first position value' do
         expect(json).not_to be_empty
-        print(json)
         expect(json['project_position']).to eq(1)
         expect(json['sprint_position']).to eq(1)
         expect(json['sprint_id']).to eq(sprint_id)
