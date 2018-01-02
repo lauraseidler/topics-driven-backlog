@@ -1,6 +1,6 @@
 <template>
     <section id="sprint-planning-page">
-        <h2 class="h4 text-muted">{{ course.title}} - {{ project.title}}</h2>
+        <h2 class="h4 text-muted" v-if="course && project">{{ course.title}} - {{ project.title}}</h2>
         <h1>Sprint planning</h1>
 
         <template v-if="nextSprint">
@@ -73,12 +73,14 @@
 import * as _ from 'lodash';
 import moment from 'moment';
 import BButton from '@bootstrap/button/button';
+import BaseProjectAwarePage from '@/components/pages/BaseProjectAwarePage';
 import StoryItem from '@/components/elements/StoryItem';
 import StoryForm from '@/components/forms/StoryForm';
 import SprintItem from '@/components/elements/SprintItem';
 
 export default {
     components: { SprintItem, StoryForm, StoryItem, BButton },
+    extends: BaseProjectAwarePage,
     data() {
         return {
             showForm: false,
@@ -86,17 +88,6 @@ export default {
         };
     },
     computed: {
-        course() {
-            return this.$route.params.courseId
-                ? this.$store.getters['courses/byId'](parseInt(this.$route.params.courseId, 10))
-                : null;
-        },
-
-        project() {
-            return this.course
-                ? this.$store.getters['projects/byId'](this.course.id, parseInt(this.$route.params.id, 10))
-                : null;
-        },
         /**
          * All stories not in sprint, sorted by position
          * @returns {array}
@@ -136,15 +127,6 @@ export default {
         },
     },
     methods: {
-        init() {
-            if (this.project) {
-                this.$store.dispatch('projects/init', {
-                    id: this.project.id,
-                    parentId: this.course.id
-                });
-            }
-        },
-
         /**
          * Save current form state as new story
          */
@@ -216,15 +198,6 @@ export default {
             // TODO handle errors in UI
 
         },
-    },
-
-    created() {
-        this.init();
-    },
-
-    watch: {
-        $route: 'init',
-        course: 'init',
     },
 };
 </script>

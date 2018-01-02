@@ -55,10 +55,12 @@
 </template>
 
 <script>
+import BaseProjectAwarePage from '@/components/pages/BaseProjectAwarePage';
 import StoryItem from '@/components/elements/StoryItem';
 
 export default {
     components: { StoryItem },
+    extends: BaseProjectAwarePage,
     data() {
         return {};
     },
@@ -68,9 +70,11 @@ export default {
          * @returns {array}
          */
         backlog() {
-            return this.$store.getters['stories/all']
-                .filter(s => !s.sprint_id)
-                .sort((a, b) => a.position - b.position);
+            return this.project
+                ? this.$store.getters['stories/all'](this.project.id)
+                    .filter(s => !s.sprint_id)
+                    .sort((a, b) => a.position - b.position)
+                : [];
         },
 
         /**
@@ -78,7 +82,10 @@ export default {
          * @returns {array}
          */
         sprints() {
-            return this.$store.getters['courses/allSprints']().slice().sort((a, b) => a.start_date.localeCompare(b.start_date));
+            return this.course
+                ? this.$store.getters['sprints/all'](this.course.id)
+                    .sort((a, b) => a.start_date.localeCompare(b.start_date))
+                : [];
         },
     },
     methods: {
@@ -88,7 +95,10 @@ export default {
          * @returns {array}
          */
         storiesInSprint(sprintId) {
-            return this.$store.getters['stories/find']('sprint_id', sprintId).sort((a, b) => a.position - b.position);
+            return this.project
+                ? this.$store.getters['stories/find'](this.project.id, 'sprint_id', sprintId)
+                    .sort((a, b) => a.position - b.position)
+                : [];
         },
     },
 };

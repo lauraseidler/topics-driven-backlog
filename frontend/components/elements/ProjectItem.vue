@@ -53,6 +53,10 @@
                 <router-link
                     class="btn btn-primary mr-2 mb-2"
                     :to="sprintPlanningUrl">Sprint planning</router-link>
+
+                <router-link
+                    class="btn btn-primary mr-2 mb-2"
+                    :to="historyUrl">History</router-link>
             </p>
         </div> 
     </li>
@@ -90,21 +94,24 @@ export default {
             return this.$store.getters['courses/byId'](this.data.course_id);
         },
 
-        backlogUrl() {
+        baseUrl() {
             return '/courses'
                 + `/${this.data.course_id}-${this.slugify(this.course.title)}`
                 + '/projects'
-                + `/${this.data.id}-${this.slugify(this.data.title)}`
-                + '/backlog';
+                + `/${this.data.id}-${this.slugify(this.data.title)}`;
+        },
+
+        backlogUrl() {
+            return `${this.baseUrl}/backlog`;
         },
 
         sprintPlanningUrl() {
-            return '/courses'
-                + `/${this.data.course_id}-${this.slugify(this.course.title)}`
-                + '/projects'
-                + `/${this.data.id}-${this.slugify(this.data.title)}`
-                + '/sprint-planning';
-        }
+            return `${this.baseUrl}/sprint-planning`;
+        },
+
+        historyUrl() {
+            return `${this.baseUrl}/history`;
+        },
     },
     methods: {
         /**

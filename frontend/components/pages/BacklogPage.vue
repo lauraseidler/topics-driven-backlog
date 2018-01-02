@@ -1,6 +1,6 @@
 <template>
     <section id="backlog-page">
-        <h2 class="h4 text-muted">{{ course.title}} - {{ project.title}}</h2>
+        <h2 class="h4 text-muted" v-if="course && project">{{ course.title}} - {{ project.title}}</h2>
         <h1>Backlog</h1>
 
         <table class="table table-striped">
@@ -38,12 +38,14 @@
 </template>
 
 <script>
+import BaseProjectAwarePage from '@/components/pages/BaseProjectAwarePage';
 import StoryItem from '@/components/elements/StoryItem';
 import StoryForm from '@/components/forms/StoryForm';
 import BButton from '@bootstrap/button/button';
 
 export default {
     components: { StoryForm, StoryItem, BButton },
+    extends: BaseProjectAwarePage,
     data() {
         return {
             showForm: false,
@@ -51,18 +53,6 @@ export default {
         };
     },
     computed: {
-        course() {
-            return this.$route.params.courseId
-                ? this.$store.getters['courses/byId'](parseInt(this.$route.params.courseId, 10))
-                : null;
-        },
-
-        project() {
-            return this.course
-                ? this.$store.getters['projects/byId'](this.course.id, parseInt(this.$route.params.id, 10))
-                : null;
-        },
-
         /**
          * All stories in backlog that are open and not already in sprints, sorted by position
          * @returns {array}
@@ -76,14 +66,6 @@ export default {
         },
     },
     methods: {
-        init() {
-            if (this.project) {
-                this.$store.dispatch('projects/init', {
-                    id: this.project.id,
-                    parentId: this.course.id
-                });
-            }
-        },
         /**
          * Save current form state as new story
          */
@@ -123,15 +105,6 @@ export default {
 
             // TODO handle errors in UI
         },
-    },
-
-    created() {
-        this.init();
-    },
-
-    watch: {
-        $route: 'init',
-        course: 'init',
     },
 };
 </script>

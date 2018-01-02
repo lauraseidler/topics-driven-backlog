@@ -29,15 +29,15 @@ const router = new Router({
             component: SprintPlanningPage,
         },
         {
+            path: '/courses/:courseId-(.*)/projects/:id-(.*)/history',
+            name: 'history',
+            component: HistoryPage,
+        },
+        {
             path: '/stories/:identifier',
             name: 'story',
             component: StoryPage,
         },
-        // {
-        //     path: '/history',
-        //     name: 'history',
-        //     component: HistoryPage,
-        // },
         {
             path: '/courses/:id-(.*)',
             name: 'course',
