@@ -8,7 +8,8 @@ class Story < ApplicationRecord
 
   after_save :set_identifier
   after_commit :create_project_position, on: :create
-  after_commit :create_sprint_position, on: [:create, :update]
+  after_commit :create_sprint_position, on: :create
+  after_commit :update_sprint_position, on: :update
   before_validation :set_status
 
   validates_presence_of :title, :status, :project_id
@@ -54,15 +55,19 @@ class Story < ApplicationRecord
     project_position.save!
   end
 
-  def create_sprint_position
+  def update_sprint_position
     if !sprint_id_was.present?
-      if self.sprint_id.present?
-        sprint_position = SprintPosition.create(
-            :sprint_id => self.sprint_id, :story_id => self.id
-        )
-        sprint_position.set_list_position(0)
-        sprint_position.save!
-      end
+      create_sprint_position
+    end
+  end
+
+  def create_sprint_position
+    if self.sprint_id.present?
+      sprint_position = SprintPosition.create(
+          :sprint_id => self.sprint_id, :story_id => self.id
+      )
+      sprint_position.set_list_position(0)
+      sprint_position.save!
     end
   end
 
