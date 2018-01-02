@@ -23,7 +23,7 @@ exports[`CoursePage.test.js has the expected html structure 1`] = `
   >
     <div
       class="tabs"
-      id="__BVID__59_"
+      id="__BVID__96_"
     >
       <!---->
       <div
@@ -31,7 +31,7 @@ exports[`CoursePage.test.js has the expected html structure 1`] = `
       >
         <ul
           class="nav nav-tabs card-header-tabs"
-          id="__BVID__59___BV_tab_controls_"
+          id="__BVID__96___BV_tab_controls_"
           role="tablist"
           tabindex="0"
         >
@@ -40,13 +40,13 @@ exports[`CoursePage.test.js has the expected html structure 1`] = `
             role="presentation"
           >
             <a
-              aria-controls="__BVID__59___BV_tab_container_"
+              aria-controls="__BVID__96___BV_tab_container_"
               aria-posinset="1"
               aria-selected="true"
               aria-setsize="3"
               class="nav-link active"
               href="#"
-              id="__BVID__60____BV_tab_button__"
+              id="__BVID__97____BV_tab_button__"
               role="tab"
               tabindex="-1"
             >
@@ -58,13 +58,13 @@ exports[`CoursePage.test.js has the expected html structure 1`] = `
             role="presentation"
           >
             <a
-              aria-controls="__BVID__59___BV_tab_container_"
+              aria-controls="__BVID__96___BV_tab_container_"
               aria-posinset="2"
               aria-selected="false"
               aria-setsize="3"
               class="nav-link"
               href="#"
-              id="__BVID__62____BV_tab_button__"
+              id="__BVID__101____BV_tab_button__"
               role="tab"
               tabindex="-1"
             >
@@ -76,13 +76,13 @@ exports[`CoursePage.test.js has the expected html structure 1`] = `
             role="presentation"
           >
             <a
-              aria-controls="__BVID__59___BV_tab_container_"
+              aria-controls="__BVID__96___BV_tab_container_"
               aria-posinset="3"
               aria-selected="false"
               aria-setsize="3"
               class="nav-link"
               href="#"
-              id="__BVID__64____BV_tab_button__"
+              id="__BVID__103____BV_tab_button__"
               role="tab"
               tabindex="-1"
             >
@@ -93,28 +93,90 @@ exports[`CoursePage.test.js has the expected html structure 1`] = `
       </div>
       <div
         class="tab-content"
-        id="__BVID__59___BV_tab_container_"
+        id="__BVID__96___BV_tab_container_"
       >
         <div
           aria-expanded="true"
           aria-hidden="false"
-          aria-lablelledby="__BVID__60____BV_tab_button__"
+          aria-lablelledby="__BVID__97____BV_tab_button__"
           class="tab-pane card-body fade active v-enter v-enter-active"
-          id="__BVID__60_"
+          id="__BVID__97_"
           role="tabpanel"
           style=""
         >
-          <p>
-            No projects in this course yet.
-          </p>
+          <ul
+            class="list-unstyled"
+          >
+            <li
+              class="project-item card mb-2"
+            >
+              <div
+                class="card-body"
+              >
+                <button
+                  class="btn float-right ml-2 btn-danger btn-sm"
+                  type="button"
+                >
+                  Delete
+                </button>
+                 
+                <button
+                  class="btn float-right btn-primary btn-sm"
+                  type="button"
+                >
+                  Edit
+                </button>
+                 
+                <h3
+                  class="card-title h5"
+                >
+                  Test
+                </h3>
+              </div>
+            </li>
+            <li
+              class="project-item card mb-2"
+            >
+              <div
+                class="card-body"
+              >
+                <button
+                  class="btn float-right ml-2 btn-danger btn-sm"
+                  type="button"
+                >
+                  Delete
+                </button>
+                 
+                <button
+                  class="btn float-right btn-primary btn-sm"
+                  type="button"
+                >
+                  Edit
+                </button>
+                 
+                <h3
+                  class="card-title h5"
+                >
+                  Test 2
+                </h3>
+              </div>
+            </li>
+          </ul>
+           
+          <button
+            class="btn btn-primary"
+            type="button"
+          >
+            Add project
+          </button>
         </div>
          
         <div
           aria-expanded="false"
           aria-hidden="true"
-          aria-lablelledby="__BVID__62____BV_tab_button__"
+          aria-lablelledby="__BVID__101____BV_tab_button__"
           class="tab-pane card-body fade"
-          id="__BVID__62_"
+          id="__BVID__101_"
           role="tabpanel"
           style="display: none;"
         >
@@ -126,15 +188,68 @@ exports[`CoursePage.test.js has the expected html structure 1`] = `
         <div
           aria-expanded="false"
           aria-hidden="true"
-          aria-lablelledby="__BVID__64____BV_tab_button__"
+          aria-lablelledby="__BVID__103____BV_tab_button__"
           class="tab-pane card-body fade"
-          id="__BVID__64_"
+          id="__BVID__103_"
           role="tabpanel"
           style="display: none;"
         >
-          <p>
-            No sprints in this course yet.
-          </p>
+          <ul
+            class="list-unstyled"
+          >
+            <li
+              class="sprint-item card mb-2"
+            >
+              <div
+                class="card-body"
+              >
+                <!---->
+                 
+                <h3
+                  class="card-title h5"
+                >
+                  
+                </h3>
+                 
+                <p
+                  class="card-text"
+                >
+                  
+                Start: 2000-01-01 
+                  <br />
+                  
+                End: 
+            
+                </p>
+              </div>
+            </li>
+            <li
+              class="sprint-item card mb-2"
+            >
+              <div
+                class="card-body"
+              >
+                <!---->
+                 
+                <h3
+                  class="card-title h5"
+                >
+                  
+                </h3>
+                 
+                <p
+                  class="card-text"
+                >
+                  
+                Start: 2000-01-02 
+                  <br />
+                  
+                End: 
+            
+                </p>
+              </div>
+            </li>
+          </ul>
            
           <button
             class="btn btn-primary"

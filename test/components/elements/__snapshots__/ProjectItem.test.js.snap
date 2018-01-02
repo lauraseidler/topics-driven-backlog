@@ -1,0 +1,88 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProjectItem.test.js is in edit mode after startEditing was called 1`] = `
+<li
+  class="project-item card"
+>
+  <div
+    class="card-body"
+  >
+    <form
+      class="project-form"
+    >
+      <div
+        aria-labelledby="__BVID__15___BV_label_"
+        class="b-form-group form-group"
+        id="__BVID__15_"
+        role="group"
+      >
+        <label
+          class="col-form-label pt-0"
+          for="project-title"
+          id="__BVID__15___BV_label_"
+        >
+          Title
+        </label>
+        <div
+          class=""
+        >
+          <input
+            aria-required="true"
+            class="form-control"
+            id="project-title"
+            required="required"
+            type="text"
+          />
+          <!---->
+          <!---->
+          <!---->
+        </div>
+      </div>
+       
+      <button
+        class="btn btn-primary"
+        type="submit"
+      >
+        Save
+      </button>
+       
+      <button
+        class="btn btn-grey"
+        type="button"
+      >
+        Cancel
+      </button>
+    </form>
+  </div>
+</li>
+`;
+
+exports[`ProjectItem.test.js shows edit and delete buttons 1`] = `
+<li
+  class="project-item card"
+>
+  <div
+    class="card-body"
+  >
+    <button
+      class="btn float-right ml-2 btn-danger btn-sm"
+      type="button"
+    >
+      Delete
+    </button>
+     
+    <button
+      class="btn float-right btn-primary btn-sm"
+      type="button"
+    >
+      Edit
+    </button>
+     
+    <h3
+      class="card-title h5"
+    >
+      Test Project
+    </h3>
+  </div>
+</li>
+`;

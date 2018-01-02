@@ -1,15 +1,10 @@
 class StoriesController < ApplicationController
+  before_action :set_project, only: [:create]
   before_action :set_story, only: [:show, :update, :destroy]
 
-  # GET /stories
-  def index
-    @stories = Story.all
-    json_response(@stories)
-  end
-
-  # POST /stories
+  # POST /projects/:project_id/stories
   def create
-    @story = Story.create!(story_params)
+    @story = @project.stories.create!(story_params)
     @story.move_to_bottom
     json_response(@story, :created)
   end
@@ -42,6 +37,10 @@ class StoriesController < ApplicationController
   def story_params
     # whitelist params
     params.permit(:title, :description, :status, :points, :sprint_id, :topic_id)
+  end
+
+  def set_project
+    @project = Project.find_by!(id: params[:project_id])
   end
 
   def set_story

@@ -4,4 +4,5 @@ class CourseSerializer < ActiveModel::Serializer
   # model association
   has_many :sprints
   has_many :topics
+  has_many :projects
 end

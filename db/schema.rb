@@ -25,6 +25,14 @@ ActiveRecord::Schema.define(version: 20180101224044) do
     t.string "short_title"
   end
 
+  create_table "projects", force: :cascade do |t|
+    t.string "title"
+    t.bigint "course_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_projects_on_course_id"
+  end
+
   create_table "sprints", force: :cascade do |t|
     t.string "name"
     t.date "start_date"
@@ -46,6 +54,8 @@ ActiveRecord::Schema.define(version: 20180101224044) do
     t.integer "points"
     t.bigint "sprint_id"
     t.bigint "topic_id"
+    t.bigint "project_id"
+    t.index ["project_id"], name: "index_stories_on_project_id"
     t.index ["sprint_id"], name: "index_stories_on_sprint_id"
     t.index ["topic_id"], name: "index_stories_on_topic_id"
   end
@@ -68,7 +78,9 @@ ActiveRecord::Schema.define(version: 20180101224044) do
     t.index ["course_id"], name: "index_topics_on_course_id"
   end
 
+  add_foreign_key "projects", "courses"
   add_foreign_key "sprints", "courses"
+  add_foreign_key "stories", "projects"
   add_foreign_key "stories", "sprints"
   add_foreign_key "stories", "topics"
   add_foreign_key "tasks", "stories"
