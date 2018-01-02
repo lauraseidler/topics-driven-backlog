@@ -6,8 +6,6 @@ class Story < ApplicationRecord
     {:open => 0, :progressing => 1, :closed => 2, :canceled => 3}
   end
 
-  acts_as_list scope: [:sprint_id]
-
   after_save :set_identifier
   before_validation :set_status
 

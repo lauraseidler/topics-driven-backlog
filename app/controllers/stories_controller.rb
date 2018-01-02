@@ -5,7 +5,7 @@ class StoriesController < ApplicationController
   # POST /projects/:project_id/stories
   def create
     @story = @project.stories.create!(story_params)
-    @story.move_to_bottom
+    create_project_position
     json_response(@story, :created)
   end
 
@@ -17,17 +17,16 @@ class StoriesController < ApplicationController
   # PUT /stories/:id
   # PATCH /stories/:id
   def update
-    if params[:position]
-      @story.set_list_position(params[:position])
-    end
     @story.update!(story_params)
+    set_positions(params[:sprint_position] || nil, params[:project_position] || nil)
 
     json_response(@story)
   end
 
   # DELETE /stories/:id
   def destroy
-    @story.remove_from_list
+    remove_positions
+
     @story.destroy!
     head :no_content
   end
@@ -45,6 +44,36 @@ class StoriesController < ApplicationController
 
   def set_story
     @story = Story.find_by!(id: params[:id])
+  end
+
+  def set_positions(sprint_pos, project_pos)
+    if sprint_pos.present? & @story.sprint_id.present?
+      sprint_position = SprintPosition.find_by!(id: @story.sprint_position_id)
+      if @story.sprint_id != sprint_position.sprint_id
+        sprint_position.sprint_id = @story.sprint_id
+      end
+      sprint_position.set_list_position(sprint_pos)
+    end
+    if project_pos.present?
+      project_position = ProjectPosition.find_by!(id: @story.project_position_id)
+      project_position.set_list_position(project_pos)
+    end
+  end
+
+  def remove_positions
+    if @story.sprint_position_id.present?
+      sprint_position = SprintPosition.find_by!(id: @story.sprint_position_id)
+      sprint_position.remove_from_list
+    end
+    project_position = ProjectPosition.find_by!(id: @story.project_position_id)
+    project_position.remove_from_list
+  end
+
+  def create_project_position
+    project_position = ProjectPosition.find_by!(id: @story.project_position_id)
+    project_position.create(:project_id => @project.id)
+    project_position.move_to_bottom
+    set_story
   end
 
 end
