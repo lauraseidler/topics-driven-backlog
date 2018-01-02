@@ -188,23 +188,25 @@ export default {
         /**
          * Save the edited parameters of this story
          */
-        save() {
-            this.$store
-                .dispatch('stories/patch', {
-                    id: this.data.id,
-                    values: this.editingData,
-                })
-                .then(() => {
-                    this.editing = false;
-                });
+        async save() {
+            await this.$store.dispatch('stories/update', {
+                id: this.data.id,
+                parentId: this.data.project_id,
+                ...this.editingData,
+            });
+
+            this.editing = false;
+
+            // TODO handle errors in UI
         },
 
         /**
          * Delete this story
          */
         remove() {
-            this.$store.dispatch('stories/delete', {
+            this.$store.dispatch('stories/remove', {
                 id: this.data.id,
+                parentId: this.data.project_id,
             });
         },
 

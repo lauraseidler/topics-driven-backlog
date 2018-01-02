@@ -28,7 +28,9 @@ export default {
          * @returns {object}
          */
         story() {
-            return this.$store.getters['stories/byIdentifier'](this.$route.params.identifier);
+            return this.$store.getters['stories/byIdentifier'](
+                this.$route.params.identifier
+            );
         },
     },
 };
