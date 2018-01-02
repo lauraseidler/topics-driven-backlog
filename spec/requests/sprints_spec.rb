@@ -20,6 +20,7 @@ RSpec.describe 'Sprints API' do
 
     context 'when the record exists' do
       it 'updates the record' do
+        expect(json).not_to be_empty
         expect(json['name']).to eq('Learn Elm')
         expect(json['start_date']).to eq(Date.today.to_s)
         expect(json['end_date']).to eq(Date.tomorrow.to_s)
