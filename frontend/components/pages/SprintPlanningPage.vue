@@ -1,7 +1,10 @@
 <template>
     <section id="sprint-planning-page">
-        <h2 class="h4 text-muted" v-if="course && project">{{ course.title}} - {{ project.title}}</h2>
-        <h1>Sprint planning</h1>
+        <h2 class="h4 text-muted" v-if="course">{{ course.title}} </h2>
+        <h1>
+            Sprint planning
+            <small class="text-muted">{{ project.title}}</small>
+        </h1>
 
         <template v-if="nextSprint">
             <p>
