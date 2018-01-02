@@ -13,7 +13,7 @@
 
                 <div class="card-body">
                     <router-link 
-                        :to="`/courses/${course.id}`" 
+                        :to="`/courses/${course.id}-${slugify(course.title)}`"
                         class="h4 card-title link-unstyled">
                         {{ course.short_title }}
                     </router-link>
@@ -176,6 +176,15 @@ export default {
          */
         getSemesterInfo(type, year) {
             return info(type, year);
+        },
+
+        slugify(text) {
+            return text.toString().toLowerCase()
+                .replace(/\s+/g, '-')           // Replace spaces with -
+                .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+                .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+                .replace(/^-+/, '')             // Trim - from start of text
+                .replace(/-+$/, '');            // Trim - from end of text
         },
     },
     validations: {

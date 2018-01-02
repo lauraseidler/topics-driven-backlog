@@ -19,9 +19,14 @@ const router = new Router({
             component: ProjectsPage,
         },
         {
-            path: '/projects/:id-(.*)/backlog',
+            path: '/courses/:courseId-(.*)/projects/:id-(.*)/backlog',
             name: 'backlog',
             component: BacklogPage,
+        },
+        {
+            path: '/courses/:courseId-(.*)/projects/:id-(.*)/sprint-planning',
+            name: 'sprint-planning',
+            component: SprintPlanningPage,
         },
         {
             path: '/stories/:identifier',
@@ -29,22 +34,12 @@ const router = new Router({
             component: StoryPage,
         },
         // {
-        //     path: '/backlog',
-        //     name: 'backlog',
-        //     component: BacklogPage,
+        //     path: '/history',
+        //     name: 'history',
+        //     component: HistoryPage,
         // },
         {
-            path: '/sprint-planning',
-            name: 'sprint-planning',
-            component: SprintPlanningPage,
-        },
-        {
-            path: '/history',
-            name: 'history',
-            component: HistoryPage,
-        },
-        {
-            path: '/courses/:id',
+            path: '/courses/:id-(.*)',
             name: 'course',
             component: CoursePage,
         },

@@ -27,29 +27,48 @@
                 @submit="saveProject"/>
         </div>
 
+        <div v-else-if="view === 'new'" :class="$style.full">
+            <div :class="$style.full" v-if="!editing" @click="startEditing">
+                <VIcon name="plus" scale="2"/>
+            </div>
+
+            <ProjectForm
+                v-else
+                v-model="editingData"
+                @cancel="editing = false"
+                @submit="emitProject"/>
+        </div>
+
         <div 
             v-else 
-            class="card-body">
+            :class="['card-body', $style.display]">
 
-            <h3 class="card-title h5">{{ data.title }}</h3>
+            <h3 class="card-title h4">{{ data.title }}</h3>
 
             <p class="card-text">
                 <router-link 
-                    class="btn btn-primary btn-sm mr-2" 
-                    :to="`/projects/${data.id}-${slugify(data.title)}/backlog`">Backlog</router-link>
+                    class="btn btn-primary mr-2 mb-2"
+                    :to="backlogUrl">Backlog</router-link>
+
+                <router-link
+                    class="btn btn-primary mr-2 mb-2"
+                    :to="sprintPlanningUrl">Sprint planning</router-link>
             </p>
         </div> 
     </li>
 </template>
 
 <script>
+import '@icons/plus';
+
 import * as _ from 'lodash';
+import VIcon from 'vue-awesome/components/Icon';
 import BButton from '@bootstrap/button/button';
 import ProjectForm from '@/components/forms/ProjectForm';
 
 export default {
     name: 'ProjectItem',
-    components: { ProjectForm, BButton },
+    components: { ProjectForm, BButton, VIcon },
     props: {
         data: {
             type: Object,
@@ -63,42 +82,73 @@ export default {
     data() {
         return {
             editing: false,
-            editingData: null,
+            editingData: {},
         };
+    },
+    computed: {
+        course() {
+            return this.$store.getters['courses/byId'](this.data.course_id);
+        },
+
+        backlogUrl() {
+            return '/courses'
+                + `/${this.data.course_id}-${this.slugify(this.course.title)}`
+                + '/projects'
+                + `/${this.data.id}-${this.slugify(this.data.title)}`
+                + '/backlog';
+        },
+
+        sprintPlanningUrl() {
+            return '/courses'
+                + `/${this.data.course_id}-${this.slugify(this.course.title)}`
+                + '/projects'
+                + `/${this.data.id}-${this.slugify(this.data.title)}`
+                + '/sprint-planning';
+        }
     },
     methods: {
         /**
          * Start editing process of this project
          */
         startEditing() {
-            this.editing = true;
-            this.editingData = _.pick(this.data, [
-                'title',
-            ]);
+            if (!this.editing){
+                this.editing = true;
+                this.editingData = _.pick(this.data, [
+                    'title',
+                ]);
+            }
         },
 
         /**
          * Save the edited parameters of this project
          */
-        saveProject() {
-            this.$store
-                .dispatch('projects/patch', {
-                    id: this.data.id,
-                    values: this.editingData,
-                })
-                .then(() => {
-                    this.editing = false;
-                });
+        async saveProject() {
+            await this.$store.dispatch('projects/update', {
+                id: this.data.id,
+                parentId: this.data.course_id,
+                ...this.editingData,
+            });
+
+            this.editing = false;
+
+            // TODO handle errors in UI
         },
 
         /**
          * Delete this project
          */
-        deleteProject() {
-            this.$store.dispatch('projects/delete', {
+        async deleteProject() {
+            await this.$store.dispatch('projects/remove', {
                 id: this.data.id,
-                course_id: this.data.course_id,
+                parentId: this.data.course_id,
             });
+
+            // TODO handle errors in UI
+        },
+
+        emitProject() {
+            this.$emit('submit', this.editingData);
+            this.editing = false;
         },
 
         slugify(text) {
@@ -112,3 +162,23 @@ export default {
     },
 };
 </script>
+
+<style lang="scss" module>
+    .display {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .full {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        div {
+            cursor: pointer;
+        }
+    }
+</style>

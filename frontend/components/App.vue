@@ -15,9 +15,7 @@
                     id="nav-collapse">
                     
                     <BNavbarNav>
-                        <BNavItem to="/backlog">Backlog</BNavItem>
-                        <BNavItem to="/sprint-planning">Sprint planning</BNavItem>
-                        <BNavItem to="/history">History</BNavItem>
+                        <BNavItem to="/projects">Projects</BNavItem>
                         <BNavItem to="/courses">Courses</BNavItem>
                     </BNavbarNav>
                 </BCollapse>

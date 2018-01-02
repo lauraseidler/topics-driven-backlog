@@ -15,22 +15,39 @@ export function init(settings) {
      * @param {object} operations
      * @param {object} operations.state
      * @param {function} operations.dispatch
-     * @param {int=} parentId
+     * @param {object=} payload
+     * @param {int} payload.parentId
+     * @param {int} payload.id
      */
-    return async function ({ state, dispatch }, parentId = null) {
+    return async function ({ state, dispatch, rootState }, { id = null, parentId = null }) {
         // if resource has parent and parentId is set, dispatch partial fetch
         // else if no parent, dispatch full fetch
         // else configuration is incorrect
+
         if (settings.parent && parentId) {
             if (!state.initialised[parentId]) {
-                await dispatch(`${settings.parent}/${actionTypes.FETCH}`, null, { root: true });
+                await dispatch(`${settings.parent}/${actionTypes.FETCH}`, {}, { root: true });
             }
         } else if (!settings.parent) {
             if (!state.initialised) {
-                await dispatch(actionTypes.FETCH);
+                await dispatch(actionTypes.FETCH, {});
             }
         } else {
             throw new Error('Incorrect resource module configuration!');
+        }
+
+        if (settings.children) {
+            let childrenInitialised = true;
+
+            settings.children.forEach(child => {
+                if (!rootState[child].initialised[parentId]) {
+                    childrenInitialised = false;
+                }
+            });
+
+            if (!childrenInitialised) {
+                await dispatch(actionTypes.FETCH, { id, parentId });
+            }
         }
     };
 }
@@ -47,30 +64,57 @@ export function fetch(settings) {
      *
      * @param {object} operations
      * @param {function} operations.commit
+     * @param {object=} payload
+     * @param {int} payload.id
+     * @param {int} payload.parentId
      * @returns {array|object}
      */
-    return async function ({ commit }) {
+    return async function ({ commit }, { id = null, parentId = null }) {
         try {
-            const res = await Vue.http.get(`/${settings.resource}`);
+            let url = `/${settings.resource}`;
+            url += id ? `/${id}` : '';
+
+            const res = await Vue.http.get(url);
 
             // if resource has children, patch the data through to the child store
             // then delete the data from the resource that's being stored to avoid duplication
             if (settings.children) {
-                res.body.forEach((item, index) => {
+                if (id) {
                     settings.children.forEach(child => {
                         commit(`${child}/${mutationTypes.SET_ALL}`, {
-                            id: res.body[index].id,
-                            items: res.body[index][child],
+                            parentId: res.body.id,
+                            items: res.body[child],
                         }, { root: true });
 
-                        delete res.body[index][child];
+                        delete res.body[child];
                     });
+                } else {
+                    res.body.forEach((item, index) => {
+                        settings.children.forEach(child => {
+                            commit(`${child}/${mutationTypes.SET_ALL}`, {
+                                parentId: res.body[index].id,
+                                items: res.body[index][child],
+                            }, { root: true });
+
+                            delete res.body[index][child];
+                        });
+                    });
+                }
+            }
+
+            // if an ID is set, update the one item we just fetched
+            // else set all items
+            if (id) {
+                commit(mutationTypes.SET_ONE, {
+                    parentId,
+                    item: res.body,
+                });
+            } else {
+                commit(mutationTypes.SET_ALL, {
+                    items: res.body,
                 });
             }
 
-            commit(mutationTypes.SET_ALL, {
-                items: res.body,
-            });
 
             return res.body;
         } catch (err) {
@@ -92,12 +136,17 @@ export function create(settings) {
      * @param {object} operations
      * @param {function} operations.commit
      * @param {object} item
+     * @param {int=} item.parentId
+     * @param {object} item.values
      * @returns {object}
      */
-    return async function ({ commit }, item) {
+    return async function ({ commit }, { parentId, ...values }) {
         try {
-            const res = await Vue.http.post(`/${settings.resource}`, item);
-            commit(mutationTypes.SET_ONE, res.body);
+            let url = settings.parent ? `/${settings.parent}/${parentId}` : '';
+            url += `/${settings.resource}`;
+
+            const res = await Vue.http.post(url, values);
+            commit(mutationTypes.SET_ONE, { parentId, item: res.body });
             return res.body;
         } catch (err) {
             return err;
@@ -119,13 +168,14 @@ export function update(settings) {
      * @param {function} operations.commit
      * @param {object} item
      * @param {int} item.id
+     * @param {int=} item.parentId
      * @param {object} item.values
      * @returns {object}
      */
-    return async function ({ commit }, { id, ...values }) {
+    return async function ({ commit }, { id, parentId, ...values }) {
         try {
             const res = await Vue.http.patch(`/${settings.resource}/${id}`, values);
-            commit(mutationTypes.SET_ONE, res.body);
+            commit(mutationTypes.SET_ONE, { parentId, item: res.body });
             return res.body;
         } catch (err) {
             return err;
@@ -149,10 +199,11 @@ export function remove(settings) {
      * @param {int} item.id
      * @returns {undefined|object}
      */
-    return async function ({ commit }, { id }) {
+    return async function ({ commit }, { id, parentId }) {
         try {
             await Vue.http.delete(`/${settings.resource}/${id}`);
-            commit(mutationTypes.REMOVE_ONE, { id });
+
+            commit(mutationTypes.REMOVE_ONE, { id, parentId });
         } catch (err) {
             return err;
         }

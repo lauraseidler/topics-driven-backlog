@@ -5,6 +5,11 @@ const resourceModule = generate({
     resource: resources.PROJECTS,
     parent: resources.COURSES,
     children: [resources.STORIES],
+    template: () => {
+        return {
+            title: '',
+        };
+    },
 });
 
 export default resourceModule;

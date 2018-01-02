@@ -139,9 +139,8 @@ export default {
          * @returns {array}
          */
         sprints() {
-            return this.course.sprints
-                ? this.course.sprints
-                    .slice()
+            return this.course
+                ? this.$store.getters['sprints/all'](this.course.id)
                     .sort((a, b) => a.start_date > b.start_date)
                 : [];
         },
@@ -151,22 +150,24 @@ export default {
          * @returns {array}
          */
         projects() {
-            return this.course.projects || [];
+            return this.course
+                ? this.$store.getters['projects/all'](this.course.id)
+                : [];
         },
     },
     methods: {
         /**
          * Add a sprint to the given course
          */
-        addSprint() {
-            this.$store
-                .dispatch('sprints/save', {
-                    course_id: this.course.id,
-                    sprint: this.newSprint,
-                })
-                .then(() => {
-                    this.newSprint = {};
-                });
+        async addSprint() {
+            await this.$store.dispatch('sprints/create', {
+                parentId: this.course.id,
+                ...this.newSprint,
+            });
+
+            this.newSprint = this.$store.getters['sprints/template']();
+
+            // TODO handle errors in UI
         },
 
         /**
@@ -184,16 +185,14 @@ export default {
         },
 
         async addProject() {
-            try {
-                await this.$store.dispatch('projects/save', {
-                    course_id: this.course.id,
-                    project: this.newProject,
-                });
+            await this.$store.dispatch('projects/create', {
+                parentId: this.course.id,
+                ...this.newProject,
+            });
 
-                this.newProject = {};
-            } catch (err) {
-                // TODO handle errors in UI
-            }
+            this.newProject = this.$store.getters['projects/template']();
+
+            // TODO handle errors in UI
         },
 
         /**

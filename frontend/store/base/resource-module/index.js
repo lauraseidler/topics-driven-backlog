@@ -13,17 +13,19 @@ import getterTypes from './getter-types';
  * @param {string} settings.resource
  * @param {string=} settings.parent
  * @param {string[]=} settings.children
+ * @param {function=} settings.template
+ * @param {object=} settings.state
  * @returns {object}
  */
-export function generate({ resource, parent = null, children = null }) {
-    const settings = { resource, parent, children };
+export function generate({ resource, parent = null, children = null, template = null, state = {} }) {
+    const settings = { resource, parent, children, template, state };
 
     const base = {
         namespaced: true,
-        state: {
+        state: Object.assign({
             initialised: parent ? {} : false,
             data: parent ? {} : [],
-        },
+        }, state),
         mutations: {},
         actions: {},
         getters: {},
@@ -43,8 +45,6 @@ export function generate({ resource, parent = null, children = null }) {
     for (let getterType in getterTypes) {
         base.getters[getterTypes[getterType]] = getters[getterTypes[getterType]](settings);
     }
-
-    console.log(base);
 
     return base;
 }
