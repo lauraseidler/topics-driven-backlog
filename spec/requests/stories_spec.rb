@@ -9,7 +9,6 @@ RSpec.describe 'Stories API', type: :request do
         :story,
         10,
         project_id: project.id,
-        project_position_id: create( :project_position, project_id: project.id ).id
     )
   }
 
@@ -88,8 +87,6 @@ RSpec.describe 'Stories API', type: :request do
 
   # Test suite for PATCH /stories/:id
   describe 'PATCH /stories/:id for position attributes' do
-    let(:first_story) {stories.first}
-    let(:last_story) {stories.last}
     let(:position_attributes) {
       {
           project_position: 1,
@@ -97,32 +94,23 @@ RSpec.describe 'Stories API', type: :request do
           sprint_position: 1
       }
     }
-    before { patch "/stories/#{last_story.id}", params: position_attributes }
+    before { patch "/stories/#{story_id}", params: position_attributes }
 
-    context 'updating the last story of the backlog' do
+    context 'updating the a story of the backlog' do
 
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
       end
     end
 
-    context 'updating the last story of the backlog to the first position' do
-      before { get "/stories/#{last_story.id}" }
+    context 'updating the a story of the backlog to the second position' do
+      before { get "/stories/#{story_id}" }
 
       it 'returns the first position value' do
         expect(json).not_to be_empty
         expect(json['project_position']).to eq(1)
         expect(json['sprint_position']).to eq(1)
         expect(json['sprint_id']).to eq(sprint_id)
-      end
-    end
-
-    context 'updating the last story of the backlog to the first position' do
-      before { get "/stories/#{first_story.id}" }
-
-      it 'leads to the second position for the former first one' do
-        expect(json['project_position']).to eq(2)
-        expect(json['sprint_position']).to eq(nil)
       end
     end
   end

@@ -5,8 +5,6 @@ class StoriesController < ApplicationController
   # POST /projects/:project_id/stories
   def create
     @story = @project.stories.create!(story_params)
-    create_project_position
-    @story.reload
     json_response(@story, :created)
   end
 
@@ -20,7 +18,6 @@ class StoriesController < ApplicationController
   def update
     @story.update!(story_params)
     set_positions(params[:sprint_position], params[:project_position])
-    @story.reload
     json_response(@story)
   end
 
@@ -49,37 +46,36 @@ class StoriesController < ApplicationController
 
   def set_positions(sprint_pos, project_pos)
     if sprint_pos.present? & @story.sprint_id.present?
-      if @story.sprint_position_id.present?
-        sprint_position = SprintPosition.find_by!(id: @story.sprint_position_id)
+      sprint_position = SprintPosition.find_by(story_id: @story.id)
+      if sprint_position.present?
         if @story.sprint_id != sprint_position.sprint_id
           sprint_position.sprint_id = @story.sprint_id
         end
       else
         sprint_position = SprintPosition.create(:sprint_id => @story.sprint_id)
-        sprint_position.move_to_bottom
-        @story.sprint_position_id = sprint_position.id
       end
+      
       sprint_position.set_list_position(sprint_pos)
+      sprint_position.save!
     end
+
     if project_pos.present?
-      project_position = ProjectPosition.find_by!(id: @story.project_position_id)
+      project_position = ProjectPosition.find_by!(story_id: @story.id)
       project_position.set_list_position(project_pos)
+      project_position.save!
     end
   end
 
   def remove_positions
-    if @story.sprint_position_id.present?
-      sprint_position = SprintPosition.find_by!(id: @story.sprint_position_id)
+    sprint_position = SprintPosition.find_by(story_id: @story.id)
+    if sprint_position.present?
       sprint_position.remove_from_list
+      sprint_position.save!
     end
-    project_position = ProjectPosition.find_by!(id: @story.project_position_id)
-    project_position.remove_from_list
-  end
 
-  def create_project_position
-    project_position = ProjectPosition.create(:project_id => @project.id)
-    project_position.move_to_bottom
-    @story.project_position_id = project_position.id
+    project_position = ProjectPosition.find_by!(story_id: @story.id)
+    project_position.remove_from_list
+    project_position.destroy!
   end
 
 end

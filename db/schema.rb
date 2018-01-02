@@ -28,7 +28,9 @@ ActiveRecord::Schema.define(version: 20180101235655) do
   create_table "project_positions", force: :cascade do |t|
     t.integer "position"
     t.bigint "project_id"
+    t.bigint "story_id"
     t.index ["project_id"], name: "index_project_positions_on_project_id"
+    t.index ["story_id"], name: "index_project_positions_on_story_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -42,7 +44,9 @@ ActiveRecord::Schema.define(version: 20180101235655) do
   create_table "sprint_positions", force: :cascade do |t|
     t.integer "position"
     t.bigint "sprint_id"
+    t.bigint "story_id"
     t.index ["sprint_id"], name: "index_sprint_positions_on_sprint_id"
+    t.index ["story_id"], name: "index_sprint_positions_on_story_id"
   end
 
   create_table "sprints", force: :cascade do |t|
@@ -65,12 +69,8 @@ ActiveRecord::Schema.define(version: 20180101235655) do
     t.integer "points"
     t.bigint "sprint_id"
     t.bigint "project_id"
-    t.bigint "sprint_position_id"
-    t.bigint "project_position_id"
     t.index ["project_id"], name: "index_stories_on_project_id"
-    t.index ["project_position_id"], name: "index_stories_on_project_position_id"
     t.index ["sprint_id"], name: "index_stories_on_sprint_id"
-    t.index ["sprint_position_id"], name: "index_stories_on_sprint_position_id"
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -83,12 +83,12 @@ ActiveRecord::Schema.define(version: 20180101235655) do
   end
 
   add_foreign_key "project_positions", "projects"
+  add_foreign_key "project_positions", "stories"
   add_foreign_key "projects", "courses"
   add_foreign_key "sprint_positions", "sprints"
+  add_foreign_key "sprint_positions", "stories"
   add_foreign_key "sprints", "courses"
-  add_foreign_key "stories", "project_positions"
   add_foreign_key "stories", "projects"
-  add_foreign_key "stories", "sprint_positions"
   add_foreign_key "stories", "sprints"
   add_foreign_key "tasks", "stories"
 end
