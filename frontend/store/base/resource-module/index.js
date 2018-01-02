@@ -17,7 +17,13 @@ import getterTypes from './getter-types';
  * @param {object=} settings.state
  * @returns {object}
  */
-export function generate({ resource, parent = null, children = null, template = null, state = {} }) {
+export function generate({
+    resource,
+    parent = null,
+    children = null,
+    template = null,
+    state = {},
+}) {
     const settings = { resource, parent, children, template, state };
 
     const base = {

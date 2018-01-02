@@ -173,15 +173,15 @@ export default {
         /**
          * Add a sprint collection to the given course
          */
-        addCollection() {
-            this.$store
-                .dispatch('sprints/saveCollection', {
-                    course_id: this.course.id,
-                    collection: this.newCollection,
-                })
-                .then(() => {
-                    this.newCollection = {};
-                });
+        async addCollection() {
+            await this.$store.dispatch('sprints/createCollection', {
+                parentId: this.course.id,
+                collection: this.newCollection,
+            });
+
+            this.newCollection = {};
+
+            // TODO handle errors in UI
         },
 
         async addProject() {
