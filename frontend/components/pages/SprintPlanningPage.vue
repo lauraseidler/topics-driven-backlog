@@ -1,14 +1,9 @@
 <template>
     <section id="sprint-planning-page">
-        <h2 class="h4 text-muted" v-if="course">{{ course.title}} </h2>
-        <h1>
-            Sprint planning
-            <small class="text-muted">{{ project.title}}</small>
-        </h1>
-
         <template v-if="nextSprint">
+            <h2>{{ nextSprint.name }}</h2>
+
             <p>
-                Planning sprint: {{ nextSprint.name }} <br>
                 Start: {{ nextSprint.start_date }} <br>
                 End: {{ nextSprint.end_date }}
             </p>

@@ -1,11 +1,5 @@
 <template>
     <section id="backlog-page">
-        <h2 class="h4 text-muted" v-if="course">{{ course.title}} </h2>
-        <h1>
-            Backlog
-            <small class="text-muted">{{ project.title}}</small>
-        </h1>
-
         <table class="table table-striped">
             <thead>
                 <tr>
