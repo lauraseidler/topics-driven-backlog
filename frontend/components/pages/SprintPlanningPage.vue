@@ -15,7 +15,6 @@
                         <th>Story</th>
                         <th>Topic</th>
                         <th>Story&nbsp;points</th>
-                        <th>Operations</th>
                     </tr>
                 </thead>
                 <tbody v-sortable="{handle: '.js-drag-drop', onEnd: saveOrder}">
@@ -36,6 +35,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>&nbsp;</th>
                     <th>Identifier</th>
                     <th>Story</th>
                     <th>Topic</th>

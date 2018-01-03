@@ -13,8 +13,28 @@
 
         <template v-else>
             <!-- Drag and drop -->
-            <td v-if="isView(['backlog', 'planning-sprint'])">
-                <span class="js-drag-drop">
+            <td v-if="isView(['backlog', 'planning-sprint', 'planning-backlog'])">
+                <BButton
+                        v-if="isView('planning-backlog')"
+                        size="sm"
+                        variant="primary"
+                        title="Add to sprint"
+                        @click="addToSprint">
+
+                    <VIcon name="arrow-up"/>
+                </BButton>
+
+                <BButton
+                        v-if="isView('planning-sprint')"
+                        size="sm"
+                        variant="danger"
+                        title="Remove from sprint"
+                        @click="removeFromSprint">
+
+                    <VIcon name="arrow-down"/>
+                </BButton>
+
+                <span class="js-drag-drop ml-2" v-if="isView(['backlog', 'planning-sprint'])" title="Drag to change order">
                     <VIcon 
                         name="arrows" 
                         label="Drag and drop to change order"/>
@@ -105,26 +125,6 @@
 
                     <VIcon name="pencil"/>
                 </BButton>
-
-                <BButton 
-                    size="sm" 
-                    variant="primary" 
-                    title="Add to sprint" 
-                    @click="addToSprint">
-
-                    <VIcon name="plus"/>
-                </BButton>
-            </td>
-
-            <td v-if="isView('planning-sprint')">
-                <BButton 
-                    size="sm" 
-                    variant="danger" 
-                    title="Remove from sprint" 
-                    @click="removeFromSprint">
-
-                    <VIcon name="minus"/>
-                </BButton>
             </td>
         </template>
     </tr>
@@ -134,8 +134,8 @@
 import '@icons/arrows';
 import '@icons/pencil';
 import '@icons/trash';
-import '@icons/plus';
-import '@icons/minus';
+import '@icons/arrow-up';
+import '@icons/arrow-down';
 
 import * as _ from 'lodash';
 import VIcon from 'vue-awesome/components/Icon';
