@@ -1,6 +1,7 @@
 <template>
     <section id="sprint-planning-page">
         <template v-if="nextSprint">
+            <h3 class="h5 text-muted mb-0">Next sprint</h3>
             <h2>{{ nextSprint.name }}</h2>
 
             <p>
@@ -19,12 +20,12 @@
                     </tr>
                 </thead>
                 <tbody v-sortable="{handle: '.js-drag-drop', onEnd: saveOrder}">
-                    <tr 
-                        is="StoryItem" 
-                        v-for="story in storiesInSprint" 
-                        :key="story.id" 
-                        :data="story" 
-                        view="planning-sprint" 
+                    <tr
+                        is="StoryItem"
+                        v-for="story in storiesInSprint"
+                        :key="story.id"
+                        :data="story"
+                        view="planning-sprint"
                         @removeFromSprint="removeFromSprint(story.id)"/>
                 </tbody>
             </table>
@@ -94,7 +95,7 @@ export default {
             return this.project
                 ? this.$store.getters['stories/all'](this.project.id)
                     .filter(s => !s.sprint_id)
-                    .sort((a, b) => a.position - b.position)
+                    .sort((a, b) => a.project_position - b.project_position)
                 : [];
         },
 
@@ -108,7 +109,7 @@ export default {
             return this.course
                 ? _.first(
                     this.$store.getters['sprints/all'](this.course.id)
-                        .filter(s => s.end_date >= currentDate)
+                        .filter(s => s.start_date > currentDate)
                         .sort((a, b) => a.start_date.localeCompare(b.start_date)))
                 : null;
         },
@@ -120,7 +121,7 @@ export default {
         storiesInSprint() {                        
             return this.nextSprint
                 ? this.$store.getters['stories/find'](this.project.id, 'sprint_id', this.nextSprint.id)
-                    .sort((a, b) => a.position - b.position)
+                    .sort((a, b) => a.sprint_position - b.sprint_position)
                 : [];
         },
     },
@@ -144,7 +145,7 @@ export default {
          * @param {Event} evt
          */
         async saveOrder(evt) {
-            const story = this.stories[evt.oldIndex];
+            const story = this.storiesInSprint[evt.oldIndex];
 
             if (!story) {
                 return;
@@ -153,7 +154,7 @@ export default {
             await this.$store.dispatch('stories/update', {
                 id: story.id,
                 parentId: this.project.id,
-                position: evt.newIndex + 1, // act_as_list is 1-indexed
+                sprint_position: evt.newIndex + 1, // act_as_list is 1-indexed
             });
 
             await this.$store.dispatch('projects/fetch', {
