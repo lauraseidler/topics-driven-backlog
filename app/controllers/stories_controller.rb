@@ -62,12 +62,10 @@ class StoriesController < ApplicationController
     sprint_position = SprintPosition.find_by(story_id: @story.id)
     if sprint_position.present?
       sprint_position.remove_from_list
-      sprint_position.destroy!
     end
 
     project_position = ProjectPosition.find_by!(story_id: @story.id)
     project_position.remove_from_list
-    project_position.destroy!
   end
 
 end
