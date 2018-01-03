@@ -16,6 +16,6 @@ Sprint.create!([
                    {name: "Sprint 2", start_date: "2017-11-02", end_date: "2017-11-16", course_id: 3},
                    {name: "Sprint 3", start_date: "2017-11-23", end_date: "2017-11-30", course_id: 3},
                    {name: "Sprint 4", start_date: "2017-12-07", end_date: "2017-12-14", course_id: 3},
-                   {name: "Sprint 5", start_date: "2017-12-21", end_date: "2018-01-04", course_id: 3},
+                   {name: "Sprint 5", start_date: "2017-12-21", end_date: "2018-01-05", course_id: 3},
                    {name: "Sprint 6", start_date: "2018-01-11", end_date: "2018-01-18", course_id: 3}
                ])
