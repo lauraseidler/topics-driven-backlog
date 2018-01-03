@@ -27,5 +27,9 @@ docker-compose -f docker-compose.production.yml exec app .docker/wait-for-db.sh
 exit_on_error $?
 
 echo "+++ Database Migration"
-docker-compose -f docker-compose.production.yml exec app bundle exec rake db:migrate
+docker-compose -f docker-compose.production.yml exec app bundle exec rake db:drop db:create db:migrate
+exit_on_error $?
+
+echo "+++ Seeding Database"
+docker-compose -f docker-compose.production.yml exec app bundle exec rake db:seed
 exit_on_error $?
