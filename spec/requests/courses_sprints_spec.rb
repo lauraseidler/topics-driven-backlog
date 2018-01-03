@@ -17,6 +17,7 @@ RSpec.describe 'Courses/Sprints API' do
       end
 
       it 'returns all course sprints' do
+        expect(json).not_to be_empty
         expect(json['sprints'].size).to eq(20)
       end
     end

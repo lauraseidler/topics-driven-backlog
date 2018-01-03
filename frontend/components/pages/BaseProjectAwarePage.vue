@@ -15,7 +15,7 @@
 
             project() {
                 return this.course
-                    ? this.$store.getters['projects/byId'](this.course.id, parseInt(this.$route.params.id, 10))
+                    ? this.$store.getters['projects/byId'](parseInt(this.$route.params.id, 10))
                     : null;
             },
         },

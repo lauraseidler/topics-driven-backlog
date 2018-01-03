@@ -13,6 +13,11 @@ const resourceModule = generate({
             { name: 'cancelled', css: 'badge-danger' },
         ],
     },
+    template: () => {
+        return {
+            topic_id: null,
+        };
+    },
 });
 
 export default resourceModule;

@@ -36,7 +36,7 @@ class StoriesController < ApplicationController
 
   def story_params
     # whitelist params
-    params.permit(:title, :description, :status, :points, :sprint_id)
+    params.permit(:title, :description, :status, :points, :sprint_id, :topic_id)
   end
 
   def set_project

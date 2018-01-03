@@ -3,4 +3,5 @@ export default {
     SPRINTS: 'sprints',
     PROJECTS: 'projects',
     STORIES: 'stories',
+    TOPICS: 'topics',
 };
