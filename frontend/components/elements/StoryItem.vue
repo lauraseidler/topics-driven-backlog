@@ -2,8 +2,8 @@
     <tr class="story-item">
         <td 
             v-if="editing" 
-            colspan="5">
-            
+            colspan="6">
+
             <StoryForm 
                 v-model="editingData" 
                 @cancel="editing = false" 
@@ -31,9 +31,13 @@
                 {{ data.title }}
             </td>
 
+            <td>
+                {{ topic(data.topic_id) ? topic(data.topic_id).title : '(no topic)' }}
+            </td>
+
             <!-- Story points -->
             <td>
-                {{ data.points ? data.points + ' SP' : 'not&nbsp;estimated' }}
+                {{ data.points ? data.points + ' SP' : '(not&nbsp;estimated)' }}
             </td>
 
             <!-- Status -->
@@ -173,6 +177,10 @@ export default {
             }
         },
 
+        topic(topicId) {
+            return this.$store.getters['topics/byId'](topicId);
+        },
+
         /**
          * Start editing process of this story
          */
@@ -182,6 +190,7 @@ export default {
                 'title',
                 'description',
                 'points',
+                'topic_id',
             ]);
         },
 
