@@ -7,7 +7,7 @@
             </h3>
             <h2>{{ currentSprint.name }}</h2>
 
-            <table class="table table-striped">
+            <table class="table table-striped mb-4">
                 <thead>
                 <tr>
                     <th>Identifier</th>
