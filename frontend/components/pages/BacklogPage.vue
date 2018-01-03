@@ -37,6 +37,7 @@
                     <th>&nbsp;</th>
                     <th>Identifier</th>
                     <th>Story</th>
+                    <th>Topic</th>
                     <th>Story&nbsp;points</th>
                     <th>Operations</th>
                 </tr>
@@ -54,6 +55,7 @@
         <StoryForm
             v-if="showForm"
             v-model="newStory"
+            :project="project"
             @cancel="showForm = false"
             @submit="save"/>
 

@@ -1,6 +1,6 @@
 class StorySerializer < ActiveModel::Serializer
   # attributes to be serialized
-  attributes :id, :title, :description, :sprint_position, :project_position, :identifier, :status, :points, :sprint_id, :project_id
+  attributes :id, :title, :description, :sprint_position, :project_position, :identifier, :status, :points, :sprint_id, :topic_id, :project_id
 
   def sprint_position
     sprint_position = SprintPosition.find_by(story_id: object.id)
@@ -15,5 +15,4 @@ class StorySerializer < ActiveModel::Serializer
       project_position.position
     end
   end
-
 end

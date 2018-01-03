@@ -12,6 +12,7 @@
                         <tr>
                             <th>Identifier</th>
                             <th>Story</th>
+                            <th>Topic</th>
                             <th>Story&nbsp;points</th>
                             <th>Status</th>
                         </tr>
@@ -36,6 +37,7 @@
                 <tr>
                     <th>Identifier</th>
                     <th>Story</th>
+                    <th>Topic</th>
                     <th>Story&nbsp;points</th>
                     <th>Status</th>
                 </tr>

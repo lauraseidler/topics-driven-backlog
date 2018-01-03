@@ -40,7 +40,30 @@
                             @click="showProjectForm = true">Add project</BButton>
                     </BTab>
                     <BTab title="Topics">
-                        <p>No topics in this course yet.</p>
+                        <ul
+                            class="list-unstyled"
+                            v-if="topics.length">
+
+                            <TopicItem
+                                class="mb-2"
+                                v-for="topic in topics"
+                                :data="topic"
+                                :key="topic.id"/>
+                        </ul>
+
+                        <p v-else>No topics in this course yet.</p>
+
+                        <TopicForm
+                                v-if="showTopicForm"
+                                v-model="newTopic"
+                                @cancel="showTopicForm = false"
+                                @submit="addTopic"/>
+
+                        <BButton
+                                v-else
+                                type="button"
+                                variant="primary"
+                                @click="showTopicForm = true">Add topic</BButton>
                     </BTab>
                     <BTab title="Sprints">
                         <ul 
@@ -98,6 +121,8 @@ import SprintForm from '@/components/forms/SprintForm';
 import SprintCollectionForm from '@/components/forms/SprintCollectionForm';
 import ProjectForm from '@/components/forms/ProjectForm';
 import ProjectItem from '@/components/elements/ProjectItem';
+import TopicForm from '@/components/forms/TopicForm';
+import TopicItem from '@/components/elements/TopicItem';
 import { info } from '@/helper/semester';
 
 export default {
@@ -105,8 +130,10 @@ export default {
         SprintCollectionForm,
         SprintForm,
         ProjectForm,
+        TopicForm,
         SprintItem,
         ProjectItem,
+        TopicItem,
         NotFound,
         BCard,
         BTabs,
@@ -118,9 +145,11 @@ export default {
             showSprintForm: false,
             showCollectionForm: false,
             showProjectForm: false,
-            newSprint: {},
+            showTopicForm: false,
+            newSprint: this.$store.getters['sprints/template'](),
             newCollection: {},
-            newProject: {},
+            newProject: this.$store.getters['projects/template'](),
+            newTopic: this.$store.getters['topics/template'](),
         };
     },
     computed: {
@@ -152,6 +181,16 @@ export default {
         projects() {
             return this.course
                 ? this.$store.getters['projects/all'](this.course.id)
+                : [];
+        },
+
+        /**
+         * Topics in course
+         * @returns {array}
+         */
+        topics() {
+            return this.course
+                ? this.$store.getters['topics/all'](this.course.id)
                 : [];
         },
     },
@@ -191,6 +230,17 @@ export default {
             });
 
             this.newProject = this.$store.getters['projects/template']();
+
+            // TODO handle errors in UI
+        },
+
+        async addTopic() {
+            await this.$store.dispatch('topics/create', {
+                parentId: this.course.id,
+                ...this.newTopic,
+            });
+
+            this.newTopic = this.$store.getters['topics/template']();
 
             // TODO handle errors in UI
         },

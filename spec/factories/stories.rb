@@ -6,6 +6,7 @@ FactoryBot.define do
     status {rand(0..3)}
     points {[rand(1..3), nil].sample}
     sprint_id nil
+    topic_id nil
     project_id nil
   end
 end
