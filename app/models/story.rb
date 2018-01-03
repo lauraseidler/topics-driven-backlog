@@ -6,7 +6,7 @@ class Story < ApplicationRecord
     {:open => 0, :progressing => 1, :closed => 2, :canceled => 3}
   end
 
-  after_save :set_identifier
+  after_save :set_identifier, on: :create
   after_commit :create_project_position, on: :create
   after_commit :create_sprint_position, on: :create
   before_validation :update_sprint_position, on: :update
@@ -20,6 +20,7 @@ class Story < ApplicationRecord
   def set_identifier
     if self.identifier.blank?
       self.identifier = 'S-'+self.id.to_s
+      self.save!
     end
   end
 
