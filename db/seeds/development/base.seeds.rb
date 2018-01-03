@@ -4,8 +4,12 @@ Course.create!([
                    {title: "B21.1 - B23.1 WTAT2: Agile Web Development", hyperlink: "http://home.htw-berlin.de/~kleinen/classes/ws2017/wtat2", semester_type: "W", semester_year: 2017, short_title: "WTAT2"}
                ])
 Topic.create!([
-                  {title: "hjk", url: "https://topics-driven-backlog.myjetbrains.com/youtrack/agiles/89-0/90-19", course_id: 3},
-                  {title: "sdf", url: "https://topics-driven-backlog.myjetbrains.com/youtrack/agiles/89-0/90-19", course_id: 3}
+                  {title: "Rails and Active Record", url: "http://home.htw-berlin.de/~kleinen/classes/ws2017/wtat2/topics/a1-activerecord/", course_id: 3},
+                  {title: "Authentication & Testing", url: "http://home.htw-berlin.de/~kleinen/classes/ws2017/wtat2/topics/a2-authentication/", course_id: 3},
+                  {title: "Search, Database, Docker", url: "http://home.htw-berlin.de/~kleinen/classes/ws2017/wtat2/topics/a3-search-database-docker/", course_id: 3},
+                  {title: "Deployment & Javascript", url: "http://home.htw-berlin.de/~kleinen/classes/ws2017/wtat2/topics/a4-ci-cd-javascript/", course_id: 3},
+                  {title: "Rails Security & External APIs", url: "http://home.htw-berlin.de/~kleinen/classes/ws2017/wtat2/topics/", course_id: 3},
+                  {title: "Choose one yourself", url: "http://home.htw-berlin.de/~kleinen/classes/ws2017/wtat2/topics/", course_id: 3}
               ])
 Sprint.create!([
                    {name: "Rails and Active Record", start_date: "2017-10-19", end_date: "2018-10-26", course_id: 3},
@@ -17,8 +21,8 @@ Project.create!([
                     {title: "WTAT2 Project 1", course_id: 3}
                 ])
 Story.create!([
-                  {title: "As the Studiengangssprecher, I want to announce events relevant for IMI-Students.", description: nil, identifier: "S-1", status: 2, points: nil, sprint_id: 1, project_id: 1, topic_id: nil},
-                  {title: "As an IMI-Student, I get an overview of events coming up within the next week.", description: nil, identifier: "S-2", status: 2, points: nil, sprint_id: 1, project_id: 1, topic_id: nil},
+                  {title: "As the Studiengangssprecher, I want to announce events relevant for IMI-Students.", description: nil, identifier: "S-1", status: 2, points: nil, sprint_id: 1, project_id: 1, topic_id: 1},
+                  {title: "As an IMI-Student, I get an overview of events coming up within the next week.", description: nil, identifier: "S-2", status: 2, points: nil, sprint_id: 1, project_id: 1, topic_id: 1},
                   {title: "As an IMI-Student, I can see events that will be important for me, e.g. the Projektvergabe, or the Showtime, well ahead.", description: nil, identifier: "S-3", status: 0, points: nil, sprint_id: nil, project_id: 1, topic_id: nil},
                   {title: "As the Studiengangssprecher, I can also keep an overview of the planning status (date set, room booked, announced etc) for each listed event.", description: nil, identifier: "S-4", status: 0, points: nil, sprint_id: nil, project_id: 1, topic_id: nil},
                   {title: "As a Student, I can filter events that are relevant for me (B/M, Semester).", description: nil, identifier: "S-5", status: 0, points: nil, sprint_id: nil, project_id: 1, topic_id: nil},
@@ -34,7 +38,7 @@ SprintPosition.create!([
                            {position: 2, sprint_id: 1, story_id: 1},
                            {position: 1, sprint_id: 1, story_id: 2},
                            {position: 3, sprint_id: 2, story_id: 9},
-                           {position: 0, sprint_id: 2, story_id: 12},
+                           {position: 4, sprint_id: 2, story_id: 12},
                            {position: 2, sprint_id: 2, story_id: 12},
                            {position: 1, sprint_id: 2, story_id: 11}
                        ])
