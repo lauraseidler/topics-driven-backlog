@@ -83,7 +83,7 @@ ActiveRecord::Schema.define(version: 20180101235655) do
     t.datetime "updated_at", null: false
     t.index ["story_id"], name: "index_tasks_on_story_id"
   end
-  
+
   create_table "topics", force: :cascade do |t|
     t.string "title"
     t.string "url"
