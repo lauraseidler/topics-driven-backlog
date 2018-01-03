@@ -1,15 +1,13 @@
 <template>
     <section id="sprint-planning-page">
         <template v-if="nextSprint">
-            <h3 class="h5 text-muted mb-0">Next sprint</h3>
+            <h3 class="h5 text-muted mb-0">
+                Next sprint
+                <small>({{ nextSprint.start_date | displayDate }} - {{ nextSprint.end_date | displayDate }})</small>
+            </h3>
             <h2>{{ nextSprint.name }}</h2>
 
-            <p>
-                Start: {{ nextSprint.start_date | displayDate }} <br>
-                End: {{ nextSprint.end_date | displayDate }}
-            </p>
-
-            <table class="table table-striped">
+            <table class="table table-striped mb-4">
                 <thead>
                     <tr>
                         <th>&nbsp;</th>
@@ -17,7 +15,6 @@
                         <th>Story</th>
                         <th>Topic</th>
                         <th>Story&nbsp;points</th>
-                        <th>Operations</th>
                     </tr>
                 </thead>
                 <tbody v-sortable="{handle: '.js-drag-drop', onEnd: saveOrder}">
@@ -38,6 +35,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>&nbsp;</th>
                     <th>Identifier</th>
                     <th>Story</th>
                     <th>Topic</th>

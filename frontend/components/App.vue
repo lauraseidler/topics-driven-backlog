@@ -8,7 +8,9 @@
             <BContainer>
                 <BNavbarToggle target="nav-collapse"/>
 
-                <BNavbarBrand href="#">TDB</BNavbarBrand>
+                <BNavbarBrand href="#">
+                    Topics Driven Backlog
+                </BNavbarBrand>
 
                 <BCollapse 
                     is-nav 
@@ -17,6 +19,12 @@
                     <BNavbarNav>
                         <BNavItem to="/projects">Projects</BNavItem>
                         <BNavItem to="/courses">Courses</BNavItem>
+                    </BNavbarNav>
+
+                    <BNavbarNav class="ml-auto">
+                        <BNavItem href="https://www.htw-berlin.de" target="_blank">
+                            <img src="~images/logo-htw.png" alt="HTW Berlin" class="d-inline-block align-top">
+                        </BNavItem>
                     </BNavbarNav>
                 </BCollapse>
             </BContainer>

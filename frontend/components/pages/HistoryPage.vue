@@ -1,7 +1,10 @@
 <template>
     <section id="history-page">
         <template v-for="sprint in sprints">
-            <div :key="sprint.id">
+            <div :key="sprint.id" class="mb-4">
+                <h3 class="h5 text-muted mb-0">
+                    <small>{{ sprint.start_date | displayDate }} - {{ sprint.end_date | displayDate }}</small>
+                </h3>
                 <h2>{{ sprint.name }}</h2>
 
                 <table 
