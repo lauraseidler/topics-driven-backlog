@@ -4,7 +4,8 @@
             v-if="editing" 
             colspan="6">
 
-            <StoryForm 
+            <StoryForm
+                :project="project"
                 v-model="editingData" 
                 @cancel="editing = false" 
                 @submit="save"/>
@@ -162,6 +163,11 @@ export default {
             editingData: null,
             statusMap: this.$store.state.stories.statusMap,
         };
+    },
+    computed: {
+        project() {
+            return this.$store.getters['projects/byId'](this.data.project_id);
+        },
     },
     methods: {
         /**
