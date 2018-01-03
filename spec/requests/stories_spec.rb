@@ -153,6 +153,24 @@ RSpec.describe 'Stories API', type: :request do
         expect(json['sprint_position']).to eq(1)
       end
     end
+
+    context 'updates first storys sprint and position' do
+      let(:sprint_and_position_attribute) {
+        {
+            sprint_id: sprint_id,
+            sprint_position: 1
+        }
+      }
+      before { patch "/stories/#{story_id}", params: sprint_and_position_attribute }
+      before { get "/stories/#{story_id}" }
+
+      it 'returns the first position value' do
+        expect(json).not_to be_empty
+        expect(json['sprint_id']).to eq(sprint_id)
+        expect(json['sprint_position']).to eq(1)
+      end
+    end
+
   end
 
   # Test suite for PATCH /stories/:id
@@ -236,10 +254,30 @@ RSpec.describe 'Stories API', type: :request do
 
   # Test suite for DELETE /stories/:id
   describe 'DELETE /stories/:id' do
-    before { delete "/stories/#{story_id}"}
 
-    it 'returns status code 204' do
-      expect(response).to have_http_status(204)
+    context 'when the record exists' do
+      before { delete "/stories/#{story_id}"}
+
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+      end
+    end
+
+    let(:sprint_attribute) {{:sprint_id => sprint_id}}
+    before { patch "/stories/#{story_id}", params: sprint_attribute}
+
+    context 'when the story was part of a sprint' do
+      before { delete "/stories/#{story_id}"}
+
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+      end
+
+      it 'removes the SprintPosition record' do
+        sprint_position = SprintPosition.find_by(sprint_id: sprint_id, story_id: story_id)
+        expect(sprint_position).to eq(nil)
+      end
     end
   end
+
 end

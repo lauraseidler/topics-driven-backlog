@@ -47,14 +47,6 @@ class StoriesController < ApplicationController
   def set_positions(sprint_pos, project_pos)
     if sprint_pos.present? & @story.sprint_id.present?
       sprint_position = SprintPosition.find_by(story_id: @story.id)
-      if sprint_position.present?
-        if @story.sprint_id != sprint_position.sprint_id
-          sprint_position.sprint_id = @story.sprint_id
-        end
-      else
-        sprint_position = SprintPosition.create(:sprint_id => @story.sprint_id, :story_id => @story.id)
-      end
-      
       sprint_position.set_list_position(sprint_pos)
       sprint_position.save!
     end
