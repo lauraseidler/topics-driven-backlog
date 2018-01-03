@@ -3,7 +3,7 @@
         <h2 class="h4 text-muted" v-if="course">{{ course.title}} </h2>
         <h1>
             Backlog
-            <small class="text-muted">{{ project.title}}</small>
+            <small class="text-muted" v-if="project">{{ project.title}}</small>
         </h1>
 
         <table class="table table-striped">
@@ -12,6 +12,7 @@
                     <th>&nbsp;</th>
                     <th>Identifier</th>
                     <th>Story</th>
+                    <th>Topic</th>
                     <th>Story&nbsp;points</th>
                     <th>Operations</th>
                 </tr>
@@ -29,6 +30,7 @@
         <StoryForm
             v-if="showForm"
             v-model="newStory"
+            :project="project"
             @cancel="showForm = false"
             @submit="save"/>
 

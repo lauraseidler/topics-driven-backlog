@@ -3,7 +3,7 @@
         <h2 class="h4 text-muted" v-if="course">{{ course.title}} </h2>
         <h1>
             History
-            <small class="text-muted">{{ project.title}}</small>
+            <small class="text-muted" v-if="project">{{ project.title}}</small>
         </h1>
 
         <template v-for="sprint in sprints">
@@ -18,6 +18,7 @@
                         <tr>
                             <th>Identifier</th>
                             <th>Story</th>
+                            <th>Topic</th>
                             <th>Story&nbsp;points</th>
                             <th>Status</th>
                         </tr>
@@ -42,6 +43,7 @@
                 <tr>
                     <th>Identifier</th>
                     <th>Story</th>
+                    <th>Topic</th>
                     <th>Story&nbsp;points</th>
                     <th>Status</th>
                 </tr>

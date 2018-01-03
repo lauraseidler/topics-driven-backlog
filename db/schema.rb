@@ -53,8 +53,8 @@ ActiveRecord::Schema.define(version: 20180101224044) do
     t.integer "status", default: 0
     t.integer "points"
     t.bigint "sprint_id"
-    t.bigint "topic_id"
     t.bigint "project_id"
+    t.bigint "topic_id"
     t.index ["project_id"], name: "index_stories_on_project_id"
     t.index ["sprint_id"], name: "index_stories_on_sprint_id"
     t.index ["topic_id"], name: "index_stories_on_topic_id"

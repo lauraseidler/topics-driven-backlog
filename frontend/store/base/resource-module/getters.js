@@ -54,21 +54,6 @@ export function byId(settings) {
      * @returns {function}
      */
     return function (state) {
-        if (settings.parent) {
-            /**
-             * Return item from data by ID and parent ID
-             *
-             * @param {int} parentId
-             * @param {int} id
-             * @returns {object}
-             */
-            return function (parentId, id) {
-                return state.initialised[parentId]
-                    ? state.data[parentId].find(i => i.id === id)
-                    : null;
-            };
-        }
-
         /**
          * Return item from data by ID
          *
@@ -76,8 +61,12 @@ export function byId(settings) {
          * @returns {object}
          */
         return function (id) {
+            const data = settings.parent
+                ? Object.keys(state.data).reduce((arr, parentId) => arr.concat(state.data[parentId]), [])
+                : state.data;
+
             return state.initialised
-                ? state.data.find(i => i.id === id)
+                ? data.find(i => i.id === id)
                 : null;
         };
     };
