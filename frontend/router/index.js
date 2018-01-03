@@ -2,12 +2,10 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import StoryPage from '@/components/pages/StoryPage';
-import BacklogPage from '@/components/pages/BacklogPage';
 import CoursePage from '@/components/pages/CoursePage';
 import CoursesPage from '@/components/pages/CoursesPage';
-import SprintPlanningPage from '@/components/pages/SprintPlanningPage';
-import HistoryPage from '@/components/pages/HistoryPage';
 import ProjectsPage from '@/components/pages/ProjectsPage';
+import ProjectPage from '@/components/pages/ProjectPage';
 
 Vue.use(Router);
 
@@ -19,19 +17,9 @@ const router = new Router({
             component: ProjectsPage,
         },
         {
-            path: '/courses/:courseId-(.*)/projects/:id-(.*)/backlog',
-            name: 'backlog',
-            component: BacklogPage,
-        },
-        {
-            path: '/courses/:courseId-(.*)/projects/:id-(.*)/sprint-planning',
-            name: 'sprint-planning',
-            component: SprintPlanningPage,
-        },
-        {
-            path: '/courses/:courseId-(.*)/projects/:id-(.*)/history',
-            name: 'history',
-            component: HistoryPage,
+            path: '/courses/:courseId-(.*)/projects/:id-(.*)',
+            name: 'project',
+            component: ProjectPage,
         },
         {
             path: '/stories/:identifier',

@@ -1,11 +1,5 @@
 <template>
     <section id="history-page">
-        <h2 class="h4 text-muted" v-if="course">{{ course.title}} </h2>
-        <h1>
-            History
-            <small class="text-muted">{{ project.title}}</small>
-        </h1>
-
         <template v-for="sprint in sprints">
             <div :key="sprint.id">
                 <h2>{{ sprint.name }}</h2>

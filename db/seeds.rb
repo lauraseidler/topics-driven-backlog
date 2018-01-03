@@ -43,7 +43,7 @@ project1 = Project.create(
 
 t1 = Sprint.create(
     name: 'Rails and Active Record',
-    start_date: Date.new(2018, 10, 19),
+    start_date: Date.new(2017, 10, 19),
     end_date: Date.new(2018, 10, 26),
     course_id: wtat2.id
 )

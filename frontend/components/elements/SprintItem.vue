@@ -19,8 +19,8 @@
                 <h3 class="card-title h5">{{ data.name }}</h3>
 
                 <p class="card-text">
-                    Start: {{ data.start_date }} <br>
-                    End: {{ data.end_date }}
+                    Start: {{ data.start_date | displayDate }} <br>
+                    End: {{ data.end_date | displayDate }}
                 </p>
             </template>
 

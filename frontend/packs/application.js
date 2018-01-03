@@ -24,6 +24,9 @@ import store from '@/store';
 import '@/directives/confirm';
 import '@/directives/sortable';
 
+// custom filters
+import '@/filters/displayDate';
+
 // register plugins
 Vue.use(VueResource);
 Vue.use(Vuelidate);
