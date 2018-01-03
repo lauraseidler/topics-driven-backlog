@@ -15,11 +15,23 @@
             "requireParamDescription": false,
             "prefer": {
               "return": "returns"
+            },
+            "preferType": {
+              "String": "string",
+              "Object": "object",
+              "Function": "function",
+              "Number": "int"
             }
-          }]
+        }],
+        "semi": ["error", "always"],
+        "no-extra-semi": "error",
+        "object-curly-spacing": ["error", "always"]
     },
     "env": {
         "node": true,
         "jest": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 8
     }
 }

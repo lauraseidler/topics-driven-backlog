@@ -71,25 +71,28 @@ export default {
         /**
          * Save the edited parameters of this sprint
          */
-        saveSprint() {
-            this.$store
-                .dispatch('sprints/patch', {
-                    id: this.data.id,
-                    values: this.editingData,
-                })
-                .then(() => {
-                    this.editing = false;
-                });
+        async saveSprint() {
+            await this.$store.dispatch('sprints/update', {
+                id: this.data.id,
+                parentId: this.data.course_id,
+                ...this.editingData,
+            });
+
+            this.editing = false;
+
+            // TODO handle errors in UI
         },
 
         /**
          * Delete this sprint
          */
-        deleteSprint() {
-            this.$store.dispatch('sprints/delete', {
+        async deleteSprint() {
+            await this.$store.dispatch('sprints/remove', {
                 id: this.data.id,
-                course_id: this.data.course_id,
+                parentId: this.data.course_id,
             });
+
+            // TODO handle errors in UI
         },
     },
 };

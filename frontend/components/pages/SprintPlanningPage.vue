@@ -1,6 +1,10 @@
 <template>
     <section id="sprint-planning-page">
-        <h1>Sprint planning</h1>
+        <h2 class="h4 text-muted" v-if="course">{{ course.title}} </h2>
+        <h1>
+            Sprint planning
+            <small class="text-muted">{{ project.title}}</small>
+        </h1>
 
         <template v-if="nextSprint">
             <p>
@@ -72,16 +76,18 @@
 import * as _ from 'lodash';
 import moment from 'moment';
 import BButton from '@bootstrap/button/button';
+import BaseProjectAwarePage from '@/components/pages/BaseProjectAwarePage';
 import StoryItem from '@/components/elements/StoryItem';
 import StoryForm from '@/components/forms/StoryForm';
 import SprintItem from '@/components/elements/SprintItem';
 
 export default {
     components: { SprintItem, StoryForm, StoryItem, BButton },
+    extends: BaseProjectAwarePage,
     data() {
         return {
             showForm: false,
-            newStory: {},
+            newStory: this.$store.getters['stories/template'](),
         };
     },
     computed: {
@@ -90,9 +96,11 @@ export default {
          * @returns {array}
          */
         backlog() {
-            return this.$store.getters['stories/all']
-                .filter(s => !s.sprint_id)
-                .sort((a, b) => a.position - b.position);
+            return this.project
+                ? this.$store.getters['stories/all'](this.project.id)
+                    .filter(s => !s.sprint_id)
+                    .sort((a, b) => a.position - b.position)
+                : [];
         },
 
         /**
@@ -102,11 +110,12 @@ export default {
         nextSprint() {
             const currentDate = moment().format('YYYY-MM-DD');
 
-            return _.first(
-                this.$store.getters['courses/allSprints']()
-                    .filter(s => s.end_date >= currentDate)
-                    .sort((a, b) => a.start_date.localeCompare(b.start_date))
-            );
+            return this.course
+                ? _.first(
+                    this.$store.getters['sprints/all'](this.course.id)
+                        .filter(s => s.end_date >= currentDate)
+                        .sort((a, b) => a.start_date.localeCompare(b.start_date)))
+                : null;
         },
 
         /**
@@ -114,73 +123,83 @@ export default {
          * @returns {array}
          */
         storiesInSprint() {                        
-            if (this.nextSprint) {
-                return this.$store.getters['stories/find']('sprint_id', this.nextSprint.id)
-                    .sort((a, b) => a.position - b.position);
-            } else {
-                return [];
-            }
+            return this.nextSprint
+                ? this.$store.getters['stories/find'](this.project.id, 'sprint_id', this.nextSprint.id)
+                    .sort((a, b) => a.position - b.position)
+                : [];
         },
     },
     methods: {
         /**
          * Save current form state as new story
          */
-        save() {
-            this.$store
-                .dispatch('stories/save', {
-                    story: this.newStory,
-                })
-                .then(() => {
-                    this.newStory = {};
-                });
+        async save() {
+            await this.$store.dispatch('stories/create', {
+                parentId: this.project.id,
+                ...this.newStory
+            });
+
+            this.newStory = this.$store.getters['stories/template']();
+
+            // TODO handle errors in UI
         },
 
         /**
          * Save new position of dragged story
          * @param {Event} evt
          */
-        saveOrder(evt) {
-            const story = this.storiesInSprint[evt.oldIndex];
+        async saveOrder(evt) {
+            const story = this.stories[evt.oldIndex];
 
             if (!story) {
                 return;
             }
 
-            this.$store.dispatch('stories/patch', {
+            await this.$store.dispatch('stories/update', {
                 id: story.id,
-                field: 'position',
-                value: evt.newIndex + 1, // act_as_list is 1-indexed
-                fetch: true,
+                parentId: this.project.id,
+                position: evt.newIndex + 1, // act_as_list is 1-indexed
             });
+
+            await this.$store.dispatch('projects/fetch', {
+                id: this.project.id,
+                parentId: this.course.id
+            });
+
+            // TODO handle errors in UI
         },
 
         /**
          * Add story to next sprint
          * @param {int} storyId
          */
-        addToSprint(storyId) {
+        async addToSprint(storyId) {
             if (!this.nextSprint) {
                 return;
             }
 
-            this.$store.dispatch('stories/patch', {
+            await this.$store.dispatch('stories/update', {
                 id: storyId,
-                field: 'sprint_id',
-                value: this.nextSprint.id,
+                parentId: this.project.id,
+                sprint_id: this.nextSprint.id,
             });
+
+            // TODO handle errors in UI
         },
 
         /**
          * Remove story from next sprint
          * @param {int} storyId
          */
-        removeFromSprint(storyId) {
-            this.$store.dispatch('stories/patch', {
+        async removeFromSprint(storyId) {
+            await this.$store.dispatch('stories/update', {
                 id: storyId,
-                field: 'sprint_id',
-                value: null,
+                parentId: this.project.id,
+                sprint_id: null,
             });
+
+            // TODO handle errors in UI
+
         },
     },
 };

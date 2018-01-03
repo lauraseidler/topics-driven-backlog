@@ -11,12 +11,16 @@ localVue.use(Vuelidate);
 const { $router, $route } = mockRouter(['/courses/:id'], '/courses/1');
 
 describe('CoursePage.test.js', () => {
-    let cmp, store, actions, getters;
+    let cmp, store, sprintActions, projectActions, getters;
 
     beforeEach(() => {
-        actions = {
-            addSprint: jest.fn(),
-            addSprintCollection: jest.fn(),
+        sprintActions = {
+            save: jest.fn(),
+            saveCollection: jest.fn(),
+        };
+
+        projectActions = {
+            save: jest.fn(),
         };
 
         getters = {
@@ -30,6 +34,10 @@ describe('CoursePage.test.js', () => {
                         sprints: [
                             { id: 1, start_date: '2000-01-02' },
                             { id: 2, start_date: '2000-01-01' },
+                        ],
+                        projects: [
+                            { id: 1, title: 'Test' },
+                            { id: 2, title: 'Test 2' },
                         ],
                     },
                     {
@@ -47,8 +55,15 @@ describe('CoursePage.test.js', () => {
             modules: {
                 courses: {
                     namespaced: true,
-                    actions,
                     getters,
+                },
+                sprints: {
+                    namespaced: true,
+                    actions: sprintActions,
+                },
+                projects: {
+                    namespaced: true,
+                    actions: projectActions,
                 },
             },
         });
@@ -61,35 +76,51 @@ describe('CoursePage.test.js', () => {
                 $route,
             },
         });
+
+        cmp.vm.$router.push('/courses/1');
     });
 
     it('returns correct course from route param', () => {
         expect(cmp.vm.course.title).toBe('Test course');
     });
 
-    it('returns correctly sorted sprints for course', () => {
+    it('returns correctly sorted sprints and projects for course', () => {
         expect(cmp.vm.sprints).toEqual([
             { id: 2, start_date: '2000-01-01' },
             { id: 1, start_date: '2000-01-02' },
         ]);
 
+        expect(cmp.vm.projects).toEqual([
+            { id: 1, title: 'Test' },
+            { id: 2, title: 'Test 2' },
+        ]);
+
         cmp.vm.$router.push('/courses/2');
 
         expect(cmp.vm.sprints.length).toBe(0);
+        expect(cmp.vm.projects.length).toBe(0);
     });
 
     it('adds a sprint and resets form', () => {
         cmp.vm.addSprint();
 
-        expect(actions.addSprint).toBeCalled();
+        expect(sprintActions.save).toBeCalled();
         expect(cmp.vm.newSprint).toEqual({});
     });
 
     it('adds a sprint collection and resets form', () => {
         cmp.vm.addCollection();
 
-        expect(actions.addSprintCollection).toBeCalled();
+        expect(sprintActions.saveCollection).toBeCalled();
         expect(cmp.vm.newCollection).toEqual({});
+    });
+
+
+    it('adds a sprint and resets form', () => {
+        cmp.vm.addProject();
+
+        expect(projectActions.save).toBeCalled();
+        expect(cmp.vm.newSprint).toEqual({});
     });
 
     it('has the expected html structure', () => {

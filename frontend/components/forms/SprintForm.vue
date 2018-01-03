@@ -62,7 +62,7 @@ import BaseForm from '@/components/forms/BaseForm';
 
 export default {
     name: 'SprintForm',
-    components: {BForm, BFormGroup, BFormInput, BButton},
+    components: { BForm, BFormGroup, BFormInput, BButton },
     extends: BaseForm,
     validations: {
         data: {
@@ -74,7 +74,10 @@ export default {
             end_date: {
                 required,
                 largerThanStart: largerOrEqualThan('start_date'),
-                largerThanToday: largerOrEqualThan(moment().format('YYYY-MM-DD'), true),
+                largerThanToday: largerOrEqualThan(
+                    moment().format('YYYY-MM-DD'),
+                    true
+                ),
             },
         },
     },

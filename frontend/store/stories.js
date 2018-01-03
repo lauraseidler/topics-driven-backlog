@@ -2,13 +2,6 @@ import Vue from 'vue';
 
 export const state = {
     initialised: false,
-    STATUS: { OPEN: 0, IN_PROGRESS: 1, CLOSED: 2, CANCELLED: 3 },
-    statusMap: [
-        { name: 'open', css: 'badge-dark' },
-        { name: 'in progress', css: 'badge-warning' },
-        { name: 'closed', css: 'badge-success' },
-        { name: 'cancelled', css: 'badge-danger' },
-    ],
     data: [],
 };
 
@@ -104,7 +97,7 @@ export const actions = {
      */
     save({ commit }, payload) {
         return new Promise((resolve, reject) => {
-            Vue.http.post('/stories', payload.story).then(response => {
+            Vue.http.post(`/projects/${payload.project_id}/stories`, payload.story).then(response => {
                 commit('set', {
                     story: response.body,
                 });
@@ -170,6 +163,10 @@ export const getters = {
      * @returns {array}
      */
     all: state => (state.initialised ? state.data : []),
+
+    byProject: (state, getters, rootState, rootGetters) => (id) => {
+        return rootGetters['projects/byId'](id).stories || [];
+    },
 
     /**
      * Find a story by identifier

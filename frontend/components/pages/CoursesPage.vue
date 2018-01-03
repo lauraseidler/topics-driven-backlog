@@ -13,7 +13,7 @@
 
                 <div class="card-body">
                     <router-link 
-                        :to="`/courses/${course.id}`" 
+                        :to="`/courses/${course.id}-${slugify(course.title)}`"
                         class="h4 card-title link-unstyled">
                         {{ course.short_title }}
                     </router-link>
@@ -121,7 +121,7 @@ export default {
     data() {
         return {
             showForm: false,
-            newCourse: this.$store.getters['courses/new'],
+            newCourse: this.$store.getters['courses/template'](),
         };
     },
     computed: {
@@ -153,19 +153,21 @@ export default {
         /**
          * Save current form state as new story
          */
-        saveCourse() {
+        async saveCourse() {
             if (this.$v.newCourse.$invalid) {
                 this.$v.newCourse.$touch();
                 return;
             }
 
-            this.$store
-                .dispatch('courses/save', {
-                    course: this.newCourse,
-                })
-                .then(() => {
-                    this.newCourse = this.$store.getters['courses/new'];
-                });
+            const semesterSplit = this.newCourse.semester.split('*');
+            this.newCourse.semester_type = semesterSplit[0];
+            this.newCourse.semester_year = parseInt(semesterSplit[1], 10);
+
+            await this.$store.dispatch('courses/create', this.newCourse);
+
+            this.newCourse = this.$store.getters['courses/template']();
+
+            // TODO handle errors in UI
         },
 
         /**
@@ -176,6 +178,15 @@ export default {
          */
         getSemesterInfo(type, year) {
             return info(type, year);
+        },
+
+        slugify(text) {
+            return text.toString().toLowerCase()
+                .replace(/\s+/g, '-')           // Replace spaces with -
+                .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+                .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+                .replace(/^-+/, '')             // Trim - from start of text
+                .replace(/-+$/, '');            // Trim - from end of text
         },
     },
     validations: {
