@@ -32,6 +32,7 @@ RSpec.describe 'Projects/Stories API', type: :request do
       before { post "/projects/#{project_id}/stories", params: valid_attributes }
 
       it 'creates a story' do
+        expect(json).not_to be_empty
         expect(json['title']).to eq('Learn Elm')
         expect(json['description']).to eq('Foobar')
         expect(json['status']).to eq(Story.statuses[:open])

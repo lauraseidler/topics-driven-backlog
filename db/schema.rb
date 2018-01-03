@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180101224044) do
+ActiveRecord::Schema.define(version: 20180101235655) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,12 +25,28 @@ ActiveRecord::Schema.define(version: 20180101224044) do
     t.string "short_title"
   end
 
+  create_table "project_positions", force: :cascade do |t|
+    t.integer "position"
+    t.bigint "project_id"
+    t.bigint "story_id"
+    t.index ["project_id"], name: "index_project_positions_on_project_id"
+    t.index ["story_id"], name: "index_project_positions_on_story_id"
+  end
+
   create_table "projects", force: :cascade do |t|
     t.string "title"
     t.bigint "course_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["course_id"], name: "index_projects_on_course_id"
+  end
+
+  create_table "sprint_positions", force: :cascade do |t|
+    t.integer "position"
+    t.bigint "sprint_id"
+    t.bigint "story_id"
+    t.index ["sprint_id"], name: "index_sprint_positions_on_sprint_id"
+    t.index ["story_id"], name: "index_sprint_positions_on_story_id"
   end
 
   create_table "sprints", force: :cascade do |t|
@@ -48,7 +64,6 @@ ActiveRecord::Schema.define(version: 20180101224044) do
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "position"
     t.string "identifier"
     t.integer "status", default: 0
     t.integer "points"
@@ -68,7 +83,7 @@ ActiveRecord::Schema.define(version: 20180101224044) do
     t.datetime "updated_at", null: false
     t.index ["story_id"], name: "index_tasks_on_story_id"
   end
-
+  
   create_table "topics", force: :cascade do |t|
     t.string "title"
     t.string "url"
@@ -78,7 +93,11 @@ ActiveRecord::Schema.define(version: 20180101224044) do
     t.index ["course_id"], name: "index_topics_on_course_id"
   end
 
+  add_foreign_key "project_positions", "projects"
+  add_foreign_key "project_positions", "stories"
   add_foreign_key "projects", "courses"
+  add_foreign_key "sprint_positions", "sprints"
+  add_foreign_key "sprint_positions", "stories"
   add_foreign_key "sprints", "courses"
   add_foreign_key "stories", "projects"
   add_foreign_key "stories", "sprints"

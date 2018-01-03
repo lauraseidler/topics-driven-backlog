@@ -223,12 +223,14 @@ export default {
          * Save new status of story
          * @param {int} statusId
          */
-        saveStatus(statusId) {
-            this.$store.dispatch('stories/patch', {
+        async saveStatus(statusId) {
+            await this.$store.dispatch('stories/update', {
                 id: this.data.id,
-                field: 'status',
-                value: statusId,
+                parentId: this.data.project_id,
+                status: statusId,
             });
+
+            // TODO handle errors in UI
         },
 
         /**

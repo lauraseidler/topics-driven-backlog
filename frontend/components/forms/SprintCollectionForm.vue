@@ -77,9 +77,9 @@
 
                         <strong>{{ i }}. Sprint:</strong>
 
-                        {{ datePlusDays(data.start_date, (i - 1) * data.duration) }}
+                        {{ datePlusDays(data.start_date, (i - 1) * data.duration) | displayDate }}
                         -
-                        {{ datePlusDays(data.start_date, i * data.duration - 1) }}
+                        {{ datePlusDays(data.start_date, i * data.duration - 1) | displayDate }}
                     </div>
                 </template>
             </BCol>

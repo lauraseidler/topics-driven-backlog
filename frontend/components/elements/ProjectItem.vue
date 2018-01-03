@@ -43,7 +43,9 @@
             v-else 
             :class="['card-body', $style.display]">
 
-            <h3 class="card-title h4">{{ data.title }}</h3>
+            <h3 class="card-title h4">
+                <router-link :to="baseUrl">{{ data.title }}</router-link>
+            </h3>
 
             <p class="card-text">
                 <router-link 
@@ -53,10 +55,6 @@
                 <router-link
                     class="btn btn-primary mr-2 mb-2"
                     :to="sprintPlanningUrl">Sprint planning</router-link>
-
-                <router-link
-                    class="btn btn-primary mr-2 mb-2"
-                    :to="historyUrl">History</router-link>
             </p>
         </div> 
     </li>
@@ -102,15 +100,11 @@ export default {
         },
 
         backlogUrl() {
-            return `${this.baseUrl}/backlog`;
+            return `${this.baseUrl}#backlog`;
         },
 
         sprintPlanningUrl() {
-            return `${this.baseUrl}/sprint-planning`;
-        },
-
-        historyUrl() {
-            return `${this.baseUrl}/history`;
+            return `${this.baseUrl}#sprint-planning`;
         },
     },
     methods: {
