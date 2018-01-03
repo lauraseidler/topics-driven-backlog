@@ -5,8 +5,8 @@
             <h2>{{ currentSprint.name }}</h2>
 
             <p>
-                Start: {{ currentSprint.start_date }} <br>
-                End: {{ currentSprint.end_date }}
+                Start: {{ currentSprint.start_date | displayDate }} <br>
+                End: {{ currentSprint.end_date | displayDate }}
             </p>
 
             <table class="table table-striped">
