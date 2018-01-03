@@ -1,13 +1,11 @@
 <template>
     <section id="backlog-page">
         <template v-if="currentSprint">
-            <h3 class="h5 text-muted mb-0">Current sprint</h3>
+            <h3 class="h5 text-muted mb-0">
+                Current sprint
+                <small>({{ currentSprint.start_date | displayDate }} - {{ currentSprint.end_date | displayDate }})</small>
+            </h3>
             <h2>{{ currentSprint.name }}</h2>
-
-            <p>
-                Start: {{ currentSprint.start_date | displayDate }} <br>
-                End: {{ currentSprint.end_date | displayDate }}
-            </p>
 
             <table class="table table-striped">
                 <thead>
