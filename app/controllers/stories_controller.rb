@@ -53,7 +53,6 @@ class StoriesController < ApplicationController
         end
       else
         sprint_position = SprintPosition.create(:sprint_id => @story.sprint_id, :story_id => @story.id)
-
       end
       
       sprint_position.set_list_position(sprint_pos)

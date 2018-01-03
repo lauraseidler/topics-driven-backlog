@@ -19,6 +19,7 @@ RSpec.describe 'Stories API', type: :request do
     ).id
   }
   let(:story_id) { stories.first.id }
+  let(:second_story_id) { stories.last.id }
 
   # Test suite for GET /stories/:id
   describe 'GET /stories/:id' do
@@ -86,31 +87,70 @@ RSpec.describe 'Stories API', type: :request do
 
 
   # Test suite for PATCH /stories/:id
-  describe 'PATCH /stories/:id for position attributes' do
+  describe 'PATCH /stories/:id for project position attribute' do
     let(:position_attributes) {
       {
-          project_position: 1,
+          project_position: 2,
           sprint_id: sprint_id,
           sprint_position: 1
       }
     }
     before { patch "/stories/#{story_id}", params: position_attributes }
 
-    context 'updating the a story of the backlog' do
+    context 'updating the story of the backlog' do
 
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
       end
     end
 
-    context 'updating the a story of the backlog to the second position' do
+    context 'updates the story of the backlog to the second position' do
       before { get "/stories/#{story_id}" }
 
       it 'returns the first position value' do
         expect(json).not_to be_empty
-        expect(json['project_position']).to eq(1)
+        expect(json['project_position']).to eq(2)
         expect(json['sprint_position']).to eq(1)
         expect(json['sprint_id']).to eq(sprint_id)
+      end
+    end
+
+  end
+
+  # Test suite for PATCH /stories/:id
+  describe 'PATCH /stories/:id for sprint position attribute' do
+    let(:second_sprint_id) {
+      create(
+          :sprint,
+          :course_id => course_id
+      ).id
+    }
+    let(:sprint_attribute) {
+      {
+          sprint_id: second_sprint_id
+      }
+    }
+
+    before { patch "/stories/#{story_id}", params: sprint_attribute }
+    before { patch "/stories/#{second_story_id}", params: sprint_attribute }
+
+    context 'updates the story in the sprint to the last position' do
+      before { get "/stories/#{story_id}" }
+
+      it 'returns the first position value' do
+        expect(json).not_to be_empty
+        expect(json['sprint_id']).to eq(second_sprint_id)
+        expect(json['sprint_position']).to eq(2)
+      end
+    end
+
+    context 'updates second story to the first position' do
+      before { get "/stories/#{second_story_id}" }
+
+      it 'returns the first position value' do
+        expect(json).not_to be_empty
+        expect(json['sprint_id']).to eq(second_sprint_id)
+        expect(json['sprint_position']).to eq(1)
       end
     end
   end
