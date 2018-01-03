@@ -6,9 +6,10 @@ class Story < ApplicationRecord
     {:open => 0, :progressing => 1, :closed => 2, :canceled => 3}
   end
 
-  acts_as_list scope: [:sprint_id]
-
   after_save :set_identifier
+  after_commit :create_project_position, on: :create
+  after_commit :create_sprint_position, on: :create
+  before_validation :update_sprint_position, on: :update
   before_validation :set_status
 
   validates_presence_of :title, :status, :project_id
@@ -43,6 +44,37 @@ class Story < ApplicationRecord
   def is_sprint_finished(sprint)
     if sprint.end_date < Date.today
       errors.add(:sprint_id, 'was finished and cannot be changed')
+    end
+  end
+
+  def create_project_position
+    project_position = ProjectPosition.create(
+        :project_id => self.project_id, :story_id => self.id
+    )
+    project_position.set_list_position(0)
+    project_position.save!
+  end
+
+  def update_sprint_position
+    if sprint_id_was.present?
+      if sprint_id.present?
+        sprint_position = SprintPosition.find_by(sprint_id: sprint_id_was, story_id: self.id)
+        sprint_position.sprint_id = sprint_id
+        sprint_position.set_list_position(0)
+        sprint_position.save!
+      end
+    else
+      create_sprint_position
+    end
+  end
+
+  def create_sprint_position
+    if self.sprint_id.present?
+      sprint_position = SprintPosition.create(
+          :sprint_id => self.sprint_id, :story_id => self.id
+      )
+      sprint_position.set_list_position(0)
+      sprint_position.save!
     end
   end
 

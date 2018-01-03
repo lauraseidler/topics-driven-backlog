@@ -18,6 +18,34 @@ RSpec.describe Story, type: :model do
     expect(subject.status).to be(Story.statuses[:open])
   end
 
+  it "should get a default project_position on save" do
+    course = create(:course)
+    project = create(:project, course_id: course.id)
+    subject = create(:story, project_id: project.id)
+    expect(subject).to be_valid
+    subject.save
+    project_pos_record = ProjectPosition.find_by(story_id: subject.id, project_id: project.id)
+    expect(project_pos_record).not_to be_nil
+    expect(project_pos_record.position).to be_an_instance_of(Integer)
+  end
+
+  it "should get a default sprint_position if sprint was defined on save" do
+    course = create(:course)
+    project = create(:project, course_id: course.id)
+    sprint = create(
+        :sprint,
+        course_id: course.id,
+        start_date: Date.yesterday,
+        end_date: Date.tomorrow
+    )
+    subject = create(:story, project_id: project.id, sprint_id: sprint.id)
+    expect(subject).to be_valid
+    subject.save
+    sprint_pos_record = SprintPosition.find_by(story_id: subject.id, sprint_id: sprint.id)
+    expect(sprint_pos_record).not_to be_nil
+    expect(sprint_pos_record.position).to be_an_instance_of(Integer)
+  end
+
   it "is not valid if new assigned Sprint is finished" do
     course = create(:course)
     project = create(:project, course_id: course.id)
