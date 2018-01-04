@@ -83,7 +83,7 @@ ActiveRecord::Schema.define(version: 20180101235655) do
     t.datetime "updated_at", null: false
     t.index ["story_id"], name: "index_tasks_on_story_id"
   end
-  
+
   create_table "topics", force: :cascade do |t|
     t.string "title"
     t.string "url"
@@ -93,11 +93,11 @@ ActiveRecord::Schema.define(version: 20180101235655) do
     t.index ["course_id"], name: "index_topics_on_course_id"
   end
 
-  add_foreign_key "project_positions", "projects"
-  add_foreign_key "project_positions", "stories"
+  add_foreign_key "project_positions", "projects", on_delete: :cascade
+  add_foreign_key "project_positions", "stories", on_delete: :cascade
   add_foreign_key "projects", "courses"
-  add_foreign_key "sprint_positions", "sprints"
-  add_foreign_key "sprint_positions", "stories"
+  add_foreign_key "sprint_positions", "sprints", on_delete: :cascade
+  add_foreign_key "sprint_positions", "stories", on_delete: :cascade
   add_foreign_key "sprints", "courses"
   add_foreign_key "stories", "projects"
   add_foreign_key "stories", "sprints"

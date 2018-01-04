@@ -19,13 +19,14 @@
 
             <BFormInput
                     id="topic-url"
+                    type="url"
                     v-model="data.url"/>
         </BFormGroup>
 
         <BButton 
             type="submit" 
             variant="primary" 
-            :disabled="isInvalid">Save</BButton>
+            :class="{ 'is-disabled': isInvalid }">Save</BButton>
 
         <BButton 
             type="button" 
