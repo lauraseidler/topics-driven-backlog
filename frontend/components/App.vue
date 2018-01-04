@@ -122,4 +122,8 @@ $headings-font-weight: 700;
 .fa-icon {
     vertical-align: sub;
 }
+
+.is-disabled {
+    opacity: 0.5;
+}
 </style>
