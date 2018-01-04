@@ -52,8 +52,8 @@
 
                 <BButton 
                     type="submit" 
-                    variant="primary" 
-                    :disabled="isInvalid">Add sprints</BButton>
+                    variant="primary"
+                    :class="{ 'is-disabled': isInvalid }">Add sprints</BButton>
 
                 <BButton 
                     type="button" 

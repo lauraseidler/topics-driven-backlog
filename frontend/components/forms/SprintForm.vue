@@ -39,8 +39,8 @@
 
         <BButton 
             type="submit" 
-            variant="primary" 
-            :disabled="isInvalid">Save</BButton>
+            variant="primary"
+            :class="{ 'is-disabled': isInvalid }">Save</BButton>
 
         <BButton 
             type="button" 
