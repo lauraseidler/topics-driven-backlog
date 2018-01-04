@@ -56,7 +56,8 @@
 
         <StoryForm 
             v-if="showForm" 
-            v-model="newStory" 
+            v-model="newStory"
+            :project="project"
             @cancel="showForm = false" 
             @submit="save"/>
 
