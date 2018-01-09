@@ -139,3 +139,10 @@ SprintPosition.create!([
                            {position: 2, sprint_id: 1, story_id: 2},
                            {position: 1, sprint_id: 1, story_id: 1}
                        ])
+
+# bypass validation errors by moving sprints back to time via database
+Sprint.all.each do |sprint|
+  start_date = sprint.start_date
+  end_date = sprint.end_date
+  sprint.update_columns(:start_date => start_date-1.years, :end_date => end_date-1.years)
+end
