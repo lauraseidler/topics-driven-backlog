@@ -8,7 +8,7 @@
             <BContainer>
                 <BNavbarToggle target="nav-collapse"/>
 
-                <BNavbarBrand href="#">
+                <BNavbarBrand to="/">
                     Topics Driven Backlog
                 </BNavbarBrand>
 
