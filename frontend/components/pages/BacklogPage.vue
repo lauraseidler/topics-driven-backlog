@@ -43,9 +43,10 @@
             <tbody v-sortable="{handle: '.js-drag-drop', onEnd: saveOrder}" >
                 <tr
                     is="StoryItem"
-                    v-for="story in stories"
+                    v-for="(story, index) in stories"
                     :key="story.id"
                     :data="story"
+                    :position="index + 1"
                     view="backlog"/>
             </tbody>
         </table>

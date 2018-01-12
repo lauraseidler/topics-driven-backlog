@@ -20,10 +20,11 @@
                 <tbody v-sortable="{handle: '.js-drag-drop', onEnd: saveOrder}">
                     <tr
                         is="StoryItem"
-                        v-for="story in storiesInSprint"
+                        v-for="(story, index) in storiesInSprint"
                         :key="story.id"
                         :data="story"
                         view="planning-sprint"
+                        :position="index + 1"
                         @removeFromSprint="removeFromSprint(story.id)"/>
                 </tbody>
             </table>

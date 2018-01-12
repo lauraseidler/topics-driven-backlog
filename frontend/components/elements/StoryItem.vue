@@ -35,11 +35,14 @@
                 </BButton>
 
                 <span class="js-drag-drop ml-2" v-if="isView(['backlog', 'planning-sprint'])" title="Drag to change order">
-                    <VIcon 
-                        name="arrows" 
-                        label="Drag and drop to change order"/>
+                    <nobr>
+                        <VIcon
+                            name="arrows"
+                            label="Drag and drop to change order"/>
+
+                        <strong>{{ position }}</strong>
+                    </nobr>
                 </span>
-                <!--{{ data.position }}-->
             </td>
 
             <!-- Identifier -->
@@ -155,6 +158,10 @@ export default {
         view: {
             type: String,
             default: 'backlog',
+        },
+        position: {
+            type: Number,
+            default: null,
         },
     },
     data() {
