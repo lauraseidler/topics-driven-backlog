@@ -6,7 +6,7 @@
                     size="sm"
                     variant="danger"
                     class="float-right ml-2"
-                    v-confirm="deleteTopic">Delete</BButton>
+                    v-confirm="{ action: deleteTopic, text: 'Are you sure you want to delete this topic?' }">Delete</BButton>
 
                 <BButton
                     size="sm"

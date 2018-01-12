@@ -9,7 +9,7 @@
                     size="sm" 
                     variant="danger" 
                     class="float-right ml-2" 
-                    v-confirm="deleteProject">Delete</BButton>
+                    v-confirm="{ action: deleteProject, text: 'Are you sure you want to delete this project?' }">Delete</BButton>
 
                 <BButton 
                     size="sm" 

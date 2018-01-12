@@ -7,8 +7,12 @@ import Vue from 'vue';
  */
 function bind(el, binding) {
     el.handleClick = () => {            
-        if (confirm('Are you sure? This action is irreversible.')) {
-            binding.value();
+        if (confirm(binding.value.text || 'Are you sure? This action is irreversible.')) {
+            if (binding.value.action) {
+                binding.value.action();
+            } else {
+                binding.value();
+            }
         }
     };
 

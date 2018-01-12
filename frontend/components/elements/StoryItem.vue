@@ -110,7 +110,7 @@
                     size="sm" 
                     variant="danger" 
                     title="Delete" 
-                    v-confirm="remove">
+                    v-confirm="{ action: remove, text: 'Are you sure you want to delete this story?' }">
 
                     <VIcon name="trash"/>
                 </BButton>
