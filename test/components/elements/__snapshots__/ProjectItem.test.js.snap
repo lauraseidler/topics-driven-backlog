@@ -86,3 +86,33 @@ exports[`ProjectItem.test.js shows edit and delete buttons 1`] = `
   </div>
 </li>
 `;
+
+exports[`The ProjectItem component shows edit and delete buttons 1`] = `
+<li
+  class="project-item card"
+>
+  <div
+    class="card-body"
+  >
+    <button
+      class="btn float-right ml-2 btn-danger btn-sm"
+      type="button"
+    >
+      Delete
+    </button>
+     
+    <button
+      class="btn float-right btn-primary btn-sm"
+      type="button"
+    >
+      Edit
+    </button>
+     
+    <h3
+      class="card-title h5"
+    >
+      Test Project
+    </h3>
+  </div>
+</li>
+`;

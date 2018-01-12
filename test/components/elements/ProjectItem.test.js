@@ -9,19 +9,18 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 localVue.use(Vuelidate);
 
-describe('ProjectItem.test.js', () => {
+describe('The ProjectItem component', () => {
     let cmp, actions, store;
 
     beforeEach(() => {
         actions = {
-            patch: jest.fn(),
-            delete: jest.fn(),
+            update: jest.fn(),
+            remove: jest.fn(),
         };
 
         store = new Vuex.Store({
             modules: {
                 projects: {
-                    namespaced: true,
                     actions,
                 },
             },
@@ -74,9 +73,11 @@ describe('ProjectItem.test.js', () => {
     });
 
     it('patches the project and leaves editing mode on project save', () => {
+        console.log(store);
+        const spy = jest.spyOn(store._actions, 'projects/update');
         cmp.vm.saveProject();
 
-        expect(actions.patch).toBeCalled();
+        expect(spy).toHaveBeenCalled();
         expect(cmp.vm.editing).toBe(false);
     });
 
@@ -91,6 +92,6 @@ describe('ProjectItem.test.js', () => {
             .trigger('click');
 
         expect(confirmSpy).toHaveBeenCalled();
-        expect(actions.delete).toHaveBeenCalled();
+        expect(projects.actions.remove).toHaveBeenCalled();
     });
 });

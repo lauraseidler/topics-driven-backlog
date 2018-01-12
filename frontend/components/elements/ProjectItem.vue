@@ -89,6 +89,7 @@ export default {
     },
     computed: {
         course() {
+            console.log(this.$store.getters);
             return this.$store.getters['courses/byId'](this.data.course_id);
         },
 

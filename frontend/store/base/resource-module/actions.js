@@ -33,14 +33,14 @@ export function init(settings) {
                 await dispatch(actionTypes.FETCH, {});
             }
         } else {
-            throw new Error('Incorrect resource module configuration!');
+            throw 'Incorrect resource module configuration!';
         }
 
         if (settings.children) {
             let childrenInitialised = true;
 
             settings.children.forEach(child => {
-                if (!rootState[child].initialised[parentId]) {
+                if (!rootState[child].initialised[id]) {
                     childrenInitialised = false;
                 }
             });

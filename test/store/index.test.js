@@ -1,6 +1,7 @@
 // turn off vue console info
 console.info = jest.fn();
 
+import moment from 'moment';
 import { state, actions } from '@/store';
 
 describe('index.test.js', () => {
@@ -10,7 +11,7 @@ describe('index.test.js', () => {
         actions.init({ state, dispatch });
 
         expect(state.initialised).toBe(true);
-        expect(dispatch).toHaveBeenCalledWith('stories/init');
-        expect(dispatch).toHaveBeenCalledWith('courses/init');
+        expect(state.currentDate).toBe(moment().format('YYYY-MM-DD'));
+        expect(dispatch).toHaveBeenCalledWith('courses/init', {});
     });
 });

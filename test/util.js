@@ -61,3 +61,23 @@ export function mockResponse(
 
     return mockStatus;
 }
+
+/**
+ * Return a new mock store
+ * @returns {object}
+ */
+export function mockStore() {
+    Object.keys(module.actions).forEach(action => {
+        module.actions[action] = jest.fn();
+    });
+
+    Object.keys(module.mutations).forEach(mutation => {
+        module.mutations[mutation] = jest.fn();
+    });
+
+    Object.keys(module.getters).forEach(getter => {
+        module.getters[getter] = () => jest.fn();
+    });
+
+    return module;
+}
