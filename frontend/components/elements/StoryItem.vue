@@ -34,17 +34,30 @@
                     <VIcon name="arrow-down"/>
                 </BButton>
 
-                <span class="js-drag-drop ml-2" v-if="isView(['backlog', 'planning-sprint'])" title="Drag to change order">
+                <span
+                    :class="{ 'js-drag-drop': sortable, 'ml-2': true }"
+                    v-if="isView(['backlog', 'planning-sprint'])"
+                    :title="sortable ? 'Drag to change order' : 'Sort by position ascending (default order) to be able to change order'">
                     <nobr>
                         <VIcon
                             name="arrows"
-                            label="Drag and drop to change order"/>
+                            label="Drag and drop to change order"
+                            :class="{ [$style.fade]: !sortable }"/>
 
                         <strong>{{ position }}</strong>
                     </nobr>
                 </span>
+
+                <strong v-if="isView('planning-backlog')">
+                    {{ position }}
+                </strong>
             </td>
 
+            <td v-if="isView(['sprint', 'history'])">
+                <strong>
+                    {{ position }}
+                </strong>
+            </td>
             <!-- Identifier -->
             <td>
                 {{ data.identifier }}
@@ -163,6 +176,10 @@ export default {
             type: Number,
             default: null,
         },
+        sortable: {
+            type: Boolean,
+            default: false,
+        },
     },
     data() {
         return {
@@ -175,6 +192,11 @@ export default {
         project() {
             return this.$store.getters['projects/byId'](this.data.project_id);
         },
+        nextSprint() {
+            return this.project
+                ? this.$store.getters['sprints/next'](this.project.course_id)
+                : null;
+        }
     },
     methods: {
         /**
@@ -247,18 +269,48 @@ export default {
         },
 
         /**
-         * Emit addToSprint event to parent
+         * Add story to sprint
          */
-        addToSprint() {
-            this.$emit('addToSprint');
+        async addToSprint() {
+            if (!this.nextSprint) {
+                return;
+            }
+
+            await this.$store.dispatch('stories/update', {
+                id: this.data.id,
+                parentId: this.project.id,
+                sprint_id: this.nextSprint.id,
+            });
+
+            await this.$store.dispatch('projects/fetch', {
+                id: this.project.id,
+            });
+
+            // TODO handle errors in UI
         },
 
         /**
-         * Emit removeFromSprint event to parent
+         * Remove story from sprint
          */
-        removeFromSprint() {
-            this.$emit('removeFromSprint');
+        async removeFromSprint() {
+            await this.$store.dispatch('stories/update', {
+                id: this.data.id,
+                parentId: this.project.id,
+                sprint_id: null,
+            });
+
+            await this.$store.dispatch('projects/fetch', {
+                id: this.project.id,
+            });
+
+            // TODO handle errors in UI
         },
     },
 };
 </script>
+
+<style module>
+    .fade {
+        fill: #ccc;
+    }
+</style>

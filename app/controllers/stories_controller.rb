@@ -5,6 +5,10 @@ class StoriesController < ApplicationController
   # POST /projects/:project_id/stories
   def create
     @story = @project.stories.create!(story_params)
+    project_position = ProjectPosition.find_by(story_id: @story.id)
+    if project_position.present?
+      project_position.move_to_bottom
+    end
     json_response(@story, :created)
   end
 
@@ -48,6 +52,17 @@ class StoriesController < ApplicationController
     if sprint_pos.present? & @story.sprint_id.present?
       sprint_position = SprintPosition.find_by(story_id: @story.id)
       sprint_position.set_list_position(sprint_pos)
+    elsif !@story.sprint_id.present?
+      sprint_position = SprintPosition.find_by(story_id: @story.id)
+      if sprint_position.present?
+        sprint_position.remove_from_list
+        sprint_position.destroy!
+      end
+    elsif !sprint_pos.present? & @story.sprint_id.present?
+      sprint_position = SprintPosition.find_by(story_id: @story.id)
+      if sprint_position.present?
+        sprint_position.move_to_bottom
+      end
     end
 
     if project_pos.present?
@@ -60,10 +75,12 @@ class StoriesController < ApplicationController
     sprint_position = SprintPosition.find_by(story_id: @story.id)
     if sprint_position.present?
       sprint_position.remove_from_list
+      sprint_position.destroy!
     end
 
     project_position = ProjectPosition.find_by!(story_id: @story.id)
     project_position.remove_from_list
+    project_position.destroy!
   end
 
 end
