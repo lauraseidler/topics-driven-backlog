@@ -65,8 +65,13 @@
             </td>
 
             <!-- Story -->
-            <td>
+            <td @click="expandedView = !expandedView">
                 {{ data.title }}
+
+                <p v-show="expandedView" class="mt-2">
+                    Notes: <br>
+                    {{ data.description || '(no notes)' }}
+                </p>
             </td>
 
             <td>
@@ -192,6 +197,7 @@ export default {
             editingData: null,
             statusMap: this.$store.state.stories.statusMap,
             keyboardSorting: false,
+            expandedView: false,
         };
     },
     computed: {
