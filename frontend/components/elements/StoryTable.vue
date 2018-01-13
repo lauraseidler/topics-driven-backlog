@@ -22,12 +22,16 @@
         <tbody v-sortable="sortable ? { handle: '.js-drag-drop', onEnd: saveOrder } : false">
             <tr
                 is="StoryItem"
-                v-for="story in sortedRows"
+                v-for="story in sortedAndMovedRows"
                 :key="story.id"
                 :data="story"
-                :position="mappedFields(positionField).indexOf(story[positionField]) + 1"
+                :position="typeof moving[story.id] !== 'undefined' ? null : mappedFields(positionField).indexOf(story[positionField]) + 1"
                 :sortable="sortable && currentSort.field === positionField && currentSort.order === 1"
-                :view="view"/>
+                :view="view"
+                @moveStart="moveStart"
+                @move="move"
+                @moveComplete="moveComplete"
+                @moveAbort="moveAbort"/>
         </tbody>
     </table>
 </template>
@@ -68,7 +72,8 @@ export default {
             currentSort: {
                 field: null,
                 order: 1,
-            }
+            },
+            moving: {},
         }
     },
     computed: {
@@ -88,6 +93,39 @@ export default {
 
             } else {
                 return this.rows;
+            }
+        },
+
+        sortedAndMovedRows() {
+            if (Object.keys(this.moving).length) {
+                const rows = this.sortedRows.slice();
+
+                Object.keys(this.moving).forEach(id => {
+                    const indexById = this.indexById(parseInt(id, 10));
+
+                    const newObj = Object.assign(
+                        {},
+                        rows[indexById],
+                        {
+                            [this.positionField]:
+                                this.mappedFields(this.positionField)
+                                    [indexById + this.moving[id]]
+                                + Math.sign(this.moving[id])
+                        }
+                    );
+
+                    this.$set(
+                        rows,
+                        indexById,
+                        newObj
+                    );
+                });
+
+                return rows.sort((a, b) =>
+                    (a[this.positionField] - b[this.positionField])
+                );
+            } else {
+                return this.sortedRows;
             }
         },
     },
@@ -118,6 +156,43 @@ export default {
             if (this.positionField) {
                 this.sortBy(this.positionField);
             }
+        },
+
+        indexById(id) {
+            return this.sortedRows.findIndex(i => i.id === id);
+        },
+
+        move(id, direction) {
+            if (!this.moving[id]) {
+                this.$set(this.moving, id, 0);
+            }
+
+            let newMoving = this.moving[id] += direction;
+
+            if (this.indexById(id) + newMoving < 0) {
+                newMoving += 1;
+            } else if (this.indexById(id) + newMoving >= this.sortedRows.length) {
+                newMoving -= 1;
+            }
+
+            this.$set(this.moving, id, newMoving);
+        },
+
+        moveStart(id) {
+            this.$set(this.moving, id, 0);
+        },
+
+        moveComplete(id) {
+            this.saveOrder({
+                oldIndex: this.indexById(id),
+                newIndex: this.indexById(id) + this.moving[id],
+            });
+
+            this.$delete(this.moving, id);
+        },
+
+        moveAbort(id) {
+            this.$delete(this.moving, id);
         },
 
         /**

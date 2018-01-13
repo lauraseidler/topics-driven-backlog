@@ -1,5 +1,5 @@
 <template>
-    <tr class="story-item">
+    <tr :class="{ [$style.highlight]: sortable && keyboardSorting, 'story-item': true }">
         <td 
             v-if="editing" 
             colspan="6">
@@ -37,7 +37,8 @@
                 <span
                     :class="{ 'js-drag-drop': sortable, 'ml-2': true }"
                     v-if="isView(['backlog', 'planning-sprint'])"
-                    :title="sortable ? 'Drag to change order' : 'Sort by position ascending (default order) to be able to change order'">
+                    @dblclick="!sortable || startKeyboardSort()"
+                    :title="sortable ? 'Drag to change order, double click to use keyboard' : 'Sort by position ascending (default order) to be able to change order'">
                     <nobr>
                         <VIcon
                             name="arrows"
@@ -186,6 +187,7 @@ export default {
             editing: false,
             editingData: null,
             statusMap: this.$store.state.stories.statusMap,
+            keyboardSorting: false,
         };
     },
     computed: {
@@ -227,6 +229,48 @@ export default {
                 'points',
                 'topic_id',
             ]);
+        },
+
+        startKeyboardSort() {
+            this.keyboardSorting = true;
+            window.addEventListener('keydown', this.move);
+            this.$emit('moveStart', this.data.id);
+        },
+
+        stopKeyboardSort() {
+            this.keyboardSorting = false;
+            window.removeEventListener('keydown', this.move);
+        },
+
+        move(evt) {
+            if (this.keyboardSorting) {
+                switch(evt.keyCode) {
+                    // enter
+                    case 13:
+                        evt.preventDefault();
+                        this.stopKeyboardSort();
+                        this.$emit('moveComplete', this.data.id);
+                        break;
+                    // esc
+                    case 27:
+                        evt.preventDefault();
+                        this.stopKeyboardSort();
+                        this.$emit('moveAbort', this.data.id);
+                        break;
+                    // arrow up
+                    case 38:
+                        evt.preventDefault();
+                        this.$emit('move', this.data.id, -1);
+                        break;
+                    // arrow down
+                    case 40:
+                        evt.preventDefault();
+                        this.$emit('move', this.data.id, 1);
+                        break;
+                    default:
+                        // do nothing
+                }
+            }
         },
 
         /**
@@ -312,5 +356,9 @@ export default {
 <style module>
     .fade {
         fill: #ccc;
+    }
+
+    .highlight {
+        border: 3px solid #76b900;
     }
 </style>
