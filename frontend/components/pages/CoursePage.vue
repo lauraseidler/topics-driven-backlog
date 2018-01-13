@@ -238,9 +238,6 @@ export default {
                     type: 'error',
                 });
             }
-
-
-            // TODO handle errors in UI
         },
 
         async addTopic() {
