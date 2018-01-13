@@ -7,7 +7,7 @@
             <StoryForm
                 :project="project"
                 v-model="editingData" 
-                @cancel="editing = false" 
+                @cancel="cancelEdit"
                 @submit="save"/>
         </td>
 
@@ -239,6 +239,13 @@ export default {
                 'points',
                 'topic_id',
             ]);
+
+            this.$store.commit('newPendingChange');
+        },
+
+        cancelEdit() {
+            this.editing = false;
+            this.$store.commit('resolvePendingChange');
         },
 
         startKeyboardSort() {
@@ -294,6 +301,8 @@ export default {
             });
 
             this.editing = false;
+
+            this.$store.commit('resolvePendingChange');
 
             // TODO handle errors in UI
         },

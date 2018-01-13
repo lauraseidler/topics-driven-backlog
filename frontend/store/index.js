@@ -13,6 +13,16 @@ Vue.use(Vuex);
 export const state = {
     initialised: false,
     currentDate: moment().format('YYYY-MM-DD'),
+    pendingChanges: 0,
+};
+
+export const mutations = {
+    newPendingChange(state) {
+        state.pendingChanges++;
+    },
+    resolvePendingChange(state) {
+        state.pendingChanges--;
+    },
 };
 
 export const actions = {
@@ -30,5 +40,6 @@ export const actions = {
 export default new Vuex.Store({
     modules: { courses, projects, sprints, stories, topics },
     state,
+    mutations,
     actions,
 });
