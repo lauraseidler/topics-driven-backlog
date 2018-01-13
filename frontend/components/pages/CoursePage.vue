@@ -15,7 +15,7 @@
                 <BTabs card>
                     <BTab title="Projects">
                         <ul 
-                            class="list-unstyled" 
+                            :class="['list-unstyled', $style.list]"
                             v-if="projects.length">
 
                             <ProjectItem
@@ -263,3 +263,12 @@ export default {
     },
 };
 </script>
+
+<style module>
+    .list {
+        display: grid;
+        grid-gap: 8px;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-auto-rows: minmax(200px, 1fr);
+    }
+</style>
