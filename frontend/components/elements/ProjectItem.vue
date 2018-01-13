@@ -121,15 +121,21 @@ export default {
          * Save the edited parameters of this project
          */
         async saveProject() {
-            await this.$store.dispatch('projects/update', {
-                id: this.data.id,
-                parentId: this.data.course_id,
-                ...this.editingData,
-            });
+            try {
+                await this.$store.dispatch('projects/update', {
+                    id: this.data.id,
+                    parentId: this.data.course_id,
+                    ...this.editingData,
+                });
 
-            this.editing = false;
-
-            // TODO handle errors in UI
+                this.editing = false;
+            } catch (err) {
+                this.$notify({
+                    title: 'Validation failed',
+                    text: err.body.message.replace('Validation failed: ', ''),
+                    type: 'error',
+                });
+            }
         },
 
         /**

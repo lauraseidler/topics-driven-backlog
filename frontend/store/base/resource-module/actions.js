@@ -169,13 +169,9 @@ export function update(settings) {
      * @returns {object}
      */
     return async function ({ commit }, { id, parentId, ...values }) {
-        try {
-            const res = await Vue.http.patch(`/${settings.resource}/${id}`, values);
-            commit(mutationTypes.SET_ONE, { parentId, item: res.body });
-            return res.body;
-        } catch (err) {
-            return err;
-        }
+        const res = await Vue.http.patch(`/${settings.resource}/${id}`, values);
+        commit(mutationTypes.SET_ONE, { parentId, item: res.body });
+        return res.body;
     };
 }
 
