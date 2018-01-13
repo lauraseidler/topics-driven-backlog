@@ -28,6 +28,7 @@
                 :position="typeof moving[story.id] !== 'undefined' ? null : mappedFields(positionField).indexOf(story[positionField]) + 1"
                 :sortable="sortable && currentSort.field === positionField && currentSort.order === 1"
                 :view="view"
+                :highlight="highlight === story.id"
                 @moveStart="moveStart"
                 @move="move"
                 @moveComplete="moveComplete"
@@ -74,6 +75,7 @@ export default {
                 order: 1,
             },
             moving: {},
+            highlight: null,
         }
     },
     computed: {
@@ -211,6 +213,12 @@ export default {
                 parentId: story.project_id,
                 [this.positionField]: this.mappedFields(this.positionField)[evt.newIndex],
             });
+
+            this.highlight = story.id;
+
+            setTimeout(() => {
+                this.highlight = null;
+            }, 1000);
 
             await this.$store.dispatch('projects/fetch', {
                 id: story.project_id,

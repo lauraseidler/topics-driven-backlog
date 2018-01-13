@@ -1,5 +1,5 @@
 <template>
-    <tr :class="{ [$style.highlight]: sortable && keyboardSorting, 'story-item': true }">
+    <tr :class="{ [$style.highlight]: highlight || sortable && keyboardSorting, 'story-item': true }">
         <td 
             v-if="editing" 
             colspan="6">
@@ -178,6 +178,10 @@ export default {
             default: null,
         },
         sortable: {
+            type: Boolean,
+            default: false,
+        },
+        highlight: {
             type: Boolean,
             default: false,
         },
