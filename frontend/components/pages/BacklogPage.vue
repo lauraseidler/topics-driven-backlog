@@ -14,6 +14,16 @@
                 view="sprint"/>
         </template>
 
+        <BButton
+                :disabled="$store.state.pendingChanges < 1"
+                :title="$store.state.pendingChanges < 1 ? 'No pending changes' : 'Save all changes on page'"
+                class="float-right mb-2"
+                type="button"
+                variant="primary"
+                @click="saveAll">
+            Save all
+        </BButton>
+
         <h2>Backlog</h2>
 
         <StoryTable
@@ -43,6 +53,7 @@ import StoryItem from '@/components/elements/StoryItem';
 import StoryForm from '@/components/forms/StoryForm';
 import BButton from '@bootstrap/button/button';
 import StoryTable from '@/components/elements/StoryTable';
+import bus from '@/helper/bus';
 
 export default {
     components: { StoryForm, StoryItem, BButton, StoryTable },
@@ -125,6 +136,10 @@ export default {
             this.newStory = this.$store.getters['stories/template']();
 
             // TODO handle errors in UI
+        },
+
+        saveAll() {
+            bus.$emit('saveAll');
         },
     },
 };

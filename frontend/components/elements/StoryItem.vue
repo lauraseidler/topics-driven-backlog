@@ -165,6 +165,7 @@ import BButton from '@bootstrap/button/button';
 import BDropdown from '@bootstrap/dropdown/dropdown';
 import BDropdownItem from '@bootstrap/dropdown/dropdown-item';
 import StoryForm from '@/components/forms/StoryForm';
+import bus from '@/helper/bus';
 
 export default {
     name: 'StoryItem',
@@ -241,11 +242,14 @@ export default {
             ]);
 
             this.$store.commit('newPendingChange');
+
+            bus.$on('saveAll', this.save);
         },
 
         cancelEdit() {
             this.editing = false;
             this.$store.commit('resolvePendingChange');
+            bus.$off('saveAll', this.save);
         },
 
         startKeyboardSort() {
@@ -303,6 +307,7 @@ export default {
             this.editing = false;
 
             this.$store.commit('resolvePendingChange');
+            bus.$off('saveAll', this.save);
 
             // TODO handle errors in UI
         },
