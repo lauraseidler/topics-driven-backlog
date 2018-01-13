@@ -32,6 +32,7 @@
 
         <BContainer class="mt-4 mb-5">
             <router-view/>
+            <notifications position="top center"/>
         </BContainer>
     </div>
 </template>
@@ -125,5 +126,9 @@ $headings-font-weight: 700;
 
 .is-disabled {
     opacity: 0.5;
+}
+
+.vue-notification {
+    font-size: 16px;
 }
 </style>

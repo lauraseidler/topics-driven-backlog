@@ -224,12 +224,21 @@ export default {
         },
 
         async addProject() {
-            await this.$store.dispatch('projects/create', {
-                parentId: this.course.id,
-                ...this.newProject,
-            });
+            try {
+                await this.$store.dispatch('projects/create', {
+                    parentId: this.course.id,
+                    ...this.newProject,
+                });
 
-            this.newProject = this.$store.getters['projects/template']();
+                this.newProject = this.$store.getters['projects/template']();
+            } catch (err) {
+                this.$notify({
+                    title: 'Validation failed',
+                    text: err.body.message.replace('Validation failed: ', ''),
+                    type: 'error',
+                });
+            }
+
 
             // TODO handle errors in UI
         },

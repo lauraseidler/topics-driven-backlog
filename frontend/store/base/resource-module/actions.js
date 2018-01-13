@@ -141,16 +141,12 @@ export function create(settings) {
      * @returns {object}
      */
     return async function ({ commit }, { parentId, ...values }) {
-        try {
-            let url = settings.parent ? `/${settings.parent}/${parentId}` : '';
-            url += `/${settings.resource}`;
+        let url = settings.parent ? `/${settings.parent}/${parentId}` : '';
+        url += `/${settings.resource}`;
 
-            const res = await Vue.http.post(url, values);
-            commit(mutationTypes.SET_ONE, { parentId, item: res.body });
-            return res.body;
-        } catch (err) {
-            return err;
-        }
+        const res = await Vue.http.post(url, values);
+        commit(mutationTypes.SET_ONE, { parentId, item: res.body });
+        return res.body;
     };
 }
 
