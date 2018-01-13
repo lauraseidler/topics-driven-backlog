@@ -32,18 +32,19 @@
             view="backlog"
             position-field="project_position"
             :sortable="true"/>
+
         <StoryForm
             v-if="showForm"
             v-model="newStory"
             :project="project"
-            @cancel="showForm = false"
+            @cancel="cancelNew"
             @submit="save"/>
 
         <BButton
             v-else
             type="button"
             variant="primary"
-            @click="showForm = true">Add story</BButton>
+            @click="startNew">Add story</BButton>
     </section>
 </template>
 
@@ -134,8 +135,22 @@ export default {
             });
 
             this.newStory = this.$store.getters['stories/template']();
+            this.showForm = false;
+            this.$store.commit('resolvePendingChange');
 
             // TODO handle errors in UI
+        },
+
+        startNew() {
+            this.showForm = true;
+            this.$store.commit('newPendingChange');
+            bus.$on('saveAll', this.save);
+        },
+
+        cancelNew() {
+            this.showForm = false;
+            this.$store.commit('resolvePendingChange');
+            bus.$off('saveAll', this.save);
         },
 
         saveAll() {

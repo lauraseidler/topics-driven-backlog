@@ -189,16 +189,10 @@ export function remove(settings) {
      * @param {function} operations.commit
      * @param {object} item
      * @param {int} item.id
-     * @returns {undefined|object}
      */
     return async function ({ commit }, { id, parentId }) {
-        try {
-            await Vue.http.delete(`/${settings.resource}/${id}`);
-
-            commit(mutationTypes.REMOVE_ONE, { id, parentId });
-        } catch (err) {
-            return err;
-        }
+        await Vue.http.delete(`/${settings.resource}/${id}`);
+        commit(mutationTypes.REMOVE_ONE, { id, parentId });
     };
 }
 

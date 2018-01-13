@@ -38,7 +38,7 @@
                     :class="{ 'js-drag-drop': sortable, 'ml-2': true }"
                     v-if="isView(['backlog', 'planning-sprint'])"
                     @dblclick="!sortable || startKeyboardSort()"
-                    :title="sortable ? 'Drag to change order, double click to use keyboard' : 'Sort by position ascending (default order) to be able to change order'">
+                    :title="sortable ? 'Drag to change order, double click to use keyboard (arrow keys to move up/down, enter to save, esc to abort)' : 'Sort by position ascending (default order) to be able to change order'">
                     <nobr>
                         <VIcon
                             name="arrows"
@@ -67,6 +67,9 @@
             <!-- Story -->
             <td @click="expandedView = !expandedView">
                 {{ data.title }}
+
+                <VIcon v-if="!expandedView" name="caret-down" />
+                <VIcon v-else name="caret-up" />
 
                 <p v-show="expandedView" class="mt-2">
                     Notes: <br>
@@ -158,6 +161,8 @@ import '@icons/pencil';
 import '@icons/trash';
 import '@icons/arrow-up';
 import '@icons/arrow-down';
+import '@icons/caret-down';
+import '@icons/caret-up';
 
 import * as _ from 'lodash';
 import VIcon from 'vue-awesome/components/Icon';
@@ -315,8 +320,8 @@ export default {
         /**
          * Delete this story
          */
-        remove() {
-            this.$store.dispatch('stories/remove', {
+        async remove() {
+            await this.$store.dispatch('stories/remove', {
                 id: this.data.id,
                 parentId: this.data.project_id,
             });
