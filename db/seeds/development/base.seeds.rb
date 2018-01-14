@@ -67,7 +67,6 @@ Story.create!([
                   {title: "Als​ ​ Nutzer​ ​ kann​ ​ ich​ ​ Eventslog​ ​ sehen.​ ​ (Wann​ ​ und was​ ​ gespielt​ ​ war)",
                    description: nil, status: 2, points: nil, sprint_id: 5, project_id: 1, topic_id: 5},
               ])
-<<<<<<< HEAD
 
 # Project 2
 Story.create!([
@@ -97,5 +96,3 @@ Sprint.all.each do |sprint|
   end_date = sprint.end_date
   sprint.update_columns(:start_date => start_date-1.years, :end_date => end_date-1.years)
 end
-=======
->>>>>>> 3e34f514a0d9e362fef2d661f669eecd373726da
