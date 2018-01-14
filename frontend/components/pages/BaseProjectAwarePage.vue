@@ -16,6 +16,12 @@
             project() {
                 return this.$store.getters['projects/byId'](parseInt(this.$route.params.id, 10));
             },
+
+            projectId() {
+                return this.project
+                    ? this.project.id
+                    : null;
+            },
         },
         methods: {
             initData() {
@@ -32,7 +38,7 @@
         },
         watch: {
             $route: 'initData',
-            course: 'initData',
+            projectId: 'initData',
         },
     };
 </script>
