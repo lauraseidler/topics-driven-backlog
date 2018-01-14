@@ -5,15 +5,23 @@
                 <template v-if="data.end_date >= currentDate">
                     <BButton 
                         size="sm" 
-                        variant="danger" 
+                        variant="outline-danger"
                         class="float-right ml-2" 
-                        v-confirm="{ action: deleteSprint, text: 'Are you sure you want to delete this sprint?' }">Delete</BButton>
+                        v-confirm="{ action: deleteSprint, text: 'Are you sure you want to delete this sprint?' }">
+
+                        <VIcon name="trash"/>
+                        Delete
+                    </BButton>
 
                     <BButton 
                         size="sm" 
-                        variant="primary" 
+                        variant="outline-primary"
                         class="float-right" 
-                        @click="startEditing">Edit</BButton>
+                        @click="startEditing">
+
+                        <VIcon name="pencil"/>
+                        Edit
+                    </BButton>
                 </template>
                 
                 <h3 class="card-title h5">{{ data.name }}</h3>
@@ -34,14 +42,18 @@
 </template>
 
 <script>
+import '@icons/pencil';
+import '@icons/trash';
+
 import * as _ from 'lodash';
+import VIcon from 'vue-awesome/components/Icon';
 import moment from 'moment';
 import BButton from '@bootstrap/button/button';
 import SprintForm from '@/components/forms/SprintForm';
 
 export default {
     name: 'SprintItem',
-    components: { SprintForm, BButton },
+    components: { SprintForm, BButton, VIcon },
     props: {
         data: {
             type: Object,

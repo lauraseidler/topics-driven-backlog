@@ -19,7 +19,7 @@ const router = new Router({
             component: ProjectsPage,
         },
         {
-            path: '/courses/:courseId-(.*)/projects/:id-(.*)',
+            path: '/projects/:id-(.*)',
             name: 'project',
             component: ProjectPage,
         },

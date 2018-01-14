@@ -69,7 +69,7 @@ export default {
     .list {
         display: grid;
         grid-gap: 8px;
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr ;
         grid-auto-rows: minmax(200px, 1fr);
     }
 

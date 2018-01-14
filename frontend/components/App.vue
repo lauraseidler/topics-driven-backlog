@@ -91,7 +91,7 @@ $cyan: #6daedb;
 $primary: $green;
 $secondary: $blue;
 
-$enable-rounded: false;
+$enable-rounded: true;
 
 $font-family-sans-serif: HTWBerlin, Verdana, Arial, sans-serif;
 $headings-font-weight: 700;
@@ -122,6 +122,10 @@ $headings-font-weight: 700;
 
 .fa-icon {
     vertical-align: sub;
+}
+
+.btn .fa-icon {
+    margin-right: 3px;
 }
 
 .is-disabled {
