@@ -7,6 +7,8 @@ import CoursesPage from '@/components/pages/CoursesPage';
 import ProjectsPage from '@/components/pages/ProjectsPage';
 import ProjectPage from '@/components/pages/ProjectPage';
 
+import store from '@/store';
+
 Vue.use(Router);
 
 const router = new Router({
@@ -41,6 +43,17 @@ const router = new Router({
             redirect: '/projects',
         },
     ],
+});
+
+router.beforeEach((to, from, next) => {
+    if (store.state.pendingChanges > 0) {
+        if (confirm('You have unsaved changes. Proceed?')) {
+            store.state.pendingChanges = 0;
+            next();
+        }
+    } else {
+        next();
+    }
 });
 
 export default router;

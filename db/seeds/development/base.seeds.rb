@@ -38,25 +38,3 @@ Story.create!([
                   {title: "As an SGS, I can combine two categories into one.", description: nil, identifier: "S-10", status: 0, points: nil, sprint_id: nil, project_id: 1, topic_id: 2},
                   {title: "As an SGS, I can delete Categories from an Category-Maintenance View listing all the Categories.", description: nil, identifier: "S-9", status: 0, points: nil, sprint_id: 2, project_id: 1, topic_id: 1}
               ])
-SprintPosition.create!([
-                           {position: 2, sprint_id: 1, story_id: 1},
-                           {position: 1, sprint_id: 1, story_id: 2},
-                           {position: 3, sprint_id: 2, story_id: 9},
-                           {position: 4, sprint_id: 2, story_id: 12},
-                           {position: 2, sprint_id: 2, story_id: 12},
-                           {position: 1, sprint_id: 2, story_id: 11}
-                       ])
-ProjectPosition.create!([
-                            {position: 1, project_id: 1, story_id: 9},
-                            {position: 4, project_id: 1, story_id: 10},
-                            {position: 3, project_id: 1, story_id: 11},
-                            {position: 2, project_id: 1, story_id: 12},
-                            {position: 12, project_id: 1, story_id: 1},
-                            {position: 11, project_id: 1, story_id: 2},
-                            {position: 10, project_id: 1, story_id: 3},
-                            {position: 9, project_id: 1, story_id: 4},
-                            {position: 8, project_id: 1, story_id: 5},
-                            {position: 7, project_id: 1, story_id: 6},
-                            {position: 6, project_id: 1, story_id: 7},
-                            {position: 5, project_id: 1, story_id: 8}
-                        ])

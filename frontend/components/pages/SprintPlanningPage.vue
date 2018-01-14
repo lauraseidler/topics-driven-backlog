@@ -7,52 +7,25 @@
             </h3>
             <h2>{{ nextSprint.name }}</h2>
 
-            <table class="table table-striped mb-4">
-                <thead>
-                    <tr>
-                        <th>&nbsp;</th>
-                        <th>Identifier</th>
-                        <th>Story</th>
-                        <th>Topic</th>
-                        <th>Story&nbsp;points</th>
-                    </tr>
-                </thead>
-                <tbody v-sortable="{handle: '.js-drag-drop', onEnd: saveOrder}">
-                    <tr
-                        is="StoryItem"
-                        v-for="story in storiesInSprint"
-                        :key="story.id"
-                        :data="story"
-                        view="planning-sprint"
-                        @removeFromSprint="removeFromSprint(story.id)"/>
-                </tbody>
-            </table>
+            <StoryTable
+                :columns="tableColumns.nextSprint"
+                :rows="storiesInSprint"
+                position-field="sprint_position"
+                :sortable="true"
+                view="planning-sprint"
+            />
         </template>
 
         <p v-else>No sprint to plan!</p>
 
         <h2>Backlog</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>Identifier</th>
-                    <th>Story</th>
-                    <th>Topic</th>
-                    <th>Story&nbsp;points</th>
-                    <th>Operations</th>
-                </tr>
-            </thead>
-            <tbody >
-                <tr 
-                    is="StoryItem" 
-                    v-for="story in backlog" 
-                    :key="story.id" 
-                    :data="story" 
-                    view="planning-backlog" 
-                    @addToSprint="addToSprint(story.id)"/>
-            </tbody>
-        </table>
+
+        <StoryTable
+            :columns="tableColumns.backlog"
+            :rows="backlog"
+            position-field="project_position"
+            view="planning-backlog"
+        />
 
         <StoryForm 
             v-if="showForm" 
@@ -77,14 +50,32 @@ import BaseProjectAwarePage from '@/components/pages/BaseProjectAwarePage';
 import StoryItem from '@/components/elements/StoryItem';
 import StoryForm from '@/components/forms/StoryForm';
 import SprintItem from '@/components/elements/SprintItem';
+import StoryTable from '@/components/elements/StoryTable';
 
 export default {
-    components: { SprintItem, StoryForm, StoryItem, BButton },
+    components: { SprintItem, StoryForm, StoryItem, BButton, StoryTable },
     extends: BaseProjectAwarePage,
     data() {
         return {
             showForm: false,
             newStory: this.$store.getters['stories/template'](),
+            tableColumns: {
+                nextSprint: [
+                    { field: 'sprint_position', name: 'Position' },
+                    { field: 'identifier', name: 'Identifier' },
+                    { field: 'title', name: 'Story' },
+                    { field: 'topic_id', name: 'Topic' },
+                    { field: 'points', name: 'Story Points' },
+                ],
+                backlog: [
+                    { field: 'project_position', name: 'Position' },
+                    { field: 'identifier', name: 'Identifier' },
+                    { field: 'title', name: 'Story' },
+                    { field: 'topic_id', name: 'Topic' },
+                    { field: 'points', name: 'Story points' },
+                    { name: 'Operations' },
+                ]
+            }
         };
     },
     computed: {
@@ -139,64 +130,6 @@ export default {
             this.newStory = this.$store.getters['stories/template']();
 
             // TODO handle errors in UI
-        },
-
-        /**
-         * Save new position of dragged story
-         * @param {Event} evt
-         */
-        async saveOrder(evt) {
-            const story = this.storiesInSprint[evt.oldIndex];
-
-            if (!story) {
-                return;
-            }
-
-            await this.$store.dispatch('stories/update', {
-                id: story.id,
-                parentId: this.project.id,
-                sprint_position: evt.newIndex + 1, // act_as_list is 1-indexed
-            });
-
-            await this.$store.dispatch('projects/fetch', {
-                id: this.project.id,
-                parentId: this.course.id
-            });
-
-            // TODO handle errors in UI
-        },
-
-        /**
-         * Add story to next sprint
-         * @param {int} storyId
-         */
-        async addToSprint(storyId) {
-            if (!this.nextSprint) {
-                return;
-            }
-
-            await this.$store.dispatch('stories/update', {
-                id: storyId,
-                parentId: this.project.id,
-                sprint_id: this.nextSprint.id,
-            });
-
-            // TODO handle errors in UI
-        },
-
-        /**
-         * Remove story from next sprint
-         * @param {int} storyId
-         */
-        async removeFromSprint(storyId) {
-            await this.$store.dispatch('stories/update', {
-                id: storyId,
-                parentId: this.project.id,
-                sprint_id: null,
-            });
-
-            // TODO handle errors in UI
-
         },
     },
 };

@@ -134,23 +134,23 @@ RSpec.describe 'Stories API', type: :request do
     before { patch "/stories/#{story_id}", params: sprint_attribute }
     before { patch "/stories/#{second_story_id}", params: sprint_attribute }
 
-    context 'updates the story in the sprint to the last position' do
+    context 'updates the story in the sprint to the first position' do
       before { get "/stories/#{story_id}" }
 
       it 'returns the first position value' do
         expect(json).not_to be_empty
         expect(json['sprint_id']).to eq(second_sprint_id)
-        expect(json['sprint_position']).to eq(2)
+        expect(json['sprint_position']).to eq(1)
       end
     end
 
-    context 'updates second story to the first position' do
+    context 'updates second story to the second position' do
       before { get "/stories/#{second_story_id}" }
 
-      it 'returns the first position value' do
+      it 'returns the second position value' do
         expect(json).not_to be_empty
         expect(json['sprint_id']).to eq(second_sprint_id)
-        expect(json['sprint_position']).to eq(1)
+        expect(json['sprint_position']).to eq(2)
       end
     end
 

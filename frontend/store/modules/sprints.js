@@ -1,6 +1,7 @@
 import { generate } from '@/store/base/resource-module/index';
 import resources from '@/store/resources';
 
+import * as _ from 'lodash';
 import Vue from 'vue';
 import actionTypes from '@/store/base/resource-module/action-types';
 
@@ -33,6 +34,17 @@ resourceModule.actions['createCollection'] = function () {
             return err;
         }
 
+    };
+}();
+
+resourceModule.getters['next'] = function () {
+    return function (state, getters, rootState)  {
+        return function (courseId) {
+            return _.first(
+                getters.all(courseId)
+                    .filter(s => s.start_date > rootState.currentDate)
+                    .sort((a, b) => a.start_date.localeCompare(b.start_date)));
+        };
     };
 }();
 

@@ -6,9 +6,13 @@ import Vue from 'vue';
  * @param {*} binding 
  */
 function bind(el, binding) {
-    el.handleClick = () => {            
-        if (confirm('Are you sure? This action is irreversible.')) {
-            binding.value();
+    el.handleClick = () => {
+        if (confirm(binding.value.text || 'Are you sure? This action is irreversible.')) {
+            if (binding.value.action) {
+                binding.value.action();
+            } else {
+                binding.value();
+            }
         }
     };
 

@@ -7,7 +7,7 @@
                         size="sm" 
                         variant="danger" 
                         class="float-right ml-2" 
-                        v-confirm="deleteSprint">Delete</BButton>
+                        v-confirm="{ action: deleteSprint, text: 'Are you sure you want to delete this sprint?' }">Delete</BButton>
 
                     <BButton 
                         size="sm" 
