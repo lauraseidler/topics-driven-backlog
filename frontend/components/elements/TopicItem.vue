@@ -6,7 +6,10 @@
                     size="sm"
                     variant="outline-danger"
                     class="float-right ml-2"
-                    v-confirm="{ action: deleteTopic, text: 'Are you sure you want to delete this topic?' }">
+                    v-confirm="{
+                        action: deleteTopic,
+                        text: 'Are you sure you want to delete this topic? This will remove the topic link from all associated stories.'
+                }">
 
                     <VIcon name="trash"/>
                     Delete
