@@ -2,7 +2,8 @@
     <div id="app">
         <BNavbar 
             toggleable="md" 
-            type="dark" 
+            type="dark"
+            fixed="top"
             variant="primary">
 
             <BContainer>
@@ -109,6 +110,11 @@ $headings-font-weight: 700;
 
 @import '~bootstrap/scss/bootstrap';
 // @import "~bootstrap-vue/dist/bootstrap-vue.css"; // necessary?
+
+
+body {
+    padding-top: 77px;
+}
 
 .link-unstyled {
     color: inherit;
