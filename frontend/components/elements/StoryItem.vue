@@ -14,44 +14,45 @@
         <template v-else>
             <!-- Drag and drop -->
             <td v-if="isView(['backlog', 'planning-sprint', 'planning-backlog'])">
-                <BButton
-                        v-if="isView('planning-backlog')"
-                        size="sm"
-                        variant="primary"
-                        title="Add to sprint"
-                        @click="addToSprint">
+                <nobr>
+                    <BButton
+                            v-if="isView('planning-backlog')"
+                            size="sm"
+                            variant="primary"
+                            title="Add to sprint"
+                            @click="addToSprint">
 
-                    <VIcon name="arrow-up"/>
-                </BButton>
+                        <VIcon name="arrow-up"/>
+                    </BButton>
 
-                <BButton
-                        v-if="isView('planning-sprint')"
-                        size="sm"
-                        variant="danger"
-                        title="Remove from sprint"
-                        @click="removeFromSprint">
+                    <BButton
+                            v-if="isView('planning-sprint')"
+                            size="sm"
+                            variant="danger"
+                            title="Remove from sprint"
+                            @click="removeFromSprint">
 
-                    <VIcon name="arrow-down"/>
-                </BButton>
+                        <VIcon name="arrow-down"/>
+                    </BButton>
 
-                <span
-                    :class="{ 'js-drag-drop': sortable, 'ml-2': true }"
-                    v-if="isView(['backlog', 'planning-sprint'])"
-                    @dblclick="!sortable || startKeyboardSort()"
-                    :title="sortable ? 'Drag to change order, double click to use keyboard (arrow keys to move up/down, enter to save, esc to abort)' : 'Sort by position ascending (default order) to be able to change order'">
-                    <nobr>
+                    <span
+                        :class="{ 'js-drag-drop': sortable, 'ml-2': true }"
+                        v-if="isView(['backlog', 'planning-sprint'])"
+                        @dblclick="!sortable || startKeyboardSort()"
+                        :title="sortable ? 'Drag to change order, double click to use keyboard (arrow keys to move up/down, enter to save, esc to abort)' : 'Sort by position ascending (default order) to be able to change order'">
+
                         <VIcon
                             name="arrows"
                             label="Drag and drop to change order"
                             :class="{ [$style.fade]: !sortable }"/>
 
                         <strong>{{ position }}</strong>
-                    </nobr>
-                </span>
+                    </span>
 
-                <strong v-if="isView('planning-backlog')">
-                    {{ position }}
-                </strong>
+                    <strong v-if="isView('planning-backlog')">
+                        {{ position }}
+                    </strong>
+                </nobr>
             </td>
 
             <td v-if="isView(['sprint', 'history'])">
@@ -83,7 +84,9 @@
 
             <!-- Story points -->
             <td>
-                {{ data.points ? data.points + ' SP' : '(not&nbsp;estimated)' }}
+                <nobr>
+                    {{ data.points ? data.points + ' SP' : '(not&nbsp;estimated)' }}
+                </nobr>
             </td>
 
             <!-- Status -->
@@ -382,12 +385,12 @@ export default {
 };
 </script>
 
-<style module>
+<style lang="scss" module>
     .fade {
         fill: #ccc;
     }
 
-    .highlight {
-        border: 3px solid #76b900;
+    .highlight td {
+        background: fade_out(#76b900, 0.3);
     }
 </style>
