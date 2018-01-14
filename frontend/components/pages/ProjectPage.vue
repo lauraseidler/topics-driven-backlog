@@ -275,10 +275,6 @@ export default {
             this.$store.commit('resolvePendingChange');
             bus.$off('saveAll', this.save);
         },
-
-        saveAll() {
-            bus.$emit('saveAll');
-        },
     }
 };
 </script>
