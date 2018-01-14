@@ -90,56 +90,6 @@ Story.create!([
                    description: nil, status: 0, points: nil, sprint_id: nil, project_id: 2, topic_id: 5},
               ])
 
-ProjectPosition.create!([
-                            {position: 1, project_id: 2, story_id: 19},
-                            {position: 2, project_id: 2, story_id: 20},
-                            {position: 4, project_id: 1, story_id: 15},
-                            {position: 18, project_id: 1, story_id: 1},
-                            {position: 17, project_id: 1, story_id: 2},
-                            {position: 16, project_id: 1, story_id: 3},
-                            {position: 15, project_id: 1, story_id: 4},
-                            {position: 14, project_id: 1, story_id: 5},
-                            {position: 13, project_id: 1, story_id: 6},
-                            {position: 12, project_id: 1, story_id: 7},
-                            {position: 11, project_id: 1, story_id: 8},
-                            {position: 10, project_id: 1, story_id: 9},
-                            {position: 9, project_id: 1, story_id: 10},
-                            {position: 8, project_id: 1, story_id: 11},
-                            {position: 7, project_id: 1, story_id: 12},
-                            {position: 6, project_id: 1, story_id: 13},
-                            {position: 5, project_id: 1, story_id: 14},
-                            {position: 3, project_id: 1, story_id: 16},
-                            {position: 2, project_id: 1, story_id: 17},
-                            {position: 1, project_id: 1, story_id: 18},
-                            {position: 3, project_id: 2, story_id: 21},
-                            {position: 4, project_id: 2, story_id: 22},
-                            {position: 5, project_id: 2, story_id: 23},
-                            {position: 6, project_id: 2, story_id: 24},
-                            {position: 7, project_id: 2, story_id: 25},
-                            {position: 8, project_id: 2, story_id: 26},
-                            {position: 9, project_id: 2, story_id: 27}
-                        ])
-SprintPosition.create!([
-                           {position: 2, sprint_id: 2, story_id: 5},
-                           {position: 1, sprint_id: 2, story_id: 6},
-                           {position: 2, sprint_id: 3, story_id: 10},
-                           {position: 3, sprint_id: 3, story_id: 9},
-                           {position: 4, sprint_id: 3, story_id: 8},
-                           {position: 5, sprint_id: 3, story_id: 7},
-                           {position: 6, sprint_id: 3, story_id: 4},
-                           {position: 1, sprint_id: 3, story_id: 11},
-                           {position: 2, sprint_id: 4, story_id: 13},
-                           {position: 3, sprint_id: 4, story_id: 12},
-                           {position: 1, sprint_id: 4, story_id: 14},
-                           {position: 2, sprint_id: 5, story_id: 17},
-                           {position: 3, sprint_id: 5, story_id: 16},
-                           {position: 4, sprint_id: 5, story_id: 15},
-                           {position: 1, sprint_id: 5, story_id: 18},
-                           {position: 0, sprint_id: 1, story_id: 3},
-                           {position: 2, sprint_id: 1, story_id: 2},
-                           {position: 1, sprint_id: 1, story_id: 1}
-                       ])
-
 # bypass validation errors by moving sprints back to time via database
 Sprint.all.each do |sprint|
   start_date = sprint.start_date
