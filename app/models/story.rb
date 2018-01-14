@@ -53,6 +53,7 @@ class Story < ApplicationRecord
     )
     project_position.set_list_position(0)
     project_position.save!
+    project_position.move_to_bottom
   end
 
   def update_sprint_position
@@ -62,6 +63,7 @@ class Story < ApplicationRecord
         sprint_position.sprint_id = sprint_id
         sprint_position.set_list_position(0)
         sprint_position.save!
+        sprint_position.move_to_bottom
       end
     else
       create_sprint_position
@@ -75,6 +77,7 @@ class Story < ApplicationRecord
       )
       sprint_position.set_list_position(0)
       sprint_position.save!
+      sprint_position.move_to_bottom
     end
   end
 

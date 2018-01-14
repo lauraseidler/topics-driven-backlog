@@ -15,7 +15,7 @@
                 <BTabs card>
                     <BTab title="Projects">
                         <ul 
-                            class="list-unstyled" 
+                            :class="['list-unstyled', $style.list]"
                             v-if="projects.length">
 
                             <ProjectItem
@@ -224,14 +224,20 @@ export default {
         },
 
         async addProject() {
-            await this.$store.dispatch('projects/create', {
-                parentId: this.course.id,
-                ...this.newProject,
-            });
+            try {
+                await this.$store.dispatch('projects/create', {
+                    parentId: this.course.id,
+                    ...this.newProject,
+                });
 
-            this.newProject = this.$store.getters['projects/template']();
-
-            // TODO handle errors in UI
+                this.newProject = this.$store.getters['projects/template']();
+            } catch (err) {
+                this.$notify({
+                    title: 'Validation failed',
+                    text: err.body.message.replace('Validation failed: ', ''),
+                    type: 'error',
+                });
+            }
         },
 
         async addTopic() {
@@ -257,3 +263,12 @@ export default {
     },
 };
 </script>
+
+<style module>
+    .list {
+        display: grid;
+        grid-gap: 8px;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-auto-rows: minmax(200px, 1fr);
+    }
+</style>

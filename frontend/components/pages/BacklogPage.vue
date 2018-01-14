@@ -7,61 +7,44 @@
             </h3>
             <h2>{{ currentSprint.name }}</h2>
 
-            <table class="table table-striped mb-4">
-                <thead>
-                <tr>
-                    <th>Identifier</th>
-                    <th>Story</th>
-                    <th>Story&nbsp;points</th>
-                    <th>Status</th>
-                </tr>
-                </thead>
-                <tbody>
-                    <tr
-                        is="StoryItem"
-                        v-for="story in storiesInSprint"
-                        :key="story.id"
-                        :data="story"
-                        view="sprint"/>
-                </tbody>
-            </table>
+            <StoryTable
+                :columns="tableColumns.currentSprint"
+                :rows="storiesInSprint"
+                position-field="sprint_position"
+                view="sprint"/>
         </template>
+
+        <BButton
+                :disabled="$store.state.pendingChanges < 1"
+                :title="$store.state.pendingChanges < 1 ? 'No pending changes' : 'Save all changes on page'"
+                class="float-right mb-2"
+                type="button"
+                variant="primary"
+                @click="saveAll">
+            Save all
+        </BButton>
 
         <h2>Backlog</h2>
 
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>Identifier</th>
-                    <th>Story</th>
-                    <th>Topic</th>
-                    <th>Story&nbsp;points</th>
-                    <th>Operations</th>
-                </tr>
-            </thead>
-            <tbody v-sortable="{handle: '.js-drag-drop', onEnd: saveOrder}" >
-                <tr
-                    is="StoryItem"
-                    v-for="story in stories"
-                    :key="story.id"
-                    :data="story"
-                    view="backlog"/>
-            </tbody>
-        </table>
+        <StoryTable
+            :columns="tableColumns.backlog"
+            :rows="stories"
+            view="backlog"
+            position-field="project_position"
+            :sortable="true"/>
 
         <StoryForm
             v-if="showForm"
             v-model="newStory"
             :project="project"
-            @cancel="showForm = false"
+            @cancel="cancelNew"
             @submit="save"/>
 
         <BButton
             v-else
             type="button"
             variant="primary"
-            @click="showForm = true">Add story</BButton>
+            @click="startNew">Add story</BButton>
     </section>
 </template>
 
@@ -70,14 +53,35 @@ import BaseProjectAwarePage from '@/components/pages/BaseProjectAwarePage';
 import StoryItem from '@/components/elements/StoryItem';
 import StoryForm from '@/components/forms/StoryForm';
 import BButton from '@bootstrap/button/button';
+import StoryTable from '@/components/elements/StoryTable';
+import bus from '@/helper/bus';
 
 export default {
-    components: { StoryForm, StoryItem, BButton },
+    components: { StoryForm, StoryItem, BButton, StoryTable },
     extends: BaseProjectAwarePage,
     data() {
         return {
             showForm: false,
             newStory: this.$store.getters['stories/template'](),
+            tableColumns: {
+                currentSprint: [
+                    { field: 'sprint_position', name: 'Position' },
+                    { field: 'identifier', name: 'Identifier' },
+                    { field: 'title', name: 'Story' },
+                    { field: 'topic_id', name: 'Topic' },
+                    { field: 'points', name: 'Story points' },
+                    { field: 'status', name: 'Status' },
+                ],
+                backlog: [
+                    { field: 'project_position', name: 'Position' },
+                    { field: 'identifier', name: 'Identifier' },
+                    { field: 'title', name: 'Story' },
+                    { field: 'topic_id', name: 'Topic' },
+                    { field: 'points', name: 'Story points' },
+                    { name: 'Operations' },
+
+                ]
+            }
         };
     },
     computed: {
@@ -131,34 +135,26 @@ export default {
             });
 
             this.newStory = this.$store.getters['stories/template']();
+            this.showForm = false;
+            this.$store.commit('resolvePendingChange');
 
             // TODO handle errors in UI
         },
 
+        startNew() {
+            this.showForm = true;
+            this.$store.commit('newPendingChange');
+            bus.$on('saveAll', this.save);
+        },
 
-        /**
-         * Save new position of dragged story
-         * @param {Event} evt
-         */
-        async saveOrder(evt) {
-            const story = this.stories[evt.oldIndex];
+        cancelNew() {
+            this.showForm = false;
+            this.$store.commit('resolvePendingChange');
+            bus.$off('saveAll', this.save);
+        },
 
-            if (!story) {
-                return;
-            }
-
-            await this.$store.dispatch('stories/update', {
-                id: story.id,
-                parentId: this.project.id,
-                project_position: evt.newIndex + 1, // act_as_list is 1-indexed
-            });
-
-            await this.$store.dispatch('projects/fetch', {
-                id: this.project.id,
-                parentId: this.course.id
-            });
-
-            // TODO handle errors in UI
+        saveAll() {
+            bus.$emit('saveAll');
         },
     },
 };

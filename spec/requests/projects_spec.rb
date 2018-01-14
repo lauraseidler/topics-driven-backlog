@@ -4,7 +4,8 @@ RSpec.describe 'Projects API' do
 
   let!(:course) { create(:course) }
   let(:course_id) { course.id }
-  let!(:projects) { create_list(:project, 20, course_id: course.id) }
+  # create_list doesn't work here because we need a unique title
+  let!(:projects) { 20.times.map { |i| Project.create!(title: "Project#{i}", course_id: course.id) } }
   let(:id) { projects.first.id }
 
   # Test suite for GET /courses/:course_id

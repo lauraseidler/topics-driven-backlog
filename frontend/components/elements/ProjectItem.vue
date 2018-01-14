@@ -1,67 +1,64 @@
 <template>
     <li class="project-item card">
-        <div 
-            v-if="view === 'manage'" 
-            class="card-body">
-
-            <template v-if="!editing">
-                <BButton 
-                    size="sm" 
-                    variant="danger" 
-                    class="float-right ml-2" 
-                    v-confirm="deleteProject">Delete</BButton>
-
-                <BButton 
-                    size="sm" 
-                    variant="primary" 
-                    class="float-right" 
-                    @click="startEditing">Edit</BButton>
-                
-                <h3 class="card-title h5">{{ data.title }}</h3>
-            </template>
-
-            <ProjectForm 
-                v-else 
-                v-model="editingData" 
-                @cancel="editing = false" 
-                @submit="saveProject"/>
-        </div>
-
-        <div v-else-if="view === 'new'" :class="$style.full">
+        <div v-if="view === 'new'" :class="$style.full">
             <div :class="$style.full" v-if="!editing" @click="startEditing">
                 <VIcon name="plus" scale="2"/>
+                <strong>Create new project <br> in course</strong>
             </div>
 
             <ProjectForm
                 v-else
                 v-model="editingData"
                 @cancel="editing = false"
-                @submit="emitProject"/>
+                @submit="addProject"/>
         </div>
 
         <div 
             v-else 
             :class="['card-body', $style.display]">
 
-            <h3 class="card-title h4">
-                <router-link :to="baseUrl">{{ data.title }}</router-link>
-            </h3>
+            <template v-if="!editing">
+                <BButton
+                        size="sm"
+                        variant="danger"
+                        class="float-right ml-2"
+                        v-confirm="{ action: deleteProject, text: 'Are you sure you want to delete this project?' }">
+                    <VIcon name="trash"/>
 
-            <p class="card-text">
-                <router-link 
-                    class="btn btn-primary mr-2 mb-2"
-                    :to="backlogUrl">Backlog</router-link>
+                </BButton>
 
-                <router-link
-                    class="btn btn-primary mr-2 mb-2"
-                    :to="sprintPlanningUrl">Sprint planning</router-link>
-            </p>
-        </div> 
+                <BButton
+                        size="sm"
+                        variant="primary"
+                        class="float-right ml-2"
+                        @click="startEditing">
+                    <VIcon name="pencil"/>
+                </BButton>
+
+                <h3 class="card-title h4">
+                    <router-link :to="baseUrl">{{ data.title }}</router-link>
+                </h3>
+
+                <p :class="['card-text', $style.bottom]">
+                    <router-link
+                        class="btn btn-primary"
+                        :to="backlogUrl">View Backlog</router-link>
+                </p>
+            </template>
+
+            <ProjectForm
+                    v-else
+                    v-model="editingData"
+                    @cancel="editing = false"
+                    @submit="saveProject"/>
+        </div>
     </li>
 </template>
 
 <script>
 import '@icons/plus';
+import '@icons/pencil';
+import '@icons/trash';
 
 import * as _ from 'lodash';
 import VIcon from 'vue-awesome/components/Icon';
@@ -78,8 +75,12 @@ export default {
         },
         view: {
             type: String,
-            default: 'manage',
+            default: 'standard',
         },
+        courseId: {
+            type: Number,
+            default: null,
+        }
     },
     data() {
         return {
@@ -102,10 +103,6 @@ export default {
         backlogUrl() {
             return `${this.baseUrl}#backlog`;
         },
-
-        sprintPlanningUrl() {
-            return `${this.baseUrl}#sprint-planning`;
-        },
     },
     methods: {
         /**
@@ -124,15 +121,21 @@ export default {
          * Save the edited parameters of this project
          */
         async saveProject() {
-            await this.$store.dispatch('projects/update', {
-                id: this.data.id,
-                parentId: this.data.course_id,
-                ...this.editingData,
-            });
+            try {
+                await this.$store.dispatch('projects/update', {
+                    id: this.data.id,
+                    parentId: this.data.course_id,
+                    ...this.editingData,
+                });
 
-            this.editing = false;
-
-            // TODO handle errors in UI
+                this.editing = false;
+            } catch (err) {
+                this.$notify({
+                    title: 'Validation failed',
+                    text: err.body.message.replace('Validation failed: ', ''),
+                    type: 'error',
+                });
+            }
         },
 
         /**
@@ -147,9 +150,21 @@ export default {
             // TODO handle errors in UI
         },
 
-        emitProject() {
-            this.$emit('submit', this.editingData);
-            this.editing = false;
+        async addProject() {
+            try {
+                await this.$store.dispatch('projects/create', {
+                    parentId: this.courseId,
+                    ...this.editingData,
+                });
+
+                this.editing = false;
+            } catch (err) {
+                this.$notify({
+                    title: 'Validation failed',
+                    text: err.body.message.replace('Validation failed: ', ''),
+                    type: 'error',
+                });
+            }
         },
 
         slugify(text) {
@@ -166,20 +181,30 @@ export default {
 
 <style lang="scss" module>
     .display {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+        position: relative;
+    }
+
+    .bottom {
+        position: absolute;
+        left: 20px;
+        bottom: 20px;
     }
 
     .full {
         height: 100%;
         width: 100%;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
+        text-align: center;
 
         div {
             cursor: pointer;
+        }
+
+        form {
+            text-align: left;
         }
     }
 </style>
