@@ -1,7 +1,8 @@
 class User < ApplicationRecord
-  # encrypt password
+  has_many :memberships
+  has_many :projects, through: :memberships
+
   has_secure_password
 
-  # Validations
   validates_presence_of :name, :email, :password_digest
 end
