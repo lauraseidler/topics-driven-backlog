@@ -20,19 +20,20 @@
             <template v-if="!editing">
                 <BButton
                         size="sm"
-                        variant="danger"
+                        variant="outline-danger"
                         class="float-right ml-2"
                         v-confirm="{ action: deleteProject, text: 'Are you sure you want to delete this project?' }">
                     <VIcon name="trash"/>
-
+                    Delete
                 </BButton>
 
                 <BButton
                         size="sm"
-                        variant="primary"
+                        variant="outline-primary"
                         class="float-right ml-2"
                         @click="startEditing">
                     <VIcon name="pencil"/>
+                    Edit
                 </BButton>
 
                 <h3 class="card-title h4">
@@ -42,7 +43,7 @@
                 <p :class="['card-text', $style.bottom]">
                     <router-link
                         class="btn btn-primary"
-                        :to="backlogUrl">View Backlog</router-link>
+                        :to="baseUrl">View Backlog</router-link>
                 </p>
             </template>
 
@@ -94,14 +95,8 @@ export default {
         },
 
         baseUrl() {
-            return '/courses'
-                + `/${this.data.course_id}-${this.slugify(this.course.title)}`
-                + '/projects'
+            return '/projects'
                 + `/${this.data.id}-${this.slugify(this.data.title)}`;
-        },
-
-        backlogUrl() {
-            return `${this.baseUrl}#backlog`;
         },
     },
     methods: {

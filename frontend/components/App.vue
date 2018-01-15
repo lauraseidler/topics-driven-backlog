@@ -2,7 +2,8 @@
     <div id="app">
         <BNavbar 
             toggleable="md" 
-            type="dark" 
+            type="dark"
+            fixed="top"
             variant="primary">
 
             <BContainer>
@@ -22,6 +23,9 @@
                     </BNavbarNav>
 
                     <BNavbarNav class="ml-auto">
+                        <BNavItem>
+                            <BButton v-if="$store.state.pendingChanges > 0" @click="saveAll" type="button" variant="white">Save all</BButton>
+                        </BNavItem>
                         <BNavItem href="https://www.htw-berlin.de" target="_blank">
                             <img src="~images/logo-htw.png" alt="HTW Berlin" class="d-inline-block align-top">
                         </BNavItem>
@@ -45,6 +49,8 @@ import BNavbarBrand from '@bootstrap/navbar/navbar-brand';
 import BCollapse from '@bootstrap/collapse/collapse';
 import BNavbarNav from '@bootstrap/navbar/navbar-nav';
 import BNavItem from '@bootstrap/nav/nav-item';
+import BButton from '@bootstrap/button/button';
+import bus from '@/helper/bus';
 
 export default {
     components: {
@@ -55,10 +61,16 @@ export default {
         BCollapse,
         BNavbarNav,
         BNavItem,
+        BButton,
     },
     data() {
         return {};
     },
+    methods: {
+        saveAll() {
+            bus.$emit('saveAll');
+        },
+    }
 };
 </script>
 
@@ -91,13 +103,18 @@ $cyan: #6daedb;
 $primary: $green;
 $secondary: $blue;
 
-$enable-rounded: false;
+$enable-rounded: true;
 
 $font-family-sans-serif: HTWBerlin, Verdana, Arial, sans-serif;
 $headings-font-weight: 700;
 
 @import '~bootstrap/scss/bootstrap';
 // @import "~bootstrap-vue/dist/bootstrap-vue.css"; // necessary?
+
+
+body {
+    padding-top: 77px;
+}
 
 .link-unstyled {
     color: inherit;
@@ -122,6 +139,10 @@ $headings-font-weight: 700;
 
 .fa-icon {
     vertical-align: sub;
+}
+
+.btn .fa-icon {
+    margin-right: 3px;
 }
 
 .is-disabled {

@@ -13,45 +13,45 @@
 
         <template v-else>
             <!-- Drag and drop -->
-            <td v-if="isView(['backlog', 'planning-sprint', 'planning-backlog'])">
+            <td v-if="isView(['backlog', 'planning-sprint', 'planning-backlog'])" :class="$style.parent">
                 <nobr>
                     <BButton
-                            v-if="isView('planning-backlog')"
-                            size="sm"
-                            variant="primary"
-                            title="Add to sprint"
-                            @click="addToSprint">
+                        v-if="isView('planning-backlog')"
+                        size="sm"
+                        variant="outline-primary"
+                        title="Add to sprint"
+                        :class="$style.pull"
+                        @click="addToSprint">
 
                         <VIcon name="arrow-up"/>
+                        Move to sprint
                     </BButton>
 
                     <BButton
-                            v-if="isView('planning-sprint')"
-                            size="sm"
-                            variant="danger"
-                            title="Remove from sprint"
-                            @click="removeFromSprint">
+                        v-if="isView('planning-sprint')"
+                        size="sm"
+                        variant="outline-primary"
+                        title="Remove from sprint"
+                        :class="$style.pull"
+                        @click="removeFromSprint">
 
                         <VIcon name="arrow-down"/>
+                        Move to backlog
                     </BButton>
 
                     <span
                         :class="{ 'js-drag-drop': sortable, 'ml-2': true }"
-                        v-if="isView(['backlog', 'planning-sprint'])"
+                        v-if="isView(['backlog', 'planning-sprint', 'planning-backlog'])"
                         @dblclick="!sortable || startKeyboardSort()"
                         :title="sortable ? 'Drag to change order, double click to use keyboard (arrow keys to move up/down, enter to save, esc to abort)' : 'Sort by position ascending (default order) to be able to change order'">
 
                         <VIcon
-                            name="arrows"
+                            name="sort"
                             label="Drag and drop to change order"
                             :class="{ [$style.fade]: !sortable }"/>
 
                         <strong>{{ position }}</strong>
                     </span>
-
-                    <strong v-if="isView('planning-backlog')">
-                        {{ position }}
-                    </strong>
                 </nobr>
             </td>
 
@@ -67,10 +67,9 @@
 
             <!-- Story -->
             <td @click="expandedView = !expandedView">
-                {{ data.title }}
+                <VIcon class="float-right" :name="expandedView ? 'caret-up' : 'caret-down'" />
 
-                <VIcon v-if="!expandedView" name="caret-down" />
-                <VIcon v-else name="caret-up" />
+                {{ data.title }}
 
                 <p v-show="expandedView" class="mt-2">
                     Notes: <br>
@@ -124,34 +123,26 @@
                 </BDropdown>
             </td>
 
-            <td v-if="isView('backlog')">
+            <td v-if="isView(['backlog', 'planning-backlog', 'planning-sprint'])">
                 <BButton 
                     size="sm" 
-                    variant="primary" 
-                    title="Edit" 
+                    variant="outline-primary"
+                    title="Edit"
+                    class="mb-1"
                     @click="startEditing">
 
                     <VIcon name="pencil"/>
+                    Edit
                 </BButton>
 
                 <BButton 
                     size="sm" 
-                    variant="danger" 
+                    variant="outline-danger"
                     title="Delete" 
                     v-confirm="{ action: remove, text: 'Are you sure you want to delete this story?' }">
 
                     <VIcon name="trash"/>
-                </BButton>
-            </td>
-
-            <td v-if="isView('planning-backlog')">
-                <BButton 
-                    size="sm" 
-                    variant="primary" 
-                    title="Edit" 
-                    @click="startEditing">
-
-                    <VIcon name="pencil"/>
+                    Delete
                 </BButton>
             </td>
         </template>
@@ -159,7 +150,7 @@
 </template>
 
 <script>
-import '@icons/arrows';
+import '@icons/sort';
 import '@icons/pencil';
 import '@icons/trash';
 import '@icons/arrow-up';
@@ -392,5 +383,15 @@ export default {
 
     .highlight td {
         background: fade_out(#76b900, 0.3);
+    }
+
+    .parent {
+        position: relative;
+    }
+
+    .pull {
+        position: absolute;
+        right: 115px;
+        cursor: pointer;
     }
 </style>

@@ -8,20 +8,24 @@
         name: 'BaseProjectAwarePage',
         computed: {
             course() {
-                return this.$route.params.courseId
-                    ? this.$store.getters['courses/byId'](parseInt(this.$route.params.courseId, 10))
+                return this.project
+                    ? this.$store.getters['courses/byId'](this.project.course_id)
                     : null;
             },
 
             project() {
-                return this.course
-                    ? this.$store.getters['projects/byId'](parseInt(this.$route.params.id, 10))
+                return this.$store.getters['projects/byId'](parseInt(this.$route.params.id, 10));
+            },
+
+            projectId() {
+                return this.project
+                    ? this.project.id
                     : null;
             },
         },
         methods: {
             initData() {
-                if (this.project) {
+                if (this.project && this.course) {
                     this.$store.dispatch('projects/init', {
                         id: this.project.id,
                         parentId: this.course.id
@@ -34,7 +38,7 @@
         },
         watch: {
             $route: 'initData',
-            course: 'initData',
+            projectId: 'initData',
         },
     };
 </script>
