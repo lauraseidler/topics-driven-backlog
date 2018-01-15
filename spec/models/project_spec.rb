@@ -12,12 +12,11 @@ RSpec.describe Project, type: :model do
   it "can have many users" do
     subject.title = "Anything"
     subject.course_id = create(:course).id
-    subject.save
+    subject.save!
     subject.users << create(:user)
     subject.users << create(:user)
-    subject.save
+    subject.save!
     expect(subject.users.size).to eq(2)
-    expect(subject).to be_valid
   end
 
 end
