@@ -25,6 +25,13 @@ ActiveRecord::Schema.define(version: 20180115234430) do
     t.string "short_title"
   end
 
+  create_table "memberships", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "project_id"
+    t.index ["project_id"], name: "index_memberships_on_project_id"
+    t.index ["user_id"], name: "index_memberships_on_user_id"
+  end
+
   create_table "project_positions", force: :cascade do |t|
     t.integer "position"
     t.bigint "project_id"
@@ -99,6 +106,13 @@ ActiveRecord::Schema.define(version: 20180115234430) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["course_id"], name: "index_topics_on_course_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "password_digest"
+    t.index ["email"], name: "index_users_on_email", unique: true
   end
 
   add_foreign_key "project_positions", "projects", on_delete: :cascade
