@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180115234430) do
+ActiveRecord::Schema.define(version: 20180118195950) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 20180115234430) do
   create_table "sprints_topics", force: :cascade do |t|
     t.bigint "sprint_id"
     t.bigint "topic_id"
+    t.index ["sprint_id", "topic_id"], name: "index_sprints_topics_on_sprint_id_and_topic_id", unique: true
     t.index ["sprint_id"], name: "index_sprints_topics_on_sprint_id"
     t.index ["topic_id"], name: "index_sprints_topics_on_topic_id"
   end

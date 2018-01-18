@@ -54,6 +54,8 @@ module SprintsHelper
 
     if params[:topic_ids].present?
 
+      params[:topic_ids] = filter_unique_parameter_list(params[:topic_ids])
+
       params[:topic_ids].each do |topic_id|
         errors.append(
             valid_topic_id(topic_id, @sprint.course)
@@ -66,6 +68,10 @@ module SprintsHelper
   end
 
   private
+
+  def filter_unique_parameter_list(list)
+    list.uniq
+  end
 
   def valid_topic_id(topic_id, course)
     if Topic.find_by(id: topic_id).nil?
