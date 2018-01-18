@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180115095456) do
+ActiveRecord::Schema.define(version: 20180118202158) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 20180115095456) do
     t.bigint "user_id"
     t.bigint "project_id"
     t.index ["project_id"], name: "index_memberships_on_project_id"
+    t.index ["user_id", "project_id"], name: "index_memberships_on_user_id_and_project_id", unique: true
     t.index ["user_id"], name: "index_memberships_on_user_id"
   end
 
@@ -65,6 +66,13 @@ ActiveRecord::Schema.define(version: 20180115095456) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["course_id"], name: "index_sprints_on_course_id"
+  end
+
+  create_table "sprints_topics", force: :cascade do |t|
+    t.bigint "sprint_id"
+    t.bigint "topic_id"
+    t.index ["sprint_id"], name: "index_sprints_topics_on_sprint_id"
+    t.index ["topic_id"], name: "index_sprints_topics_on_topic_id"
   end
 
   create_table "stories", force: :cascade do |t|
@@ -114,6 +122,8 @@ ActiveRecord::Schema.define(version: 20180115095456) do
   add_foreign_key "sprint_positions", "sprints", on_delete: :cascade
   add_foreign_key "sprint_positions", "stories", on_delete: :cascade
   add_foreign_key "sprints", "courses"
+  add_foreign_key "sprints_topics", "sprints"
+  add_foreign_key "sprints_topics", "topics"
   add_foreign_key "stories", "projects"
   add_foreign_key "stories", "sprints"
   add_foreign_key "stories", "topics"

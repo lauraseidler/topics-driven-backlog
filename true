@@ -1,5 +1,0 @@
-[2K[1G[1myarn check v1.3.2[22m
-[2K[1G[32msuccess[39m Folder in sync.
-[2K[1GDone in 0.20s.
-[1m[37m      invoke[0m  active_record
-[1m[32m      create[0m    db/migrate/20180115095456_add_index_to_email.rb
