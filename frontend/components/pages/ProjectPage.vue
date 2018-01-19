@@ -1,6 +1,12 @@
 <template>
     <section id="project-page">
-        <h2 class="h4 text-muted" v-if="course">{{ course.short_title }} <small>({{ course.title}})</small></h2>
+        <router-link :to="`/courses/${course.id}-${slugify(course.title)}`" class="btn btn-primary float-right">
+            Back to course
+        </router-link>
+
+        <router-link class="h4 text-muted" :to="`/courses/${course.id}-${slugify(course.title)}`" v-if="course">
+            {{ course.short_title }} <small>({{ course.title}})</small>
+        </router-link>
         <h1 v-if="project">{{ project.title }}: {{ currentView }}</h1>
 
         <hr>
@@ -274,6 +280,15 @@ export default {
             this.showForm = false;
             this.$store.commit('resolvePendingChange');
             bus.$off('saveAll', this.save);
+        },
+
+        slugify(text) {
+            return text.toString().toLowerCase()
+                .replace(/\s+/g, '-')           // Replace spaces with -
+                .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+                .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+                .replace(/^-+/, '')             // Trim - from start of text
+                .replace(/-+$/, '');            // Trim - from end of text
         },
     }
 };

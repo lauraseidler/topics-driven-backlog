@@ -2,8 +2,10 @@
     <section id="course-page">
         <template v-if="course">
             <h1>
-                {{ course.title }}
-                <small class="text-muted">{{ getSemesterInfo(course.semester_type, course.semester_year).fullString }}
+                {{ course.short_title }}
+                <small class="text-muted">
+                    {{ course.title }}
+                    ({{ getSemesterInfo(course.semester_type, course.semester_year).fullString }})
                 </small>
             </h1>
 
