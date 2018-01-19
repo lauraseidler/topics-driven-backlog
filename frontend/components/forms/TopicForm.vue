@@ -50,7 +50,7 @@ export default {
     validations: {
         data: {
             title: { required },
-            url: { required, url },
+            url: { url },
         },
     },
 };
