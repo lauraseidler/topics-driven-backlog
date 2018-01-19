@@ -1,52 +1,87 @@
 <template>
     <section id="backlog-page">
-        <h1>Backlog</h1>
+        <template v-if="currentSprint">
+            <h3 class="h5 text-muted mb-0">
+                Current sprint
+                <small>({{ currentSprint.start_date | displayDate }} - {{ currentSprint.end_date | displayDate }})</small>
+            </h3>
+            <h2>{{ currentSprint.name }}</h2>
 
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>Identifier</th>
-                    <th>Story</th>
-                    <th>Story&nbsp;points</th>
-                    <th>Operations</th>
-                </tr>
-            </thead>
-            <tbody v-sortable="{handle: '.js-drag-drop', onEnd: saveOrder}" >
-                <tr 
-                    is="StoryItem" 
-                    v-for="story in stories" 
-                    :key="story.id" 
-                    :data="story" 
-                    view="backlog"/>
-            </tbody>
-        </table>
+            <StoryTable
+                :columns="tableColumns.currentSprint"
+                :rows="storiesInSprint"
+                position-field="sprint_position"
+                view="sprint"/>
+        </template>
 
-        <StoryForm 
-            v-if="showForm" 
-            v-model="newStory" 
-            @cancel="showForm = false" 
+        <BButton
+                :disabled="$store.state.pendingChanges < 1"
+                :title="$store.state.pendingChanges < 1 ? 'No pending changes' : 'Save all changes on page'"
+                class="float-right mb-2"
+                type="button"
+                variant="primary"
+                @click="saveAll">
+            Save all
+        </BButton>
+
+        <h2>Backlog</h2>
+
+        <StoryTable
+            :columns="tableColumns.backlog"
+            :rows="stories"
+            view="backlog"
+            position-field="project_position"
+            :sortable="true"/>
+
+        <StoryForm
+            v-if="showForm"
+            v-model="newStory"
+            :project="project"
+            @cancel="cancelNew"
             @submit="save"/>
-            
-        <BButton 
-            v-else 
-            type="button" 
-            variant="primary" 
-            @click="showForm = true">Add story</BButton>
+
+        <BButton
+            v-else
+            type="button"
+            variant="primary"
+            @click="startNew">Add story</BButton>
     </section>
 </template>
 
 <script>
+import BaseProjectAwarePage from '@/components/pages/BaseProjectAwarePage';
 import StoryItem from '@/components/elements/StoryItem';
 import StoryForm from '@/components/forms/StoryForm';
 import BButton from '@bootstrap/button/button';
+import StoryTable from '@/components/elements/StoryTable';
+import bus from '@/helper/bus';
 
 export default {
-    components: { StoryForm, StoryItem, BButton },
+    components: { StoryForm, StoryItem, BButton, StoryTable },
+    extends: BaseProjectAwarePage,
     data() {
         return {
             showForm: false,
-            newStory: {},
+            newStory: this.$store.getters['stories/template'](),
+            tableColumns: {
+                currentSprint: [
+                    { field: 'sprint_position', name: 'Position' },
+                    { field: 'identifier', name: 'Identifier' },
+                    { field: 'title', name: 'Story' },
+                    { field: 'topic_id', name: 'Topic' },
+                    { field: 'points', name: 'Story points' },
+                    { field: 'status', name: 'Status' },
+                ],
+                backlog: [
+                    { field: 'project_position', name: 'Position' },
+                    { field: 'identifier', name: 'Identifier' },
+                    { field: 'title', name: 'Story' },
+                    { field: 'topic_id', name: 'Topic' },
+                    { field: 'points', name: 'Story points' },
+                    { name: 'Operations' },
+
+                ]
+            }
         };
     },
     computed: {
@@ -54,43 +89,72 @@ export default {
          * All stories in backlog that are open and not already in sprints, sorted by position
          * @returns {array}
          */
-        stories() {            
-            return this.$store.getters['stories/all']
-                .filter(s => !s.sprint_id && s.status === this.$store.state.stories.STATUS.OPEN)
-                .sort((a, b) => a.position - b.position);
+        stories() {
+            return this.project
+                ? this.$store.getters['stories/all'](this.project.id)
+                    .filter(s => !s.sprint_id && s.status === this.$store.state.stories.STATUS.OPEN)
+                    .sort((a, b) => a.project_position - b.project_position)
+                : [];
+        },
+
+        /**
+         * Current sprint depending on current date
+         * @returns {object}
+         */
+        currentSprint() {
+            return this.course
+                ? _.first(
+                    this.$store.getters['sprints/all'](this.course.id)
+                        .filter(s =>
+                            s.start_date <= this.$store.state.currentDate
+                            && s.end_date >= this.$store.state.currentDate
+                        )
+                        .sort((a, b) => a.start_date.localeCompare(b.start_date)))
+                : null;
+        },
+
+        /**
+         * Stories in current sprint
+         * @returns {array}
+         */
+        storiesInSprint() {
+            return this.currentSprint
+                ? this.$store.getters['stories/find'](this.project.id, 'sprint_id', this.currentSprint.id)
+                    .sort((a, b) => a.sprint_position - b.sprint_position)
+                : [];
         },
     },
     methods: {
         /**
          * Save current form state as new story
          */
-        save() {
-            this.$store
-                .dispatch('stories/save', {
-                    story: this.newStory,
-                })
-                .then(() => {
-                    this.newStory = {};
-                });
+        async save() {
+            await this.$store.dispatch('stories/create', {
+                parentId: this.project.id,
+                ...this.newStory
+            });
+
+            this.newStory = this.$store.getters['stories/template']();
+            this.showForm = false;
+            this.$store.commit('resolvePendingChange');
+
+            // TODO handle errors in UI
         },
 
-        /**
-         * Save new position of dragged story
-         * @param {Event} evt
-         */
-        saveOrder(evt) {
-            const story = this.stories[evt.oldIndex];
+        startNew() {
+            this.showForm = true;
+            this.$store.commit('newPendingChange');
+            bus.$on('saveAll', this.save);
+        },
 
-            if (!story) {
-                return;
-            }
+        cancelNew() {
+            this.showForm = false;
+            this.$store.commit('resolvePendingChange');
+            bus.$off('saveAll', this.save);
+        },
 
-            this.$store.dispatch('stories/patch', {
-                id: story.id,
-                field: 'position',
-                value: evt.newIndex + 1, // act_as_list is 1-indexed
-                fetch: true,
-            });
+        saveAll() {
+            bus.$emit('saveAll');
         },
     },
 };

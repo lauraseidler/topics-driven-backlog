@@ -2,8 +2,10 @@
     <section id="course-page">
         <template v-if="course">
             <h1>
-                {{ course.title }}
-                <small class="text-muted">{{ getSemesterInfo(course.semester_type, course.semester_year).fullString }}
+                {{ course.short_title }}
+                <small class="text-muted">
+                    {{ course.title }}
+                    ({{ getSemesterInfo(course.semester_type, course.semester_year).fullString }})
                 </small>
             </h1>
 
@@ -14,10 +16,56 @@
             <BCard no-body>
                 <BTabs card>
                     <BTab title="Projects">
-                        <p>No projects in this course yet.</p>
+                        <ul 
+                            :class="['list-unstyled', $style.list]"
+                            v-if="projects.length">
+
+                            <ProjectItem
+                                class="mb-2"
+                                v-for="project in projects"
+                                :data="project"
+                                :key="project.id"/>
+                        </ul>
+
+                        <p v-else>No projects in this course yet.</p>
+
+                        <ProjectForm
+                            v-if="showProjectForm"
+                            v-model="newProject"
+                            @cancel="showProjectForm = false"
+                            @submit="addProject"/>
+
+                        <BButton 
+                            v-else
+                            type="button" 
+                            variant="primary" 
+                            @click="showProjectForm = true">Add project</BButton>
                     </BTab>
                     <BTab title="Topics">
-                        <p>No topics in this course yet.</p>
+                        <ul
+                            class="list-unstyled"
+                            v-if="topics.length">
+
+                            <TopicItem
+                                class="mb-2"
+                                v-for="topic in topics"
+                                :data="topic"
+                                :key="topic.id"/>
+                        </ul>
+
+                        <p v-else>No topics in this course yet.</p>
+
+                        <TopicForm
+                                v-if="showTopicForm"
+                                v-model="newTopic"
+                                @cancel="showTopicForm = false"
+                                @submit="addTopic"/>
+
+                        <BButton
+                                v-else
+                                type="button"
+                                variant="primary"
+                                @click="showTopicForm = true">Add topic</BButton>
                     </BTab>
                     <BTab title="Sprints">
                         <ul 
@@ -34,7 +82,8 @@
                         <p v-else>No sprints in this course yet.</p>
 
                         <SprintForm 
-                            v-if="showSprintForm" 
+                            v-if="showSprintForm"
+                            :course="course"
                             v-model="newSprint" 
                             @cancel="showSprintForm = false" 
                             @submit="addSprint"/>
@@ -73,16 +122,37 @@ import NotFound from '@/components/elements/NotFound';
 import SprintItem from '@/components/elements/SprintItem';
 import SprintForm from '@/components/forms/SprintForm';
 import SprintCollectionForm from '@/components/forms/SprintCollectionForm';
+import ProjectForm from '@/components/forms/ProjectForm';
+import ProjectItem from '@/components/elements/ProjectItem';
+import TopicForm from '@/components/forms/TopicForm';
+import TopicItem from '@/components/elements/TopicItem';
 import { info } from '@/helper/semester';
 
 export default {
-    components: { SprintCollectionForm, SprintForm, SprintItem, NotFound, BCard, BTabs, BTab, BButton },
+    components: {
+        SprintCollectionForm,
+        SprintForm,
+        ProjectForm,
+        TopicForm,
+        SprintItem,
+        ProjectItem,
+        TopicItem,
+        NotFound,
+        BCard,
+        BTabs,
+        BTab,
+        BButton,
+    },
     data() {
         return {
             showSprintForm: false,
             showCollectionForm: false,
-            newSprint: {},
+            showProjectForm: false,
+            showTopicForm: false,
+            newSprint: this.$store.getters['sprints/template'](),
             newCollection: {},
+            newProject: this.$store.getters['projects/template'](),
+            newTopic: this.$store.getters['topics/template'](),
         };
     },
     computed: {
@@ -91,43 +161,97 @@ export default {
          * @returns {object}
          */
         course() {
-            return this.$store.getters['courses/byId'](parseInt(this.$route.params.id, 10));
+            return this.$store.getters['courses/byId'](
+                parseInt(this.$route.params.id, 10)
+            );
         },
+
         /**
          * Sprints in course sorted by start date
          * @returns {array}
          */
         sprints() {
-            return this.course.sprints ? this.course.sprints.slice().sort((a, b) => a.start_date > b.start_date) : [];
+            return this.course
+                ? this.$store.getters['sprints/all'](this.course.id)
+                    .sort((a, b) => a.start_date > b.start_date)
+                : [];
+        },
+
+        /** 
+         * Projects in course
+         * @returns {array}
+         */
+        projects() {
+            return this.course
+                ? this.$store.getters['projects/all'](this.course.id)
+                : [];
+        },
+
+        /**
+         * Topics in course
+         * @returns {array}
+         */
+        topics() {
+            return this.course
+                ? this.$store.getters['topics/all'](this.course.id)
+                : [];
         },
     },
     methods: {
         /**
          * Add a sprint to the given course
          */
-        addSprint() {
-            this.$store
-                .dispatch('courses/addSprint', {
-                    id: this.course.id,
-                    sprint: this.newSprint,
-                })
-                .then(() => {
-                    this.newSprint = {};
-                });
+        async addSprint() {
+            await this.$store.dispatch('sprints/create', {
+                parentId: this.course.id,
+                ...this.newSprint,
+            });
+
+            this.newSprint = this.$store.getters['sprints/template']();
+
+            // TODO handle errors in UI
         },
 
         /**
          * Add a sprint collection to the given course
          */
-        addCollection() {
-            this.$store
-                .dispatch('courses/addSprintCollection', {
-                    id: this.course.id,
-                    collection: this.newCollection,
-                })
-                .then(() => {
-                    this.newCollection = {};
+        async addCollection() {
+            await this.$store.dispatch('sprints/createCollection', {
+                parentId: this.course.id,
+                collection: this.newCollection,
+            });
+
+            this.newCollection = {};
+
+            // TODO handle errors in UI
+        },
+
+        async addProject() {
+            try {
+                await this.$store.dispatch('projects/create', {
+                    parentId: this.course.id,
+                    ...this.newProject,
                 });
+
+                this.newProject = this.$store.getters['projects/template']();
+            } catch (err) {
+                this.$notify({
+                    title: 'Validation failed',
+                    text: err.body.message.replace('Validation failed: ', ''),
+                    type: 'error',
+                });
+            }
+        },
+
+        async addTopic() {
+            await this.$store.dispatch('topics/create', {
+                parentId: this.course.id,
+                ...this.newTopic,
+            });
+
+            this.newTopic = this.$store.getters['topics/template']();
+
+            // TODO handle errors in UI
         },
 
         /**
@@ -142,3 +266,12 @@ export default {
     },
 };
 </script>
+
+<style module>
+    .list {
+        display: grid;
+        grid-gap: 8px;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-auto-rows: minmax(200px, 1fr);
+    }
+</style>

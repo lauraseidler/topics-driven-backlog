@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe 'Tasks API' do
 
-  let!(:story) { create(:story) }
+  let!(:project) { create(:project, course_id: create(:course).id ) }
+  let!(:story) { create(:story, project_id: project.id ) }
   let!(:tasks) { create_list(:task, 20, story_id: story.id) }
   let(:story_id) { story.id }
   let(:id) { tasks.first.id }
@@ -36,7 +37,7 @@ RSpec.describe 'Tasks API' do
 
   # Test suite for GET /stories
   describe 'GET /tasks' do
-    let!(:story_2) { create(:story) }
+    let!(:story_2) { create(:story, project_id: project.id) }
     let!(:tasks_2) { create_list(:task, 5, story_id: story_2.id) }
     before { get '/tasks' }
 

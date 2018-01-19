@@ -72,6 +72,7 @@ RSpec.describe 'Courses API', type: :request do
       before { post '/courses', params: valid_attributes }
 
       it 'creates a course' do
+        expect(json).not_to be_empty
         expect(json['title']).to eq('Learn Elm')
         expect(json['short_title']).to eq('LE')
         expect(json['hyperlink']).to eq('example.com')
@@ -112,6 +113,7 @@ RSpec.describe 'Courses API', type: :request do
 
     context 'when the record exists' do
       it 'updates the record' do
+        expect(json).not_to be_empty
         expect(json['title']).to eq('Learn Elm')
         expect(json['hyperlink']).to eq('example.com')
         expect(json['semester_type']).to eq(Course.semester_types[:summer])

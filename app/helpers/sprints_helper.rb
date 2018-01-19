@@ -49,18 +49,59 @@ module SprintsHelper
 
   def validate_sprint_date_parameter(start_date, end_date)
     errors = []
-
+    
     errors.append(
         valid_date_range(start_date || '', end_date || '')
     )
     errors.append(
         ends_in_the_future(end_date || '')
     )
-
+    
     raise_exception_on_validation_error(errors)
   end
 
+  def validate_topics
+    errors = []
+
+    if params[:topic_ids].present?
+
+      params[:topic_ids] = filter_unique_parameter_list(params[:topic_ids])
+      course = get_course
+
+      params[:topic_ids].each do |topic_id|
+        errors.append(
+            valid_topic_id(topic_id, course)
+        )
+      end
+
+        raise_exception_on_validation_error(errors)
+    end
+
+  end
+
   private
+
+  def get_course
+    if @course.present?
+      @course
+    else
+      @sprint.course
+    end
+  end
+
+  def filter_unique_parameter_list(list)
+    list.uniq
+  end
+
+  def valid_topic_id(topic_id, course)
+    if Topic.find_by(id: topic_id).nil?
+      'Topic ' + topic_id.to_s + ' does not exist'
+    else
+      if Topic.find_by(id: topic_id).course != course
+      'Topic ' + topic_id.to_s + ' does not exists for course ' + course.id.to_s
+      end
+    end
+  end
 
   def duration_cannot_be_empty(duration)
     if duration == 0 || duration.blank?
@@ -83,14 +124,6 @@ module SprintsHelper
       if Date.parse(end_date) < Date.today
         'End date cannot be in the past'
       end
-    end
-  end
-
-  def raise_exception_on_validation_error(errors)
-    errors = errors - ['', nil]
-
-    if !errors.empty?
-      raise ActionController::BadRequest.new('Validation failed: ' + errors.join(", "))
     end
   end
 end

@@ -1,16 +1,10 @@
 class StoriesController < ApplicationController
+  before_action :set_project, only: [:create]
   before_action :set_story, only: [:show, :update, :destroy]
 
-  # GET /stories
-  def index
-    @stories = Story.all
-    json_response(@stories)
-  end
-
-  # POST /stories
+  # POST /projects/:project_id/stories
   def create
-    @story = Story.create!(story_params)
-    @story.move_to_bottom
+    @story = @project.stories.create!(story_params)
     json_response(@story, :created)
   end
 
@@ -22,17 +16,15 @@ class StoriesController < ApplicationController
   # PUT /stories/:id
   # PATCH /stories/:id
   def update
-    if params[:position]
-      @story.set_list_position(params[:position])
-    end
     @story.update!(story_params)
-
+    set_positions(params[:sprint_position], params[:project_position])
     json_response(@story)
   end
 
   # DELETE /stories/:id
   def destroy
-    @story.remove_from_list
+    remove_positions
+
     @story.destroy!
     head :no_content
   end
@@ -41,11 +33,45 @@ class StoriesController < ApplicationController
 
   def story_params
     # whitelist params
-    params.permit(:title, :description, :status, :points, :sprint_id)
+    params.permit(:title, :description, :status, :points, :sprint_id, :topic_id)
+  end
+
+  def set_project
+    @project = Project.find_by!(id: params[:project_id])
   end
 
   def set_story
     @story = Story.find_by!(id: params[:id])
+  end
+
+  def set_positions(sprint_pos, project_pos)
+    if sprint_pos.present? & @story.sprint_id.present?
+      sprint_position = SprintPosition.find_by(story_id: @story.id)
+      sprint_position.set_list_position(sprint_pos)
+    elsif !@story.sprint_id.present?
+      remove_sprint_position
+    end
+
+    if project_pos.present?
+      project_position = ProjectPosition.find_by!(story_id: @story.id)
+      project_position.set_list_position(project_pos)
+    end
+  end
+
+  def remove_positions
+    remove_sprint_position
+
+    project_position = ProjectPosition.find_by!(story_id: @story.id)
+    project_position.remove_from_list
+    project_position.destroy!
+  end
+
+  def remove_sprint_position
+      sprint_position = SprintPosition.find_by(story_id: @story.id)
+      if sprint_position.present?
+        sprint_position.remove_from_list
+        sprint_position.destroy!
+      end
   end
 
 end

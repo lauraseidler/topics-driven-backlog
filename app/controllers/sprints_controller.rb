@@ -9,6 +9,7 @@ class SprintsController < ApplicationController
   before_action only:[:update] {
     validate_sprint_date_parameter(params[:start_date], params[:end_date])
   }
+  before_action :validate_topics, only: [:create, :update]
 
   # POST /courses/course_id/sprints
   def create
@@ -49,7 +50,7 @@ class SprintsController < ApplicationController
 
   def sprint_params
     # whitelist params
-    params.permit(:name, :end_date, :start_date, :duration, :collection)
+    params.permit(:name, :end_date, :start_date, :duration, :collection, :topic_ids => [])
   end
 
   def set_course

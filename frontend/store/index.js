@@ -2,15 +2,27 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import moment from 'moment';
 
-import stories from '@/store/stories';
-import courses from '@/store/courses';
-import sprints from '@/store/sprints';
+import courses from '@/store/modules/courses';
+import projects from '@/store/modules/projects';
+import sprints from '@/store/modules/sprints';
+import stories from '@/store/modules/stories';
+import topics from '@/store/modules/topics';
 
 Vue.use(Vuex);
 
 export const state = {
     initialised: false,
     currentDate: moment().format('YYYY-MM-DD'),
+    pendingChanges: 0,
+};
+
+export const mutations = {
+    newPendingChange(state) {
+        state.pendingChanges++;
+    },
+    resolvePendingChange(state) {
+        state.pendingChanges--;
+    },
 };
 
 export const actions = {
@@ -20,14 +32,14 @@ export const actions = {
      * @param {function} dispatch
      */
     init({ state, dispatch }) {
-        dispatch('stories/init');
-        dispatch('courses/init');
+        dispatch('courses/init', {});
         state.initialised = true;
     },
 };
 
 export default new Vuex.Store({
-    modules: { stories, courses, sprints },
+    modules: { courses, projects, sprints, stories, topics },
     state,
+    mutations,
     actions,
 });
