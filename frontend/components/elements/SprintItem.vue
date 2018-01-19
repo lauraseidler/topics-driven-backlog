@@ -6,21 +6,19 @@
                     <BButton 
                         size="sm" 
                         variant="outline-danger"
-                        class="float-right ml-2" 
+                        class="float-right ml-1"
                         v-confirm="{ action: deleteSprint, text: 'Are you sure you want to delete this sprint?' }">
 
                         <VIcon name="trash"/>
-                        Delete
                     </BButton>
 
                     <BButton 
                         size="sm" 
                         variant="outline-primary"
-                        class="float-right" 
+                        class="float-right ml-1"
                         @click="startEditing">
 
                         <VIcon name="pencil"/>
-                        Edit
                     </BButton>
                 </template>
                 
@@ -28,12 +26,14 @@
 
                 <p class="card-text">
                     Start: {{ data.start_date | displayDate }} <br>
-                    End: {{ data.end_date | displayDate }}
+                    End: {{ data.end_date | displayDate }} <br>
+                    Topics: {{ topicsString || '(no topics)' }}
                 </p>
             </template>
 
             <SprintForm 
-                v-else 
+                v-else
+                :course="course"
                 v-model="editingData" 
                 @cancel="editing = false" 
                 @submit="saveSprint"/>
@@ -60,6 +60,14 @@ export default {
             default: () => {},
         },
     },
+    computed: {
+        course() {
+            return this.$store.getters['courses/byId'](this.data.course_id);
+        },
+        topicsString() {
+            return this.data.topic_ids.map(id => this.$store.getters['topics/byId'](id).title).join(' | ');
+        },
+    },
     data() {
         return {
             editing: false,
@@ -77,6 +85,7 @@ export default {
                 'name',
                 'start_date',
                 'end_date',
+                'topic_ids',
             ]);
         },
 

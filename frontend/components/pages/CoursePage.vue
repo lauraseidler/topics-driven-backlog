@@ -80,7 +80,8 @@
                         <p v-else>No sprints in this course yet.</p>
 
                         <SprintForm 
-                            v-if="showSprintForm" 
+                            v-if="showSprintForm"
+                            :course="course"
                             v-model="newSprint" 
                             @cancel="showSprintForm = false" 
                             @submit="addSprint"/>

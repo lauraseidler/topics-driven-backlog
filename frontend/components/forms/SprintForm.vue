@@ -37,6 +37,24 @@
                 :min="$store.state.currentDate > data.start_date ? $store.state.currentDate : data.start_date"/>
         </BFormGroup>
 
+        <BFormGroup
+                label="Topics"
+                label-for="sprint-topics">
+
+            <BFormSelect
+                    multiple
+                    id="sprint-topics"
+                    v-model="data.topic_ids">
+                <option
+                        v-for="topic in topics"
+                        :value="topic.id"
+                        :key="topic.id">
+
+                    {{ topic.title }}
+                </option>
+            </BFormSelect>
+        </BFormGroup>
+
         <BButton 
             type="submit" 
             variant="primary"
@@ -55,6 +73,7 @@ import { required } from 'vuelidate/lib/validators';
 import BForm from '@bootstrap/form/form';
 import BFormGroup from '@bootstrap/form-group/form-group';
 import BFormInput from '@bootstrap/form-input/form-input';
+import BFormSelect from '@bootstrap/form-select/form-select';
 import BButton from '@bootstrap/button/button';
 import smallerOrEqualThan from '@/validators/smallerOrEqualThan';
 import largerOrEqualThan from '@/validators/largerOrEqualThan';
@@ -62,8 +81,21 @@ import BaseForm from '@/components/forms/BaseForm';
 
 export default {
     name: 'SprintForm',
-    components: { BForm, BFormGroup, BFormInput, BButton },
+    components: { BForm, BFormGroup, BFormInput, BFormSelect, BButton },
     extends: BaseForm,
+    props: {
+        course: {
+            type: Object,
+            default: () => {},
+        },
+    },
+    computed: {
+        topics() {
+            return this.course
+                ? this.$store.getters['topics/all'](this.course.id)
+                : [];
+        },
+    },
     validations: {
         data: {
             name: { required },
