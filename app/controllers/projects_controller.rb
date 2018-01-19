@@ -1,6 +1,9 @@
 class ProjectsController < ApplicationController
+  include ProjectsHelper
+
   before_action :set_course, only: [:create]
   before_action :set_project, only: [:show, :update, :destroy]
+  before_action :validate_users, only: [:create, :update]
 
   # GET /projects/:id
   def show
@@ -30,7 +33,7 @@ class ProjectsController < ApplicationController
 
   def project_params
     # whitelist params
-    params.permit(:title)
+    params.permit(:title, :user_ids => [])
   end
 
   def set_course
