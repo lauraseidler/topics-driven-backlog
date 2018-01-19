@@ -4,7 +4,9 @@
             Back to course
         </router-link>
 
-        <h2 class="h4 text-muted" v-if="course">{{ course.short_title }} <small>({{ course.title}})</small></h2>
+        <router-link class="h4 text-muted" :to="`/courses/${course.id}-${slugify(course.title)}`" v-if="course">
+            {{ course.short_title }} <small>({{ course.title}})</small>
+        </router-link>
         <h1 v-if="project">{{ project.title }}: {{ currentView }}</h1>
 
         <hr>
