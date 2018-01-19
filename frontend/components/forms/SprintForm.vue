@@ -20,8 +20,9 @@
             <BFormInput 
                 id="sprint-start-date" 
                 :max="data.end_date" 
-                type="date" 
-                v-model="data.start_date" 
+                type="date"
+                v-model="data.start_date"
+                placeholder="YYYY-MM-DD"
                 required/>
         </BFormGroup>
 
@@ -31,8 +32,9 @@
 
             <BFormInput 
                 id="sprint-end-date" 
-                type="date" 
-                v-model="data.end_date" 
+                type="date"
+                v-model="data.end_date"
+                placeholder="YYYY-MM-DD"
                 required
                 :min="$store.state.currentDate > data.start_date ? $store.state.currentDate : data.start_date"/>
         </BFormGroup>
@@ -77,6 +79,7 @@ import BFormSelect from '@bootstrap/form-select/form-select';
 import BButton from '@bootstrap/button/button';
 import smallerOrEqualThan from '@/validators/smallerOrEqualThan';
 import largerOrEqualThan from '@/validators/largerOrEqualThan';
+import date from '@/validators/date';
 import BaseForm from '@/components/forms/BaseForm';
 
 export default {
@@ -101,10 +104,12 @@ export default {
             name: { required },
             start_date: {
                 required,
+                date,
                 smallerThanEnd: smallerOrEqualThan('end_date'),
             },
             end_date: {
                 required,
+                date,
                 largerThanStart: largerOrEqualThan('start_date'),
                 largerThanToday: largerOrEqualThan(
                     moment().format('YYYY-MM-DD'),
