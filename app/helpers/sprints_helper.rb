@@ -55,10 +55,11 @@ module SprintsHelper
     if params[:topic_ids].present?
 
       params[:topic_ids] = filter_unique_parameter_list(params[:topic_ids])
+      course = get_course
 
       params[:topic_ids].each do |topic_id|
         errors.append(
-            valid_topic_id(topic_id, @sprint.course)
+            valid_topic_id(topic_id, course)
         )
       end
 
@@ -68,6 +69,14 @@ module SprintsHelper
   end
 
   private
+
+  def get_course
+    if @course.present?
+      @course
+    else
+      @sprint.course
+    end
+  end
 
   def filter_unique_parameter_list(list)
     list.uniq
