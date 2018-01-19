@@ -24,7 +24,7 @@
                         @click="addToSprint">
 
                         <VIcon name="arrow-up"/>
-                        Move to sprint
+                        <span>Move to sprint</span>
                     </BButton>
 
                     <BButton
@@ -36,7 +36,7 @@
                         @click="removeFromSprint">
 
                         <VIcon name="arrow-down"/>
-                        Move to backlog
+                        <span>Move to backlog</span>
                     </BButton>
 
                     <span
@@ -62,7 +62,7 @@
             </td>
             <!-- Identifier -->
             <td>
-                {{ data.identifier }}
+                <nobr>{{ data.identifier }}</nobr>
             </td>
 
             <!-- Story -->
@@ -78,7 +78,12 @@
             </td>
 
             <td>
-                {{ topic(data.topic_id) ? topic(data.topic_id).title : '(no topic)' }}
+                <template v-if="topic(data.topic_id)">
+                    {{ topic(data.topic_id).title }} <br>
+                    <small>{{ sprints(data.topic_id) }}</small>
+                </template>
+
+                <template v-else>(no topic)</template>
             </td>
 
             <!-- Story points -->
@@ -132,17 +137,16 @@
                     @click="startEditing">
 
                     <VIcon name="pencil"/>
-                    Edit
                 </BButton>
+                <br>
 
                 <BButton 
                     size="sm" 
                     variant="outline-danger"
-                    title="Delete" 
+                    title="Delete"
                     v-confirm="{ action: remove, text: 'Are you sure you want to delete this story?' }">
 
                     <VIcon name="trash"/>
-                    Delete
                 </BButton>
             </td>
         </template>
@@ -226,6 +230,13 @@ export default {
 
         topic(topicId) {
             return this.$store.getters['topics/byId'](topicId);
+        },
+
+        sprints(topicId) {
+            return this.$store.getters['sprints/all'](this.project.course_id)
+                .filter(s => s.topic_ids.indexOf(topicId) > -1)
+                .map(s => s.name)
+                .join(' | ');
         },
 
         /**

@@ -9,6 +9,34 @@ RSpec.describe 'Sprints/Topics API' do
   let!(:topic_id) { topics.first.id }
   let!(:invalid_sprint_topic_id) { create(:topic, course_id: create(:course).id).id }
 
+  # Test suite for POST /courses/:course_id/sprints
+  describe 'POST /courses/:course_id/sprints with defining topics' do
+    let(:valid_attributes) {
+      {
+          name: 'Visit Narnia',
+          start_date: Date.today.to_s,
+          end_date: Date.tomorrow.to_s,
+          topic_ids: [topics.first.id, topics.last.id]
+      }
+    }
+
+    context 'when request attributes are valid' do
+      before { post "/courses/#{course.id}/sprints", params: valid_attributes }
+
+      it 'creates a sprint with topics' do
+        expect(json['name']).to eq('Visit Narnia')
+        expect(json['start_date']).to eq(Date.today.to_s)
+        expect(json['end_date']).to eq(Date.tomorrow.to_s)
+        expect(json['course_id']).to eq(course.id)
+        expect(json['topic_ids']).to eq([topics.first.id, topics.last.id])
+      end
+
+      it 'returns status code 201' do
+        expect(response).to have_http_status(201)
+      end
+    end
+  end
+
   # Test suite for PATCH /sprints/:id
   describe 'PATCH /sprints/:id for adding topics' do
     let(:valid_topics) {
