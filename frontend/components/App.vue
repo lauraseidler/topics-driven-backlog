@@ -141,8 +141,9 @@ body {
     vertical-align: sub;
 }
 
-.btn .fa-icon {
-    margin-right: 3px;
+.btn .fa-icon + span {
+    display: inline-block;
+    margin-left: 3px;
 }
 
 .is-disabled {

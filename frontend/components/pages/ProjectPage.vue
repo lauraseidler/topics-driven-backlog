@@ -145,7 +145,7 @@ export default {
             tableColumns: {
                 history: [
                     { field: 'sprint_position', name: 'Position' },
-                    { field: 'identifier', name: 'Identifier' },
+                    { field: 'identifier', name: 'ID' },
                     { field: 'title', name: 'Story' },
                     { field: 'topic_id', name: 'Topic' },
                     { field: 'points', name: 'Story points' },
@@ -153,7 +153,7 @@ export default {
                 ],
                 currentSprint: [
                     { field: 'sprint_position', name: 'Position' },
-                    { field: 'identifier', name: 'Identifier' },
+                    { field: 'identifier', name: 'ID' },
                     { field: 'title', name: 'Story' },
                     { field: 'topic_id', name: 'Topic' },
                     { field: 'points', name: 'Story points' },
@@ -161,19 +161,19 @@ export default {
                 ],
                 nextSprint: [
                     { field: 'sprint_position', name: 'Position' },
-                    { field: 'identifier', name: 'Identifier' },
+                    { field: 'identifier', name: 'ID' },
                     { field: 'title', name: 'Story' },
                     { field: 'topic_id', name: 'Topic' },
                     { field: 'points', name: 'Story points' },
-                    { name: 'Operations' },
+                    { name: '' },
                 ],
                 backlog: [
                     { field: 'project_position', name: 'Position' },
-                    { field: 'identifier', name: 'Identifier' },
+                    { field: 'identifier', name: 'ID' },
                     { field: 'title', name: 'Story' },
                     { field: 'topic_id', name: 'Topic' },
                     { field: 'points', name: 'Story points' },
-                    { name: 'Operations' },
+                    { name: '' },
                 ]
             },
             sections: {

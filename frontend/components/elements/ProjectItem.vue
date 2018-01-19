@@ -21,19 +21,17 @@
                 <BButton
                         size="sm"
                         variant="outline-danger"
-                        class="float-right ml-2"
+                        class="float-right ml-1"
                         v-confirm="{ action: deleteProject, text: 'Are you sure you want to delete this project?' }">
                     <VIcon name="trash"/>
-                    Delete
                 </BButton>
 
                 <BButton
                         size="sm"
                         variant="outline-primary"
-                        class="float-right ml-2"
+                        class="float-right ml-1"
                         @click="startEditing">
                     <VIcon name="pencil"/>
-                    Edit
                 </BButton>
 
                 <h3 class="card-title h4">

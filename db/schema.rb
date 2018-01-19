@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 20180118202158) do
   create_table "sprints_topics", force: :cascade do |t|
     t.bigint "sprint_id"
     t.bigint "topic_id"
+    t.index ["sprint_id", "topic_id"], name: "index_sprints_topics_on_sprint_id_and_topic_id", unique: true
     t.index ["sprint_id"], name: "index_sprints_topics_on_sprint_id"
     t.index ["topic_id"], name: "index_sprints_topics_on_topic_id"
   end

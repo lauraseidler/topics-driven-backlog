@@ -8,6 +8,11 @@ import actionTypes from '@/store/base/resource-module/action-types';
 const resourceModule = generate({
     resource: resources.SPRINTS,
     parent: resources.COURSES,
+    template: () => {
+        return {
+            topic_ids: [],
+        };
+    },
 });
 
 /**
