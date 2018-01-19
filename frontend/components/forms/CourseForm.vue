@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { required, url } from 'vuelidate/lib/validators';
+import { required, url, requiredIf } from 'vuelidate/lib/validators';
 import { current, next } from '@/helper/semester';
 import BForm from '@bootstrap/form/form';
 import BFormGroup from '@bootstrap/form-group/form-group';
@@ -112,7 +112,9 @@ export default {
         data: {
             title: { required },
             hyperlink: { url },
-            semester: { required },
+            semester: {
+                requiredIf: requiredIf(() => this.noSemester),
+            },
         },
     },
 };
