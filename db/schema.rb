@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180113141102) do
+ActiveRecord::Schema.define(version: 20180118195950) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,13 @@ ActiveRecord::Schema.define(version: 20180113141102) do
     t.string "semester_type"
     t.integer "semester_year", limit: 2
     t.string "short_title"
+  end
+
+  create_table "memberships", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "project_id"
+    t.index ["project_id"], name: "index_memberships_on_project_id"
+    t.index ["user_id"], name: "index_memberships_on_user_id"
   end
 
   create_table "project_positions", force: :cascade do |t|
@@ -60,6 +67,14 @@ ActiveRecord::Schema.define(version: 20180113141102) do
     t.index ["course_id"], name: "index_sprints_on_course_id"
   end
 
+  create_table "sprints_topics", force: :cascade do |t|
+    t.bigint "sprint_id"
+    t.bigint "topic_id"
+    t.index ["sprint_id", "topic_id"], name: "index_sprints_topics_on_sprint_id_and_topic_id", unique: true
+    t.index ["sprint_id"], name: "index_sprints_topics_on_sprint_id"
+    t.index ["topic_id"], name: "index_sprints_topics_on_topic_id"
+  end
+
   create_table "stories", force: :cascade do |t|
     t.string "title"
     t.string "description"
@@ -94,12 +109,21 @@ ActiveRecord::Schema.define(version: 20180113141102) do
     t.index ["course_id"], name: "index_topics_on_course_id"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "password_digest"
+    t.index ["email"], name: "index_users_on_email", unique: true
+  end
+
   add_foreign_key "project_positions", "projects", on_delete: :cascade
   add_foreign_key "project_positions", "stories", on_delete: :cascade
   add_foreign_key "projects", "courses"
   add_foreign_key "sprint_positions", "sprints", on_delete: :cascade
   add_foreign_key "sprint_positions", "stories", on_delete: :cascade
   add_foreign_key "sprints", "courses"
+  add_foreign_key "sprints_topics", "sprints"
+  add_foreign_key "sprints_topics", "topics"
   add_foreign_key "stories", "projects"
   add_foreign_key "stories", "sprints"
   add_foreign_key "stories", "topics"

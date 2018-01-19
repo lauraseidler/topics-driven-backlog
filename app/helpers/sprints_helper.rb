@@ -37,17 +37,51 @@ module SprintsHelper
   def validate_sprint_date_parameter
     errors = []
 
-    errors.append(
-        valid_date_range(params[:start_date] || '', params[:end_date] || '')
-    )
-    errors.append(
-        ends_in_the_future(params[:end_date] || '')
-    )
+    if params[:start_date].present? || params[:end_date].present?
+      errors.append(
+          valid_date_range(params[:start_date] || '', params[:end_date] || '')
+      )
+      errors.append(
+          ends_in_the_future(params[:end_date] || '')
+      )
 
-    raise_exception_on_validation_error(errors)
+      raise_exception_on_validation_error(errors)
+    end
+  end
+
+  def validate_topics
+    errors = []
+
+    if params[:topic_ids].present?
+
+      params[:topic_ids] = filter_unique_parameter_list(params[:topic_ids])
+
+      params[:topic_ids].each do |topic_id|
+        errors.append(
+            valid_topic_id(topic_id, @sprint.course)
+        )
+      end
+
+        raise_exception_on_validation_error(errors)
+    end
+
   end
 
   private
+
+  def filter_unique_parameter_list(list)
+    list.uniq
+  end
+
+  def valid_topic_id(topic_id, course)
+    if Topic.find_by(id: topic_id).nil?
+      'Topic ' + topic_id.to_s + ' does not exist'
+    else
+      if Topic.find_by(id: topic_id).course != course
+      'Topic ' + topic_id.to_s + ' does not exists for course ' + course.id.to_s
+      end
+    end
+  end
 
   def duration_cannot_be_empty(duration)
     if duration == 0 || duration.blank?
