@@ -5,6 +5,7 @@ module ExceptionHandler
   class AuthenticationError < StandardError; end
   class MissingToken < StandardError; end
   class InvalidToken < StandardError; end
+  class ExpiredSignature < StandardError; end
 
   def raise_exception_on_validation_error(errors)
     errors = errors - ['', nil]
@@ -21,7 +22,8 @@ module ExceptionHandler
     rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
     rescue_from ExceptionHandler::AuthenticationError, with: :unauthorized_request
     rescue_from ExceptionHandler::MissingToken, with: :record_invalid
-    rescue_from ExceptionHandler::InvalidToken, with: :record_invalid
+    rescue_from ExceptionHandler::InvalidToken, with: :invalid_token
+    rescue_from ExceptionHandler::ExpiredSignature, with: :invalid_token
   end
 
   private
@@ -44,6 +46,11 @@ module ExceptionHandler
   # JSON response with message; Status code 422 - unprocessable entity
   def record_invalid(e)
     json_response({ message: e.message }, :unprocessable_entity)
+  end
+
+  # JSON response with message; Status code 498 - Invalid Token
+  def invalid_token(e)
+    json_response({ message: e.message }, :invalid_token)
   end
 
 end

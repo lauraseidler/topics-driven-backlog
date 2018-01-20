@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Courses API', type: :request do
 
+  let(:headers) { valid_headers }
   let!(:courses) { create_list(:course, 10) }
   let(:course) { courses.first }
   let(:course_id) { courses.first.id }
@@ -9,7 +10,7 @@ RSpec.describe 'Courses API', type: :request do
   # Test suite for GET /courses
   describe 'GET /courses' do
     # make HTTP get request before each example
-    before { get '/courses' }
+    before { get '/courses', headers: headers }
 
     it 'returns courses' do
       # Note `json` is a custom helper to parse JSON responses
@@ -24,7 +25,7 @@ RSpec.describe 'Courses API', type: :request do
 
   # Test suite for GET /courses/:id
   describe 'GET /courses/:id' do
-    before { get "/courses/#{course_id}" }
+    before { get "/courses/#{course_id}", headers: headers }
 
     context 'when the record exists' do
       it 'returns the course' do
@@ -69,7 +70,7 @@ RSpec.describe 'Courses API', type: :request do
     }
 
     context 'when the request is valid' do
-      before { post '/courses', params: valid_attributes }
+      before { post '/courses', params: valid_attributes, headers: headers }
 
       it 'creates a course' do
         expect(json).not_to be_empty
@@ -86,7 +87,7 @@ RSpec.describe 'Courses API', type: :request do
     end
 
     context 'when the request is invalid' do
-      before { post '/courses', params: { title: 'Foobar' } }
+      before { post '/courses', params: { title: 'Foobar' }, headers: headers }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -109,7 +110,7 @@ RSpec.describe 'Courses API', type: :request do
           semester_year: Date.today.year.to_s
       }
     }
-    before { put "/courses/#{course_id}", params: valid_attributes }
+    before { put "/courses/#{course_id}", params: valid_attributes, headers: headers }
 
     context 'when the record exists' do
       it 'updates the record' do
@@ -148,7 +149,7 @@ RSpec.describe 'Courses API', type: :request do
     }
 
     context 'updating with a valid semester attributes' do
-      before { patch "/courses/#{course_id}", params: valid_semester_attributes }
+      before { patch "/courses/#{course_id}", params: valid_semester_attributes, headers: headers }
 
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
@@ -156,7 +157,7 @@ RSpec.describe 'Courses API', type: :request do
     end
 
     context 'updating with invalid semester attributes' do
-      before { patch "/courses/#{course_id}", params: invalid_semester_attributes }
+      before { patch "/courses/#{course_id}", params: invalid_semester_attributes, headers: headers }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -171,7 +172,7 @@ RSpec.describe 'Courses API', type: :request do
 
   # Test suite for DELETE /courses/:id
   describe 'DELETE /courses/:id' do
-    before { delete "/courses/#{course_id}"}
+    before { delete "/courses/#{course_id}", headers: headers }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)
