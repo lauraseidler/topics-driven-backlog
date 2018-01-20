@@ -20,6 +20,7 @@
                     <BNavbarNav>
                         <BNavItem to="/projects">Projects</BNavItem>
                         <BNavItem to="/courses">Courses</BNavItem>
+                        <BNavItem to="/logout" v-if="$store.state.loggedIn">Logout</BNavItem>
                     </BNavbarNav>
 
                     <BNavbarNav class="ml-auto">
