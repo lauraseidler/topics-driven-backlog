@@ -26,10 +26,6 @@ export const mutations = {
     resolvePendingChange(state) {
         state.pendingChanges--;
     },
-    setUser(state, user) {
-        state.user = user;
-        localStorage.setItem('user', JSON.stringify(state.user));
-    },
     login(state, { user, token }) {
         state.loggedIn = true;
         state.user = user;
@@ -67,9 +63,6 @@ export const actions = {
             // switch to logged in state
             commit('login', { user, token });
 
-            // fetch user data
-            dispatch('fetchUser');
-
             // init modules
             dispatch('courses/init', {});
         } else {
@@ -78,16 +71,6 @@ export const actions = {
         }
 
         state.initialised = true;
-    },
-
-    /**
-     * Fetch user data from API and save
-     * @param {function}commit
-     */
-    fetchUser({ commit }) {
-        Vue.http.get('user').then((response) => {
-            commit('setUser', response.body);
-        });
     },
 
     /**
@@ -100,7 +83,7 @@ export const actions = {
 
         commit('login', {
             user: res.body.user,
-            token: res.body.token,
+            token: res.body.auth_token,
         });
     },
 };

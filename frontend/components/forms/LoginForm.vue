@@ -4,12 +4,12 @@
         class="login-form">
 
         <BFormGroup
-            label="Username"
-            label-for="login-username">
+            label="Email"
+            label-for="login-email">
 
             <BFormInput
-                id="login-username"
-                v-model="data.username"
+                id="login-email"
+                v-model="data.email"
                 required/>
         </BFormGroup>
 
@@ -39,7 +39,7 @@ import BFormGroup from '@bootstrap/form-group/form-group';
 import BFormInput from '@bootstrap/form-input/form-input';
 import BButton from '@bootstrap/button/button';
 import BaseForm from '@/components/forms/BaseForm';
-import { required } from 'vuelidate/lib/validators';
+import { required, email } from 'vuelidate/lib/validators';
 
 export default {
     name: 'login-form',
@@ -47,7 +47,7 @@ export default {
     extends: BaseForm,
     validations: {
         data: {
-            username: { required },
+            email: { required, email },
             password: { required },
         },
     },
