@@ -21,7 +21,7 @@ module ExceptionHandler
     rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
     rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
     rescue_from ExceptionHandler::AuthenticationError, with: :unauthorized_request
-    rescue_from ExceptionHandler::MissingToken, with: :record_invalid
+    rescue_from ExceptionHandler::MissingToken, with: :unauthorized_request
     rescue_from ExceptionHandler::InvalidToken, with: :invalid_token
     rescue_from ExceptionHandler::ExpiredSignature, with: :invalid_token
   end

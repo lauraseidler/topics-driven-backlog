@@ -7,8 +7,12 @@ class AuthenticateUser
   # Service entry point
   def call
     user = get_user(@email, @password)
+    expires_at = 24.hours.from_now
     {
-        auth_token: JsonWebToken.encode(user_id: user.id),
+        auth_token: {
+          token: JsonWebToken.encode(user_id: user.id, exp: expires_at),
+          ttl: expires_at.to_i
+        },
         user: user
     }
   end
