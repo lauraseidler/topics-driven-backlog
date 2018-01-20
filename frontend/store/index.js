@@ -16,7 +16,7 @@ export const state = {
     pendingChanges: 0,
     loggedIn: false,
     user: null,
-    token: null,
+    jwt: null,
 };
 
 export const mutations = {
@@ -26,21 +26,21 @@ export const mutations = {
     resolvePendingChange(state) {
         state.pendingChanges--;
     },
-    login(state, { user, token }) {
+    login(state, { user, jwt }) {
         state.loggedIn = true;
         state.user = user;
-        state.token = token;
+        state.jwt = jwt;
 
         localStorage.setItem('user', JSON.stringify(state.user));
-        localStorage.setItem('token', state.token);
-        Vue.http.headers.common.Authorization = `Bearer ${state.token}`;
+        localStorage.setItem('jwt', JSON.stringify(state.jwt));
+        Vue.http.headers.common.Authorization = `Bearer ${state.jwt.token}`;
     },
     logout(state) {
         state.user = null;
         state.loggedIn = false;
-        state.token = null;
+        state.jwt = null;
 
-        localStorage.removeItem('token');
+        localStorage.removeItem('jwt');
         localStorage.removeItem('user');
         delete Vue.http.headers.common.Authorization;
     },
@@ -55,13 +55,13 @@ export const actions = {
      */
     init({ state, commit, dispatch }) {
         const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
-        const token = localStorage.getItem('token') || null;
+        const jwt = localStorage.getItem('jwt') ? JSON.parse(localStorage.getItem('jwt')) : null;
 
         // if user and token present, login and initialise rest of app
         // else ensure clean logged out tate
-        if (user && token) {
+        if (user && jwt && jwt.token && jwt.ttl && jwt.ttl > moment().unix()) {
             // switch to logged in state
-            commit('login', { user, token });
+            commit('login', { user, jwt });
 
             // init modules
             dispatch('courses/init', {});
@@ -78,13 +78,15 @@ export const actions = {
      * @param {function} commit
      * @param {object} user
      */
-    async login({ commit }, user) {
+    async login({ commit, dispatch }, user) {
         const res = await Vue.http.post('/get-token', user);
 
         commit('login', {
             user: res.body.user,
-            token: res.body.auth_token,
+            jwt: res.body.auth_token,
         });
+
+        dispatch('init');
     },
 };
 
