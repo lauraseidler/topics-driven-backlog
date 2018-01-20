@@ -5,28 +5,37 @@ RSpec.describe 'Authentication', type: :request do
   # Test suite for POST /get-token
   describe 'POST /get-token' do
     let!(:user) { create(:user) }
-    let(:headers) { valid_headers.except('Authorization') }
-    let(:valid_credentials) do
+    let(:valid_credentials) {
       {
-          email: user.email,
-          password: user.password
-      }.to_json
-    end
-    let(:invalid_credentials) do
+          HTTP_AUTHORIZATION: ActionController::HttpAuthentication::Basic.encode_credentials(user.email, 'ldap-password')
+      }
+    }
+    let(:invalid_credentials) {
       {
-          email: Faker::Internet.email,
-          password: Faker::Internet.password
-      }.to_json
-    end
+          HTTP_AUTHORIZATION: ActionController::HttpAuthentication::Basic.encode_credentials(user.email, '')
+      }
+    }
 
     # set request.headers to our custon headers
     # before { allow(request).to receive(:headers).and_return(headers) }
 
     context 'When request is valid' do
-      before { post '/get-token', params: valid_credentials, headers: headers }
+      before { post '/get-token', params: {}, headers: valid_credentials }
 
       it 'returns an authentication token' do
         expect(json['auth_token']).not_to be_nil
+      end
+    end
+
+    context 'When request is invalid' do
+      before { post '/get-token', params: {}, headers: invalid_credentials }
+
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+
+      it 'returns a not found message' do
+        expect(response.body).to match(/#{Message::invalid_credentials}/)
       end
     end
   end
