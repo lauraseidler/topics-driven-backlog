@@ -28,6 +28,7 @@
                             :data="project"/>
 
                         <ProjectItem
+                            v-if="course.allow_enrollment"
                             view="new"
                             :class="$style.new"
                             :data="newProject"
