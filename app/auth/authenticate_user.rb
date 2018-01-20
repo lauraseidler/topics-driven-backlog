@@ -6,15 +6,17 @@ class AuthenticateUser
 
   # Service entry point
   def call
-    JsonWebToken.encode(user_id: user.id) if user
+    user = get_user(@email, @password)
+    {
+        auth_token: JsonWebToken.encode(user_id: user.id),
+        user: user
+    }
   end
 
   private
 
-  attr_reader :email, :password
-
   # verify user credentials
-  def user
+  def get_user(email, password)
     if password.empty?
       user = nil
     else

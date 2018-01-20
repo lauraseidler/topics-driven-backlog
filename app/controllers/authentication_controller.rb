@@ -6,9 +6,7 @@ class AuthenticationController < ApplicationController
   # POST /get-token
   def authenticate
     authenticate_or_request_with_http_basic do |username, password|
-    auth_token =
-        AuthenticateUser.new(username, password).call
-    json_response(auth_token: auth_token)
+    json_response(AuthenticateUser.new(username, password).call)
     end
   end
 end
