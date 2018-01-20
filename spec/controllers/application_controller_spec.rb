@@ -1,3 +1,5 @@
+# Source: https://scotch.io/tutorials/build-a-restful-json-api-with-rails-5-part-two
+
 require 'rails_helper'
 
 RSpec.describe ApplicationController, type: :controller do

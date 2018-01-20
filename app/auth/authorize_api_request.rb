@@ -1,4 +1,4 @@
-# https://scotch.io/tutorials/build-a-restful-json-api-with-rails-5-part-two
+# Source: https://scotch.io/tutorials/build-a-restful-json-api-with-rails-5-part-two
 
 class AuthorizeApiRequest
   def initialize(headers = {})
