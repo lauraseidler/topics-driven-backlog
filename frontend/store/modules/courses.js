@@ -8,6 +8,7 @@ const resourceModule = generate({
     template: () => {
         return {
             semester: current().valueString,
+            allow_enrollment: true,
         };
     },
 });
