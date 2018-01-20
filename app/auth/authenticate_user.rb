@@ -17,19 +17,15 @@ class AuthenticateUser
 
   # verify user credentials
   def user
-    get_user(:email, :password)
-  end
-
-  def get_user(email, password)
     if User.find_by(email: email).present?
       # todo authenticate via LDAP, return nil if LDAP Auth fails
       user = User.find_by(email: email)
     else
       # Todo get Name via LDAP
-      user = User.create!(email: email, name: email, password: password)
+      user = User.create!([:email => email, :name => email, :password => password])
     end
 
-    return user if user && user.authenticate(password)
+    return user if user && user.authenticate(:password)
     raise(ExceptionHandler::AuthenticationError, Message.invalid_credentials)
   end
 end
