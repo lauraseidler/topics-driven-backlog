@@ -14,7 +14,7 @@ class User < ApplicationRecord
 
   def set_role
     if self.role.blank?
-      self.status = User.roles[:student]
+      self.role = User.roles[:student]
     end
   end
 end
