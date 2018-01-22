@@ -1,6 +1,6 @@
 <template>
     <section id="project-page">
-        <router-link v-if="course" :to="`/courses/${course.id}-${slugify(course.title)}`" class="btn btn-primary float-right">
+        <router-link :to="`/courses/${course.id}-${slugify(course.title)}`" class="btn btn-primary float-right" v-if="course">
             Back to course
         </router-link>
 
