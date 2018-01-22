@@ -28,4 +28,12 @@ RSpec.describe Course, type: :model do
     expect(subject).not_to be_valid
   end
 
+  it "can have many users as instructors" do
+    subject = create(:course)
+    subject.instructions.build(user_id: create(:user).id, initial_instructor: true)
+    subject.instructions.build(user_id: create(:user).id, initial_instructor: false)
+    subject.save!
+    expect(subject.instructions.size).to eq(2)
+  end
+
 end
