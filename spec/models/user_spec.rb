@@ -14,4 +14,13 @@ RSpec.describe User, type: :model do
     subject.save!
     expect(subject.projects.size).to eq(10)
   end
+
+  it "should get a default status on save" do
+    subject = create(:user)
+    expect(subject).to be_valid
+    subject.role = nil
+    subject.save
+    expect(subject.role).to be(User.roles[:student])
+  end
+
 end
