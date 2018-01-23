@@ -19,4 +19,13 @@ RSpec.describe Project, type: :model do
     expect(subject.users.size).to eq(2)
   end
 
+  it "project cannot be created, if course enrollment is closed" do
+    course = create(:course)
+    subject.title = "Anything"
+    subject.course_id = course.id
+    subject.save!
+    course.update!(:allow_enrollment => false)
+    expect(subject).not_to be_valid
+  end
+
 end
