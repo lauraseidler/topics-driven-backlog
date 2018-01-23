@@ -17,9 +17,10 @@
                     is-nav 
                     id="nav-collapse">
                     
-                    <BNavbarNav>
+                    <BNavbarNav v-if="$store.state.loggedIn">
                         <BNavItem to="/projects">Projects</BNavItem>
                         <BNavItem to="/courses">Courses</BNavItem>
+                        <BNavItem to="/logout">Logout</BNavItem>
                     </BNavbarNav>
 
                     <BNavbarNav class="ml-auto">

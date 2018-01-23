@@ -2,6 +2,12 @@ require 'rails_helper'
 
 RSpec.describe 'Sprints/Topics API' do
 
+  let(:user) { create(:user) }
+  before(:each) do
+    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+    allow_any_instance_of(ApplicationController).to receive(:authorize_request).and_return(user)
+  end
+
   let!(:course) { create(:course) }
   let!(:sprint) { create(:sprint, course_id: course.id)}
   let!(:sprint_id) { sprint.id }

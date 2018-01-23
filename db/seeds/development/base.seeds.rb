@@ -96,3 +96,11 @@ Sprint.all.each do |sprint|
   end_date = sprint.end_date
   sprint.update_columns(:start_date => start_date-1.years, :end_date => end_date-1.years)
 end
+
+User.create!([
+                  {email: 'user1@example.com'},
+                  {email: 'user2@example.com'},
+                  {email: 'user3@example.com'},
+                  {email: 'user4@example.com'},
+                  {email: 'user5@example.com'},
+              ])

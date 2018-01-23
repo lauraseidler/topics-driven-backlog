@@ -5,10 +5,8 @@ RSpec.describe User, type: :model do
   it { should have_many(:projects) }
 
   # Validation tests
-  it { should validate_presence_of(:name) }
   it { should validate_presence_of(:email) }
   it { should validate_uniqueness_of(:email) }
-  it { should validate_presence_of(:password_digest) }
 
   it "can have many projects" do
     subject = create(:user)
@@ -16,4 +14,13 @@ RSpec.describe User, type: :model do
     subject.save!
     expect(subject.projects.size).to eq(10)
   end
+
+  it "should get a default status on save" do
+    subject = create(:user)
+    expect(subject).to be_valid
+    subject.role = nil
+    subject.save
+    expect(subject.role).to be(User.roles[:student])
+  end
+
 end
