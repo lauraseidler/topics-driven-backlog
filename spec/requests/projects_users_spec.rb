@@ -30,7 +30,8 @@ RSpec.describe 'Projects API' do
       before { patch "/projects/#{project.id}", params: valid_attributes }
 
       it 'updates the record' do
-        expect(json.size).to eq(4)
+        expect(json.size).to eq(5)
+        expect(json['user_ids']).to eq([users.first.id, users.second.id])
       end
 
       it 'returns status code 200' do
@@ -60,6 +61,7 @@ RSpec.describe 'Projects API' do
       it 'returns the project' do
         expect(json['title']).to eq(project.title)
         expect(json['course_id']).to eq(course_id)
+        expect(json['user_ids']).to eq([user.id])
       end
 
       it 'returns status code 201' do
