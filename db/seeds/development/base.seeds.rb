@@ -3,9 +3,9 @@ require 'database_cleaner'
 DatabaseCleaner.clean_with(:truncation)
 
 Course.create!([
-                   {title: "B15.1 Informatik 3", hyperlink: "http://home.htw-berlin.de/~kleinen/classes/ws2017/info3", semester_type: "W", semester_year: 2017, short_title: "INFO3"},
-                   {title: "M1 Media Programming: Web Technology", hyperlink: "http://home.htw-berlin.de/~kleinen/classes/ws2017/media-programming-rails", semester_type: "W", semester_year: 2017, short_title: "M1 Rails"},
-                   {title: "B21.1 - B23.1 WTAT2: Agile Web Development", hyperlink: "http://home.htw-berlin.de/~kleinen/classes/ws2017/wtat2", semester_type: "W", semester_year: 2017, short_title: "WTAT2"}
+                   {title: "B15.1 Informatik 3", hyperlink: "http://home.htw-berlin.de/~kleinen/classes/ws2017/info3", semester_type: "W", semester_year: 2017, short_title: "INFO3", allow_enrollment: true},
+                   {title: "M1 Media Programming: Web Technology", hyperlink: "http://home.htw-berlin.de/~kleinen/classes/ws2017/media-programming-rails", semester_type: "W", semester_year: 2017, short_title: "M1 Rails", allow_enrollment: true},
+                   {title: "B21.1 - B23.1 WTAT2: Agile Web Development", hyperlink: "http://home.htw-berlin.de/~kleinen/classes/ws2017/wtat2", semester_type: "W", semester_year: 2017, short_title: "WTAT2", allow_enrollment: true}
                ])
 Topic.create!([
                   {title: "Rails and Active Record", url: "http://home.htw-berlin.de/~kleinen/classes/ws2017/wtat2/topics/a1-activerecord/", course_id: 3},
