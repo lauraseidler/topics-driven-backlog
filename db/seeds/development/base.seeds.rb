@@ -103,4 +103,6 @@ User.create!([
                   {email: 'user3@example.com'},
                   {email: 'user4@example.com'},
                   {email: 'user5@example.com'},
+                  {email: 'instructor1@example.com', role: User.roles[:instructor]},
+                  {email: 'instructor2@example.com', role: User.roles[:instructor]},
               ])

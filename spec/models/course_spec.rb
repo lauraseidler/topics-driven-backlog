@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Course, type: :model do
-# Association test
+  # Association test
   it { should have_many(:sprints).dependent(:destroy) }
 
   # Validation tests
@@ -26,6 +26,14 @@ RSpec.describe Course, type: :model do
     subject.semester_type = 'Q'
     subject.semester_year = DateTime.now.year
     expect(subject).not_to be_valid
+  end
+
+  it "can have many users as instructors" do
+    subject = create(:course)
+    subject.instructions.build(user_id: create(:user).id, initial_instructor: true)
+    subject.instructions.build(user_id: create(:user).id, initial_instructor: false)
+    subject.save!
+    expect(subject.instructions.size).to eq(2)
   end
 
 end
