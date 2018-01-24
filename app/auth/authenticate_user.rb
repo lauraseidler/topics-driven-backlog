@@ -31,8 +31,12 @@ class AuthenticateUser
   # verify user credentials
   def get_user(email, password)
     if email.present? && password.present?
-      authenticated = authenticate_user_via_ldap(email, password)
+      authenticated = authenticate_user_via_ldap(username(email), password)
       user = User.find_by(email: email)
+
+      if user.nil? && authenticated
+        user = User.create!(email: email, role: User.roles[:student]) # role needs to be set via ldap query
+      end
 
       return user if user && authenticated
     end
@@ -40,7 +44,7 @@ class AuthenticateUser
     raise(ExceptionHandler::AuthenticationError, Message.invalid_credentials)
   end
 
-  def authenticate_user_via_ldap(email, password)
+  def authenticate_user_via_ldap(username, password)
     begin
       ldap = Net::LDAP.new(
           host: LDAP_HOST,
@@ -52,7 +56,7 @@ class AuthenticateUser
               },
           auth: {
               method: :simple,
-              username: "CN=#{username(email)},#{LDAP_CONNECTSTRING}",
+              username: "CN=#{username},#{LDAP_CONNECTSTRING}",
               password: password
           }
       )
@@ -65,6 +69,6 @@ class AuthenticateUser
   def username(email)
     m = /\A(.*)@.*htw-berlin.de\z/.match(email)
     return m[1] if m
-    raise(ExceptionHandler::AuthenticationError, Message.not_htw_email)
+    raise(ExceptionHandler::AuthenticationError, Message.not_htw_email(email))
   end
 end
