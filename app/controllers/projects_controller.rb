@@ -2,7 +2,7 @@ class ProjectsController < ApplicationController
   include ProjectsHelper
 
   before_action :set_course, only: [:create]
-  before_action :set_project, only: [:show, :update, :destroy]
+  before_action :set_project, only: [:show, :update, :destroy, :enroll_user]
   before_action :validate_users, only: [:create, :update]
 
   # GET /projects/:id
@@ -10,7 +10,13 @@ class ProjectsController < ApplicationController
     json_response(@project)
   end
 
-  # POST /courses/course_id/projects
+  # POST /projects/:id/enrollment
+  def enroll_user
+    @project.users << current_user
+    json_response(@project, :created)
+  end
+
+  # POST /courses/:course_id/projects
   def create
     @project = @course.projects.create!(project_params)
     json_response(@project, :created)
@@ -29,11 +35,18 @@ class ProjectsController < ApplicationController
     head :no_content
   end
 
+  # DELETE /projects/:project_id/enrollment/:user_id
+  def remove_enrollment
+    @project = Project.find_by!(id: params[:project_id])
+    @project.user_ids.delete(:user_id)
+    head :no_content
+  end
+
   private
 
   def project_params
     # whitelist params
-    params.permit(:title, :user_ids => [])
+    params.permit(:title, :user_id, :user_ids => [])
   end
 
   def set_course
@@ -41,7 +54,10 @@ class ProjectsController < ApplicationController
   end
 
   def set_project
-    @project = Project.find_by!(id: params[:id])
+    @project = Project.find_by(id: params[:id])
+    if @project.nil?
+      @project = Project.find_by!(id: params[:project_id])
+    end
   end
 
 end

@@ -16,10 +16,13 @@ Rails.application.routes.draw do
     resources :topics, only: [:create]
     resources :projects, only: [:index, :create]
   end
-  
+
+
   resources :sprints, only: [:update, :destroy]
   resources :topics, only: [:update, :destroy]
   resources :projects, only: [:show, :update, :destroy] do
+    post 'enrollments', to: 'projects#enroll_user'
+    delete 'enrollments/:user_id', to: 'projects#remove_enrollment'
     resources :stories, only: [:index, :create]
   end
 end
