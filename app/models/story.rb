@@ -6,11 +6,11 @@ class Story < ApplicationRecord
     {:open => 0, :progressing => 1, :closed => 2, :canceled => 3}
   end
 
-  after_save :set_identifier, on: :create
-  after_commit :create_project_position, on: :create
-  after_commit :create_sprint_position, on: :create
   before_validation :update_sprint_position, on: :update
   before_validation :set_status
+  before_save :set_identifier, on: :create
+  after_commit :create_project_position, on: :create
+  after_commit :create_sprint_position, on: :create
 
   validates_presence_of :title, :status, :project_id
   validate :can_be_edited
@@ -18,8 +18,12 @@ class Story < ApplicationRecord
   private
 
   def set_identifier
-    if self.identifier.blank?
-      self.update_column(:identifier, 'S-'+self.id.to_s)
+    project = Project.find_by!(id: project_id)
+    last_story = project.stories.last
+    if last_story.nil?
+      self.identifier = 'S-1'
+    else
+      self.identifier = last_story.identifier.next
     end
   end
 
