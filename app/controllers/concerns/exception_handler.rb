@@ -1,19 +1,11 @@
 module ExceptionHandler
-  # provides the more graceful `included` method
   extend ActiveSupport::Concern
 
   class AuthenticationError < StandardError; end
+  class AuthenticationServerIsDown < StandardError; end
   class MissingToken < StandardError; end
   class InvalidToken < StandardError; end
   class ExpiredSignature < StandardError; end
-
-  def raise_exception_on_validation_error(errors)
-    errors = errors - ['', nil]
-
-    if !errors.empty?
-      raise ActionController::BadRequest.new('Validation failed: ' + errors.join(", "))
-    end
-  end
 
   included do
     rescue_from ActionController::BadRequest, with: :bad_request
@@ -21,6 +13,7 @@ module ExceptionHandler
     rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
     rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
     rescue_from ExceptionHandler::AuthenticationError, with: :unauthorized_request
+    rescue_from ExceptionHandler::AuthenticationServerIsDown, with: :unauthorized_request
     rescue_from ExceptionHandler::MissingToken, with: :unauthorized_request
     rescue_from ExceptionHandler::InvalidToken, with: :invalid_token
     rescue_from ExceptionHandler::ExpiredSignature, with: :invalid_token

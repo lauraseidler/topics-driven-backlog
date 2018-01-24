@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe 'Authentication', type: :request do
+  
+  before(:each) do
+    allow_any_instance_of(AuthenticateUser).to receive(:authenticate_user_via_ldap).and_return(true)
+  end
 
   # Test suite for POST /get-token
   describe 'POST /get-token' do

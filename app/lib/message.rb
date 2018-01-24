@@ -1,5 +1,3 @@
-# Source: https://scotch.io/tutorials/build-a-restful-json-api-with-rails-5-part-two
-
 class Message
 
   def self.invalid_credentials
@@ -14,4 +12,11 @@ class Message
     'Missing token'
   end
 
+  def self.contact_the_admin
+    'Request failed. Please contact the administrator.'
+  end
+
+  def self.not_htw_email(email)
+    "email needs to be like '*.htw-berlin.de', but was: #{email}"
+  end
 end
