@@ -4,9 +4,14 @@ class AuthenticateUser
   LDAP_HOST = ENV['LDAP_HTW_HOST']
   LDAP_PORT = ENV['LDAP_HTW_PORT']
   LDAP_CONNECTSTRING = ENV['LDAP_HTW_CONNECTSTRING']
+  HTW_USER_TYPE_STUDENT = 'student'
+  HTW_USER_TYPE_INSTRUCTOR = 'lehrende'
+
   private_constant :LDAP_PORT
   private_constant :LDAP_CONNECTSTRING
   private_constant :LDAP_HOST
+  private_constant :HTW_USER_TYPE_STUDENT
+  private_constant :HTW_USER_TYPE_INSTRUCTOR
 
   def initialize(email, password)
     @email = email
@@ -31,20 +36,21 @@ class AuthenticateUser
   # verify user credentials
   def get_user(email, password)
     if email.present? && password.present?
-      authenticated = authenticate_user_via_ldap(username(email), password)
-      user = User.find_by(email: email)
+      user_role = get_user_role_via_ldap(username(email), password)
+      user = User.find_by(email: email, role: user_role)
 
-      if user.nil? && authenticated
-        user = User.create!(email: email, role: User.roles[:student]) # role needs to be set via ldap query
+      if user.nil?
+        # TODO set role if user_role changed on ldap
+        user = User.create!(email: email, role: user_role)
       end
 
-      return user if user && authenticated
+      return user if user
     end
 
     raise(ExceptionHandler::AuthenticationError, Message.invalid_credentials)
   end
 
-  def authenticate_user_via_ldap(username, password)
+  def get_user_role_via_ldap(username, password)
     begin
       ldap = Net::LDAP.new(
           host: LDAP_HOST,
@@ -60,10 +66,42 @@ class AuthenticateUser
               password: password
           }
       )
-      ldap.bind
     rescue
       raise(ExceptionHandler::AuthenticationServerIsDown, Message.contact_the_admin)
     end
+
+    authenticate_user_via_ldap(ldap)
+    get_user_role(ldap, username)
+  end
+
+  def authenticate_user_via_ldap(ldap)
+    authenticated = ldap.bind
+
+    return authenticated if authenticated
+    raise(ExceptionHandler::AuthenticationError, Message.invalid_credentials)
+  end
+
+  def get_user_role(ldap, username)
+    filter = Net::LDAP::Filter.eq( "CN", "#{username}" )
+    query_result = ldap.search( :base => LDAP_CONNECTSTRING, :filter => filter )
+
+    if query_result.size != 1
+      raise(ExceptionHandler::AuthenticationError, Message.invalid_credentials)
+    end
+
+    user_groups = query_result[0]['memberof'].split(',')
+
+    user_groups.split('=').each do |group, value|
+      if group == 'DN' && value == HTW_USER_TYPE_INSTRUCTOR
+        return User.roles[:instructor]
+      end
+
+      if group == 'DN' && value == HTW_USER_TYPE_STUDENT
+        return User.roles[:student]
+      end
+    end
+
+    raise(ExceptionHandler::AuthenticationError, Message.invalid_credentials)
   end
 
   def username(email)
