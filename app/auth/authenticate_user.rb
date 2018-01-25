@@ -26,7 +26,7 @@ class AuthenticateUser
   # verify user credentials
   def get_user(email, password)
     if email.present? && password.present?
-      ldap_user_role = get_user_role_via_ldap(username(email), password)
+      ldap_user_role = LdapAuthenticator.new(username(email), password)
       user = User.find_by(email: email)
 
       if user.nil?
@@ -36,50 +36,6 @@ class AuthenticateUser
       end
 
       return user if user
-    end
-
-    raise(ExceptionHandler::AuthenticationError, Message.invalid_credentials)
-  end
-
-  def get_user_role_via_ldap(username, password)
-    query_result = []
-    begin
-      ldap = Net::LDAP.new(
-          host: DomainDefinition::LDAP_HOST,
-          port: DomainDefinition::LDAP_PORT,
-          encryption:
-              {
-                  method: :simple_tls,
-                  verify_mode: OpenSSL::SSL::VERIFY_NONE
-              },
-          auth: {
-              method: :simple,
-              username: "CN=#{username},#{DomainDefinition::LDAP_CONNECTSTRING}",
-              password: password
-          }
-      )
-      query_result = ldap.search(
-          :base => DomainDefinition::LDAP_CONNECTSTRING,
-          :filter => Net::LDAP::Filter.eq( 'CN', username )
-      )
-    rescue Exception => e
-      raise(ExceptionHandler::AuthenticationServerIsDown, e.message)
-    end
-
-    get_user_role(query_result)
-  end
-
-  def get_user_role(query_result)
-    if query_result.size === 1
-      user_groups = query_result[0]['memberof'][0].split(',')
-
-      if user_groups.include?("CN=#{DomainDefinition::USER_GROUP_INSTRUCTOR}")
-        return User.roles[:instructor]
-      end
-
-      if user_groups.include?("CN=#{DomainDefinition::USER_GROUP_STUDENT}")
-        return User.roles[:student]
-      end
     end
 
     raise(ExceptionHandler::AuthenticationError, Message.invalid_credentials)
