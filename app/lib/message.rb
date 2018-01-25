@@ -1,4 +1,5 @@
 class Message
+  include DomainDefinition
 
   def self.invalid_credentials
     'Invalid credentials'
@@ -16,7 +17,7 @@ class Message
     'Request failed. Please contact the administrator.'
   end
 
-  def self.not_htw_email(email)
-    "email needs to be like '*.htw-berlin.de', but was: #{email}"
+  def self.not_domain_email_address(email)
+    "email needs to be like '*.#{DomainDefinition::ORGANISATION_DOMAIN}', but was: #{email}"
   end
 end
