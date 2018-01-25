@@ -37,9 +37,43 @@ RSpec.describe AuthenticateUser do
   end
 
   describe 'AuthenticateUser#call' do
-    context 'when valid credentials but no instructor or student' do
+    context 'when valid credentials and right ldap group' do
+      let(:valid_student_member_result) {
+        { 0 => { :memberof=> { 0 => ["CN=#{DomainDefinition::USER_GROUP_STUDENT},OU=Users,DC=SomeDomain,DC=com"] } } }
+      }
       before {
-        allow_any_instance_of(LdapAuthenticator).to receive(:connect_to_ldap).and_return([])
+        allow_any_instance_of(LdapAuthenticator).to receive(:connect_to_ldap)
+                                                        .and_return(valid_student_member_result)
+      }
+      it 'returns an auth token' do
+        token = valid_auth_obj.call
+        expect(token).not_to be_nil
+      end
+    end
+
+    context 'when valid credentials and right ldap group' do
+      let(:valid_instructor_member_result) {
+        { 0 => { :memberof=> { 0 => ["CN=#{DomainDefinition::USER_GROUP_INSTRUCTOR},OU=Users,DC=SomeDomain,DC=com"] } } }
+      }
+      before {
+        allow_any_instance_of(LdapAuthenticator).to receive(:connect_to_ldap)
+                                                        .and_return(valid_instructor_member_result)
+      }
+      it 'returns an auth token' do
+        token = valid_auth_obj.call
+        expect(token).not_to be_nil
+      end
+    end
+  end
+
+  describe 'AuthenticateUser#call' do
+    context 'when valid credentials but no instructor or student' do
+      let(:invalid_group_member_result) {
+        { 0 => { :memberof=> { 0 => ['CN=SomeGroup,OU=Users,DC=SomeDomain,DC=com'] } } }
+      }
+      before {
+        allow_any_instance_of(LdapAuthenticator).to receive(:connect_to_ldap)
+                                                        .and_return(invalid_group_member_result)
       }
       it 'raise exception: Not authorized' do
         expect{valid_auth_obj.call}

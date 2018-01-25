@@ -9,12 +9,12 @@ class LdapAuthenticator
   end
 
   def call
-    get_user_role(connect_to_ldap)
+    get_user_role(connect_to_ldap(@username, @password))
   end
 
   private
 
-  def connect_to_ldap
+  def connect_to_ldap(username, password)
     query_result = []
     begin
       Net::LDAP.open(
@@ -36,7 +36,6 @@ class LdapAuthenticator
             :filter => Net::LDAP::Filter.eq('CN', username)
         )
       end
-
       return query_result
     rescue
       raise(ExceptionHandler::AuthenticationServerIsDown, Message.contact_the_admin)
@@ -45,7 +44,7 @@ class LdapAuthenticator
 
   def get_user_role(query_result)
     if query_result.size === 1
-      user_groups = query_result[0]['memberof'][0].split(',')
+      user_groups = query_result[0][:memberof][0].to_s
 
       if user_groups.include?("CN=#{DomainDefinition::USER_GROUP_INSTRUCTOR}")
         return User.roles[:instructor]
