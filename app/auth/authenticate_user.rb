@@ -44,7 +44,7 @@ class AuthenticateUser
   def get_user_role_via_ldap(username, password)
     query_result = []
     begin
-      Net::LDAP.open(
+      ldap = Net::LDAP.new(
           host: DomainDefinition::LDAP_HOST,
           port: DomainDefinition::LDAP_PORT,
           encryption:
@@ -52,34 +52,32 @@ class AuthenticateUser
                   method: :simple_tls,
                   verify_mode: OpenSSL::SSL::VERIFY_NONE
               },
-          base: DomainDefinition::LDAP_CONNECTSTRING,
           auth: {
               method: :simple,
-              username: username,
+              username: "CN=#{username},#{DomainDefinition::LDAP_CONNECTSTRING}",
               password: password
           }
-      ) do |ldap|
-        query_result = ldap.search(
-            :base => DomainDefinition::LDAP_CONNECTSTRING,
-            :filter => Net::LDAP::Filter.eq( 'CN', username )
-        )
-      end
-
-      get_user_role(query_result)
-    rescue
-      raise(ExceptionHandler::AuthenticationServerIsDown, Message.contact_the_admin)
+      )
+      query_result = ldap.search(
+          :base => DomainDefinition::LDAP_CONNECTSTRING,
+          :filter => Net::LDAP::Filter.eq( 'CN', username )
+      )
+    rescue Exception => e
+      raise(ExceptionHandler::AuthenticationServerIsDown, e.message)
     end
+
+    get_user_role(query_result)
   end
 
   def get_user_role(query_result)
     if query_result.size === 1
-      user_groups = query_result[0]['memberof'].split(',')
+      user_groups = query_result[0]['memberof'][0].split(',')
 
-      if user_groups.include?('DN=' . DomainDefinition::USER_GROUP_INSTRUCTOR)
+      if user_groups.include?("CN=#{DomainDefinition::USER_GROUP_INSTRUCTOR}")
         return User.roles[:instructor]
       end
 
-      if user_groups.include?('DN=' . DomainDefinition::USER_GROUP_STUDENT)
+      if user_groups.include?("CN=#{DomainDefinition::USER_GROUP_STUDENT}")
         return User.roles[:student]
       end
     end
@@ -88,7 +86,7 @@ class AuthenticateUser
   end
 
   def username(email)
-    m = /\A(.*)@.*htw-berlin.de\z/.match(email)
+    m = /\A(.*)@.*#{DomainDefinition::ORGANISATION_DOMAIN}\z/.match(email)
     return m[1] if m
     raise(ExceptionHandler::AuthenticationError, Message.not_domain_email_address(email))
   end

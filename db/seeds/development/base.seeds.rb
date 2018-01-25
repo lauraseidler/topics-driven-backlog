@@ -96,6 +96,3 @@ Sprint.all.each do |sprint|
   end_date = sprint.end_date
   sprint.update_columns(:start_date => start_date-1.years, :end_date => end_date-1.years)
 end
-
-# set B.Kleinen as the instructor - because at the moment there is no possibility to set an instructor
-User.create!({email: 'kleinen@htw-berlin.de', role: User.roles[:instructor]})
