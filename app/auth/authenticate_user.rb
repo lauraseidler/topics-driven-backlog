@@ -24,7 +24,7 @@ class AuthenticateUser
   # verify user credentials
   def get_user(email, password)
     if email.present? && password.present?
-      ldap_user_role = LdapAuthenticator.new(username(email), password).call
+      ldap_user_role = ldap_auth(email, password)
       user = User.find_by(email: email)
 
       if user.nil?
@@ -43,5 +43,14 @@ class AuthenticateUser
     m = /\A(.*)@.*#{DomainDefinition::ORGANISATION_DOMAIN}\z/.match(email)
     return m[1] if m
     raise(ExceptionHandler::AuthenticationError, Message.not_domain_email_address(email))
+  end
+
+  def ldap_auth(email, password)
+    if Rails.env.development?
+      user = User.find_by(email: email)
+      return user.role
+    end
+
+    LdapAuthenticator.new(username(email), password).call
   end
 end
