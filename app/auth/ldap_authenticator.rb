@@ -1,7 +1,20 @@
+require 'net-ldap'
+
 class LdapAuthenticator
 
   # Returns the user role of an user if this user was authenticated via ldap
   def initialize(username, password)
+    @username = username
+    @password = password
+  end
+
+  def call
+    get_user_role(connect_to_ldap)
+  end
+
+  private
+
+  def connect_to_ldap
     query_result = []
     begin
       Net::LDAP.open(
@@ -23,14 +36,12 @@ class LdapAuthenticator
             :filter => Net::LDAP::Filter.eq('CN', username)
         )
       end
-    rescue Exception => e
-      raise(ExceptionHandler::AuthenticationServerIsDown, e.message)
+
+      return query_result
+    rescue
+      raise(ExceptionHandler::AuthenticationServerIsDown, Message.contact_the_admin)
     end
-
-    get_user_role(query_result)
   end
-
-  private
 
   def get_user_role(query_result)
     if query_result.size === 1
@@ -45,6 +56,6 @@ class LdapAuthenticator
       end
     end
 
-    raise(ExceptionHandler::AuthenticationError, Message.invalid_credentials)
+    raise(ExceptionHandler::AuthenticationError, Message.not_authorized)
   end
 end

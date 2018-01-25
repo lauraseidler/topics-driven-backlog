@@ -5,6 +5,10 @@ class Message
     'Invalid credentials'
   end
 
+  def self.not_authorized
+    'Not authorized'
+  end
+
   def self.invalid_token
     'Invalid token'
   end

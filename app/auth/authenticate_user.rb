@@ -1,5 +1,3 @@
-require 'net-ldap'
-
 class AuthenticateUser
   include DomainDefinition
 
@@ -26,7 +24,7 @@ class AuthenticateUser
   # verify user credentials
   def get_user(email, password)
     if email.present? && password.present?
-      ldap_user_role = LdapAuthenticator.new(username(email), password)
+      ldap_user_role = LdapAuthenticator.new(username(email), password).call
       user = User.find_by(email: email)
 
       if user.nil?
