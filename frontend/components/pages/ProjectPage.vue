@@ -1,7 +1,11 @@
 <template>
     <section id="project-page">
-        <router-link :to="`/courses/${course.id}-${slugify(course.title)}`" class="btn btn-primary float-right" v-if="course">
+        <router-link :to="`/courses/${course.id}-${slugify(course.title)}`" class="btn btn-primary float-right ml-2" v-if="course">
             Back to course
+        </router-link>
+
+        <router-link :to="`/projects/${project.id}-${slugify(project.title)}/print`" class="btn btn-primary float-right" v-if="project">
+            View report
         </router-link>
 
         <router-link class="h4 text-muted" :to="`/courses/${course.id}-${slugify(course.title)}`" v-if="course">
