@@ -28,7 +28,7 @@ module SprintsHelper
       collection.each do |s|
         validate_sprint_date_parameter(s[:start_date], s[:end_date])
         sprint = Sprint.find_by!(id: s[:id])
-        sprint.update!(s.permit(:start_date, :end_date))
+        sprint.update!(s.permit(:start_date, :end_date, :name, :topic_ids => []))
         sprints.append(sprint)
       end
     end
