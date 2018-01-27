@@ -1,6 +1,26 @@
 <template>
     <section id="print-page">
 
+
+        <div class="alert alert-info hidden-print">
+            <h5>
+                <VIcon name="info-circle" class="mb-1 mr-1"/>
+                About this page
+            </h5>
+
+            <p>
+                This is the report view of your project. You can save your report as a PDF by using your browser's print
+                functionality and then choosing "Save as PDF", "Print to PDF" or similar, depending on your browser
+                and operating system.
+            </p>
+
+            <p class="mb-0">
+                If you want to view your report in the context of a different period of time, you can choose the sprint
+                that you want to be the "Next sprint" in the dropdown on the top right. By default, you're viewing the
+                current state of your project.
+            </p>
+        </div>
+
         <BFormGroup
                 horizontal
                 class="float-right hidden-print"
@@ -22,7 +42,6 @@
                 </option>
             </BFormSelect>
         </BFormGroup>
-
 
         <h4 class="h4 text-muted" v-if="course">
             {{ course.short_title }} <small>({{ course.title}})</small>
@@ -107,6 +126,7 @@
 <script>
     import '@icons/tasks';
     import '@icons/signal';
+    import '@icons/info-circle';
     import VIcon from 'vue-awesome/components/Icon';
     import BaseProjectAwarePage from '@/components/pages/BaseProjectAwarePage';
     import StoryItem from '@/components/elements/StoryItem';
