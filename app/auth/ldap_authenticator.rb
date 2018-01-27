@@ -35,9 +35,11 @@ class LdapAuthenticator
             :base => DomainDefinition::LDAP_CONNECTSTRING,
             :filter => Net::LDAP::Filter.eq('CN', username)
         )
+        Rails.logger.info "LDAP Connection: #{ldap.get_operation_result.message}"
       end
       return query_result
-    rescue
+    rescue Exception => e
+      Rails.logger.error "LDAP Connection Error: #{e.message}"
       raise(ExceptionHandler::AuthenticationServerIsDown, Message.contact_the_admin)
     end
   end
