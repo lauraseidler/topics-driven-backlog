@@ -36,7 +36,7 @@
                 v-model="data.end_date"
                 placeholder="YYYY-MM-DD"
                 required
-                :min="$store.state.currentDate > data.start_date ? $store.state.currentDate : data.start_date"/>
+                :min="data.start_date"/>
         </BFormGroup>
 
         <BFormGroup
@@ -257,10 +257,6 @@ export default {
                 required,
                 date,
                 largerThanStart: largerOrEqualThan('start_date'),
-                largerThanToday: largerOrEqualThan(
-                    moment().format('YYYY-MM-DD'),
-                    true
-                ),
             },
         },
     },
