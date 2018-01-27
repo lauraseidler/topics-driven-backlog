@@ -1,4 +1,6 @@
 module SprintsHelper
+  include ApplicationHelper
+
   def create_sprint_collection(duration, start_date, end_date)
     sprints = []
     days = (start_date...end_date).count + 1

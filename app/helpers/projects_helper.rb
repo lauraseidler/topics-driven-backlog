@@ -1,4 +1,6 @@
 module ProjectsHelper
+  include ApplicationHelper
+
   def validate_users
     errors = []
 

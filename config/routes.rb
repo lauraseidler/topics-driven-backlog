@@ -3,6 +3,8 @@ Rails.application.routes.draw do
 
   root to: 'frontend#index'
 
+  post 'get-token', to: 'authentication#authenticate'
+
   resources :stories, only: [:show, :update, :destroy] do
     resources :tasks, only: [:index, :create, :show, :update, :destroy]
   end

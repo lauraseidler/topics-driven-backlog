@@ -6,6 +6,9 @@ import Vue from 'vue';
  * @param {*} binding 
  */
 function bind(el, binding) {
+    // make sure to unbind any possible previous listener before attaching the new one
+    unbind(el);
+
     el.handleClick = () => {
         if (confirm(binding.value.text || 'Are you sure? This action is irreversible.')) {
             if (binding.value.action) {

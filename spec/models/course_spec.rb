@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Course, type: :model do
-# Association test
+  # Association test
   it { should have_many(:sprints).dependent(:destroy) }
 
   # Validation tests
