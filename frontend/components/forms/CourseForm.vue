@@ -56,6 +56,14 @@
         </BFormGroup>
 
 
+        <BFormGroup>
+            <BFormCheckbox
+                id="course-allow-enrollment"
+                v-model="data.allow_enrollment">
+                Allow enrollment
+            </BFormCheckbox>
+        </BFormGroup>
+
         <BButton 
             type="submit" 
             variant="primary"
@@ -75,6 +83,7 @@ import BForm from '@bootstrap/form/form';
 import BFormGroup from '@bootstrap/form-group/form-group';
 import BFormInput from '@bootstrap/form-input/form-input';
 import BFormSelect from '@bootstrap/form-select/form-select';
+import BFormCheckbox from '@bootstrap/form-checkbox/form-checkbox';
 import BRow from '@bootstrap/layout/row';
 import BCol from '@bootstrap/layout/col';
 import BButton from '@bootstrap/button/button';
@@ -82,7 +91,7 @@ import BaseForm from '@/components/forms/BaseForm';
 
 export default {
     name: 'CourseForm',
-    components: { BForm, BFormGroup, BFormInput, BFormSelect, BRow, BCol, BButton },
+    components: { BForm, BFormGroup, BFormInput, BFormSelect, BFormCheckbox, BRow, BCol, BButton },
     extends: BaseForm,
     props: {
         noSemester: {

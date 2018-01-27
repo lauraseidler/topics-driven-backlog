@@ -46,6 +46,19 @@ RSpec.describe Story, type: :model do
     expect(sprint_pos_record.position).to be_an_instance_of(Integer)
   end
 
+  it "should get an identifier in the scope of the project on save" do
+    course = create(:course)
+    project = create(:project, course_id: course.id)
+    first_subject = project.stories.new(title: 'Title')
+    second_subject = project.stories.new(title: 'another Title')
+    expect(first_subject.identifier).to be_nil
+    expect(second_subject.identifier).to be_nil
+    first_subject.save
+    second_subject.save
+    expect(first_subject.identifier).to eq('S-1')
+    expect(second_subject.identifier).to eq('S-2')
+  end
+
   it "is not valid if new assigned Sprint is finished" do
     course = create(:course)
     project = create(:project, course_id: course.id)

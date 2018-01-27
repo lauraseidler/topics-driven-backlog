@@ -9,5 +9,6 @@ FactoryBot.define do
           Course.semester_types[:winter]
       ].sample }
     semester_year { rand(2018..2050) }
+    allow_enrollment { true }
   end
 end
