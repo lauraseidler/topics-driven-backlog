@@ -21,6 +21,12 @@
             </p>
         </div>
 
+        <BButton
+                type="button"
+                variant="primary"
+                class="btn btn-primary float-right ml-2"
+                @click="printWindow()">export Report</BButton>
+
         <BFormGroup
                 horizontal
                 class="float-right hidden-print"
@@ -263,6 +269,9 @@
                     .replace(/^-+/, '')             // Trim - from start of text
                     .replace(/-+$/, '');            // Trim - from end of text
             },
+            printWindow() {
+                window.print();
+            }
         }
     };
 </script>
