@@ -82,6 +82,7 @@ export default {
         startEditing() {
             this.editing = true;
             this.editingData = _.pick(this.data, [
+                'id',
                 'name',
                 'start_date',
                 'end_date',

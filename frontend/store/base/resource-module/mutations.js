@@ -70,10 +70,10 @@ export function setAll(settings) {
         // else configuration is incorrect
         if (settings.parent && parentId) {
             Vue.set(state.data, parentId, items);
-            state.initialised[parentId] = true;
+            Vue.set(state.initialised, parentId, true);
         } else if (!settings.parent) {
             Vue.set(state, 'data', items);
-            state.initialised = true;
+            Vue.set(state, 'initialised', true);
         } else {
             throw new Error('Incorrect resource module configuration!');
         }

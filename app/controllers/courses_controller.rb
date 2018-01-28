@@ -21,7 +21,7 @@ class CoursesController < ApplicationController
   # PUT /courses/:id
   # PATCH /courses/:id
   def update
-    @course.update_attributes!(course_params)
+    @course.update!(course_params)
     json_response(@course)
   end
 
