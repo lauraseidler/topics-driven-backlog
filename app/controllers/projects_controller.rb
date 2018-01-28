@@ -25,6 +25,7 @@ class ProjectsController < ApplicationController
 
   # DELETE /projects/:id
   def destroy
+    authorize! :destroy, @project
     @project.destroy!
     head :no_content
   end
