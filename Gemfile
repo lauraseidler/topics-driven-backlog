@@ -33,6 +33,9 @@ gem 'active_model_serializers', '~> 0.10.0'
 gem 'acts_as_list'
 gem 'seedbank'
 gem 'database_cleaner'
+gem 'net-ldap'
+gem 'lograge'
+gem 'logstash-event'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

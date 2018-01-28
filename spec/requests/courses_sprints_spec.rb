@@ -12,6 +12,7 @@ RSpec.describe 'Courses/Sprints API' do
   let(:course_id) { course.id }
   let!(:sprints) { create_list(:sprint, 20, course_id: course.id) }
   let(:id) { sprints.first.id }
+  let(:id_2) { sprints.second.id }
 
   # Test suite for GET /courses/:course_id
   describe 'GET /courses/:course_id with serialized sprints' do
@@ -84,8 +85,8 @@ RSpec.describe 'Courses/Sprints API' do
     let(:valid_parameters) {
       {
           duration: 7,
-          start_date: Date.new(2017,11,07).to_s,
-          end_date: Date.new(2017,11,30).to_s
+          start_date: Date.new(2200,11,07).to_s,
+          end_date: Date.new(2200,11,30).to_s
       }
     }
 
@@ -93,7 +94,7 @@ RSpec.describe 'Courses/Sprints API' do
       {
           duration: 0,
           start_date: '',
-          end_date: Date.new(2017,11,30).to_s
+          end_date: Date.new(2200,11,30).to_s
       }
     }
 
@@ -106,18 +107,18 @@ RSpec.describe 'Courses/Sprints API' do
 
         expect(json[0]['name']).to eq('1. Sprint')
         expect(json[0]['course_id']).to eq(course_id)
-        expect(json[0]['start_date']).to eq('2017-11-07')
-        expect(json[0]['end_date']).to eq('2017-11-13')
+        expect(json[0]['start_date']).to eq('2200-11-07')
+        expect(json[0]['end_date']).to eq('2200-11-13')
 
         expect(json[1]['name']).to eq('2. Sprint')
         expect(json[1]['course_id']).to eq(course_id)
-        expect(json[1]['start_date']).to eq('2017-11-14')
-        expect(json[1]['end_date']).to eq('2017-11-20')
+        expect(json[1]['start_date']).to eq('2200-11-14')
+        expect(json[1]['end_date']).to eq('2200-11-20')
 
         expect(json[2]['name']).to eq('3. Sprint')
         expect(json[2]['course_id']).to eq(course_id)
-        expect(json[2]['start_date']).to eq('2017-11-21')
-        expect(json[2]['end_date']).to eq('2017-11-27')
+        expect(json[2]['start_date']).to eq('2200-11-21')
+        expect(json[2]['end_date']).to eq('2200-11-27')
       end
 
       it 'returns status code 201' do
@@ -133,10 +134,79 @@ RSpec.describe 'Courses/Sprints API' do
       end
 
       it 'returns a failure message' do
-        expect(response.body).to match(/Validation failed: Duration must be at least 1, Start date and end date cannot be empty/)
+        expect(response.body).to match(/Validation failed: Duration must be at least 1, Start date or end date cannot be empty/)
       end
     end
 
+  end
+
+  # Test suite for PATCH /courses/:course_id/sprint-collection
+  describe 'PATCH /courses/:course_id/sprint-collection' do
+
+    context 'updating a valid parameter collection' do
+      let(:valid_parameters) {
+        {
+            collection: [
+                {
+                    id: id,
+                    start_date: Date.new(2200,11,07).to_s,
+                    end_date: Date.new(2200,11,30).to_s
+                },
+                {
+                    id: id_2,
+                    start_date: Date.new(2200,12,01).to_s,
+                    end_date: Date.new(2200,12,8).to_s
+                }
+            ]
+        }
+      }
+      before { patch "/courses/#{course_id}/sprint-collection", params: valid_parameters }
+
+      it 'updates the records' do
+        expect(json).not_to be_empty
+        expect(json.size).to eq(2)
+
+        expect(json[0]['course_id']).to eq(course_id)
+        expect(json[0]['start_date']).to eq('2200-11-07')
+        expect(json[0]['end_date']).to eq('2200-11-30')
+
+        expect(json[1]['course_id']).to eq(course_id)
+        expect(json[1]['start_date']).to eq('2200-12-01')
+        expect(json[1]['end_date']).to eq('2200-12-08')
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+    end
+
+    context 'updating an invalid parameter collection' do
+      let(:invalid_parameters) {
+        {
+            collection: [
+                {
+                    id: id,
+                    start_date: Date.new(2200,11,07).to_s,
+                    end_date: Date.new(2200,11,30).to_s
+                },
+                {
+                    id: id_2,
+                    start_date: Date.new(2200,12,01).to_s,
+                    end_date: Date.new(2001,12,8).to_s
+                }
+            ]
+        }
+      }
+      before { patch "/courses/#{course_id}/sprint-collection", params: invalid_parameters }
+
+      it 'returns status code 400' do
+        expect(response).to have_http_status(400)
+      end
+
+      it 'returns a failure message' do
+        expect(response.body).to match(/Validation failed: End date cannot be before the start date, End date cannot be in the past/)
+      end
+    end
   end
 
 end

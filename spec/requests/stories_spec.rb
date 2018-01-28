@@ -10,13 +10,6 @@ RSpec.describe 'Stories API', type: :request do
 
   let!(:course_id) { create( :course ).id }
   let!(:project) { create( :project, course_id: course_id ) }
-  let!(:stories) {
-    create_list(
-        :story,
-        10,
-        project_id: project.id,
-    )
-  }
 
   let(:sprint_id) {
     create(
@@ -24,19 +17,21 @@ RSpec.describe 'Stories API', type: :request do
         :course_id => course_id
     ).id
   }
-  let(:story_id) { stories.first.id }
-  let(:second_story_id) { stories.last.id }
+
+  let(:story) { create(:story, project_id: project.id) }
+  let(:second_story) { create(:story, project_id: project.id) }
+  let(:story_id) { story.id }
+  let(:second_story_id) { second_story.id }
 
   # Test suite for GET /stories/:id
   describe 'GET /stories/:id' do
-    before { stories.first.save! }
     before { get "/stories/#{story_id}" }
 
     context 'when the record exists' do
       it 'returns the story' do
         expect(json).not_to be_empty
         expect(json['id']).to eq(story_id)
-        expect(json['identifier']).to eq('S-'+story_id.to_s)
+        expect(json['identifier']).to eq('S-1')
         expect(json['status']).to be >= Story.statuses[:open]
         expect(json['status']).to be <= Story.statuses[:canceled]
         expect(json['points'].to_i).to be_an_instance_of(Integer).or(be_nil)
@@ -181,8 +176,8 @@ RSpec.describe 'Stories API', type: :request do
 
   # Test suite for PATCH /stories/:id
   describe 'PATCH /stories/:id for status attribute' do
-    let(:first_story) {stories.first}
-    let(:last_story) {stories.last}
+    let(:first_story) {story}
+    let(:last_story) {second_story}
     let(:status_attribute) { { :status => Story.statuses[:progressing] } }
 
     before { patch "/stories/#{last_story.id}", params: status_attribute }

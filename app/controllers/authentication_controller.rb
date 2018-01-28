@@ -3,6 +3,7 @@ class AuthenticationController < ApplicationController
 
   # POST /get-token
   def authenticate
+    Rails.logger.info "User Login attempt with email address: #{auth_params[:email]}"
     json_response(AuthenticateUser.new(auth_params[:email],auth_params[:password]).call)
   end
 

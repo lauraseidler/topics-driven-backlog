@@ -116,6 +116,7 @@ export default {
                 'short_title',
                 'title',
                 'hyperlink',
+                'allow_enrollment',
             ]);
         },
 

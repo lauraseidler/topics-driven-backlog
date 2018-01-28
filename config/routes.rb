@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
   resources :courses, only: [:index, :create, :show, :update, :destroy] do
     post 'sprint-collection', to: 'sprints#create_collection'
+    patch 'sprint-collection', to: 'sprints#update_collection'
     resources :sprints, only: [:create]
     resources :topics, only: [:create]
     resources :projects, only: [:index, :create]

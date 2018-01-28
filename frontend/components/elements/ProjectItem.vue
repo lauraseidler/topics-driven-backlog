@@ -18,21 +18,23 @@
             :class="['card-body', $style.display]">
 
             <template v-if="!editing">
-                <BButton
-                        size="sm"
-                        variant="outline-danger"
-                        class="float-right ml-1"
-                        v-confirm="{ action: deleteProject, text: 'Are you sure you want to delete this project?' }">
-                    <VIcon name="trash"/>
-                </BButton>
+                <template v-if="course.allow_enrollment">
+                    <BButton
+                            size="sm"
+                            variant="outline-danger"
+                            class="float-right ml-1"
+                            v-confirm="{ action: deleteProject, text: 'Are you sure you want to delete this project?' }">
+                        <VIcon name="trash"/>
+                    </BButton>
 
-                <BButton
-                        size="sm"
-                        variant="outline-primary"
-                        class="float-right ml-1"
-                        @click="startEditing">
-                    <VIcon name="pencil"/>
-                </BButton>
+                    <BButton
+                            size="sm"
+                            variant="outline-primary"
+                            class="float-right ml-1"
+                            @click="startEditing">
+                        <VIcon name="pencil"/>
+                    </BButton>
+                </template>
 
                 <h3 class="card-title h4">
                     <router-link :to="baseUrl">{{ data.title }}</router-link>
