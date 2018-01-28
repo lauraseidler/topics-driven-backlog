@@ -28,7 +28,7 @@ module SprintsHelper
       collection.each do |s|
         validate_sprint_date_parameter(s[:start_date], s[:end_date])
         sprint = Sprint.find_by!(id: s[:id])
-        sprint.update!(s.permit(:start_date, :end_date, :name, :topic_ids => []))
+        sprint.update!(s.permit(:start_date, :end_date))
         sprints.append(sprint)
       end
     end
@@ -50,16 +50,19 @@ module SprintsHelper
   end
 
   def validate_sprint_date_parameter(start_date, end_date)
-    errors = []
-    
-    errors.append(
-        valid_date_range(start_date || '', end_date || '')
-    )
-    errors.append(
-        ends_in_the_future(end_date || '')
-    )
-    
-    raise_exception_on_validation_error(errors)
+    if end_date.present? || start_date.present?
+
+      errors = []
+
+      errors.append(
+          valid_date_range(start_date || '', end_date || '')
+      )
+      errors.append(
+          ends_in_the_future(end_date || '')
+      )
+
+      raise_exception_on_validation_error(errors)
+    end
   end
 
   def validate_topics
@@ -113,7 +116,7 @@ module SprintsHelper
 
   def valid_date_range(start_date, end_date)
     if end_date.empty? || start_date.empty?
-      return 'Start date and end date cannot be empty'
+      return 'Start date or end date cannot be empty'
     end
 
     if end_date < start_date

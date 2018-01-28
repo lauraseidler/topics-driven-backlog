@@ -134,7 +134,7 @@ RSpec.describe 'Courses/Sprints API' do
       end
 
       it 'returns a failure message' do
-        expect(response.body).to match(/Validation failed: Duration must be at least 1, Start date and end date cannot be empty/)
+        expect(response.body).to match(/Validation failed: Duration must be at least 1, Start date or end date cannot be empty/)
       end
     end
 
