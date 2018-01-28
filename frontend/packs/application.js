@@ -14,6 +14,7 @@ import 'babel-polyfill';
 import Vue from 'vue';
 import VueResource from 'vue-resource';
 import Vuelidate from 'vuelidate';
+import Notifications from 'vue-notification';
 
 // our own stuff
 import App from '@/components/App';
@@ -30,6 +31,7 @@ import '@/filters/displayDate';
 // register plugins
 Vue.use(VueResource);
 Vue.use(Vuelidate);
+Vue.use(Notifications);
 
 // init store and app once dom is loaded
 document.addEventListener('DOMContentLoaded', () => {

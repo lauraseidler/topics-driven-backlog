@@ -7,65 +7,57 @@
                 </h3>
                 <h2>{{ sprint.name }}</h2>
 
-                <table 
-                    v-if="storiesInSprint(sprint.id).length" 
-                    class="table table-striped">
-
-                    <thead>
-                        <tr>
-                            <th>Identifier</th>
-                            <th>Story</th>
-                            <th>Topic</th>
-                            <th>Story&nbsp;points</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr 
-                            is="StoryItem" 
-                            v-for="story in storiesInSprint(sprint.id)" 
-                            :key="story.id" 
-                            :data="story" 
-                            view="history"/>
-                    </tbody>
-                </table>
+                <StoryTable
+                    v-if="storiesInSprint(sprint.id).length"
+                    :columns="tableColumns.sprints"
+                    :rows="storiesInSprint(sprint.id)"
+                    position-field="sprint_position"
+                    view="history"
+                />
 
                 <p v-else>No stories in this sprint</p>
             </div>
         </template>
 
         <h2>Backlog</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Identifier</th>
-                    <th>Story</th>
-                    <th>Topic</th>
-                    <th>Story&nbsp;points</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr 
-                    is="StoryItem" 
-                    v-for="story in backlog" 
-                    :key="story.id" 
-                    :data="story" 
-                    view="history"/>
-            </tbody>
-        </table>
+        <StoryTable
+            :columns="tableColumns.backlog"
+            :rows="backlog"
+            position-field="project_position"
+            view="history"
+        />
     </section>
 </template>
 
 <script>
 import BaseProjectAwarePage from '@/components/pages/BaseProjectAwarePage';
 import StoryItem from '@/components/elements/StoryItem';
+import StoryTable from '@/components/elements/StoryTable';
 
 export default {
-    components: { StoryItem },
+    components: { StoryItem, StoryTable },
     extends: BaseProjectAwarePage,
     data() {
-        return {};
+        return {
+            tableColumns: {
+                sprints: [
+                    { field: 'sprint_position', name: 'Position' },
+                    { field: 'identifier', name: 'Identifier' },
+                    { field: 'title', name: 'Story' },
+                    { field: 'topic_id', name: 'Topic' },
+                    { field: 'points', name: 'Story points' },
+                    { field: 'status', name: 'Status' },
+                ],
+                backlog: [
+                    { field: 'project_position', name: 'Position' },
+                    { field: 'identifier', name: 'Identifier' },
+                    { field: 'title', name: 'Story' },
+                    { field: 'topic_id', name: 'Topic' },
+                    { field: 'points', name: 'Story points' },
+                    { field: 'status', name: 'Status' },
+                ]
+            }
+        };
     },
     computed: {
         /**
@@ -76,7 +68,7 @@ export default {
             return this.project
                 ? this.$store.getters['stories/all'](this.project.id)
                     .filter(s => !s.sprint_id)
-                    .sort((a, b) => a.position - b.position)
+                    .sort((a, b) => a.project_position - b.project_position)
                 : [];
         },
 
@@ -100,7 +92,7 @@ export default {
         storiesInSprint(sprintId) {
             return this.project
                 ? this.$store.getters['stories/find'](this.project.id, 'sprint_id', sprintId)
-                    .sort((a, b) => a.position - b.position)
+                    .sort((a, b) => a.sprint_position - b.sprint_position)
                 : [];
         },
     },

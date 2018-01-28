@@ -2,10 +2,21 @@ require 'rails_helper'
 
 RSpec.describe 'Sprints API' do
 
+  let(:user) { create(:user) }
+  before(:each) do
+    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+    allow_any_instance_of(ApplicationController).to receive(:authorize_request).and_return(user)
+  end
+
   let!(:course) { create(:course) }
   let(:course_id) { course.id }
-  let!(:sprints) { create_list(:sprint, 20, course_id: course.id) }
-  let(:id) { sprints.first.id }
+  let!(:sprint_1) {
+    create(:sprint, course_id: course.id, start_date: Date.new(2018,11,07), end_date: Date.new(2018,11,17))
+  }
+  let!(:sprint_2) {
+    create(:sprint, course_id: course.id, start_date: Date.new(2018,11,17), end_date: Date.new(2018,11,27))
+  }
+  let(:id) { sprint_1.id }
 
   # Test suite for PUT /sprints/:id
   describe 'PUT /sprints/:id' do

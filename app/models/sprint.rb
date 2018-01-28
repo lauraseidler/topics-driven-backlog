@@ -1,6 +1,7 @@
 class Sprint < ApplicationRecord
   belongs_to :course
-  has_many :stories
+  has_many :stories, dependent: :nullify
+  has_and_belongs_to_many :topics, dependent: :nullify
 
   validates_presence_of :name, :start_date, :end_date, :course_id
 

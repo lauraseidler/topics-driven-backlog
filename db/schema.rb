@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180101235655) do
+ActiveRecord::Schema.define(version: 20180123002706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20180101235655) do
     t.string "semester_type"
     t.integer "semester_year", limit: 2
     t.string "short_title"
+    t.boolean "allow_enrollment", default: false
   end
 
   create_table "project_positions", force: :cascade do |t|
@@ -39,6 +40,14 @@ ActiveRecord::Schema.define(version: 20180101235655) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["course_id"], name: "index_projects_on_course_id"
+    t.index ["title", "course_id"], name: "index_projects_on_title_and_course_id", unique: true
+  end
+
+  create_table "projects_users", id: false, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "project_id", null: false
+    t.index ["project_id", "user_id"], name: "index_projects_users_on_project_id_and_user_id"
+    t.index ["user_id", "project_id"], name: "index_projects_users_on_user_id_and_project_id"
   end
 
   create_table "sprint_positions", force: :cascade do |t|
@@ -57,6 +66,14 @@ ActiveRecord::Schema.define(version: 20180101235655) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["course_id"], name: "index_sprints_on_course_id"
+  end
+
+  create_table "sprints_topics", force: :cascade do |t|
+    t.bigint "sprint_id"
+    t.bigint "topic_id"
+    t.index ["sprint_id", "topic_id"], name: "index_sprints_topics_on_sprint_id_and_topic_id", unique: true
+    t.index ["sprint_id"], name: "index_sprints_topics_on_sprint_id"
+    t.index ["topic_id"], name: "index_sprints_topics_on_topic_id"
   end
 
   create_table "stories", force: :cascade do |t|
@@ -93,12 +110,20 @@ ActiveRecord::Schema.define(version: 20180101235655) do
     t.index ["course_id"], name: "index_topics_on_course_id"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "email"
+    t.integer "role", default: 0
+    t.index ["email"], name: "index_users_on_email", unique: true
+  end
+
   add_foreign_key "project_positions", "projects", on_delete: :cascade
   add_foreign_key "project_positions", "stories", on_delete: :cascade
   add_foreign_key "projects", "courses"
   add_foreign_key "sprint_positions", "sprints", on_delete: :cascade
   add_foreign_key "sprint_positions", "stories", on_delete: :cascade
   add_foreign_key "sprints", "courses"
+  add_foreign_key "sprints_topics", "sprints"
+  add_foreign_key "sprints_topics", "topics"
   add_foreign_key "stories", "projects"
   add_foreign_key "stories", "sprints"
   add_foreign_key "stories", "topics"

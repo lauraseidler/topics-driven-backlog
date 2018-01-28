@@ -2,8 +2,10 @@
     <section id="course-page">
         <template v-if="course">
             <h1>
-                {{ course.title }}
-                <small class="text-muted">{{ getSemesterInfo(course.semester_type, course.semester_year).fullString }}
+                {{ course.short_title }}
+                <small class="text-muted">
+                    {{ course.title }}
+                    ({{ getSemesterInfo(course.semester_type, course.semester_year).fullString }})
                 </small>
             </h1>
 
@@ -15,7 +17,7 @@
                 <BTabs card>
                     <BTab title="Projects">
                         <ul 
-                            class="list-unstyled" 
+                            :class="['list-unstyled', $style.list]"
                             v-if="projects.length">
 
                             <ProjectItem
@@ -80,7 +82,8 @@
                         <p v-else>No sprints in this course yet.</p>
 
                         <SprintForm 
-                            v-if="showSprintForm" 
+                            v-if="showSprintForm"
+                            :course="course"
                             v-model="newSprint" 
                             @cancel="showSprintForm = false" 
                             @submit="addSprint"/>
@@ -170,7 +173,7 @@ export default {
         sprints() {
             return this.course
                 ? this.$store.getters['sprints/all'](this.course.id)
-                    .sort((a, b) => a.start_date > b.start_date)
+                    .sort((a, b) => a.start_date.localeCompare(b.start_date))
                 : [];
         },
 
@@ -224,14 +227,20 @@ export default {
         },
 
         async addProject() {
-            await this.$store.dispatch('projects/create', {
-                parentId: this.course.id,
-                ...this.newProject,
-            });
+            try {
+                await this.$store.dispatch('projects/create', {
+                    parentId: this.course.id,
+                    ...this.newProject,
+                });
 
-            this.newProject = this.$store.getters['projects/template']();
-
-            // TODO handle errors in UI
+                this.newProject = this.$store.getters['projects/template']();
+            } catch (err) {
+                this.$notify({
+                    title: 'Validation failed',
+                    text: err.body.message.replace('Validation failed: ', ''),
+                    type: 'error',
+                });
+            }
         },
 
         async addTopic() {
@@ -257,3 +266,12 @@ export default {
     },
 };
 </script>
+
+<style module>
+    .list {
+        display: grid;
+        grid-gap: 8px;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-auto-rows: minmax(200px, 1fr);
+    }
+</style>

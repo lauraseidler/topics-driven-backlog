@@ -1,36 +1,53 @@
 <template>
     <section id="projects-page">
-        <h1>Projects</h1>
+        <h1>
+            Projects
+            <small class="text-muted">by course</small>
+        </h1>
 
         <div
             v-for="course in courses"
             class="mb-3">
 
-            <h2>{{ course.title }}</h2>
+            <hr class="mt-4 mb-5">
 
-            <ul :class="[$style.list, 'list-unstyled', 'mb-5']">
-                <ProjectItem
-                        v-for="project in projects(course.id)"
-                        :key="project.id"
-                        :data="project"
-                        view="use"/>
+            <BRow>
+                <BCol lg="4">
+                    <h2>
+                        {{ course.short_title }} <br>
+                        <small class="text-muted">
+                            {{ course.title }}
+                        </small>
+                    </h2>
+                </BCol>
+                <BCol lg="8">
+                    <ul :class="[$style.list, 'list-unstyled', 'mb-5']">
+                        <ProjectItem
+                            v-for="project in projects(course.id)"
+                            :key="project.id"
+                            :data="project"/>
 
-                <ProjectItem
-                    view="new"
-                    :class="$style.new"
-                    :data="newProject"
-                    @submit="addProject(course.id, ...arguments)"/>
-            </ul>
+                        <ProjectItem
+                            v-if="course.allow_enrollment && !isEnrolledToProjectInCourse(course.id)"
+                            view="new"
+                            :class="$style.new"
+                            :data="newProject"
+                            :course-id="course.id"/>
+                    </ul>
+                </BCol>
+            </BRow>
         </div>
     </section>
 </template>
 
 <script>
 import ProjectItem from '@/components/elements/ProjectItem';
+import BRow from '@bootstrap/layout/row';
+import BCol from '@bootstrap/layout/col';
 
 export default {
     name: 'ProjectsPage',
-    components: { ProjectItem },
+    components: { ProjectItem, BRow, BCol },
     data() {
         return {
             newProject: this.$store.getters['projects/template'](),
@@ -46,16 +63,8 @@ export default {
             return this.$store.getters['projects/all'](courseId);
         },
 
-        async addProject(courseId, project) {
-            await this.$store.dispatch('projects/create', {
-                parentId: courseId,
-                ...project,
-            });
-
-            this.newProject =  this.$store.getters['projects/template']();
-
-
-            // TODO handle errors in UI
+        isEnrolledToProjectInCourse(courseId) {
+            return this.projects(courseId).filter(p => p.user_ids.indexOf(this.$store.state.user.id) > -1).length;
         },
     },
 };
@@ -65,7 +74,7 @@ export default {
     .list {
         display: grid;
         grid-gap: 8px;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr ;
         grid-auto-rows: minmax(200px, 1fr);
     }
 

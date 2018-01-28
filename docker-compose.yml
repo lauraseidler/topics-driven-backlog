@@ -13,6 +13,10 @@ services:
       dockerfile: .docker/Dockerfile
     container_name: tdb-dev-app
     env_file: .docker/variables.env
+    environment:
+            - LDAP_HOST=${LDAP_HOST}
+            - LDAP_PORT=${LDAP_PORT}
+            - LDAP_CONNECTSTRING=${LDAP_CONNECTSTRING}
     depends_on:
       - postgresql
     volumes:

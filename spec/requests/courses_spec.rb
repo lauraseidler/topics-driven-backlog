@@ -2,6 +2,12 @@ require 'rails_helper'
 
 RSpec.describe 'Courses API', type: :request do
 
+  let(:user) { create(:user) }
+  before(:each) do
+    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+    allow_any_instance_of(ApplicationController).to receive(:authorize_request).and_return(user)
+  end
+
   let!(:courses) { create_list(:course, 10) }
   let(:course) { courses.first }
   let(:course_id) { courses.first.id }
@@ -171,7 +177,7 @@ RSpec.describe 'Courses API', type: :request do
 
   # Test suite for DELETE /courses/:id
   describe 'DELETE /courses/:id' do
-    before { delete "/courses/#{course_id}"}
+    before { delete "/courses/#{course_id}" }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

@@ -2,10 +2,18 @@ require 'database_cleaner'
 
 DatabaseCleaner.clean_with(:truncation)
 
+User.create!([
+                 {email: 'user1@example.com', role: User.roles[:student]},
+                 {email: 'user2@example.com', role: User.roles[:student]},
+                 {email: 'user3@example.com', role: User.roles[:student]},
+                 {email: 'user4@example.com', role: User.roles[:instructor]},
+                 {email: 'user5@example.com', role: User.roles[:instructor]},
+             ])
+
 Course.create!([
-                   {title: "B15.1 Informatik 3", hyperlink: "http://home.htw-berlin.de/~kleinen/classes/ws2017/info3", semester_type: "W", semester_year: 2017, short_title: "INFO3"},
-                   {title: "M1 Media Programming: Web Technology", hyperlink: "http://home.htw-berlin.de/~kleinen/classes/ws2017/media-programming-rails", semester_type: "W", semester_year: 2017, short_title: "M1 Rails"},
-                   {title: "B21.1 - B23.1 WTAT2: Agile Web Development", hyperlink: "http://home.htw-berlin.de/~kleinen/classes/ws2017/wtat2", semester_type: "W", semester_year: 2017, short_title: "WTAT2"}
+                   {title: "B15.1 Informatik 3", hyperlink: "http://home.htw-berlin.de/~kleinen/classes/ws2017/info3", semester_type: "W", semester_year: 2017, short_title: "INFO3", allow_enrollment: true},
+                   {title: "M1 Media Programming: Web Technology", hyperlink: "http://home.htw-berlin.de/~kleinen/classes/ws2017/media-programming-rails", semester_type: "W", semester_year: 2017, short_title: "M1 Rails", allow_enrollment: true},
+                   {title: "B21.1 - B23.1 WTAT2: Agile Web Development", hyperlink: "http://home.htw-berlin.de/~kleinen/classes/ws2017/wtat2", semester_type: "W", semester_year: 2017, short_title: "WTAT2", allow_enrollment: true}
                ])
 Topic.create!([
                   {title: "Rails and Active Record", url: "http://home.htw-berlin.de/~kleinen/classes/ws2017/wtat2/topics/a1-activerecord/", course_id: 3},
@@ -16,47 +24,83 @@ Topic.create!([
                   {title: "Choose one yourself", url: "http://home.htw-berlin.de/~kleinen/classes/ws2017/wtat2/topics/", course_id: 3}
               ])
 Sprint.create!([
-                   {name: "Rails and Active Record", start_date: "2017-10-19", end_date: "2018-10-26", course_id: 3},
-                   {name: "Authentication & Testing", start_date: "2018-11-02", end_date: "2018-11-16", course_id: 3},
-                   {name: "Search Functionality, Database & Docker", start_date: "2018-11-23", end_date: "2018-11-30", course_id: 3},
-                   {name: "Rails Security & Deployment", start_date: "2018-12-07", end_date: "2018-12-14", course_id: 3}
+                   {name: "Sprint 1", start_date: "2018-10-19", end_date: "2018-10-26", course_id: 3},
+                   {name: "Sprint 2", start_date: "2018-11-02", end_date: "2018-11-16", course_id: 3},
+                   {name: "Sprint 3", start_date: "2018-11-23", end_date: "2018-11-30", course_id: 3},
+                   {name: "Sprint 4", start_date: "2018-12-07", end_date: "2018-12-14", course_id: 3},
+                   {name: "Sprint 5", start_date: "2018-12-21", end_date: "2019-01-05", course_id: 3},
+                   {name: "Sprint 6", start_date: "2019-01-11", end_date: "2019-01-18", course_id: 3}
                ])
 Project.create!([
-                    {title: "WTAT2 Project 1", course_id: 3}
+                    {title: "TABLE GAME PORTAL", course_id: 3, user_ids: [1]},
+                    {title: "CourseR:​ ​ Course​ ​ Retrospective", course_id: 3, user_ids: [2]},
                 ])
+
+# Project 1
 Story.create!([
-                  {title: "As the Studiengangssprecher, I want to announce events relevant for IMI-Students.", description: nil, identifier: "S-1", status: 2, points: nil, sprint_id: 1, project_id: 1, topic_id: 1},
-                  {title: "As an IMI-Student, I get an overview of events coming up within the next week.", description: nil, identifier: "S-2", status: 2, points: nil, sprint_id: 1, project_id: 1, topic_id: 1},
-                  {title: "As an IMI-Student, I can see events that will be important for me, e.g. the Projektvergabe, or the Showtime, well ahead.", description: nil, identifier: "S-3", status: 0, points: nil, sprint_id: nil, project_id: 1, topic_id: nil},
-                  {title: "As the Studiengangssprecher, I can also keep an overview of the planning status (date set, room booked, announced etc) for each listed event.", description: nil, identifier: "S-4", status: 0, points: nil, sprint_id: nil, project_id: 1, topic_id: nil},
-                  {title: "As a Student, I can filter events that are relevant for me (B/M, Semester).", description: nil, identifier: "S-5", status: 0, points: nil, sprint_id: nil, project_id: 1, topic_id: nil},
-                  {title: "I can see the IMI-Calendar in my favourite Calendar Application.", description: nil, identifier: "S-6", status: 0, points: nil, sprint_id: nil, project_id: 1, topic_id: nil},
-                  {title: "S-1 and S-4 are only available when logged in as an Admin User.", description: nil, identifier: "S-7", status: 0, points: nil, sprint_id: nil, project_id: 1, topic_id: nil},
-                  {title: "As a SGS, I can edit the Categories of an event while editing the event.", description: nil, identifier: "S-8", status: 0, points: nil, sprint_id: nil, project_id: 1, topic_id: nil},
-                  {title: "Both as Student and SGS, I can log in with my FB4 Account (LDAP)", description: nil, identifier: "S-12", status: 0, points: nil, sprint_id: 2, project_id: 1, topic_id: nil},
-                  {title: "As an SGS, I can edit the name of a category.", description: nil, identifier: "S-11", status: 0, points: nil, sprint_id: 2, project_id: 1, topic_id: nil},
-                  {title: "As an SGS, I can combine two categories into one.", description: nil, identifier: "S-10", status: 0, points: nil, sprint_id: nil, project_id: 1, topic_id: 2},
-                  {title: "As an SGS, I can delete Categories from an Category-Maintenance View listing all the Categories.", description: nil, identifier: "S-9", status: 0, points: nil, sprint_id: 2, project_id: 1, topic_id: 1}
+                  {title: "Auf​ der​​ Hauptseite​​ werden​  alle​ ​Spiele​ ​angezeigt. Neue​ ​Spiele​ ​hinzufügen​ / ​löschen​ ​und​ ​editieren",
+                   description: nil, status: 2, points: nil, sprint_id: 1, project_id: 1, topic_id: 1},
+                  {title: "Als​ ​ Nutzer​ ​ kann​ ​ ich​ ​ ein​ ​ Kommentar​ ​ zu​ ​ einem​ ​ Spiel schreiben/​ ​ löschen",
+                   description: nil, status: 2, points: nil, sprint_id: 1, project_id: 1, topic_id: 1},
+                  {title: "Als​ ​ Nutzer​ ​ kann​ ​ ich​ ​ ein​ ​ Spiel​ ​ anklicken​ ​ und​ ​ die Spieldetails​ ​ werden​ ​ mir​ ​ angezeigt.",
+                   description: nil, status: 2, points: nil, sprint_id: 1, project_id: 1, topic_id: 1},
+                  {title: "Als​ ​ Nutzer​ ​ kann​ ​ ich​ ​ die​ ​ Spiele​ ​ anhand​ ​ Tags sortieren.",
+                   description: nil, status: 2, points: nil, sprint_id: 3, project_id: 1, topic_id: 3},
+                  {title: "Als​ ​ Nutzer​ ​ kann​ ​ ich​ ​ mein​ ​ Profil​ ​ erstellen​ ​ und​ ​ Info über​ ​ mich​ ​ schreiben.",
+                   description: nil, status: 2, points: nil, sprint_id: 2, project_id: 1, topic_id: 2},
+                  {title: "Als​ ​ Nutzer​ ​ kann​ ​ ich​ ​ meine​ ​ Kontaktdaten​ ​ im​ ​ Profil speichern​ ​ und​ ​ angeben,​ ​ welche​ ​ Spiele​ ​ ich​ ​ besitze.",
+                   description: nil, status: 2, points: nil, sprint_id: 2, project_id: 1, topic_id: 2},
+                  {title: "Als​ ​ Nutzer​ ​ kann​ ​ ich​ ​ ein​ ​ Event​ ​ erstellen.",
+                   description: nil, status: 2, points: nil, sprint_id: 3, project_id: 1, topic_id: 3},
+                  {title: "Als​ ​ Nutzer​ ​ kann​ ​ ich​ ​ alle​ ​ Events​ ​ sehen",
+                   description: nil, status: 2, points: nil, sprint_id: 3, project_id: 1, topic_id: 3},
+                  {title: "Als​ ​ Nutzer​ ​ kann​ ​ ich​ ​ Daten​ ​ in​ ​ einem​ ​ Event​ ​ ändern​ ​ - Datum,​ ​ Treffpunkt​ ​ und​ ​ Info​ ​ ändern​ ​ oder​ ​ auch​ ​ ob​ ​ es um​ ​ Geld​ ​ gespielt​ ​ wird",
+                   description: nil, status: 2, points: nil, sprint_id: 3, project_id: 1, topic_id: 3},
+                  {title: "Als​ ​ Nutzer​ ​ kann​ ​ ich​ ​ entscheiden,​ ​ ob​ ​ das​ ​ Event öffentlich​ ​ ist​ ​ oder​ ​ nur​ ​ für​ ​ registrierte​ ​ User​ ​ zu​ ​ sehen ist.",
+                   description: nil, status: 2, points: nil, sprint_id: 3, project_id: 1, topic_id: 3},
+                  {title: "Als​ ​ Nutzer​ ​ kann​ ​ ich​ ​ andere​ ​ Teilnehmer​ ​ in​ ​ Event sehen.",
+                   description: nil, status: 2, points: nil, sprint_id: 3, project_id: 1, topic_id: 3},
+                  {title: "Als​ ​ Nutzer​ ​ kann​ ​ ich​ ​ ein​ ​ Spiel​ ​ bewerten.",
+                   description: nil, status: 2, points: nil, sprint_id: 4, project_id: 1, topic_id: 4},
+                  {title: "Als​ ​ Nutzer​ ​ kann​ ​ ich​ ​ alle​ ​ Spiele​ ​ finden​ ​ und​ ​ nach allen​ ​ Informationen​ ​ zum​ ​ Spiel​ ​ suchen.",
+                   description: nil, status: 2, points: nil, sprint_id: 4, project_id: 1, topic_id: 4},
+                  {title: "Als​ ​ Nutzer​ ​ kann​ ​ ich​ ​ ein​ ​ Kommentar​ ​ auf​ ​ das​ ​ Profil von​ ​ einem​ ​ Spieler​ ​ schreiben.",
+                   description: nil, status: 2, points: nil, sprint_id: 4, project_id: 1, topic_id: 4},
+                  {title: "Als​ ​ Nutzer​ ​ kann​ ​ ich​ ​ meine​ ​ Lieblingsspiele markieren.",
+                   description: nil, status: 2, points: nil, sprint_id: 5, project_id: 1, topic_id: 5},
+                  {title: "Der​ ​ Nutzer​ ​ kann​ ​ nach​ ​ Events,​ ​ Spielen​ ​ und​ ​ Spielern suchen​ ​ und​ ​ Filter​ ​ einsetzten",
+                   description: nil, status: 2, points: nil, sprint_id: 5, project_id: 1, topic_id: 5},
+                  {title: "Als​ ​ Nutzer​ ​ habe​ ​ ich​ ​ die​ ​ Möglichkeit,​ ​ andere​ ​ Spieler zu​ ​ kontaktieren​ ​ (Chat)",
+                   description: nil, status: 2, points: nil, sprint_id: 5, project_id: 1, topic_id: 5},
+                  {title: "Als​ ​ Nutzer​ ​ kann​ ​ ich​ ​ Eventslog​ ​ sehen.​ ​ (Wann​ ​ und was​ ​ gespielt​ ​ war)",
+                   description: nil, status: 2, points: nil, sprint_id: 5, project_id: 1, topic_id: 5},
               ])
-SprintPosition.create!([
-                           {position: 2, sprint_id: 1, story_id: 1},
-                           {position: 1, sprint_id: 1, story_id: 2},
-                           {position: 3, sprint_id: 2, story_id: 9},
-                           {position: 4, sprint_id: 2, story_id: 12},
-                           {position: 2, sprint_id: 2, story_id: 12},
-                           {position: 1, sprint_id: 2, story_id: 11}
-                       ])
-ProjectPosition.create!([
-                            {position: 1, project_id: 1, story_id: 9},
-                            {position: 4, project_id: 1, story_id: 10},
-                            {position: 3, project_id: 1, story_id: 11},
-                            {position: 2, project_id: 1, story_id: 12},
-                            {position: 12, project_id: 1, story_id: 1},
-                            {position: 11, project_id: 1, story_id: 2},
-                            {position: 10, project_id: 1, story_id: 3},
-                            {position: 9, project_id: 1, story_id: 4},
-                            {position: 8, project_id: 1, story_id: 5},
-                            {position: 7, project_id: 1, story_id: 6},
-                            {position: 6, project_id: 1, story_id: 7},
-                            {position: 5, project_id: 1, story_id: 8}
-                        ])
+
+# Project 2
+Story.create!([
+                  {title: "Als​ ​ Student,​ ​ möchte​ ​ ich​ ​ über​ ​ eine Modulübersicht​ ​ genauere Informationen​ ​ über​ ​ eine Lehrveranstaltung​ ​ bei​ ​ einem​ ​ Dozenten angezeigt​ ​ bekommen.",
+                   description: nil, status: 0, points: nil, sprint_id: nil, project_id: 2, topic_id: 1},
+                  {title: "Als​ ​ Student,​ ​ möchte​ ​ ich​ ​ Module​ ​ nach Studiengang​ ​ / ​ ​ Semester​ ​ gefiltert angezeigt​ ​ bekommen.",
+                   description: nil, status: 0, points: nil, sprint_id: nil, project_id: 2, topic_id: 2},
+                  {title: "Als​ ​ Nutzer​ ​ möchte​ ​ ich​ ​ nach​ ​ einem bestimmten​ ​ Kurs​ ​ suchen​ ​ können.",
+                   description: nil, status: 0, points: nil, sprint_id: nil, project_id: 2, topic_id: 3},
+                  {title: "Als​ ​ Dozent,​ ​ kann​ ​ ich​ ​ eine Beschreibung​ ​ zu​ ​ meinem​ ​ Kurs hochladen.",
+                   description: nil, status: 0, points: nil, sprint_id: nil, project_id: 2, topic_id: 3},
+                  {title: "Als​ ​ nicht​ ​ autorisierter​ ​ Nutzer,​ ​ möchte ich​ ​ ein​ ​ Account​ ​ erstellen​ ​ können.",
+                   description: nil, status: 0, points: nil, sprint_id: nil, project_id: 2, topic_id: 2},
+                  {title: "Als​ ​ autorisierter​ ​ Nutzer,​ ​ möchte​ ​ ich mich​ ​ anmelden​ ​ können.",
+                   description: nil, status: 0, points: nil, sprint_id: nil, project_id: 2, topic_id: 2},
+                  {title: "Als​ ​ Nutzer,​ ​ möchte​ ​ ich​ ​ die​ ​ Möglichkeit haben​ ​ zu​ ​ sehen,​ ​ wie​ ​ andere​ ​ den​ ​ Kurs in​ ​ einem​ ​ Metriksystem​ ​ charakterisiert haben.",
+                   description: nil, status: 0, points: nil, sprint_id: nil, project_id: 2, topic_id: 4},
+                  {title: "Als​ ​ autorisierter​ ​ Nutzer​ ​ (Student),​ ​ kann ich​ ​ meine​ ​ Erfahrungen​ ​ mit​ ​ dem​ ​ Kurs mit​ ​ anderen​ ​ teilen,​ ​ indem​ ​ ich Bewertungen​ ​ für​ ​ diesen​ ​ Kurs​ ​ im Metriksystem​ ​ eingebe.",
+                   description: nil, status: 0, points: nil, sprint_id: nil, project_id: 2, topic_id: 4},
+                  {title: "Als​ ​ Nutzer​ ​ möchte​ ​ ich​ ​ alle​ ​ verfügbaren Kurse​ ​ sehen​ ​ können.",
+                   description: nil, status: 0, points: nil, sprint_id: nil, project_id: 2, topic_id: 5},
+              ])
+
+# bypass validation errors by moving sprints back to time via database
+Sprint.all.each do |sprint|
+  start_date = sprint.start_date
+  end_date = sprint.end_date
+  sprint.update_columns(:start_date => start_date-1.years, :end_date => end_date-1.years)
+end
