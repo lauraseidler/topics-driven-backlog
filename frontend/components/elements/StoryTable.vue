@@ -2,19 +2,21 @@
     <table class="story-table table table-striped mb-4">
         <thead>
             <tr>
-                <th @click="sortBy(column.field)" v-for="column in columns" title="Click to sort">
+                <th @click="sortBy(column.field)" v-for="column in columns" :title="view === 'print' ? '' : 'Click to sort'">
                     <nobr>
                         {{ column.name }}
-                        <VIcon
-                            v-if="currentSort.field === column.field && currentSort.order === -1"
-                            name="caret-up"/>
-                        <VIcon
-                            v-else-if="currentSort.field === column.field && currentSort.order === 1"
-                            name="caret-down"/>
-                        <VIcon
-                            v-else-if="column.field"
-                            name="caret-down"
-                            :class="$style.fade"/>
+                        <template v-if="view !== 'print'">
+                            <VIcon
+                                v-if="currentSort.field === column.field && currentSort.order === -1"
+                                name="caret-up"/>
+                            <VIcon
+                                v-else-if="currentSort.field === column.field && currentSort.order === 1"
+                                name="caret-down"/>
+                            <VIcon
+                                v-else-if="column.field"
+                                name="caret-down"
+                                :class="$style.fade"/>
+                        </template>
                     </nobr>
                 </th>
             </tr>
@@ -137,7 +139,7 @@ export default {
         },
 
         sortBy(field) {
-            if (field) {
+            if (this.view !== 'print' && field) {
                 if (this.currentSort.field === field) {
                     if (this.currentSort.order === 1) {
                         this.currentSort.order = -1;

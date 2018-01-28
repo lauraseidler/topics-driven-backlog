@@ -10,9 +10,7 @@ RSpec.describe 'Projects API' do
 
   let!(:course) { create(:course) }
   let(:course_id) { course.id }
-  # create_list doesn't work here because we need a unique title
   let!(:projects) { create_list(:project, 20, course_id: course.id) }
-  let!(:users) { create_list(:user, 2) }
   let(:id) { projects.first.id }
 
   # Test suite for GET /courses/:course_id
@@ -105,45 +103,6 @@ RSpec.describe 'Projects API' do
 
       it 'returns a not found message' do
         expect(response.body).to match(/Couldn't find Project/)
-      end
-    end
-  end
-
-  # Test suite for PATCH /projects/:id
-  describe 'PATCH /projects/:id with user attributes' do
-    let(:valid_attributes) {
-      {
-          user_ids: [users.first.id, users.second.id]
-      }
-    }
-    let(:invalid_attributes) {
-      {
-          user_ids: [3]
-      }
-    }
-
-    context 'when the record exists' do
-      before { patch "/projects/#{id}", params: valid_attributes }
-
-      it 'updates the record' do
-        expect(json.size).to eq(4)
-      end
-
-      it 'returns status code 200' do
-        expect(response).to have_http_status(200)
-      end
-    end
-
-    context 'when the record exists' do
-      before { patch "/projects/#{id}", params: invalid_attributes }
-
-      it 'returns status code 400' do
-        expect(response).to have_http_status(400)
-      end
-
-      it 'returns a validation failure message' do
-        expect(response.body)
-            .to match(/Validation failed: User 3 does not exist/)
       end
     end
   end

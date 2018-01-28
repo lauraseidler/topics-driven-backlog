@@ -24,7 +24,10 @@ services:
     # set some more environment variables specific for this container
     environment:
       - TAG
-      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+      - SECRET_KEY_BASE
+      - LDAP_HOST
+      - LDAP_PORT
+      - LDAP_CONNECTSTRING
       - RAILS_SERVE_STATIC_FILES=true
     # open port for nginx proxy
     ports:

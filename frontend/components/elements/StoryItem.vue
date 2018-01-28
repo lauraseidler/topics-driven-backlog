@@ -67,11 +67,11 @@
 
             <!-- Story -->
             <td @click="expandedView = !expandedView">
-                <VIcon class="float-right" :name="expandedView ? 'caret-up' : 'caret-down'" />
+                <VIcon v-if="!isView('print')" class="float-right" :name="expandedView ? 'caret-up' : 'caret-down'" />
 
                 {{ data.title }}
 
-                <p v-show="expandedView" class="mt-2">
+                <p v-show="(isView('print') && data.description) || expandedView" class="mt-2">
                     Notes: <br>
                     {{ data.description || '(no notes)' }}
                 </p>
@@ -89,17 +89,21 @@
             <!-- Story points -->
             <td>
                 <nobr>
-                    {{ data.points ? data.points + ' SP' : '(not&nbsp;estimated)' }}
+                    {{ data.points ? data.points + ' SP' : isView('print') ? '0' : '(not&nbsp;estimated)' }}
                 </nobr>
             </td>
 
             <!-- Status -->
-            <td v-if="isView('history')">
-                <span 
+            <td v-if="isView(['history'])">
+                <span
                     class="badge" 
                     :class="statusMap[data.status].css">
                     {{ statusMap[data.status].name }}
                 </span>
+            </td>
+
+            <td v-if="isView(['print'])">
+                {{ statusMap[data.status].name }}
             </td>
 
             <td v-if="isView('sprint')">
