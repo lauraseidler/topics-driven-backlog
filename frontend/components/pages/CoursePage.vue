@@ -173,7 +173,7 @@ export default {
         sprints() {
             return this.course
                 ? this.$store.getters['sprints/all'](this.course.id)
-                    .sort((a, b) => a.start_date > b.start_date)
+                    .sort((a, b) => a.start_date.localeCompare(b.start_date))
                 : [];
         },
 
