@@ -1,6 +1,5 @@
 class User < ApplicationRecord
-  has_many :memberships
-  has_many :projects, through: :memberships
+  has_and_belongs_to_many :projects
 
   def self.roles
     { :student => 0, :instructor => 1 }
