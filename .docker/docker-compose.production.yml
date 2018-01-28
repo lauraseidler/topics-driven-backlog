@@ -25,6 +25,9 @@ services:
     environment:
       - TAG
       - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+      - LDAP_HOST=${LDAP_HOST}
+      - LDAP_PORT=${LDAP_PORT}
+      - LDAP_CONNECTSTRING=${LDAP_CONNECTSTRING}
       - RAILS_SERVE_STATIC_FILES=true
     # open port for nginx proxy
     ports:
