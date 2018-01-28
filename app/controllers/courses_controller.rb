@@ -10,6 +10,7 @@ class CoursesController < ApplicationController
   # POST /courses
   def create
     @course = Course.create!(course_params)
+    @course.instructions.create!(user_id: current_user.id, initial_instructor: true)
     json_response(@course, :created)
   end
 

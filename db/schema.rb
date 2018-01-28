@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180122231528) do
+ActiveRecord::Schema.define(version: 20180122204440) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,15 @@ ActiveRecord::Schema.define(version: 20180122231528) do
     t.integer "semester_year", limit: 2
     t.string "short_title"
     t.boolean "allow_enrollment", default: false
+  end
+
+  create_table "instructions", force: :cascade do |t|
+    t.boolean "initial_instructor"
+    t.bigint "user_id"
+    t.bigint "course_id"
+    t.index ["course_id"], name: "index_instructions_on_course_id"
+    t.index ["user_id", "course_id"], name: "index_instructions_on_user_id_and_course_id", unique: true
+    t.index ["user_id"], name: "index_instructions_on_user_id"
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -117,6 +126,8 @@ ActiveRecord::Schema.define(version: 20180122231528) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "instructions", "courses", on_delete: :cascade
+  add_foreign_key "instructions", "users"
   add_foreign_key "project_positions", "projects", on_delete: :cascade
   add_foreign_key "project_positions", "stories", on_delete: :cascade
   add_foreign_key "projects", "courses"
