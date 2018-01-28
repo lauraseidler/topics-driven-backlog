@@ -70,9 +70,9 @@ RSpec.describe 'Projects API' do
     end
   end
 
-  # Test suite for DELETE /projects/:project_id/enrollments/:user_id
-  describe 'DELETE /projects/:project_id/enrollments/:user_id' do
-    before { delete "/projects/#{project.id}/enrollments/#{user.id}"}
+  # Test suite for DELETE /projects/:project_id/enrollment
+  describe 'DELETE /projects/:project_id/enrollment' do
+    before { delete "/projects/#{project.id}/enrollment"}
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)
