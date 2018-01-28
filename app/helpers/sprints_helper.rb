@@ -21,7 +21,7 @@ module SprintsHelper
     sprints
   end
 
-  def update_sprint_collection(collection)
+  def update_sprint_collection(collection, course)
     sprints = []
 
     ActiveRecord::Base.transaction do
@@ -29,7 +29,7 @@ module SprintsHelper
         validate_sprint_date_parameter(s[:start_date], s[:end_date])
         sprint = Sprint.find_by!(id: s[:id])
         sprint_params = s.permit(:start_date, :end_date, :name, :topic_ids => [])
-        validate_topics(sprint_params[:topic_ids])
+        validate_topics(sprint_params[:topic_ids], course)
 
         sprint.update!(sprint_params)
         sprints.append(sprint)
@@ -68,13 +68,12 @@ module SprintsHelper
     end
   end
 
-  def validate_topics(topic_ids)
+  def validate_topics(topic_ids, course)
     errors = []
 
     if topic_ids.present?
 
       topic_ids = filter_unique_parameter_list(topic_ids)
-      course = get_course
 
       topic_ids.each do |topic_id|
         errors.append(
@@ -88,14 +87,6 @@ module SprintsHelper
   end
 
   private
-
-  def get_course
-    if @course.present?
-      @course
-    else
-      @sprint.course
-    end
-  end
 
   def filter_unique_parameter_list(list)
     list.uniq
