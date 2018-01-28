@@ -46,7 +46,8 @@ class AuthenticateUser
   end
 
   def ldap_auth(email, password)
-    if Rails.env.development?
+    if Rails.env.development? || Rails.en.test?
+      Rails.logger.info 'Skipping LDAP Authentication in Develop/Test Env'
       user = User.find_by(email: email)
       return user.role
     end
