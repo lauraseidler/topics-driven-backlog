@@ -1,4 +1,7 @@
 class TopicsController < ApplicationController
+  include CanCan::ControllerAdditions
+
+  load_and_authorize_resource
   before_action :set_course, only: [:create]
   before_action :set_topic, only: [:update, :destroy]
 

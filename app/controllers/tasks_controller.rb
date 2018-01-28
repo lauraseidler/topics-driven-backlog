@@ -1,4 +1,7 @@
 class TasksController < ApplicationController
+  include CanCan::ControllerAdditions
+
+  load_and_authorize_resource
   before_action :set_story, only: [:show, :create]
   before_action :set_story_task, only: [:show, :update, :destroy]
 

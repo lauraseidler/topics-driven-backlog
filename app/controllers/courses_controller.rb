@@ -1,4 +1,7 @@
 class CoursesController < ApplicationController
+  include CanCan::ControllerAdditions
+
+  load_and_authorize_resource
   before_action :set_course, only: [:show, :update, :destroy]
 
   # GET /courses

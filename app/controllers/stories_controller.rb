@@ -1,4 +1,7 @@
 class StoriesController < ApplicationController
+  include CanCan::ControllerAdditions
+
+  load_and_authorize_resource
   before_action :set_project, only: [:create]
   before_action :set_story, only: [:show, :update, :destroy]
 

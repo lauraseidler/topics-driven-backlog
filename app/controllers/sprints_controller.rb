@@ -1,4 +1,7 @@
 class SprintsController < ApplicationController
+  include CanCan::ControllerAdditions
+
+  load_and_authorize_resource
   include SprintsHelper
 
   before_action :set_course, only: [:create, :create_collection]
