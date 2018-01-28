@@ -28,7 +28,7 @@
                             :data="project"/>
 
                         <ProjectItem
-                            v-if="course.allow_enrollment"
+                            v-if="course.allow_enrollment && !isEnrolledToProjectInCourse(course.id)"
                             view="new"
                             :class="$style.new"
                             :data="newProject"
@@ -61,6 +61,10 @@ export default {
     methods: {
         projects(courseId) {
             return this.$store.getters['projects/all'](courseId);
+        },
+
+        isEnrolledToProjectInCourse(courseId) {
+            return this.projects(courseId).filter(p => p.user_ids.indexOf(this.$store.state.user.id) > -1).length;
         },
     },
 };

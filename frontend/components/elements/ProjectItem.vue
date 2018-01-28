@@ -18,7 +18,7 @@
             :class="['card-body', $style.display]">
 
             <template v-if="!editing">
-                <template v-if="course.allow_enrollment">
+                <template v-if="course.allow_enrollment && isEnrolled">
                     <BButton
                             size="sm"
                             variant="outline-danger"
@@ -42,8 +42,21 @@
 
                 <p :class="['card-text', $style.bottom]">
                     <router-link
+                        v-if="isEnrolled"
                         class="btn btn-primary"
                         :to="baseUrl">View Backlog</router-link>
+
+                    <BButton
+                        v-if="course.allow_enrollment && isEnrolled"
+                        variant="primary"
+                        v-confirm="{ action: disenroll, text: 'Do you really want to leave this project?' }"
+                    >Leave project</BButton>
+
+                    <BButton
+                        v-if="course.allow_enrollment && !isEnrolledToProjectInCourse"
+                        variant="primary"
+                        @click="enroll"
+                    >Join project</BButton>
                 </p>
             </template>
 
@@ -97,6 +110,18 @@ export default {
         baseUrl() {
             return '/projects'
                 + `/${this.data.id}-${this.slugify(this.data.title)}`;
+        },
+
+        isEnrolled() {
+            return this.data.user_ids.indexOf(this.$store.state.user.id) > -1;
+        },
+
+        projectsInCourse() {
+            return this.$store.getters['projects/all'](this.data.course_id);
+        },
+
+        isEnrolledToProjectInCourse() {
+           return this.projectsInCourse.filter(p => p.user_ids.indexOf(this.$store.state.user.id) > -1).length;
         },
     },
     methods: {
@@ -157,6 +182,33 @@ export default {
                 this.$notify({
                     title: 'Validation failed',
                     text: err.body.message.replace('Validation failed: ', ''),
+                    type: 'error',
+                });
+            }
+        },
+
+        async enroll() {
+            try {
+                await this.$store.dispatch('projects/enroll', this.data.id);
+            } catch (err) {
+                this.$notify({
+                    title: 'Enrollment failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
+        },
+
+        async disenroll() {
+            try {
+                await this.$store.dispatch('projects/disenroll', {
+                    projectId: this.data.id,
+                    courseId: this.course.id,
+                });
+            } catch (err) {
+                this.$notify({
+                    title: 'Disenrollment failed',
+                    text: err.body.message,
                     type: 'error',
                 });
             }
