@@ -9,7 +9,9 @@ class SprintsController < ApplicationController
   before_action only:[:update] {
     validate_sprint_date_parameter(params[:start_date], params[:end_date])
   }
-  before_action :validate_topics, only: [:create, :update]
+  before_action only: [:create, :update] {
+    validate_topics(params[:topic_ids])
+  }
 
   # POST /courses/course_id/sprints
   def create

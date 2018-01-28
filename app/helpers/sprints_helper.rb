@@ -28,7 +28,10 @@ module SprintsHelper
       collection.each do |s|
         validate_sprint_date_parameter(s[:start_date], s[:end_date])
         sprint = Sprint.find_by!(id: s[:id])
-        sprint.update!(s.permit(:start_date, :end_date))
+        sprint_params = s.permit(:start_date, :end_date, :name, :topic_ids => [])
+        validate_topics(sprint_params[:topic_ids])
+
+        sprint.update!(sprint_params)
         sprints.append(sprint)
       end
     end
@@ -65,21 +68,21 @@ module SprintsHelper
     end
   end
 
-  def validate_topics
+  def validate_topics(topic_ids)
     errors = []
 
-    if params[:topic_ids].present?
+    if topic_ids.present?
 
-      params[:topic_ids] = filter_unique_parameter_list(params[:topic_ids])
+      topic_ids = filter_unique_parameter_list(topic_ids)
       course = get_course
 
-      params[:topic_ids].each do |topic_id|
+      topic_ids.each do |topic_id|
         errors.append(
             valid_topic_id(topic_id, course)
         )
       end
 
-        raise_exception_on_validation_error(errors)
+      raise_exception_on_validation_error(errors)
     end
 
   end
