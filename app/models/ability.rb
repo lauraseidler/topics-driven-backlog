@@ -80,13 +80,22 @@ class Ability
           ( is_member(project) && enrollment_allowed(project.course) )
     end
 
+    can :read, Project do |project|
+      is_instructor(project.course) || is_member(project)
+    end
+
     can :read, Story do |story|
       is_instructor(story.project.course)
     end
 
+    can :create, Story do |s, project|
+      is_member(project)
+    end
+    
     can :manage, Story do |story|
       is_member(story.project)
     end
+
   end
 
 
