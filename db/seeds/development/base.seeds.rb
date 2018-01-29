@@ -2,6 +2,14 @@ require 'database_cleaner'
 
 DatabaseCleaner.clean_with(:truncation)
 
+User.create!([
+                 {email: 'user1@example.com', role: User.roles[:student]},
+                 {email: 'user2@example.com', role: User.roles[:student]},
+                 {email: 'user3@example.com', role: User.roles[:student]},
+                 {email: 'user4@example.com', role: User.roles[:instructor]},
+                 {email: 'user5@example.com', role: User.roles[:instructor]},
+             ])
+
 Course.create!([
                    {title: "B15.1 Informatik 3", hyperlink: "http://home.htw-berlin.de/~kleinen/classes/ws2017/info3", semester_type: "W", semester_year: 2017, short_title: "INFO3", allow_enrollment: true},
                    {title: "M1 Media Programming: Web Technology", hyperlink: "http://home.htw-berlin.de/~kleinen/classes/ws2017/media-programming-rails", semester_type: "W", semester_year: 2017, short_title: "M1 Rails", allow_enrollment: true},
@@ -24,8 +32,8 @@ Sprint.create!([
                    {name: "Sprint 6", start_date: "2019-01-11", end_date: "2019-01-18", course_id: 3}
                ])
 Project.create!([
-                    {title: "TABLE GAME PORTAL", course_id: 3},
-                    {title: "CourseR:​ ​ Course​ ​ Retrospective", course_id: 3},
+                    {title: "TABLE GAME PORTAL", course_id: 3, user_ids: [1]},
+                    {title: "CourseR:​ ​ Course​ ​ Retrospective", course_id: 3, user_ids: [2]},
                 ])
 
 # Project 1

@@ -30,10 +30,10 @@ echo "sshing to $DEPLOYMENT_HOST and calling docker-compose"
 # yes, these variables are meant to expand on the client side.
 setEnvVarsString="export set TAG=$DEPLOYMENT_TAG; "
 setEnvVarsString+="export set SECRET_KEY_BASE=$SECRET_KEY_BASE; "
-setEnvVarsString+="export set LDAP_HTW_HOST=$LDAP_HOST; "
-setEnvVarsString+="export set LDAP_HTW_PORT=$LDAP_PORT; "
-setEnvVarsString+="export set LDAP_HTW_CONNECTSTRING=$LDAP_CONNECTSTRING;"
-ssh -i id_rsa_${DEPLOYMENT_ENVIRONMENT} ${DEPLOYMENT_USER}@${DEPLOYMENT_HOST} ${setEnvVarsString} ". ./04-deploy-steps-on-host.sh"
+setEnvVarsString+="export set LDAP_HOST=$LDAP_HOST; "
+setEnvVarsString+="export set LDAP_PORT=$LDAP_PORT; "
+setEnvVarsString+="export set LDAP_CONNECTSTRING=$LDAP_CONNECTSTRING;"
+ssh -i id_rsa_${DEPLOYMENT_ENVIRONMENT} ${DEPLOYMENT_USER}@${DEPLOYMENT_HOST} "$setEnvVarsString . ./04-deploy-steps-on-host.sh"
 exit_on_error $?
 
 # copy and activate cronjob file to remove old docker stuff

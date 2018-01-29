@@ -8,6 +8,7 @@ import ProjectsPage from '@/components/pages/ProjectsPage';
 import ProjectPage from '@/components/pages/ProjectPage';
 import LoginPage from '@/components/pages/LoginPage';
 import LogoutPage from '@/components/pages/LogoutPage';
+import PrintPage from '@/components/pages/PrintPage';
 
 import store from '@/store';
 
@@ -19,6 +20,14 @@ const router = new Router({
             path: '/projects',
             name: 'projects',
             component: ProjectsPage,
+            meta: {
+                protected: true,
+            },
+        },
+        {
+            path: '/projects/:id-(.*)/print',
+            name: 'print',
+            component: PrintPage,
             meta: {
                 protected: true,
             },

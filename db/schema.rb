@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180122204440) do
+ActiveRecord::Schema.define(version: 20180123002706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,14 +35,6 @@ ActiveRecord::Schema.define(version: 20180122204440) do
     t.index ["user_id"], name: "index_instructions_on_user_id"
   end
 
-  create_table "memberships", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "project_id"
-    t.index ["project_id"], name: "index_memberships_on_project_id"
-    t.index ["user_id", "project_id"], name: "index_memberships_on_user_id_and_project_id", unique: true
-    t.index ["user_id"], name: "index_memberships_on_user_id"
-  end
-
   create_table "project_positions", force: :cascade do |t|
     t.integer "position"
     t.bigint "project_id"
@@ -58,6 +50,13 @@ ActiveRecord::Schema.define(version: 20180122204440) do
     t.datetime "updated_at", null: false
     t.index ["course_id"], name: "index_projects_on_course_id"
     t.index ["title", "course_id"], name: "index_projects_on_title_and_course_id", unique: true
+  end
+
+  create_table "projects_users", id: false, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "project_id", null: false
+    t.index ["project_id", "user_id"], name: "index_projects_users_on_project_id_and_user_id"
+    t.index ["user_id", "project_id"], name: "index_projects_users_on_user_id_and_project_id"
   end
 
   create_table "sprint_positions", force: :cascade do |t|
