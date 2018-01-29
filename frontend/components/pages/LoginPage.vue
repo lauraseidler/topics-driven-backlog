@@ -32,6 +32,7 @@ export default {
                 // redirect to where the user wanted to go
                 this.$router.push(this.redirectTo);
             } catch (err) {
+                /* istanbul ignore next */
                 this.$notify({
                     title: 'Login failed',
                     text: err.body.message || 'Please check your username and password.',

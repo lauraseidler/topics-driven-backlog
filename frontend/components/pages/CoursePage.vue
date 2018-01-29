@@ -202,28 +202,42 @@ export default {
          * Add a sprint to the given course
          */
         async addSprint() {
-            await this.$store.dispatch('sprints/create', {
-                parentId: this.course.id,
-                ...this.newSprint,
-            });
-
-            this.newSprint = this.$store.getters['sprints/template']();
-
-            // TODO handle errors in UI
+            try {
+                await this.$store.dispatch('sprints/create', {
+                    parentId: this.course.id,
+                    ...this.newSprint,
+                });
+    
+                this.newSprint = this.$store.getters['sprints/template']();
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Sprint creation failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
 
         /**
          * Add a sprint collection to the given course
          */
         async addCollection() {
-            await this.$store.dispatch('sprints/createCollection', {
-                parentId: this.course.id,
-                collection: this.newCollection,
-            });
-
-            this.newCollection = {};
-
-            // TODO handle errors in UI
+            try {
+                await this.$store.dispatch('sprints/createCollection', {
+                    parentId: this.course.id,
+                    collection: this.newCollection,
+                });
+    
+                this.newCollection = {};
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Sprints creation failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
 
         async addProject() {
@@ -235,6 +249,7 @@ export default {
 
                 this.newProject = this.$store.getters['projects/template']();
             } catch (err) {
+                /* istanbul ignore next */
                 this.$notify({
                     title: 'Validation failed',
                     text: err.body.message.replace('Validation failed: ', ''),
@@ -244,14 +259,21 @@ export default {
         },
 
         async addTopic() {
-            await this.$store.dispatch('topics/create', {
-                parentId: this.course.id,
-                ...this.newTopic,
-            });
-
-            this.newTopic = this.$store.getters['topics/template']();
-
-            // TODO handle errors in UI
+            try {
+                await this.$store.dispatch('topics/create', {
+                    parentId: this.course.id,
+                    ...this.newTopic,
+                });
+    
+                this.newTopic = this.$store.getters['topics/template']();
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Topic creation failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
 
         /**

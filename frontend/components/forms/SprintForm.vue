@@ -252,6 +252,7 @@ export default {
 
                 this.cancel();
             } catch (e) {
+                /* istanbul ignore next */
                 this.$notify({
                     title: 'Update failed',
                     text: e.message,

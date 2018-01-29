@@ -15,6 +15,7 @@ import Vue from 'vue';
 import VueResource from 'vue-resource';
 import Vuelidate from 'vuelidate';
 import Notifications from 'vue-notification';
+import moment from 'moment';
 
 // our own stuff
 import App from '@/components/App';
@@ -32,6 +33,25 @@ import '@/filters/displayDate';
 Vue.use(VueResource);
 Vue.use(Vuelidate);
 Vue.use(Notifications);
+
+Vue.http.interceptors.push(function checkLogin(request, next) {
+    if (store.state.loggedIn && store.state.jwt && store.state.jwt.ttl < moment().unix()) {
+        store.commit('logout');
+
+        router.push('/login?redirectTo=' + router.currentRoute.path);
+
+        next(request.respondWith({
+            message: 'Login expired! Please login again!',
+        }, {
+            status: 401,
+        }));
+
+        return;
+    }
+
+    /* istanbul ignore next */
+    next();
+});
 
 // init store and app once dom is loaded
 document.addEventListener('DOMContentLoaded', () => {
