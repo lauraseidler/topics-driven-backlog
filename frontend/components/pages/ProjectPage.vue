@@ -1,16 +1,29 @@
 <template>
     <section id="project-page">
-        <router-link :to="`/courses/${course.id}-${slugify(course.title)}`" class="btn btn-primary float-right ml-2" v-if="course">
+        <router-link 
+            :to="`/courses/${course.id}-${slugify(course.title)}`" 
+            class="btn btn-primary float-right ml-2" 
+            v-if="course">
+
             Back to course
         </router-link>
 
-        <router-link :to="`/projects/${project.id}-${slugify(project.title)}/print`" class="btn btn-primary float-right" v-if="project">
+        <router-link 
+            :to="`/projects/${project.id}-${slugify(project.title)}/print`" 
+            class="btn btn-primary float-right" 
+            v-if="project">
+
             View report
         </router-link>
 
-        <router-link class="h4 text-muted" :to="`/courses/${course.id}-${slugify(course.title)}`" v-if="course">
-            {{ course.short_title }} <small>({{ course.title}})</small>
+        <router-link 
+            class="h4 text-muted" 
+            :to="`/courses/${course.id}-${slugify(course.title)}`" 
+            v-if="course">
+
+            {{ course.short_title }} <small>({{ course.title }})</small>
         </router-link>
+
         <h1 v-if="project">{{ project.title }}: {{ currentView }}</h1>
 
         <hr>
@@ -19,10 +32,14 @@
             <template slot="headline">
                 <h2>History</h2>
             </template>
+
             <template slot="content">
                 <div v-if="pastSprints.length">
                     <template v-for="sprint in pastSprints">
-                        <div :key="sprint.id" class="mb-4">
+                        <div 
+                            :key="sprint.id" 
+                            class="mb-4">
+
                             <h3 class="h5">
                                 {{ sprint.name }}
                                 <small class="text-muted">({{ sprint.start_date | displayDate }} - {{ sprint.end_date | displayDate }})</small>
@@ -41,7 +58,12 @@
                     </template>
                 </div>
 
-                <h3 class="h5" v-else>No past sprints!</h3>
+                <h3 
+                    class="h5" 
+                    v-else>
+                    
+                    No past sprints!
+                </h3>
             </template>
         </CollapsingSection>
 
@@ -51,23 +73,27 @@
             <template slot="headline">
                 <h2>Current sprint</h2>
             </template>
+
             <template slot="content">
                 <template v-if="currentSprint">
                     <h3 class="h5">
                         {{ currentSprint.name }}
                         <small class="text-muted">({{ currentSprint.start_date | displayDate }} - {{ currentSprint.end_date | displayDate }})</small>
                     </h3>
-                    <StoryTable
 
-                            :columns="tableColumns.currentSprint"
-                            :rows="storiesInSprint(currentSprint.id)"
-                            position-field="sprint_position"
-                            view="sprint"
-                    />
+                    <StoryTable
+                        :columns="tableColumns.currentSprint"
+                        :rows="storiesInSprint(currentSprint.id)"
+                        position-field="sprint_position"
+                        view="sprint"/>
                 </template>
 
-
-                <h3 class="h5" v-else>No current sprint!</h3>
+                <h3 
+                    class="h5" 
+                    v-else>
+                    
+                    No current sprint!
+                </h3>
             </template>
         </CollapsingSection>
 
@@ -77,24 +103,29 @@
             <template slot="headline">
                 <h2>Next sprint</h2>
             </template>
+
             <template slot="content">
                 <template v-if="nextSprint">
                     <h3 class="h5">
                         {{ nextSprint.name }}
                         <small class="text-muted">({{ nextSprint.start_date | displayDate }} - {{ nextSprint.end_date | displayDate }})</small>
                     </h3>
-                    <StoryTable
 
-                            :columns="tableColumns.nextSprint"
-                            :rows="storiesInSprint(nextSprint.id)"
-                            position-field="sprint_position"
-                            :sortable="true"
-                            view="planning-sprint"
-                    />
+                    <StoryTable
+                        :columns="tableColumns.nextSprint"
+                        :rows="storiesInSprint(nextSprint.id)"
+                        position-field="sprint_position"
+                        :sortable="true"
+                        view="planning-sprint"/>
                 </template>
 
 
-                <h3 class="h5" v-else>No sprint to plan!</h3>
+                <h3 
+                    class="h5" 
+                    v-else>
+                    
+                    No sprint to plan!
+                </h3>
             </template>
         </CollapsingSection>
 
@@ -104,27 +135,29 @@
             <template slot="headline">
                 <h2>Backlog</h2>
             </template>
+
             <template slot="content">
                 <h3 class="h5">Stories not in any sprints</h3>
+
                 <StoryTable
-                        :columns="tableColumns.backlog"
-                        :rows="backlog"
-                        :view="sections.nextSprint ? 'planning-backlog' : 'backlog'"
-                        position-field="project_position"
-                        :sortable="true"/>
+                    :columns="tableColumns.backlog"
+                    :rows="backlog"
+                    :view="sections.nextSprint ? 'planning-backlog' : 'backlog'"
+                    position-field="project_position"
+                    :sortable="true"/>
 
                 <StoryForm
-                        v-if="showForm"
-                        v-model="newStory"
-                        :project="project"
-                        @cancel="cancelNew"
-                        @submit="save"/>
+                    v-if="showForm"
+                    v-model="newStory"
+                    :project="project"
+                    @cancel="cancelNew"
+                    @submit="save"/>
 
                 <BButton
-                        v-else
-                        type="button"
-                        variant="primary"
-                        @click="startNew">Add story</BButton>
+                    v-else
+                    type="button"
+                    variant="primary"
+                    @click="startNew">Add story</BButton>
             </template>
         </CollapsingSection>
 
@@ -143,11 +176,12 @@ import BButton from '@bootstrap/button/button';
 import StoryTable from '@/components/elements/StoryTable';
 import bus from '@/helper/bus';
 import CollapsingSection from '@/components/elements/CollapsingSection';
+import { slugify } from '@/helper/util';
 
 export default {
     name: 'ProjectPage',
-    extends: BaseProjectAwarePage,
     components: { StoryForm, StoryItem, BButton, StoryTable, VIcon, CollapsingSection },
+    extends: BaseProjectAwarePage,
     data() {
         return {
             showForm: false,
@@ -184,9 +218,10 @@ export default {
                     { field: 'topic_id', name: 'Topic' },
                     { field: 'points', name: 'Story points' },
                     { name: '' },
-                ]
+                ],
             },
             sections: {
+                history: false,
                 currentSprint: true,
                 nextSprint: false,
                 backlog: true,
@@ -249,13 +284,16 @@ export default {
         },
     },
     methods: {
+        slugify,
+
         /**
          * Stories in sprint with ID
+         * @param {int} sprintId
          * @returns {array}
          */
         storiesInSprint(sprintId) {
             return this.$store.getters['stories/find'](this.project.id, 'sprint_id', sprintId)
-                    .sort((a, b) => a.sprint_position - b.sprint_position);
+                .sort((a, b) => a.sprint_position - b.sprint_position);
         },
 
         /**
@@ -264,7 +302,7 @@ export default {
         async save() {
             await this.$store.dispatch('stories/create', {
                 parentId: this.project.id,
-                ...this.newStory
+                ...this.newStory,
             });
 
             this.newStory = this.$store.getters['stories/template']();
@@ -285,16 +323,7 @@ export default {
             this.$store.commit('resolvePendingChange');
             bus.$off('saveAll', this.save);
         },
-
-        slugify(text) {
-            return text.toString().toLowerCase()
-                .replace(/\s+/g, '-')           // Replace spaces with -
-                .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-                .replace(/\-\-+/g, '-')         // Replace multiple - with single -
-                .replace(/^-+/, '')             // Trim - from start of text
-                .replace(/-+$/, '');            // Trim - from end of text
-        },
-    }
+    },
 };
 </script>
 

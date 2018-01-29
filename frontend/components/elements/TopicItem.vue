@@ -55,7 +55,11 @@ export default {
     props: {
         data: {
             type: Object,
-            default: () => {},
+            default: null,
+            validator: function (value) {
+                return value
+                    && value.title;
+            },
         },
     },
     data() {

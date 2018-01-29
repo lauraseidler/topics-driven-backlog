@@ -6,9 +6,9 @@
 
 <script>
 export default {
-    name: 'logout',
-    data() {
-        return {};
+    name: 'LogoutPage',
+    mounted() {
+        this.logout();
     },
     methods: {
         logout() {
@@ -16,8 +16,6 @@ export default {
             this.$router.push('/');
         },
     },
-    mounted() {
-        this.logout();
-    },
+
 };
 </script>

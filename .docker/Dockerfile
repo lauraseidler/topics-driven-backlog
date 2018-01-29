@@ -41,7 +41,7 @@ RUN set -ex \
 ADD . .
 
 # install yarn modules
-RUN yarn install
+RUN yarn install --ignore-engines
 
 # start puma server AND webpack dev server (see Procfile)
 CMD ["foreman", "start"]

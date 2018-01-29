@@ -18,6 +18,9 @@ describe('The router', () => {
     it('has initialised the router', () => {
         expect(cmp.vm.$router).toBeTruthy();
         expect(cmp.vm.$route).toBeTruthy();
+        cmp.vm.$router.push('/login');
+        expect(cmp.vm.$route.path).toBe('/login');
+
     });
 
     it('asks to confirm when navigating with pending changes', () => {

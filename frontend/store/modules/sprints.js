@@ -3,7 +3,6 @@ import resources from '@/store/resources';
 
 import * as _ from 'lodash';
 import Vue from 'vue';
-import actionTypes from '@/store/base/resource-module/action-types';
 import mutationTypes from '@/store/base/resource-module/mutation-types';
 
 const resourceModule = generate({
@@ -65,8 +64,7 @@ resourceModule.getters['current'] = function () {
         return function (courseId) {
             return _.first(
                 getters.all(courseId)
-                    .filter(s => s.start_date <= rootState.currentDate && s.end_date >= rootState.currentDate)
-                    .sort((a, b) => a.start_date.localeCompare(b.start_date)));
+                    .filter(s => s.start_date <= rootState.currentDate && s.end_date >= rootState.currentDate));
         };
     };
 }();
@@ -76,8 +74,7 @@ resourceModule.getters['next'] = function () {
         return function (courseId) {
             return _.first(
                 getters.all(courseId)
-                    .filter(s => s.start_date > rootState.currentDate)
-                    .sort((a, b) => a.start_date.localeCompare(b.start_date)));
+                    .filter(s => s.start_date > rootState.currentDate));
         };
     };
 }();

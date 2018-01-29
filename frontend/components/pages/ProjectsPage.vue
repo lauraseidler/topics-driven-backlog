@@ -7,6 +7,7 @@
 
         <div
             v-for="course in courses"
+            :key="course.id"
             class="mb-3">
 
             <hr class="mt-4 mb-5">
@@ -64,7 +65,7 @@ export default {
         },
 
         isEnrolledToProjectInCourse(courseId) {
-            return this.projects(courseId).filter(p => p.user_ids.indexOf(this.$store.state.user.id) > -1).length;
+            return this.projects(courseId).filter(p => p.user_ids.indexOf(this.$store.state.user.id) > -1).length > 0;
         },
     },
 };

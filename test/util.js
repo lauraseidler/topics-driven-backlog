@@ -34,11 +34,11 @@ export function mockResponse(
     Vue.http.interceptors.push((request, next) => {
         if (request.method === method) {
             mockStatus.correctMethod = true;
-        }
+        }        
 
         if (request.url === route) {
             mockStatus.correctRoute = true;
-        }
+        }        
 
         if (
             payload &&

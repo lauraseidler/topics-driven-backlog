@@ -2,7 +2,9 @@
     <section id="login-page">
         <h1>Login</h1>
 
-        <LoginForm v-model="user" @submit="login"/>
+        <LoginForm 
+            v-model="user" 
+            @submit="login"/>
     </section>
 </template>
 
@@ -10,8 +12,8 @@
 import LoginForm from '@/components/forms/LoginForm';
 
 export default {
-    components: { LoginForm },
     name: 'LoginPage',
+    components: { LoginForm },
     data() {
         return {
             user: {},
@@ -36,7 +38,7 @@ export default {
                     type: 'error',
                 });
             }
-        }
+        },
     },
 };
 </script>

@@ -13,7 +13,10 @@
 
         <template v-else>
             <!-- Drag and drop -->
-            <td v-if="isView(['backlog', 'planning-sprint', 'planning-backlog'])" :class="$style.parent">
+            <td 
+                v-if="isView(['backlog', 'planning-sprint', 'planning-backlog'])" 
+                :class="$style.parent">
+
                 <nobr>
                     <BButton
                         v-if="isView('planning-backlog')"
@@ -67,11 +70,17 @@
 
             <!-- Story -->
             <td @click="expandedView = !expandedView">
-                <VIcon v-if="!isView('print')" class="float-right" :name="expandedView ? 'caret-up' : 'caret-down'" />
+                <VIcon 
+                    v-if="!isView('print')" 
+                    class="float-right" 
+                    :name="expandedView ? 'caret-up' : 'caret-down'" />
 
                 {{ data.title }}
 
-                <p v-show="(isView('print') && data.description) || expandedView" class="mt-2">
+                <p 
+                    v-show="(isView('print') && data.description) || expandedView" 
+                    class="mt-2">
+                    
                     Notes: <br>
                     {{ data.description || '(no notes)' }}
                 </p>
