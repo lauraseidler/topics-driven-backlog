@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20180122204440) do
     t.boolean "allow_enrollment", default: false
   end
 
+
   create_table "instructions", force: :cascade do |t|
     t.boolean "initial_instructor"
     t.bigint "user_id"
@@ -33,14 +34,6 @@ ActiveRecord::Schema.define(version: 20180122204440) do
     t.index ["course_id"], name: "index_instructions_on_course_id"
     t.index ["user_id", "course_id"], name: "index_instructions_on_user_id_and_course_id", unique: true
     t.index ["user_id"], name: "index_instructions_on_user_id"
-  end
-
-  create_table "memberships", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "project_id"
-    t.index ["project_id"], name: "index_memberships_on_project_id"
-    t.index ["user_id", "project_id"], name: "index_memberships_on_user_id_and_project_id", unique: true
-    t.index ["user_id"], name: "index_memberships_on_user_id"
   end
 
   create_table "project_positions", force: :cascade do |t|
@@ -58,6 +51,13 @@ ActiveRecord::Schema.define(version: 20180122204440) do
     t.datetime "updated_at", null: false
     t.index ["course_id"], name: "index_projects_on_course_id"
     t.index ["title", "course_id"], name: "index_projects_on_title_and_course_id", unique: true
+  end
+
+  create_table "projects_users", id: false, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "project_id", null: false
+    t.index ["project_id", "user_id"], name: "index_projects_users_on_project_id_and_user_id"
+    t.index ["user_id", "project_id"], name: "index_projects_users_on_user_id_and_project_id"
   end
 
   create_table "sprint_positions", force: :cascade do |t|

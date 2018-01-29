@@ -154,4 +154,23 @@ body {
 .vue-notification {
     font-size: 16px;
 }
+
+.w-auto {
+    width: auto !important;
+}
+
+@media print {
+
+    .hidden-print {
+        display: none !important;
+    }
+
+    body {
+        padding-top: 0;
+    }
+
+    .navbar {
+        display: none;
+    }
+}
 </style>

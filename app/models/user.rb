@@ -1,6 +1,4 @@
 class User < ApplicationRecord
-  has_many :memberships
-  has_many :projects, through: :memberships
   has_many :instructions
   has_many :courses, :through => :instructions
 
