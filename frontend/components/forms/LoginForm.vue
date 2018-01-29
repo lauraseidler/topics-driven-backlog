@@ -8,6 +8,7 @@
             label-for="login-email">
 
             <BFormInput
+                ref="focusInput"
                 id="login-email"
                 v-model="data.email"
                 required/>
@@ -42,7 +43,7 @@ import BaseForm from '@/components/forms/BaseForm';
 import { required, email } from 'vuelidate/lib/validators';
 
 export default {
-    name: 'login-form',
+    name: 'LoginForm',
     components: { BForm, BFormGroup, BFormInput, BButton },
     extends: BaseForm,
     validations: {
