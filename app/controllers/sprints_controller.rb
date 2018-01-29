@@ -2,8 +2,8 @@ class SprintsController < ApplicationController
   include CanCan::ControllerAdditions
   include SprintsHelper
 
-  before_action :set_course, only: [:create, :create_collection, :update_collection]
   before_action :set_sprint, only: [:update, :destroy]
+  before_action :set_course, only: [:create, :create_collection, :update, :update_collection]
   before_action only: [:create_collection] {
     validate_sprint_collection_params(params[:start_date], params[:end_date], params[:duration].to_i)
   }
@@ -12,7 +12,6 @@ class SprintsController < ApplicationController
   }
   before_action :validate_topics, only: [:create, :update]
   load_and_authorize_resource :except => [:create, :destroy, :create_collection, :update_collection]
-
 
   # POST /courses/:course_id/sprints
   def create
@@ -35,7 +34,7 @@ class SprintsController < ApplicationController
   # PATCH /courses/:course_id/sprint-collection
   def update_collection
     authorize! :collection, Sprint, @course
-    sprints = update_sprint_collection(params[:collection])
+    sprints = update_sprint_collection(params[:collection], @course)
     json_response(sprints)
   end
 
@@ -60,11 +59,15 @@ class SprintsController < ApplicationController
     params.permit(:name, :end_date, :start_date, :duration, :collection, :topic_ids => [])
   end
 
-  def set_course
-    @course = Course.find_by!(id: params[:course_id])
-  end
-
   def set_sprint
     @sprint = Sprint.find_by!(id: params[:id])
+  end
+
+  def set_course
+    if params[:course_id].present?
+      @course = Course.find_by!(id: params[:course_id])
+    else
+      @course = @sprint.course
+    end
   end
 end
