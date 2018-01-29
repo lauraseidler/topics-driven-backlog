@@ -33,38 +33,60 @@ class Ability
     @user_id = user.id
 
     return unless user.present?
+    can :manage, Task # Task needs to be deleted soon
+
     can :read, Course
 
     if has_instructor_role
       can :create, Course
     end
 
-    can :manage, Course do |course|
+    can [:update, :delete], Course do |course|
       is_instructor(course)
     end
 
     can :read, Topic do |topic|
-      topic.course.projects do |project|
-        return true if is_member(project)
+      if !is_instructor(sprint.course)
+        topic.course.projects do |project|
+          return true if is_member(project)
+        end
+      else
+        return true
       end
+
 
       false
     end
 
-    can :manage, Topic do |topic|
+    can :create, Topic do |t, course|
+      is_instructor(course)
+    end
+
+    can [:update, :delete], Topic do |topic|
       is_instructor(topic.course)
     end
 
     can :read, Sprint do |sprint|
-      sprint.course.projects do |project|
-        return true if is_member(project)
+      if !is_instructor(sprint.course)
+        sprint.course.projects do |project|
+          return true if is_member(project)
+        end
+      else
+        return true
       end
 
       false
     end
 
-    can :manage, Sprint do |sprint|
-      is_instructor(sprint.course)
+    can [:create, :update, :delete, :collection], Sprint do |s, course|
+      if course.nil?
+        course = s.course
+      end
+      is_instructor(course)
+    end
+
+    can :read, Project do |project|
+      is_instructor(project.course) || is_member(project)
     end
 
     can :create, Project do |p, course|
@@ -78,10 +100,6 @@ class Ability
     can [:update, :delete], Project do |project|
       is_instructor(project.course) ||
           ( is_member(project) && enrollment_allowed(project.course) )
-    end
-
-    can :read, Project do |project|
-      is_instructor(project.course) || is_member(project)
     end
 
     can :read, Story do |story|

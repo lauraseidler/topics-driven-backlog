@@ -2,14 +2,15 @@ require 'rails_helper'
 
 RSpec.describe 'Stories API', type: :request do
 
-  let(:user) { create(:user) }
+  let(:user) { create(:user, role: User.roles[:student]) }
+  let!(:course_id) { create( :course ).id }
+  let!(:project) { create( :project, course_id: course_id ) }
   before(:each) do
+    project.users << user
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
     allow_any_instance_of(ApplicationController).to receive(:authorize_request).and_return(user)
   end
 
-  let!(:course_id) { create( :course ).id }
-  let!(:project) { create( :project, course_id: course_id ) }
 
   let(:sprint_id) {
     create(

@@ -3,12 +3,13 @@ require 'rails_helper'
 RSpec.describe 'Projects/Stories API', type: :request do
 
   let(:user) { create(:user) }
+  let!(:project) { create(:project, course_id: create(:course).id) }
   before(:each) do
+    project.users << user
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
     allow_any_instance_of(ApplicationController).to receive(:authorize_request).and_return(user)
   end
 
-  let!(:project) { create(:project, course_id: create(:course).id) }
   let(:project_id) { project.id }
   let!(:stories) { create_list(:story, 10, project_id: project.id) }
   let(:story_id) { stories.first.id }

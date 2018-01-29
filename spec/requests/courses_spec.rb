@@ -3,13 +3,17 @@ require 'rails_helper'
 RSpec.describe 'Courses API', type: :request do
 
   let(:user) { create(:user) }
+  let!(:courses) { create_list(:course, 10) }
+  let(:course) { courses.first }
   before(:each) do
+    courses.each do |course|
+      course.instructions.build( user_id: user.id, initial_instructor: true )
+      course.save!
+    end
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
     allow_any_instance_of(ApplicationController).to receive(:authorize_request).and_return(user)
   end
 
-  let!(:courses) { create_list(:course, 10) }
-  let(:course) { courses.first }
   let(:course_id) { courses.first.id }
 
   # Test suite for GET /courses
@@ -112,7 +116,8 @@ RSpec.describe 'Courses API', type: :request do
           title: 'Learn Elm',
           hyperlink: 'example.com',
           semester_type: Course.semester_types[:summer],
-          semester_year: Date.today.year.to_s
+          semester_year: Date.today.year.to_s,
+          allow_enrollment: true
       }
     }
     before { put "/courses/#{course_id}", params: valid_attributes }
@@ -124,6 +129,7 @@ RSpec.describe 'Courses API', type: :request do
         expect(json['hyperlink']).to eq('example.com')
         expect(json['semester_type']).to eq(Course.semester_types[:summer])
         expect(json['semester_year']).to eq(Date.today.year)
+        expect(json['allow_enrollment']).to eq(true)
       end
 
       it 'returns status code 200' do

@@ -1,10 +1,8 @@
 class SprintsController < ApplicationController
   include CanCan::ControllerAdditions
-
-  load_and_authorize_resource
   include SprintsHelper
 
-  before_action :set_course, only: [:create, :create_collection]
+  before_action :set_course, only: [:create, :create_collection, :update_collection]
   before_action :set_sprint, only: [:update, :destroy]
   before_action only: [:create_collection] {
     validate_sprint_collection_params(params[:start_date], params[:end_date], params[:duration].to_i)
@@ -13,15 +11,19 @@ class SprintsController < ApplicationController
     validate_sprint_date_parameter(params[:start_date], params[:end_date])
   }
   before_action :validate_topics, only: [:create, :update]
+  load_and_authorize_resource :except => [:create, :destroy, :create_collection, :update_collection]
 
-  # POST /courses/course_id/sprints
+
+  # POST /courses/:course_id/sprints
   def create
+    authorize! :create, Sprint, @course
     @sprint = @course.sprints.create!(sprint_params)
     json_response(@sprint, :created)
   end
 
-  # POST /courses/course_id/sprint-collection
+  # POST /courses/:course_id/sprint-collection
   def create_collection
+    authorize! :collection, Sprint, @course
     sprints = create_sprint_collection(
         params[:duration].to_i,
         params[:start_date].to_date,
@@ -30,8 +32,9 @@ class SprintsController < ApplicationController
     json_response(sprints, :created)
   end
 
-  # PATCH /courses/course_id/sprint-collection
+  # PATCH /courses/:course_id/sprint-collection
   def update_collection
+    authorize! :collection, Sprint, @course
     sprints = update_sprint_collection(params[:collection])
     json_response(sprints)
   end
@@ -45,6 +48,7 @@ class SprintsController < ApplicationController
 
   # DELETE /sprints/:id
   def destroy
+    authorize! :delete, @sprint
     @sprint.destroy!
     head :no_content
   end

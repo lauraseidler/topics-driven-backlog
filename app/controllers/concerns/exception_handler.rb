@@ -17,7 +17,9 @@ module ExceptionHandler
     rescue_from ExceptionHandler::MissingToken, with: :unauthorized_request
     rescue_from ExceptionHandler::InvalidToken, with: :invalid_token
     rescue_from ExceptionHandler::ExpiredSignature, with: :invalid_token
-    rescue_from CanCan::AccessDenied, with: :unauthorized_request
+    rescue_from CanCan::AccessDenied do
+      unauthorized_request(StandardError.new(:message => Message.not_authorized))
+    end
   end
 
   private
@@ -29,7 +31,7 @@ module ExceptionHandler
 
   # JSON response with message; Status code 401 - Unauthorized
   def unauthorized_request(e)
-    json_response({ message: Message.not_authorized }, :unauthorized)
+    json_response({ message: e.message }, :unauthorized)
   end
 
   # JSON response with message; Status code 404 - record not found

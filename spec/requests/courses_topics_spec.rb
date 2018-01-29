@@ -3,12 +3,14 @@ require 'rails_helper'
 RSpec.describe 'Courses/Topics API' do
 
   let(:user) { create(:user) }
+  let!(:course) { create(:course) }
   before(:each) do
+    course.instructions.build( user_id: user.id, initial_instructor: true )
+    course.save!
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
     allow_any_instance_of(ApplicationController).to receive(:authorize_request).and_return(user)
   end
 
-  let!(:course) { create(:course) }
   let(:course_id) { course.id }
   let!(:topics) { create_list(:topic, 20, course_id: course.id) }
   let(:id) { topics.first.id }

@@ -5,7 +5,7 @@ class ProjectsController < ApplicationController
   before_action :set_course, only: [:create]
   before_action :set_project, only: [:show, :update, :destroy, :enroll_user, :remove_enrollment]
   before_action :validate_users, only: [:create, :update]
-  load_and_authorize_resource :except => [:create, :enroll_user, :remove_enrollment]
+  load_and_authorize_resource :except => [:create, :destroy, :enroll_user, :remove_enrollment]
 
   # GET /projects/:id
   def show
@@ -15,7 +15,10 @@ class ProjectsController < ApplicationController
   # POST /projects/:id/enrollments
   def enroll_user
     authorize! :enrollment, @project
-    @project.users << current_user
+
+    if !@project.user_ids.include?(current_user.id)
+      @project.users << current_user
+    end
     json_response(@project, :created)
   end
 
@@ -36,6 +39,7 @@ class ProjectsController < ApplicationController
 
   # DELETE /projects/:id
   def destroy
+    authorize! :delete, @project
     @project.destroy!
     head :no_content
   end
@@ -51,7 +55,7 @@ class ProjectsController < ApplicationController
 
   def project_params
     # whitelist params
-    params.permit(:title, :user_ids => [])
+    params.permit(:title)
   end
 
   def set_course
@@ -64,31 +68,5 @@ class ProjectsController < ApplicationController
       @project = Project.find_by!(id: params[:project_id])
     end
   end
-  #
-  # def check_abilities(action, course, project)
-  #   case action
-  #     when :enrollment
-  #         enrollment_allowed(@course)
-  #     when :create
-  #
-  #
-  #   end
-    # can :create, Project do
-    #   enrollment_allowed(@course)
-    # end
-    #
-    # can [:create, :enrollment], Project do |project|
-    #   enrollment_allowed(project.course)
-    # end
-    #
-    # can [:update, :delete], Project do |project|
-    #   is_instructor(project.course) ||
-    #       ( is_member(project) && enrollment_allowed(project.course) )
-    # end
-  # end
-  #
-  # def enrollment_allowed(course)
-  #   course.allow_enrollment
-  # end
 
 end
