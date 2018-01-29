@@ -19,15 +19,16 @@ class Ability
     end
 
     can :read, Topic do |topic|
-      if !is_instructor(sprint.course)
+      can_read = false
+      if !is_instructor(topic.course)
         topic.course.projects do |project|
-          return true if is_member(project)
+          break if is_member(project)
         end
       else
-        return true
+        can_read = true
       end
 
-      false
+      can_read
     end
 
     can :create, Topic do |t, course|
@@ -39,15 +40,16 @@ class Ability
     end
 
     can :read, Sprint do |sprint|
+      can_read = false
       if !is_instructor(sprint.course)
         sprint.course.projects do |project|
-          return true if is_member(project)
+          break if is_member(project)
         end
       else
-        return true
+        can_read = true
       end
 
-      false
+      can_read
     end
 
     can [:create, :update, :delete, :collection], Sprint do |s, course|

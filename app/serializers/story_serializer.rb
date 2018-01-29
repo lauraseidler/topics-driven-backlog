@@ -1,6 +1,6 @@
 class StorySerializer < ActiveModel::Serializer
   # attributes to be serialized
-  attributes :id, :title, :description, :sprint_position, :project_position, :identifier, :status, :points, :sprint_id, :topic_id, :project_id
+  attributes :id, :title, :description, :sprint_position, :project_position, :identifier, :status, :points, :sprint_id, :topic_id, :project_id, :permissions
 
   def sprint_position
     sprint_position = SprintPosition.find_by(story_id: object.id)
@@ -14,5 +14,14 @@ class StorySerializer < ActiveModel::Serializer
     if project_position.present?
       project_position.position
     end
+  end
+
+  def permissions
+    [
+        :read => scope.can?(:read, object),
+        :create => scope.can?(:create, object, object.project),
+        :update => scope.can?(:update, object),
+        :delete => scope.can?(:delete, object),
+    ]
   end
 end

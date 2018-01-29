@@ -1,8 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe 'Authentication', type: :request do
-  
+
+  let(:user) { create(:user, role: User.roles[:student]) }
   before(:each) do
+    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
     allow_any_instance_of(LdapAuthenticator).to receive(:call).and_return(User.roles[:instructor])
   end
 
@@ -31,6 +33,7 @@ RSpec.describe 'Authentication', type: :request do
         expect(json['user']).not_to be_nil
         expect(json['user']['email']).to eq(user.email)
         expect(json['user']['id']).to eq(user.id)
+        expect(json['user']['role']).to eq(user.role)
       end
     end
 
