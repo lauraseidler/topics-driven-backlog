@@ -60,8 +60,4 @@ describe('SprintCollectionForm.test.js', () => {
     it('adds days to a date', () => {
         expect(cmp.vm.datePlusDays('2000-01-01', 1)).toBe('2000-01-02');
     });
-
-    it('has the expected html structure', () => {
-        expect(cmp.element).toMatchSnapshot();
-    });
 });

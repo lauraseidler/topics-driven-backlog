@@ -25,10 +25,23 @@
 
                     <BNavbarNav class="ml-auto">
                         <BNavItem>
-                            <BButton v-if="$store.state.pendingChanges > 0" @click="saveAll" type="button" variant="white">Save all</BButton>
+                            <BButton 
+                                v-if="$store.state.pendingChanges > 0" 
+                                @click="saveAll" 
+                                type="button" 
+                                variant="white">
+                                
+                                Save all
+                            </BButton>
                         </BNavItem>
-                        <BNavItem href="https://www.htw-berlin.de" target="_blank">
-                            <img src="~images/logo-htw.png" alt="HTW Berlin" class="d-inline-block align-top">
+                        <BNavItem
+                            href="https://www.htw-berlin.de" 
+                            target="_blank">
+
+                            <img 
+                                src="~images/logo-htw.png" 
+                                alt="HTW Berlin" 
+                                class="d-inline-block align-top">
                         </BNavItem>
                     </BNavbarNav>
                 </BCollapse>

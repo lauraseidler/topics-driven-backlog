@@ -1,6 +1,9 @@
 <template>
     <BRow class="collapsing-section">
-        <BCol md="3" @click="toggle">
+        <BCol 
+            md="3" 
+            @click="toggle">
+
             <VIcon
                 class="float-right mt-2"
                 :name="visible ? 'caret-down' : 'caret-right'"
@@ -9,7 +12,10 @@
             <slot name="headline">Headline</slot>
         </BCol>
         <transition name="appear">
-            <BCol md="9" v-show="visible">
+            <BCol 
+                md="9" 
+                v-show="visible">
+                
                 <slot name="content">Content</slot>
             </BCol>
         </transition>

@@ -56,16 +56,16 @@
                         <p v-else>No topics in this course yet.</p>
 
                         <TopicForm
-                                v-if="showTopicForm"
-                                v-model="newTopic"
-                                @cancel="showTopicForm = false"
-                                @submit="addTopic"/>
+                            v-if="showTopicForm"
+                            v-model="newTopic"
+                            @cancel="showTopicForm = false"
+                            @submit="addTopic"/>
 
                         <BButton
-                                v-else
-                                type="button"
-                                variant="primary"
-                                @click="showTopicForm = true">Add topic</BButton>
+                            v-else
+                            type="button"
+                            variant="primary"
+                            @click="showTopicForm = true">Add topic</BButton>
                     </BTab>
                     <BTab title="Sprints">
                         <ul 

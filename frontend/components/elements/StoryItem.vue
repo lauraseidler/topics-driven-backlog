@@ -180,7 +180,7 @@ export default {
     props: {
         data: {
             type: Object,
-            default: () => {},
+            default: null,
         },
         view: {
             type: String,
@@ -216,7 +216,7 @@ export default {
             return this.project
                 ? this.$store.getters['sprints/next'](this.project.course_id)
                 : null;
-        }
+        },
     },
     methods: {
         /**
@@ -302,8 +302,6 @@ export default {
                         evt.preventDefault();
                         this.$emit('move', this.data.id, 1);
                         break;
-                    default:
-                        // do nothing
                 }
             }
         },

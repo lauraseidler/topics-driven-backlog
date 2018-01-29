@@ -24,8 +24,4 @@ describe('NotFound.test.js', () => {
         expect(routerLink.element.getAttribute('to')).toBe('/');
         expect(routerLink.text()).toBe('Go to homepage');
     });
-
-    it('has the expected html structure', () => {
-        expect(cmp.element).toMatchSnapshot();
-    });
 });

@@ -11,12 +11,14 @@ export default {
     props: {
         data: {
             type: Object,
-            default: () => {},
+            default: function ()  {
+                return {};
+            },
         },
     },
     computed: {
         isInvalid() {
-            return this.$v.$invalid;
+            return this.$v && this.$v.$invalid;
         },
     },
     watch: {

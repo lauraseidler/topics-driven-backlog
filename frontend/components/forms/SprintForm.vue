@@ -40,24 +40,28 @@
         </BFormGroup>
 
         <BFormGroup
-                label="Topics"
-                label-for="sprint-topics">
+            label="Topics"
+            label-for="sprint-topics">
 
             <BFormSelect
-                    multiple
-                    id="sprint-topics"
-                    v-model="data.topic_ids">
+                multiple
+                id="sprint-topics"
+                v-model="data.topic_ids">
+
                 <option
-                        v-for="topic in topics"
-                        :value="topic.id"
-                        :key="topic.id">
+                    v-for="topic in topics"
+                    :value="topic.id"
+                    :key="topic.id">
 
                     {{ topic.title }}
                 </option>
             </BFormSelect>
         </BFormGroup>
 
-        <div class="alert alert-warning" v-if="isOverlapping">
+        <div
+            class="alert alert-warning" 
+            v-if="isOverlapping">
+
             <h4>Attention, overlapping sprints!</h4>
             <p>
                 You have changed this sprint's dates, which results in an overlap with another sprint.
@@ -68,14 +72,22 @@
             <BRow>
                 <BCol md="6">
                     <h5>Before</h5>
-                    <p class="mb-0" v-for="sprint in sprints">
+                    <p
+                        class="mb-0" 
+                        v-for="sprint in sprints"
+                        :key="sprint.id">
+
                         <strong>{{ sprint.name }}:</strong>
                         {{ sprint.start_date | displayDate }} - {{ sprint.end_date | displayDate }}
                     </p>
                 </BCol>
                 <BCol md="6">
                     <h5>After</h5>
-                    <p class="mb-0" v-for="sprint in newSprints">
+                    <p
+                        class="mb-0" 
+                        v-for="sprint in newSprints"
+                        :key="sprint.id">
+
                         <strong>{{ sprint.name }}:</strong>
                         {{ sprint.start_date | displayDate }} - {{ sprint.end_date | displayDate }}
                     </p>
@@ -87,7 +99,8 @@
             type="submit" 
             variant="primary"
             :class="{ 'is-disabled': isInvalid }">
-            {{ isOverlapping ? 'Save normally' : 'Save'}}
+
+            {{ isOverlapping ? 'Save normally' : 'Save' }}
         </BButton>
 
         <BButton
@@ -96,13 +109,17 @@
             type="button"
             variant="primary"
             :class="{ 'is-disabled': isInvalid }">
+
             Save and adjust other sprint dates
         </BButton>
 
         <BButton 
             type="button" 
             variant="grey" 
-            @click="cancel">Cancel</BButton>
+            @click="cancel">
+            
+            Cancel
+        </BButton>
     </BForm>
 </template>
 
@@ -128,7 +145,7 @@ export default {
     props: {
         course: {
             type: Object,
-            default: () => {},
+            default: null,
         },
     },
     computed: {
@@ -169,7 +186,7 @@ export default {
                 }
             });
 
-            return {ownIndex, overlapping};
+            return { ownIndex, overlapping };
         },
 
         isOverlapping() {
@@ -182,7 +199,7 @@ export default {
             }
 
             const newSprints = this.sprints.slice(0);
-            newSprints[this.overlapping.ownIndex] = {...this.data};
+            newSprints[this.overlapping.ownIndex] = { ...this.data };
             newSprints.sort((a, b) => a.start_date.localeCompare(b.start_date));
 
             let newOwnIndex = newSprints.findIndex(s => s.id === this.data.id);

@@ -57,15 +57,13 @@ export default {
     props: {
         data: {
             type: Object,
-            default: () => {},
-        },
-    },
-    computed: {
-        course() {
-            return this.$store.getters['courses/byId'](this.data.course_id);
-        },
-        topicsString() {
-            return this.data.topic_ids.map(id => this.$store.getters['topics/byId'](id).title).join(' | ');
+            default: null,
+            validator: function (value) {
+                return value 
+                    && value.name
+                    && value.start_date
+                    && value.end_date;
+            },
         },
     },
     data() {
@@ -75,6 +73,15 @@ export default {
             currentDate: moment().format('YYYY-MM-DD'),
         };
     },
+    computed: {
+        course() {
+            return this.$store.getters['courses/byId'](this.data.course_id);
+        },
+        topicsString() {
+            return this.data.topic_ids.map(id => this.$store.getters['topics/byId'](id).title).join(' | ');
+        },
+    },
+
     methods: {
         /**
          * Start editing process of this sprint

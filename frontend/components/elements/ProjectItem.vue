@@ -1,9 +1,19 @@
 <template>
     <li class="project-item card">
-        <div v-if="view === 'new'" :class="$style.full">
-            <div :class="$style.full" v-if="!editing" @click="startEditing">
-                <VIcon name="plus" scale="2"/>
-                <strong>Create new project <br> in course</strong>
+        <div 
+            v-if="view === 'new'" 
+            :class="$style.full">
+
+            <div 
+                v-if="!editing" 
+                @click="startEditing"
+                :class="$style.full" >
+
+                <VIcon 
+                    name="plus" 
+                    scale="2"/>
+
+                <strong>Create new project <br>in course</strong>
             </div>
 
             <ProjectForm
@@ -20,18 +30,20 @@
             <template v-if="!editing">
                 <template v-if="course.allow_enrollment && isEnrolled">
                     <BButton
-                            size="sm"
-                            variant="outline-danger"
-                            class="float-right ml-1"
-                            v-confirm="{ action: deleteProject, text: 'Are you sure you want to delete this project?' }">
+                        size="sm"
+                        variant="outline-danger"
+                        class="float-right ml-1"
+                        v-confirm="{ action: deleteProject, text: 'Are you sure you want to delete this project?' }">
+                        
                         <VIcon name="trash"/>
                     </BButton>
 
                     <BButton
-                            size="sm"
-                            variant="outline-primary"
-                            class="float-right ml-1"
-                            @click="startEditing">
+                        size="sm"
+                        variant="outline-primary"
+                        class="float-right ml-1"
+                        @click="startEditing">
+
                         <VIcon name="pencil"/>
                     </BButton>
                 </template>
@@ -61,10 +73,10 @@
             </template>
 
             <ProjectForm
-                    v-else
-                    v-model="editingData"
-                    @cancel="editing = false"
-                    @submit="saveProject"/>
+                v-else
+                v-model="editingData"
+                @cancel="editing = false"
+                @submit="saveProject"/>
         </div>
     </li>
 </template>
@@ -78,6 +90,7 @@ import * as _ from 'lodash';
 import VIcon from 'vue-awesome/components/Icon';
 import BButton from '@bootstrap/button/button';
 import ProjectForm from '@/components/forms/ProjectForm';
+import { slugify } from '@/helper/util';
 
 export default {
     name: 'ProjectItem',
@@ -85,7 +98,7 @@ export default {
     props: {
         data: {
             type: Object,
-            default: () => {},
+            default: null,
         },
         view: {
             type: String,
@@ -94,7 +107,7 @@ export default {
         courseId: {
             type: Number,
             default: null,
-        }
+        },
     },
     data() {
         return {
@@ -104,7 +117,6 @@ export default {
     },
     computed: {
         course() {
-            console.log(this.$store.getters);
             return this.$store.getters['courses/byId'](this.data.course_id);
         },
 
@@ -122,20 +134,20 @@ export default {
         },
 
         isEnrolledToProjectInCourse() {
-           return this.projectsInCourse.filter(p => p.user_ids.indexOf(this.$store.state.user.id) > -1).length;
+            return this.projectsInCourse.filter(p => p.user_ids.indexOf(this.$store.state.user.id) > -1).length;
         },
     },
     methods: {
+        slugify,
+
         /**
          * Start editing process of this project
          */
         startEditing() {
-            if (!this.editing){
-                this.editing = true;
-                this.editingData = _.pick(this.data, [
-                    'title',
-                ]);
-            }
+            this.editing = true;
+            this.editingData = _.pick(this.data, [
+                'title',
+            ]);
         },
 
         /**
@@ -213,15 +225,6 @@ export default {
                     type: 'error',
                 });
             }
-        },
-
-        slugify(text) {
-            return text.toString().toLowerCase()
-                .replace(/\s+/g, '-')           // Replace spaces with -
-                .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-                .replace(/\-\-+/g, '-')         // Replace multiple - with single -
-                .replace(/^-+/, '')             // Trim - from start of text
-                .replace(/-+$/, '');            // Trim - from end of text
         },
     },
 };
