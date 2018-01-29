@@ -1,10 +1,8 @@
 class ProjectsController < ApplicationController
-  include ProjectsHelper
   include CanCan::ControllerAdditions
 
   before_action :set_course, only: [:create]
   before_action :set_project, only: [:show, :update, :destroy, :enroll_user, :remove_enrollment]
-  before_action :validate_users, only: [:create, :update]
   load_and_authorize_resource :except => [:create, :destroy, :enroll_user, :remove_enrollment]
 
   # GET /projects/:id
