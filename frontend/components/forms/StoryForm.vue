@@ -10,6 +10,7 @@
                     label-for="story-title">
 
                     <BFormInput 
+                        ref="focusInput"
                         id="story-title" 
                         v-model="data.title" 
                         required/>
@@ -30,14 +31,19 @@
         </BRow>
 
         <BFormGroup
-                label="Topic"
-                label-for="story-topic">
+            label="Topic"
+            label-for="story-topic">
 
             <BFormSelect
-                    id="story-topic"
-                    v-model="data.topic_id">
+                id="story-topic"
+                v-model="data.topic_id">
 
-                <option :value="null" selected>No topic</option>
+                <option 
+                    :value="null" 
+                    selected>
+                    
+                    No topic
+                </option>
 
                 <option
                     v-for="topic in topics"

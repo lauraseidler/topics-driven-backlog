@@ -8,6 +8,7 @@
             label-for="sprint-name">
 
             <BFormInput 
+                ref="focusInput"
                 id="sprint-name" 
                 v-model="data.name" 
                 required/>
