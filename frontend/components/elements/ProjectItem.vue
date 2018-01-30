@@ -163,6 +163,7 @@ export default {
 
                 this.editing = false;
             } catch (err) {
+                /* istanbul ignore next */
                 this.$notify({
                     title: 'Validation failed',
                     text: err.body.message.replace('Validation failed: ', ''),
@@ -175,12 +176,19 @@ export default {
          * Delete this project
          */
         async deleteProject() {
-            await this.$store.dispatch('projects/remove', {
-                id: this.data.id,
-                parentId: this.data.course_id,
-            });
-
-            // TODO handle errors in UI
+            try {
+                await this.$store.dispatch('projects/remove', {
+                    id: this.data.id,
+                    parentId: this.data.course_id,
+                });
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Delete failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
 
         async addProject() {
@@ -192,6 +200,7 @@ export default {
 
                 this.editing = false;
             } catch (err) {
+                /* istanbul ignore next */
                 this.$notify({
                     title: 'Validation failed',
                     text: err.body.message.replace('Validation failed: ', ''),
@@ -204,6 +213,7 @@ export default {
             try {
                 await this.$store.dispatch('projects/enroll', this.data.id);
             } catch (err) {
+                /* istanbul ignore next */
                 this.$notify({
                     title: 'Enrollment failed',
                     text: err.body.message,
@@ -219,6 +229,7 @@ export default {
                     courseId: this.course.id,
                 });
             } catch (err) {
+                /* istanbul ignore next */
                 this.$notify({
                     title: 'Disenrollment failed',
                     text: err.body.message,

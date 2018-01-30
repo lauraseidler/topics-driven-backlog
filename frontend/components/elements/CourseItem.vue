@@ -107,26 +107,39 @@ export default {
         /**
          * Save the edited parameters of this course
          */
-        async saveCourse() {            
-            await this.$store.dispatch('courses/update', {
-                id: this.data.id,
-                ...this.editingData,
-            });
-
-            this.editing = false;
-
-            // TODO handle errors in UI
+        async saveCourse() {        
+            try {
+                await this.$store.dispatch('courses/update', {
+                    id: this.data.id,
+                    ...this.editingData,
+                });
+                this.editing = false;
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Course update failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            } 
         },
 
         /**
          * Delete this course
          */
         async deleteCourse() {
-            await this.$store.dispatch('courses/remove', {
-                id: this.data.id,
-            });
-
-            // TODO handle errors in UI
+            try {
+                await this.$store.dispatch('courses/remove', {
+                    id: this.data.id,
+                });
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Course delete failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
     },
 };

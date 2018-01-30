@@ -300,16 +300,23 @@ export default {
          * Save current form state as new story
          */
         async save() {
-            await this.$store.dispatch('stories/create', {
-                parentId: this.project.id,
-                ...this.newStory,
-            });
-
-            this.newStory = this.$store.getters['stories/template']();
-            this.showForm = false;
-            this.$store.commit('resolvePendingChange');
-
-            // TODO handle errors in UI
+            try {
+                await this.$store.dispatch('stories/create', {
+                    parentId: this.project.id,
+                    ...this.newStory,
+                });
+    
+                this.newStory = this.$store.getters['stories/template']();
+                this.showForm = false;
+                this.$store.commit('resolvePendingChange');
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Story creation failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
 
         startNew() {

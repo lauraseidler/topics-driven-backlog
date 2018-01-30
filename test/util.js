@@ -31,7 +31,7 @@ export function mockResponse(
         correctRequest: false,
     };
 
-    Vue.http.interceptors.push((request, next) => {
+    Vue.http.interceptors.push(function mockResponse(request, next) {
         if (request.method === method) {
             mockStatus.correctMethod = true;
         }        

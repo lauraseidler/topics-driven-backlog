@@ -66,11 +66,17 @@ export default {
             this.newCourse.semester_type = semesterSplit[0];
             this.newCourse.semester_year = parseInt(semesterSplit[1], 10);
 
-            await this.$store.dispatch('courses/create', this.newCourse);
-
-            this.newCourse = this.$store.getters['courses/template']();
-
-            // TODO handle errors in UI
+            try {
+                await this.$store.dispatch('courses/create', this.newCourse);
+                this.newCourse = this.$store.getters['courses/template']();
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Course creation failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
     },
 };
