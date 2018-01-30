@@ -191,7 +191,7 @@ export default {
                     { field: 'sprint_position', name: 'Position' },
                     { field: 'identifier', name: 'ID' },
                     { field: 'title', name: 'Story' },
-                    { field: 'topic_id', name: 'Topic' },
+                    { field: 'topic', name: 'Topic' },
                     { field: 'points', name: 'Story points' },
                     { field: 'status', name: 'Status' },
                 ],
@@ -199,7 +199,7 @@ export default {
                     { field: 'sprint_position', name: 'Position' },
                     { field: 'identifier', name: 'ID' },
                     { field: 'title', name: 'Story' },
-                    { field: 'topic_id', name: 'Topic' },
+                    { field: 'topic', name: 'Topic' },
                     { field: 'points', name: 'Story points' },
                     { field: 'status', name: 'Status' },
                 ],
@@ -207,7 +207,7 @@ export default {
                     { field: 'sprint_position', name: 'Position' },
                     { field: 'identifier', name: 'ID' },
                     { field: 'title', name: 'Story' },
-                    { field: 'topic_id', name: 'Topic' },
+                    { field: 'topic', name: 'Topic' },
                     { field: 'points', name: 'Story points' },
                     { name: '' },
                 ],
@@ -215,7 +215,7 @@ export default {
                     { field: 'project_position', name: 'Position' },
                     { field: 'identifier', name: 'ID' },
                     { field: 'title', name: 'Story' },
-                    { field: 'topic_id', name: 'Topic' },
+                    { field: 'topic', name: 'Topic' },
                     { field: 'points', name: 'Story points' },
                     { name: '' },
                 ],
@@ -237,6 +237,7 @@ export default {
             return this.project
                 ? this.$store.getters['stories/all'](this.project.id)
                     .filter(s => !s.sprint_id)
+                    .map(this.resolveTopicId)
                     .sort((a, b) => a.project_position - b.project_position)
                 : [];
         },
@@ -282,6 +283,12 @@ export default {
 
             return 'Backlog';
         },
+
+        topics() {
+            return this.course
+                ? this.$store.getters['topics/all'](this.course.id)
+                : [];
+        },
     },
     methods: {
         slugify,
@@ -293,7 +300,24 @@ export default {
          */
         storiesInSprint(sprintId) {
             return this.$store.getters['stories/find'](this.project.id, 'sprint_id', sprintId)
+                .map(this.resolveTopicId)
                 .sort((a, b) => a.sprint_position - b.sprint_position);
+        },
+
+        /**
+         * Resolve the topic ID in a story
+         * @param {object} story
+         * @returns {object}
+         */
+        resolveTopicId(story) {
+            const topic = story.topic_id
+                ? this.topics.find(t => t.id === story.topic_id)
+                : null;
+
+            return {
+                topic: topic ? topic.title : null,
+                ...story,
+            }
         },
 
         /**
