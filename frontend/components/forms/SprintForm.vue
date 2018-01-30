@@ -8,6 +8,7 @@
             label-for="sprint-name">
 
             <BFormInput 
+                ref="focusInput"
                 id="sprint-name" 
                 v-model="data.name" 
                 required/>
@@ -252,6 +253,7 @@ export default {
 
                 this.cancel();
             } catch (e) {
+                /* istanbul ignore next */
                 this.$notify({
                     title: 'Update failed',
                     text: e.message,

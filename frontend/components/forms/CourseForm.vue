@@ -10,6 +10,7 @@
                     label-for="course-shorthand">
 
                     <BFormInput
+                        ref="focusInput"
                         id="course-shorthand"
                         v-model="data.short_title"
                         required/>

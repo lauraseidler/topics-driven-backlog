@@ -80,7 +80,7 @@
                 <p 
                     v-show="(isView('print') && data.description) || expandedView" 
                     class="mt-2">
-                    
+
                     Notes: <br>
                     {{ data.description || '(no notes)' }}
                 </p>
@@ -319,28 +319,44 @@ export default {
          * Save the edited parameters of this story
          */
         async save() {
-            await this.$store.dispatch('stories/update', {
-                id: this.data.id,
-                parentId: this.data.project_id,
-                ...this.editingData,
-            });
-
-            this.editing = false;
-
-            this.$store.commit('resolvePendingChange');
-            bus.$off('saveAll', this.save);
-
-            // TODO handle errors in UI
+            try {
+                await this.$store.dispatch('stories/update', {
+                    id: this.data.id,
+                    parentId: this.data.project_id,
+                    ...this.editingData,
+                });
+    
+                this.editing = false;
+    
+                this.$store.commit('resolvePendingChange');
+                bus.$off('saveAll', this.save);
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Story update failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
 
         /**
          * Delete this story
          */
         async remove() {
-            await this.$store.dispatch('stories/remove', {
-                id: this.data.id,
-                parentId: this.data.project_id,
-            });
+            try {
+                await this.$store.dispatch('stories/remove', {
+                    id: this.data.id,
+                    parentId: this.data.project_id,
+                });
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Story delete failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
 
         /**
@@ -348,13 +364,20 @@ export default {
          * @param {int} statusId
          */
         async saveStatus(statusId) {
-            await this.$store.dispatch('stories/update', {
-                id: this.data.id,
-                parentId: this.data.project_id,
-                status: statusId,
-            });
-
-            // TODO handle errors in UI
+            try {
+                await this.$store.dispatch('stories/update', {
+                    id: this.data.id,
+                    parentId: this.data.project_id,
+                    status: statusId,
+                });
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Story update failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
 
         /**
@@ -365,34 +388,48 @@ export default {
                 return;
             }
 
-            await this.$store.dispatch('stories/update', {
-                id: this.data.id,
-                parentId: this.project.id,
-                sprint_id: this.nextSprint.id,
-            });
-
-            await this.$store.dispatch('projects/fetch', {
-                id: this.project.id,
-            });
-
-            // TODO handle errors in UI
+            try {
+                await this.$store.dispatch('stories/update', {
+                    id: this.data.id,
+                    parentId: this.project.id,
+                    sprint_id: this.nextSprint.id,
+                });
+    
+                await this.$store.dispatch('projects/fetch', {
+                    id: this.project.id,
+                });
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Sprint update failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
 
         /**
          * Remove story from sprint
          */
         async removeFromSprint() {
-            await this.$store.dispatch('stories/update', {
-                id: this.data.id,
-                parentId: this.project.id,
-                sprint_id: null,
-            });
-
-            await this.$store.dispatch('projects/fetch', {
-                id: this.project.id,
-            });
-
-            // TODO handle errors in UI
+            try {
+                await this.$store.dispatch('stories/update', {
+                    id: this.data.id,
+                    parentId: this.project.id,
+                    sprint_id: null,
+                });
+    
+                await this.$store.dispatch('projects/fetch', {
+                    id: this.project.id,
+                });
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Sprint update failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
     },
 };

@@ -101,27 +101,41 @@ export default {
          * Save the edited parameters of this sprint
          */
         async saveSprint() {
-            await this.$store.dispatch('sprints/update', {
-                id: this.data.id,
-                parentId: this.data.course_id,
-                ...this.editingData,
-            });
-
-            this.editing = false;
-
-            // TODO handle errors in UI
+            try {
+                await this.$store.dispatch('sprints/update', {
+                    id: this.data.id,
+                    parentId: this.data.course_id,
+                    ...this.editingData,
+                });
+    
+                this.editing = false;
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Sprint update failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
 
         /**
          * Delete this sprint
          */
         async deleteSprint() {
-            await this.$store.dispatch('sprints/remove', {
-                id: this.data.id,
-                parentId: this.data.course_id,
-            });
-
-            // TODO handle errors in UI
+            try {
+                await this.$store.dispatch('sprints/remove', {
+                    id: this.data.id,
+                    parentId: this.data.course_id,
+                });
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Sprint delete failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
     },
 };

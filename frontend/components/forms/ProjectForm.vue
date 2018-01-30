@@ -8,6 +8,7 @@
             label-for="project-title">
 
             <BFormInput 
+                ref="focusInput"
                 id="project-title" 
                 v-model="data.title" 
                 required/>

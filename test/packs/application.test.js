@@ -1,11 +1,7 @@
 // spy on console warnings
 const consoleSpy = jest.spyOn(console, 'info').mockImplementation(text => text);
 
-import { mockResponse } from '../util';
 import '@/packs/application.js';
-
-// mock responses with empty arrays to prevent promise errors
-mockResponse(null, null, []);
 
 // div to mount app needs to be created manually
 const div = document.createElement('div');
@@ -18,6 +14,7 @@ domLoadedEvent.initEvent('DOMContentLoaded', true, true);
 window.document.dispatchEvent(domLoadedEvent);
 
 import Vue from 'vue';
+import moment from 'moment';
 
 describe('application.test.js', () => {
     let cmp;
@@ -47,5 +44,20 @@ describe('application.test.js', () => {
 
     it('has loaded plugins', () => {
         expect(cmp.$http).toBeTruthy();
+    });
+
+    it('intercepts request and redirects to login if login expired', async () => {
+        cmp.$store.state.loggedIn = true;
+        cmp.$store.state.jwt = { ttl: moment().subtract(1, 'days').unix() };
+
+        cmp.$router.push('/courses');
+
+        try {
+            await cmp.$http.get('/courses');
+        } catch (err) {
+            expect(err.body.message).toBe('Login expired! Please login again!');
+        }
+
+        expect(cmp.$route.path).toBe('/login');
     });
 });
