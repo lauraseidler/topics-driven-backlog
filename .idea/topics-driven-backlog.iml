@@ -5,6 +5,7 @@
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/tmp/cache" />
     </content>
     <orderEntry type="jdk" jdkName="Remote:ruby-2.4.2-p198" jdkType="RUBY_SDK" />
@@ -73,5 +74,6 @@
     <orderEntry type="library" scope="PROVIDED" name="web-console (v3.5.1, Remote:ruby-2.4.2-p198) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="websocket-driver (v0.6.5, Remote:ruby-2.4.2-p198) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="websocket-extensions (v0.1.2, Remote:ruby-2.4.2-p198) [gem]" level="application" />
+    <orderEntry type="library" name="Jest" level="project" />
   </component>
 </module>

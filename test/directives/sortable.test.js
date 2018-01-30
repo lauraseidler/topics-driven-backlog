@@ -4,13 +4,19 @@ import '@/directives/sortable';
 describe('sortable.test.js', () => {
     let cmp;
 
-    beforeEach(() => {
+    it('puts an instance of sortable plugin on the element', () => {
         cmp = mount({
-            template: '<div v-sortable></div>',
+            template: '<div v-sortable="{}"></div>',
         });
+
+        expect(cmp.vm.sortableInstance).toBeTruthy();
     });
 
-    it('puts an instance of sortable plugin on the element', () => {
-        expect(cmp.vm.sortableInstance).toBeTruthy();
+    it('does not put an instance of sortable plugin on the element if value null', () => {
+        cmp = mount({
+            template: '<div v-sortable="null"></div>',
+        });
+
+        expect(cmp.vm.sortableInstance).toBeFalsy();
     });
 });

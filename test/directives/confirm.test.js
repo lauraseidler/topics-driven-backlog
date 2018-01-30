@@ -38,4 +38,24 @@ describe('confirm.test.js', () => {
         expect(confirmSpy).toHaveBeenCalled();
         expect(cmp.vm.test).not.toHaveBeenCalled();
     });
+
+    it('calls method when click is confirmed with verbose parameter', () => {
+        cmp = mount({
+            template: '<button v-confirm="{ action: test, text: \'Sure?\' }"></button>',
+            methods: {
+                test: () => null,
+            },
+        });
+
+        const confirmSpy = jest
+            .spyOn(window, 'confirm')
+            .mockImplementation(() => true);
+
+        cmp.vm.test = jest.fn();
+        cmp.update();
+        cmp.trigger('click');
+
+        expect(confirmSpy).toHaveBeenCalled();
+        expect(cmp.vm.test).toHaveBeenCalled();
+    });
 });

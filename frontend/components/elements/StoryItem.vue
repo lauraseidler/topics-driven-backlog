@@ -13,7 +13,10 @@
 
         <template v-else>
             <!-- Drag and drop -->
-            <td v-if="isView(['backlog', 'planning-sprint', 'planning-backlog'])" :class="$style.parent">
+            <td 
+                v-if="isView(['backlog', 'planning-sprint', 'planning-backlog'])" 
+                :class="$style.parent">
+
                 <nobr>
                     <BButton
                         v-if="isView('planning-backlog')"
@@ -67,11 +70,17 @@
 
             <!-- Story -->
             <td @click="expandedView = !expandedView">
-                <VIcon v-if="!isView('print')" class="float-right" :name="expandedView ? 'caret-up' : 'caret-down'" />
+                <VIcon 
+                    v-if="!isView('print')" 
+                    class="float-right" 
+                    :name="expandedView ? 'caret-up' : 'caret-down'" />
 
                 {{ data.title }}
 
-                <p v-show="(isView('print') && data.description) || expandedView" class="mt-2">
+                <p 
+                    v-show="(isView('print') && data.description) || expandedView" 
+                    class="mt-2">
+                    
                     Notes: <br>
                     {{ data.description || '(no notes)' }}
                 </p>
@@ -180,7 +189,7 @@ export default {
     props: {
         data: {
             type: Object,
-            default: () => {},
+            default: null,
         },
         view: {
             type: String,
@@ -216,7 +225,7 @@ export default {
             return this.project
                 ? this.$store.getters['sprints/next'](this.project.course_id)
                 : null;
-        }
+        },
     },
     methods: {
         /**
@@ -302,8 +311,6 @@ export default {
                         evt.preventDefault();
                         this.$emit('move', this.data.id, 1);
                         break;
-                    default:
-                        // do nothing
                 }
             }
         },

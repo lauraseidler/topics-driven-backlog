@@ -6,53 +6,57 @@
         <BRow>
             <BCol md="4">
                 <BFormGroup
-                        label="Shorthand"
-                        label-for="course-shorthand">
+                    label="Shorthand"
+                    label-for="course-shorthand">
 
                     <BFormInput
-                            id="course-shorthand"
-                            v-model="data.short_title"
-                            required/>
+                        id="course-shorthand"
+                        v-model="data.short_title"
+                        required/>
                 </BFormGroup>
             </BCol>
             <BCol md="8">
                 <BFormGroup
-                        label="Title"
-                        label-for="course-title">
+                    label="Title"
+                    label-for="course-title">
 
                     <BFormInput
-                            id="course-title"
-                            v-model="data.title"
-                            required/>
+                        id="course-title"
+                        v-model="data.title"
+                        required/>
                 </BFormGroup>
             </BCol>
         </BRow>
 
 
         <BFormGroup
-                label="Link"
-                label-for="course-hyperlink">
+            label="Link"
+            label-for="course-hyperlink">
 
             <BFormInput
-                    id="course-hyperlink"
-                    v-model="data.hyperlink"/>
+                id="course-hyperlink"
+                v-model="data.hyperlink"/>
         </BFormGroup>
 
         <BFormGroup
-
-                label="Semester"
-                label-for="course-semester">
+            label="Semester"
+            label-for="course-semester">
 
             <BFormSelect
-                    v-if="!noSemester"
-                    id="course-semester"
-                    v-model="data.semester">
+                v-if="!noSemester"
+                id="course-semester"
+                v-model="data.semester">
 
                 <option :value="currentSemester.valueString">{{ currentSemester.fullString }}</option>
                 <option :value="nextSemester.valueString">{{ nextSemester.fullString }}</option>
             </BFormSelect>
 
-            <p v-else class="text-muted">You cannot edit the semester of a course. Please create a new course instead.</p>
+            <p 
+                v-else 
+                class="text-muted">
+                
+                You cannot edit the semester of a course. Please create a new course instead.
+            </p>
         </BFormGroup>
 
 
@@ -97,7 +101,7 @@ export default {
         noSemester: {
             type: Boolean,
             default: false,
-        }
+        },
     },
     computed: {
 

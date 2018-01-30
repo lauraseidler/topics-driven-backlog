@@ -1,55 +1,38 @@
-import { mount, createLocalVue } from 'vue-test-utils';
-import Vuex from 'vuex';
-import Vuelidate from 'vuelidate';
+import { mount } from 'vue-test-utils';
 import CoursesPage from '@/components/pages/CoursesPage';
-import { getters as courseGetters } from '@/store/courses';
-
-const localVue = createLocalVue();
-localVue.use(Vuex);
-localVue.use(Vuelidate);
+import { current } from '@/helper/semester';
 
 describe('CoursesPage.test.js', () => {
-    let cmp, store, actions, getters;
+    let cmp, dispatch = jest.fn();
 
     beforeEach(() => {
-        actions = {
-            save: jest.fn(),
-        };
-
-        getters = {
-            all: () => [
-                {
-                    title: 'Test course',
-                    semester_type: 'W',
-                    semester_year: 2017,
-                },
-            ],
-            new: courseGetters.new,
-        };
-
-        store = new Vuex.Store({
-            modules: {
-                courses: {
-                    namespaced: true,
-                    actions,
-                    getters,
+        cmp = mount(CoursesPage, {
+            mocks: {
+                $store: {
+                    dispatch,
+                    getters: {
+                        'courses/all': () => [
+                            {
+                                title: 'Test course',
+                                semester_type: 'W',
+                                semester_year: 2017,
+                            },
+                        ],
+                        'courses/template': () => {
+                            return {
+                                semester: current().valueString,
+                                allow_enrollment: true,
+                            };
+                        },
+                    },
                 },
             },
         });
 
-        cmp = mount(CoursesPage, {
-            localVue,
-            store,
-        });
+        jest.resetAllMocks();
     });
 
-    it('does not add a course when invalid', () => {
-        cmp.vm.saveCourse();
-
-        expect(actions.save).not.toBeCalled();
-    });
-
-    it('adds a course when data valid', () => {
+    it('adds a course', () => {
         cmp.vm.newCourse = {
             title: 'Test course',
             semester: 'W*2017',
@@ -57,16 +40,6 @@ describe('CoursesPage.test.js', () => {
 
         cmp.vm.saveCourse();
 
-        expect(actions.save).toBeCalled();
-    });
-
-    it('has the expected html structure', () => {
-        expect(cmp.element).toMatchSnapshot();
-    });
-
-    it('has the expected html structure when form visible', () => {
-        cmp.vm.showForm = true;
-        cmp.update();
-        expect(cmp.element).toMatchSnapshot();
+        expect(dispatch).toBeCalled();
     });
 });

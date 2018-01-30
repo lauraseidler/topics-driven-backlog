@@ -1,38 +1,49 @@
-import { mount, shallow, createLocalVue } from 'vue-test-utils';
-import Vuex from 'vuex';
-import Vuelidate from 'vuelidate';
+import { mount, shallow } from 'vue-test-utils';
 import StoryItem from '@/components/elements/StoryItem';
 import StoryForm from '@/components/forms/StoryForm';
 import '@/directives/confirm';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
-localVue.use(Vuelidate);
 
 describe('StoryItem.test.js', () => {
-    let cmp, simpleCmp, actions, store;
+    let cmp, simpleCmp, dispatch = jest.fn(), commit = jest.fn();
 
-    beforeEach(() => {
-        actions = {
-            patch: jest.fn(),
-            delete: jest.fn(),
-        };
-
-        store = new Vuex.Store({
-            modules: {
+    const mocks = {
+        $store: {
+            state: {
                 stories: {
-                    namespaced: true,
-                    state: {
-                        statusMap: [{ name: 'open', css: 'badge-dark' }],
-                    },
-                    actions,
+                    statusMap: [{ name: 'open', css: 'badge-dark' }],
                 },
             },
-        });
+            dispatch,
+            commit,
+            getters: {
+                'projects/byId': () => {
+                    return {
+                        id: 1,
+                    };
+                },
+                'sprints/next': () => {
+                    return {
+                        id: 1,
+                    };
+                },
+                'topics/byId': () => {
+                    return {
+                        id: 1,
+                    };
+                },
+                'sprints/all': () => [{
+                    name: 'Sprint',
+                    topic_ids: [1],
+                }],
+                'topics/all': () => [],
+            },
+        },
+        $style: {},
+    };
 
+    beforeEach(() => {
         cmp = mount(StoryItem, {
-            localVue,
-            store,
             propsData: {
                 data: {
                     identifier: 'S-001',
@@ -41,12 +52,13 @@ describe('StoryItem.test.js', () => {
                     status: 0,
                 },
                 view: 'backlog',
+                position: 1,
+                sortable: true,
             },
+            mocks,
         });
 
         simpleCmp = shallow(StoryItem, {
-            localVue,
-            store,
             propsData: {
                 data: {
                     identifier: 'S-001',
@@ -56,6 +68,7 @@ describe('StoryItem.test.js', () => {
                 },
                 view: 'backlog',
             },
+            mocks,
         });
     });
 
@@ -82,7 +95,12 @@ describe('StoryItem.test.js', () => {
         cmp.update();
         expect(cmp.vm.editing).toBe(true);
         expect(cmp.vm.editingData).toBeTruthy();
-        expect(cmp.element).toMatchSnapshot();
+        expect(commit).toHaveBeenCalledWith('newPendingChange');
+    });
+
+    it('resolves pending change on cancel', () => {
+        cmp.vm.cancelEdit();
+        expect(commit).toHaveBeenCalledWith('resolvePendingChange');
     });
 
     it('triggers story save when story form triggers submit', () => {
@@ -97,14 +115,14 @@ describe('StoryItem.test.js', () => {
     it('patches the story and leaves editing mode on story save', () => {
         cmp.vm.save();
 
-        expect(actions.patch).toBeCalled();
+        expect(dispatch).toBeCalled();
         expect(cmp.vm.editing).toBe(false);
     });
 
     it('patches the story status correctly', () => {
         cmp.vm.saveStatus(1);
 
-        expect(actions.patch).toBeCalled();
+        expect(dispatch).toBeCalled();
         expect(cmp.vm.editing).toBe(false);
     });
 
@@ -119,44 +137,95 @@ describe('StoryItem.test.js', () => {
             .trigger('click');
 
         expect(confirmSpy).toHaveBeenCalled();
-        expect(actions.delete).toHaveBeenCalled();
+        expect(dispatch).toHaveBeenCalled();
     });
 
-    it('emits addToSprint event to parent', () => {
+    it('dispatches addToSprint action', () => {
         const props = cmp.props;
         props.view = 'planning-backlog';
         cmp.setProps(props);
 
-        const stub = jest.fn();
-        cmp.vm.$on('addToSprint', stub);
-
-        cmp
-            .findAll('.btn')
-            .at(1)
-            .trigger('click');
-
-        expect(stub).toBeCalled();
+        cmp.find('.btn-outline-primary').trigger('click');
+        expect(dispatch).toHaveBeenCalled();
     });
 
-    it('emits removeFromSprint event to parent', () => {
+    it('dispatches removeFromSprint action', () => {
         const props = cmp.props;
         props.view = 'planning-sprint';
         cmp.setProps(props);
 
+        cmp.find('.btn-outline-primary').trigger('click');
+        expect(dispatch).toHaveBeenCalled();
+    });
+
+    it('starts keyboard edit on double click', () => {
+        const handler = cmp.findAll('.js-drag-drop');
+        expect(handler.length).toBe(1);
+        handler.at(0).trigger('dblclick');
+        expect(cmp.vm.keyboardSorting).toBe(true);
+    });
+
+    it('stops keyboard sort when enter key is pressed', () => {
         const stub = jest.fn();
-        cmp.vm.$on('removeFromSprint', stub);
+        cmp.vm.$on('moveComplete', stub);
+        cmp.update();
 
-        cmp
-            .findAll('.btn')
-            .at(0)
-            .trigger('click');
+        cmp.vm.startKeyboardSort();
+        cmp.vm.move({ keyCode: 13, preventDefault: stub });
+        expect(cmp.vm.keyboardSorting).toBe(false);
+        expect(stub).toHaveBeenCalledTimes(2);
+    });
 
-        expect(stub).toBeCalled();
+    it('aborts keyboard sort when esc key is pressed', () => {
+        const stub = jest.fn();
+        cmp.vm.$on('moveAbort', stub);
+        cmp.update();
+
+        cmp.vm.startKeyboardSort();
+        cmp.vm.move({ keyCode: 27, preventDefault: stub });
+        expect(cmp.vm.keyboardSorting).toBe(false);
+        expect(stub).toHaveBeenCalledTimes(2);
+    });
+
+    it('emits move event when arrow up key is pressed', () => {
+        const stub = jest.fn();
+        cmp.vm.$on('move', stub);
+        cmp.update();
+
+        cmp.vm.startKeyboardSort();
+        cmp.vm.move({ keyCode: 38, preventDefault: stub });
+        expect(stub).toHaveBeenCalledTimes(2);
+        expect(stub).toHaveBeenCalledWith(undefined, -1);
+    });
+
+    it('emits move event when arrow down key is pressed', () => {
+        const stub = jest.fn();
+        cmp.vm.$on('move', stub);
+        cmp.update();
+
+        cmp.vm.startKeyboardSort();
+        cmp.vm.move({ keyCode: 40, preventDefault: stub });
+        expect(stub).toHaveBeenCalledTimes(2);
+        expect(stub).toHaveBeenCalledWith(undefined, 1);
+    });
+
+    it('does nothing when keys are pressed when keyboard sorting is off', () => {
+        const stub = jest.fn();
+        cmp.vm.$on('move', stub);
+        cmp.vm.$on('moveComplete', stub);
+        cmp.vm.$on('moveAbort', stub);
+        cmp.update();
+
+        cmp.vm.move({ keyCode: 13, preventDefault: stub });
+        cmp.vm.move({ keyCode: 27, preventDefault: stub });
+        cmp.vm.move({ keyCode: 38, preventDefault: stub });
+        cmp.vm.move({ keyCode: 40, preventDefault: stub });
+
+        expect(stub).not.toHaveBeenCalled();    
     });
 
     it('shows backlog page', () => {
-        expect(simpleCmp.findAll('td').length).toBe(5);
-        expect(simpleCmp.element).toMatchSnapshot();
+        expect(simpleCmp.findAll('td').length).toBe(6);
     });
 
     it('shows history page', () => {
@@ -164,8 +233,7 @@ describe('StoryItem.test.js', () => {
         props.view = 'history';
         simpleCmp.setProps(props);
 
-        expect(simpleCmp.findAll('td').length).toBe(4);
-        expect(simpleCmp.element).toMatchSnapshot();
+        expect(simpleCmp.findAll('td').length).toBe(6);
     });
 
     it('shows planning-sprint page', () => {
@@ -173,8 +241,7 @@ describe('StoryItem.test.js', () => {
         props.view = 'planning-sprint';
         simpleCmp.setProps(props);
 
-        expect(simpleCmp.findAll('td').length).toBe(5);
-        expect(simpleCmp.element).toMatchSnapshot();
+        expect(simpleCmp.findAll('td').length).toBe(6);
     });
 
     it('shows planning-backlog page', () => {
@@ -182,8 +249,7 @@ describe('StoryItem.test.js', () => {
         props.view = 'planning-backlog';
         simpleCmp.setProps(props);
 
-        expect(simpleCmp.findAll('td').length).toBe(4);
-        expect(simpleCmp.element).toMatchSnapshot();
+        expect(simpleCmp.findAll('td').length).toBe(6);
     });
 
     it('shows sprint page', () => {
@@ -191,7 +257,6 @@ describe('StoryItem.test.js', () => {
         props.view = 'sprint';
         simpleCmp.setProps(props);
 
-        expect(simpleCmp.findAll('td').length).toBe(4);
-        expect(simpleCmp.element).toMatchSnapshot();
+        expect(simpleCmp.findAll('td').length).toBe(6);
     });
 });

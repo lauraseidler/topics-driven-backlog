@@ -89,7 +89,7 @@ export default {
     props: {
         project: {
             type: Object,
-            default: () => {},
+            default: null,
         },
     },
     computed: {

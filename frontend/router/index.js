@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import StoryPage from '@/components/pages/StoryPage';
 import CoursePage from '@/components/pages/CoursePage';
 import CoursesPage from '@/components/pages/CoursesPage';
 import ProjectsPage from '@/components/pages/ProjectsPage';
@@ -36,14 +35,6 @@ const router = new Router({
             path: '/projects/:id-(.*)',
             name: 'project',
             component: ProjectPage,
-            meta: {
-                protected: true,
-            },
-        },
-        {
-            path: '/stories/:identifier',
-            name: 'story',
-            component: StoryPage,
             meta: {
                 protected: true,
             },
@@ -90,7 +81,7 @@ router.beforeEach((to, from, next) => {
         store.state.pendingChanges = 0;
     }
 
-    if (!to.meta.protected || store.state.loggedIn) {
+    if (!to.meta.protected || store.state.loggedIn) {        
         return next();
     }
 
