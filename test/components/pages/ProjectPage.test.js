@@ -45,6 +45,10 @@ describe('The ProjectPage component', () => {
                                 title: '',
                             };
                         },
+                        'topics/all': () => [
+                            { id: 1, title: 'Test topic' },
+                            { id: 2, title: 'Test topic 2' },
+                        ],
                     },
                 },
                 $route: {
@@ -93,5 +97,14 @@ describe('The ProjectPage component', () => {
         expect(dispatch).toHaveBeenCalled();
         expect(commit).toHaveBeenCalledWith('resolvePendingChange');
         expect(cmp.vm.showForm).toBe(false);
+    });
+
+    it('resolves topic ids correctly', () => {
+        const story = cmp.vm.resolveTopicId({ title: 'Test story', topic_id: 2 });
+        expect(story).toEqual({
+            title: 'Test story',
+            topic_id: 2,
+            topic: 'Test topic 2',
+        });
     });
 });
