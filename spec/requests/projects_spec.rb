@@ -33,7 +33,6 @@ RSpec.describe 'Projects API' do
 
       it 'returns all course projects' do
         expect(json['projects'].size).to eq(20)
-        print(json['projects'][0])
         expect(json['projects'][0]['permissions']).to eq(expected_permissions)
       end
     end
