@@ -13,7 +13,6 @@ class Story < ApplicationRecord
   after_commit :create_sprint_position, on: :create
 
   validates_presence_of :title, :status, :project_id
-  validate :can_be_edited
 
   private
 
@@ -30,24 +29,6 @@ class Story < ApplicationRecord
   def set_status
     if self.status.blank?
       self.status = Story.statuses[:open]
-    end
-  end
-
-  def can_be_edited
-    if sprint_id_in_database.present?
-      old_sprint = Sprint.find_by!(id: sprint_id_in_database)
-      is_sprint_finished(old_sprint)
-    end
-
-    if sprint_id.present?
-      sprint = Sprint.find_by!(id: sprint_id)
-      is_sprint_finished(sprint)
-    end
-  end
-
-  def is_sprint_finished(sprint)
-    if sprint.end_date < Date.today
-      errors.add(:sprint_id, 'was finished and cannot be changed')
     end
   end
 
