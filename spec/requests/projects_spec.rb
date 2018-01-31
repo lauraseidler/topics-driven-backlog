@@ -19,6 +19,11 @@ RSpec.describe 'Projects API' do
   # Test suite for GET /courses/:course_id
   describe 'GET /courses/:course_id with serialized projects' do
     before { get "/courses/#{course_id}" }
+    let(:expected_permissions) {
+      [
+          'project' => ['update' => true, 'delete' => true]
+      ]
+    }
 
     context 'when course exists' do
       it 'returns status code 200' do
@@ -27,6 +32,7 @@ RSpec.describe 'Projects API' do
 
       it 'returns all course projects' do
         expect(json['projects'].size).to eq(20)
+        expect(json['projects'][0]['permissions']).to eq(expected_permissions)
       end
     end
 

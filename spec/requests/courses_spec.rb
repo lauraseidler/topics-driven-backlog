@@ -35,6 +35,14 @@ RSpec.describe 'Courses API', type: :request do
   # Test suite for GET /courses/:id
   describe 'GET /courses/:id' do
     before { get "/courses/#{course_id}" }
+    let(:expected_permissions) {
+      [
+          'sprints' => ['read' => true, 'create' => true],
+          'topics' => ['read' => true, 'create' => true],
+          'projects' => ['read' => true, 'create' => true],
+          'course' => ['update' => true, 'delete' => true],
+      ]
+    }
 
     context 'when the record exists' do
       it 'returns the course' do
@@ -45,6 +53,7 @@ RSpec.describe 'Courses API', type: :request do
         expect(json['hyperlink']).to eq(course.hyperlink)
         expect(json['semester_type']).to eq(course.semester_type)
         expect(json['semester_year']).to eq(course.semester_year)
+        expect(json['permissions']).to eq(expected_permissions)
       end
 
       it 'returns status code 200' do

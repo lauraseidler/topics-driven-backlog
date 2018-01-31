@@ -18,11 +18,17 @@ RSpec.describe 'Projects/Stories API', type: :request do
   describe 'GET /projects/:project_id with serialized stories' do
     # make HTTP get request before each example
     before { get "/projects/#{project_id}" }
+    let(:expected_permissions) {
+      [
+          'story' => ['update' => true, 'delete' => true]
+      ]
+    }
 
     it 'returns stories' do
       # Note `json` is a custom helper to parse JSON responses
       expect(json).not_to be_empty
       expect(json['stories'].size).to eq(10)
+      expect(json['stories'][0]['permissions']).to eq(expected_permissions)
     end
 
     it 'returns status code 200' do

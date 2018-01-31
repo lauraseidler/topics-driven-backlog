@@ -6,9 +6,10 @@ class ProjectSerializer < ActiveModel::Serializer
 
   def permissions
     [
-        :read => scope.can?(:read, object),
-        :update => scope.can?(:update, object),
-        :delete => scope.can?(:delete, object),
+        :project => [
+            :update => scope.can?(:update, object),
+            :delete => scope.can?(:delete, object),
+        ]
     ]
   end
 
