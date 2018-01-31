@@ -30,6 +30,7 @@
                         <p v-else>No projects in this course yet.</p>
 
                         <ProjectForm
+                            ref="projectForm"
                             v-if="showProjectForm"
                             v-model="newProject"
                             @cancel="showProjectForm = false"
@@ -56,6 +57,7 @@
                         <p v-else>No topics in this course yet.</p>
 
                         <TopicForm
+                            ref="topicForm"
                             v-if="showTopicForm"
                             v-model="newTopic"
                             @cancel="showTopicForm = false"
@@ -82,6 +84,7 @@
                         <p v-else>No sprints in this course yet.</p>
 
                         <SprintForm 
+                            ref="sprintForm"
                             v-if="showSprintForm"
                             :course="course"
                             v-model="newSprint" 
@@ -89,6 +92,7 @@
                             @submit="addSprint"/>
 
                         <SprintCollectionForm 
+                            ref="sprintCollectionForm"
                             v-else-if="showCollectionForm" 
                             v-model="newCollection"
                             @cancel="showCollectionForm = false"
@@ -209,6 +213,10 @@ export default {
                 });
     
                 this.newSprint = this.$store.getters['sprints/template']();
+                
+                this.$nextTick(() => {
+                    !this.$refs.sprintForm || this.$refs.sprintForm.$el.reset();
+                });
             } catch (err) {
                 /* istanbul ignore next */
                 this.$notify({
@@ -230,6 +238,10 @@ export default {
                 });
     
                 this.newCollection = {};
+
+                this.$nextTick(() => {
+                    !this.$refs.sprintCollectionForm || this.$refs.sprintCollectionForm.$el.reset();
+                });
             } catch (err) {
                 /* istanbul ignore next */
                 this.$notify({
@@ -248,6 +260,10 @@ export default {
                 });
 
                 this.newProject = this.$store.getters['projects/template']();
+
+                this.$nextTick(() => {
+                    !this.$refs.projectForm || this.$refs.projectForm.$el.reset();
+                });
             } catch (err) {
                 /* istanbul ignore next */
                 this.$notify({
@@ -265,7 +281,11 @@ export default {
                     ...this.newTopic,
                 });
     
-                this.newTopic = this.$store.getters['topics/template']();
+                this.newTopic = this.$store.getters['topics/template']();      
+                
+                this.$nextTick(() => {
+                    !this.$refs.topicForm || this.$refs.topicForm.$el.reset();
+                });
             } catch (err) {
                 /* istanbul ignore next */
                 this.$notify({
