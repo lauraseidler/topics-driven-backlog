@@ -27,6 +27,11 @@ RSpec.describe 'Stories API', type: :request do
   # Test suite for GET /stories/:id
   describe 'GET /stories/:id' do
     before { get "/stories/#{story_id}" }
+    let(:expected_permissions) {
+      [
+          'story' => ['update' => true, 'delete' => true]
+      ]
+    }
 
     context 'when the record exists' do
       it 'returns the story' do
@@ -37,6 +42,7 @@ RSpec.describe 'Stories API', type: :request do
         expect(json['status']).to be <= Story.statuses[:canceled]
         expect(json['points'].to_i).to be_an_instance_of(Integer).or(be_nil)
         expect(json['project_id'].to_i).to eq(project.id)
+        expect(json['permissions']).to eq(expected_permissions)
       end
 
       it 'returns status code 200' do

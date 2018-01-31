@@ -21,6 +21,7 @@ RSpec.describe 'Projects API' do
     before { get "/courses/#{course_id}" }
     let(:expected_permissions) {
       [
+          'stories'=> [ 'read' => true, 'create' => true],
           'project' => ['update' => true, 'delete' => true]
       ]
     }

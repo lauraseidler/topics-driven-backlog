@@ -16,19 +16,18 @@ RSpec.describe 'Projects/Stories API', type: :request do
 
   # Test suite for GET /projects/:project_id
   describe 'GET /projects/:project_id with serialized stories' do
-    # make HTTP get request before each example
     before { get "/projects/#{project_id}" }
     let(:expected_permissions) {
       [
-          'story' => ['update' => true, 'delete' => true]
+          'stories' => ['read' => true, 'create' => true],
+          'project' => ['update' => true, 'delete' => true]
       ]
     }
 
     it 'returns stories' do
-      # Note `json` is a custom helper to parse JSON responses
       expect(json).not_to be_empty
       expect(json['stories'].size).to eq(10)
-      expect(json['stories'][0]['permissions']).to eq(expected_permissions)
+      expect(json['permissions']).to eq(expected_permissions)
     end
 
     it 'returns status code 200' do
@@ -38,7 +37,6 @@ RSpec.describe 'Projects/Stories API', type: :request do
 
   # Test suite for POST /projects/:project_id/stories
   describe 'POST /projects/:project_id/stories' do
-    # valid payload
     let(:valid_attributes) { { title: 'Learn Elm', description: 'Foobar' } }
 
     context 'when the request is valid' do
