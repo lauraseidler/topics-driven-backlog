@@ -16,6 +16,7 @@
         <p v-else>No courses yet.</p>
 
         <CourseForm
+            ref="courseForm"
             v-if="showForm"
             v-model="newCourse"
             @cancel="showForm = false"
@@ -69,6 +70,10 @@ export default {
             try {
                 await this.$store.dispatch('courses/create', this.newCourse);
                 this.newCourse = this.$store.getters['courses/template']();
+
+                this.$nextTick(() => {
+                    !this.$refs.courseForm || this.$refs.courseForm.$el.reset();
+                });
             } catch (err) {
                 /* istanbul ignore next */
                 this.$notify({

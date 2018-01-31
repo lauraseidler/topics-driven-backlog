@@ -50,10 +50,9 @@ describe('The ProjectItem component', () => {
         expect(cmp.findAll('.card-body').length).toBe(1);
     });
 
-    it('has a link to the project page as title', () => {
-        const title = cmp.find('.card-title router-link');
+    it('has a the project title as title', () => {
+        const title = cmp.find('.card-title');
         expect(title.text()).toBe('Test Project');
-        expect(title.vnode.data.attrs.to).toBe('/projects/1-test-project');
     });
 
     it('shows join project button and dispatches enroll action when clicked', () => {

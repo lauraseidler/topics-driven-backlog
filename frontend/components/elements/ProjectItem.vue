@@ -49,7 +49,14 @@
                 </template>
 
                 <h3 class="card-title h4">
-                    <router-link :to="baseUrl">{{ data.title }}</router-link>
+                    <router-link 
+                        v-if="isEnrolled" 
+                        :to="baseUrl">
+                        
+                        {{ data.title }}
+                    </router-link>
+
+                    <template v-else> {{ data.title }}</template>
                 </h3>
 
                 <p :class="['card-text', $style.bottom]">

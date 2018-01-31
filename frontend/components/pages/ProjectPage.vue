@@ -142,11 +142,12 @@
                 <StoryTable
                     :columns="tableColumns.backlog"
                     :rows="backlog"
-                    :view="sections.nextSprint ? 'planning-backlog' : 'backlog'"
+                    :view="nextSprint && sections.nextSprint ? 'planning-backlog' : 'backlog'"
                     position-field="project_position"
                     :sortable="true"/>
 
                 <StoryForm
+                    ref="storyForm"
                     v-if="showForm"
                     v-model="newStory"
                     :project="project"
@@ -317,7 +318,7 @@ export default {
             return {
                 topic: topic ? topic.title : null,
                 ...story,
-            }
+            };
         },
 
         /**
@@ -333,6 +334,10 @@ export default {
                 this.newStory = this.$store.getters['stories/template']();
                 this.showForm = false;
                 this.$store.commit('resolvePendingChange');
+                
+                this.$nextTick(() => {
+                    !this.$refs.storyForm || this.$refs.storyForm.$el.reset();
+                });
             } catch (err) {
                 /* istanbul ignore next */
                 this.$notify({
