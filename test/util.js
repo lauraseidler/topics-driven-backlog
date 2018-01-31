@@ -31,14 +31,14 @@ export function mockResponse(
         correctRequest: false,
     };
 
-    Vue.http.interceptors.push((request, next) => {
+    Vue.http.interceptors.push(function mockResponse(request, next) {
         if (request.method === method) {
             mockStatus.correctMethod = true;
-        }
+        }        
 
         if (request.url === route) {
             mockStatus.correctRoute = true;
-        }
+        }        
 
         if (
             payload &&
@@ -60,4 +60,24 @@ export function mockResponse(
     });
 
     return mockStatus;
+}
+
+/**
+ * Return a new mock store
+ * @returns {object}
+ */
+export function mockStore() {
+    Object.keys(module.actions).forEach(action => {
+        module.actions[action] = jest.fn();
+    });
+
+    Object.keys(module.mutations).forEach(mutation => {
+        module.mutations[mutation] = jest.fn();
+    });
+
+    Object.keys(module.getters).forEach(getter => {
+        module.getters[getter] = () => jest.fn();
+    });
+
+    return module;
 }

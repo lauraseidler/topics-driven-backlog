@@ -2,7 +2,12 @@
     <table class="story-table table table-striped mb-4">
         <thead>
             <tr>
-                <th @click="sortBy(column.field)" v-for="column in columns" :title="view === 'print' ? '' : 'Click to sort'">
+                <th 
+                    @click="sortBy(column.field)" 
+                    v-for="(column, index) in columns" 
+                    :key="index"
+                    :title="view === 'print' ? '' : 'Click to sort'">
+
                     <nobr>
                         {{ column.name }}
                         <template v-if="view !== 'print'">
@@ -46,16 +51,20 @@ import VIcon from 'vue-awesome/components/Icon';
 import StoryItem from '@/components/elements/StoryItem';
 
 export default {
-    components: { StoryItem, VIcon },
     name: 'StoryTable',
+    components: { StoryItem, VIcon },
     props: {
         columns: {
             type: Array,
-            default: () => [],
+            default: function () {
+                return [];
+            },
         },
         rows: {
             type: Array,
-            default: () => [],
+            default: function () {
+                return [];
+            },
         },
         view: {
             type: String,
@@ -78,7 +87,7 @@ export default {
             },
             moving: {},
             highlight: null,
-        }
+        };
     },
     computed: {
         sortedRows() {
@@ -112,10 +121,9 @@ export default {
                         rows[indexById],
                         {
                             [this.positionField]:
-                                this.mappedFields(this.positionField)
-                                    [indexById + this.moving[id]]
-                                + Math.sign(this.moving[id])
-                        }
+                                this.mappedFields(this.positionField)[indexById + this.moving[id]]
+                                + Math.sign(this.moving[id]),
+                        },
                     );
 
                     this.$set(
@@ -132,6 +140,9 @@ export default {
                 return this.sortedRows;
             }
         },
+    },
+    created() {
+        this.resetSort();
     },
     methods: {
         mappedFields(field) {
@@ -166,7 +177,7 @@ export default {
             return this.sortedRows.findIndex(i => i.id === id);
         },
 
-        move(id, direction) {
+        move(id, direction) {            
             if (!this.moving[id]) {
                 this.$set(this.moving, id, 0);
             }
@@ -186,8 +197,8 @@ export default {
             this.$set(this.moving, id, 0);
         },
 
-        moveComplete(id) {
-            this.saveOrder({
+        async moveComplete(id) {
+            await this.saveOrder({
                 oldIndex: this.indexById(id),
                 newIndex: this.indexById(id) + this.moving[id],
             });
@@ -210,11 +221,20 @@ export default {
                 return;
             }
 
-            await this.$store.dispatch('stories/update', {
-                id: story.id,
-                parentId: story.project_id,
-                [this.positionField]: this.mappedFields(this.positionField)[evt.newIndex],
-            });
+            try {
+                await this.$store.dispatch('stories/update', {
+                    id: story.id,
+                    parentId: story.project_id,
+                    [this.positionField]: this.mappedFields(this.positionField)[evt.newIndex],
+                });
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Story update failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
 
             this.highlight = story.id;
 
@@ -222,15 +242,19 @@ export default {
                 this.highlight = null;
             }, 1000);
 
-            await this.$store.dispatch('projects/fetch', {
-                id: story.project_id,
-            });
-
-            // TODO handle errors in UI
+            try {
+                await this.$store.dispatch('projects/fetch', {
+                    id: story.project_id,
+                });
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Project reload failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
-    },
-    created() {
-        this.resetSort();
     },
 };
 </script>

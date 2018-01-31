@@ -11,12 +11,14 @@ export default {
     props: {
         data: {
             type: Object,
-            default: () => {},
+            default: function ()  {
+                return {};
+            },
         },
     },
     computed: {
         isInvalid() {
-            return this.$v.$invalid;
+            return this.$v && this.$v.$invalid;
         },
     },
     watch: {
@@ -26,6 +28,11 @@ export default {
             },
             deep: true,
         },
+    },
+    mounted() {
+        if (this.$refs.focusInput && this.$refs.focusInput.$el) {
+            this.$refs.focusInput.$el.focus();
+        }
     },
     methods: {
         /**

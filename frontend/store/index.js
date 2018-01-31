@@ -65,7 +65,7 @@ export const actions = {
 
             // init modules
             dispatch('courses/init', {});
-        } else {
+        } else {            
             // switch to logged out state
             commit('logout');
         }

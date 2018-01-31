@@ -9,7 +9,7 @@ localVue.use(Vuelidate);
 describe('ProjectForm.test.js', () => {
     let cmp;
 
-    beforeEach(() => {
+    beforeAll(() => {
         cmp = mount(ProjectForm, {
             localVue,
             propsData: {
@@ -20,7 +20,7 @@ describe('ProjectForm.test.js', () => {
         });
     });
 
-    it('has the expected html structure', () => {
-        expect(cmp.element).toMatchSnapshot();
+    it('is a form with class project-form', () => {
+        expect(cmp.is('form.project-form'));
     });
 });

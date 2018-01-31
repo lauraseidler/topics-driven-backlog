@@ -16,6 +16,7 @@
         <p v-else>No courses yet.</p>
 
         <CourseForm
+            ref="courseForm"
             v-if="showForm"
             v-model="newCourse"
             @cancel="showForm = false"
@@ -66,11 +67,21 @@ export default {
             this.newCourse.semester_type = semesterSplit[0];
             this.newCourse.semester_year = parseInt(semesterSplit[1], 10);
 
-            await this.$store.dispatch('courses/create', this.newCourse);
+            try {
+                await this.$store.dispatch('courses/create', this.newCourse);
+                this.newCourse = this.$store.getters['courses/template']();
 
-            this.newCourse = this.$store.getters['courses/template']();
-
-            // TODO handle errors in UI
+                this.$nextTick(() => {
+                    !this.$refs.courseForm || this.$refs.courseForm.$el.reset();
+                });
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Course creation failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
     },
 };

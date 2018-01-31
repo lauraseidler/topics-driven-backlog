@@ -18,6 +18,7 @@
                     label-for="sprint-collection-duration">
 
                     <BFormInput 
+                        ref="focusInput"
                         id="sprint-collection-duration" 
                         type="number" 
                         min="1" 

@@ -30,6 +30,7 @@
                         <p v-else>No projects in this course yet.</p>
 
                         <ProjectForm
+                            ref="projectForm"
                             v-if="showProjectForm"
                             v-model="newProject"
                             @cancel="showProjectForm = false"
@@ -56,16 +57,17 @@
                         <p v-else>No topics in this course yet.</p>
 
                         <TopicForm
-                                v-if="showTopicForm"
-                                v-model="newTopic"
-                                @cancel="showTopicForm = false"
-                                @submit="addTopic"/>
+                            ref="topicForm"
+                            v-if="showTopicForm"
+                            v-model="newTopic"
+                            @cancel="showTopicForm = false"
+                            @submit="addTopic"/>
 
                         <BButton
-                                v-else
-                                type="button"
-                                variant="primary"
-                                @click="showTopicForm = true">Add topic</BButton>
+                            v-else
+                            type="button"
+                            variant="primary"
+                            @click="showTopicForm = true">Add topic</BButton>
                     </BTab>
                     <BTab title="Sprints">
                         <ul 
@@ -82,6 +84,7 @@
                         <p v-else>No sprints in this course yet.</p>
 
                         <SprintForm 
+                            ref="sprintForm"
                             v-if="showSprintForm"
                             :course="course"
                             v-model="newSprint" 
@@ -89,6 +92,7 @@
                             @submit="addSprint"/>
 
                         <SprintCollectionForm 
+                            ref="sprintCollectionForm"
                             v-else-if="showCollectionForm" 
                             v-model="newCollection"
                             @cancel="showCollectionForm = false"
@@ -202,28 +206,50 @@ export default {
          * Add a sprint to the given course
          */
         async addSprint() {
-            await this.$store.dispatch('sprints/create', {
-                parentId: this.course.id,
-                ...this.newSprint,
-            });
-
-            this.newSprint = this.$store.getters['sprints/template']();
-
-            // TODO handle errors in UI
+            try {
+                await this.$store.dispatch('sprints/create', {
+                    parentId: this.course.id,
+                    ...this.newSprint,
+                });
+    
+                this.newSprint = this.$store.getters['sprints/template']();
+                
+                this.$nextTick(() => {
+                    !this.$refs.sprintForm || this.$refs.sprintForm.$el.reset();
+                });
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Sprint creation failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
 
         /**
          * Add a sprint collection to the given course
          */
         async addCollection() {
-            await this.$store.dispatch('sprints/createCollection', {
-                parentId: this.course.id,
-                collection: this.newCollection,
-            });
+            try {
+                await this.$store.dispatch('sprints/createCollection', {
+                    parentId: this.course.id,
+                    collection: this.newCollection,
+                });
+    
+                this.newCollection = {};
 
-            this.newCollection = {};
-
-            // TODO handle errors in UI
+                this.$nextTick(() => {
+                    !this.$refs.sprintCollectionForm || this.$refs.sprintCollectionForm.$el.reset();
+                });
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Sprints creation failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
 
         async addProject() {
@@ -234,7 +260,12 @@ export default {
                 });
 
                 this.newProject = this.$store.getters['projects/template']();
+
+                this.$nextTick(() => {
+                    !this.$refs.projectForm || this.$refs.projectForm.$el.reset();
+                });
             } catch (err) {
+                /* istanbul ignore next */
                 this.$notify({
                     title: 'Validation failed',
                     text: err.body.message.replace('Validation failed: ', ''),
@@ -244,14 +275,25 @@ export default {
         },
 
         async addTopic() {
-            await this.$store.dispatch('topics/create', {
-                parentId: this.course.id,
-                ...this.newTopic,
-            });
-
-            this.newTopic = this.$store.getters['topics/template']();
-
-            // TODO handle errors in UI
+            try {
+                await this.$store.dispatch('topics/create', {
+                    parentId: this.course.id,
+                    ...this.newTopic,
+                });
+    
+                this.newTopic = this.$store.getters['topics/template']();      
+                
+                this.$nextTick(() => {
+                    !this.$refs.topicForm || this.$refs.topicForm.$el.reset();
+                });
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Topic creation failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
 
         /**

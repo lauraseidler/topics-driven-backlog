@@ -59,6 +59,7 @@ import '@icons/pencil';
 import '@icons/trash';
 
 import { info } from '@/helper/semester';
+import { slugify } from '@/helper/util';
 import * as _ from 'lodash';
 import VIcon from 'vue-awesome/components/Icon';
 import BButton from '@bootstrap/button/button';
@@ -70,11 +71,15 @@ export default {
     props: {
         data: {
             type: Object,
-            default: () => {},
+            default: null,
+            validator: function (value) {                
+                return value
+                    && value.id 
+                    && value.title 
+                    && value.semester_type 
+                    && value.semester_year;
+            },
         },
-    },
-    computed: {
-
     },
     data() {
         return {
@@ -83,29 +88,8 @@ export default {
         };
     },
     methods: {
-        /**
-         * Semester info for given type and year
-         * @param {string} type
-         * @param {string} year
-         * @returns {{semesterStart: *, semester: string, year: number, fullString: string, valueString: string}}
-         */
-        getSemesterInfo(type, year) {
-            return info(type, year);
-        },
-
-        /**
-         * Slugify a text
-         * @param text
-         * @returns {string}
-         */
-        slugify(text) {
-            return text.toString().toLowerCase()
-                .replace(/\s+/g, '-')           // Replace spaces with -
-                .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-                .replace(/\-\-+/g, '-')         // Replace multiple - with single -
-                .replace(/^-+/, '')             // Trim - from start of text
-                .replace(/-+$/, '');            // Trim - from end of text
-        },
+        slugify,
+        getSemesterInfo: info,
 
         /**
          * Start editing process of this sprint
@@ -123,26 +107,39 @@ export default {
         /**
          * Save the edited parameters of this course
          */
-        async saveCourse() {
-            await this.$store.dispatch('courses/update', {
-                id: this.data.id,
-                ...this.editingData,
-            });
-
-            this.editing = false;
-
-            // TODO handle errors in UI
+        async saveCourse() {        
+            try {
+                await this.$store.dispatch('courses/update', {
+                    id: this.data.id,
+                    ...this.editingData,
+                });
+                this.editing = false;
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Course update failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            } 
         },
 
         /**
          * Delete this course
          */
         async deleteCourse() {
-            await this.$store.dispatch('courses/remove', {
-                id: this.data.id,
-            });
-
-            // TODO handle errors in UI
+            try {
+                await this.$store.dispatch('courses/remove', {
+                    id: this.data.id,
+                });
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Course delete failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
     },
 };

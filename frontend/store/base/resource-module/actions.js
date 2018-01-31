@@ -33,14 +33,14 @@ export function init(settings) {
                 await dispatch(actionTypes.FETCH, {});
             }
         } else {
-            throw new Error('Incorrect resource module configuration!');
+            throw 'Incorrect resource module configuration!';
         }
 
         if (settings.children) {
             let childrenInitialised = true;
 
             settings.children.forEach(child => {
-                if (!rootState[child].initialised[parentId]) {
+                if (!rootState[child].initialised[id]) {
                     childrenInitialised = false;
                 }
             });
@@ -70,56 +70,52 @@ export function fetch(settings) {
      * @returns {array|object}
      */
     return async function ({ commit }, { id = null, parentId = null }) {
-        try {
-            let url = `/${settings.resource}`;
-            url += id ? `/${id}` : '';
+        let url = `/${settings.resource}`;
+        url += id ? `/${id}` : '';
 
-            const res = await Vue.http.get(url);
+        const res = await Vue.http.get(url);
 
-            // if resource has children, patch the data through to the child store
-            // then delete the data from the resource that's being stored to avoid duplication
-            if (settings.children) {
-                if (id) {
-                    settings.children.forEach(child => {
-                        commit(`${child}/${mutationTypes.SET_ALL}`, {
-                            parentId: res.body.id,
-                            items: res.body[child],
-                        }, { root: true });
-
-                        delete res.body[child];
-                    });
-                } else {
-                    res.body.forEach((item, index) => {
-                        settings.children.forEach(child => {
-                            commit(`${child}/${mutationTypes.SET_ALL}`, {
-                                parentId: res.body[index].id,
-                                items: res.body[index][child],
-                            }, { root: true });
-
-                            delete res.body[index][child];
-                        });
-                    });
-                }
-            }
-
-            // if an ID is set, update the one item we just fetched
-            // else set all items
+        // if resource has children, patch the data through to the child store
+        // then delete the data from the resource that's being stored to avoid duplication
+        if (settings.children) {
             if (id) {
-                commit(mutationTypes.SET_ONE, {
-                    parentId,
-                    item: res.body,
+                settings.children.forEach(child => {
+                    commit(`${child}/${mutationTypes.SET_ALL}`, {
+                        parentId: res.body.id,
+                        items: res.body[child],
+                    }, { root: true });
+
+                    delete res.body[child];
                 });
             } else {
-                commit(mutationTypes.SET_ALL, {
-                    items: res.body,
+                res.body.forEach((item, index) => {
+                    settings.children.forEach(child => {
+                        commit(`${child}/${mutationTypes.SET_ALL}`, {
+                            parentId: res.body[index].id,
+                            items: res.body[index][child],
+                        }, { root: true });
+
+                        delete res.body[index][child];
+                    });
                 });
             }
-
-
-            return res.body;
-        } catch (err) {
-            return err;
         }
+
+        // if an ID is set, update the one item we just fetched
+        // else set all items
+        if (id) {
+            commit(mutationTypes.SET_ONE, {
+                parentId,
+                item: res.body,
+            });
+        } else {
+            commit(mutationTypes.SET_ALL, {
+                items: res.body,
+            });
+        }
+
+
+        return res.body;
     };
 }
 

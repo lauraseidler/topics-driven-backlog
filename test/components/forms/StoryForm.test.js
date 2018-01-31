@@ -1,26 +1,40 @@
-import { mount, createLocalVue } from 'vue-test-utils';
-import Vuelidate from 'vuelidate';
+import { mount } from 'vue-test-utils';
 import StoryForm from '@/components/forms/StoryForm';
-
-const localVue = createLocalVue();
-localVue.use(Vuelidate);
 
 describe('StoryForm.test.js', () => {
     let cmp;
 
     beforeEach(() => {
         cmp = mount(StoryForm, {
-            localVue,
             propsData: {
                 data: {
                     title: 'Test Story',
                     points: 5,
                 },
+                project: {
+                    id: 1,
+                    course_id: 1,
+                },
+            },
+            mocks: {
+                $store: {
+                    getters: {
+                        'topics/all': () => [],
+                    },
+                },
             },
         });
     });
 
-    it('has the expected html structure', () => {
-        expect(cmp.element).toMatchSnapshot();
+    it('is a form with class story-form', () => {
+        expect(cmp.is('form.story-form'));
+    });
+
+    it('doesnt calculate topics if no project is set', () => {
+        const props = cmp.props;
+        props.project = null;
+        cmp.setProps(props);
+
+        expect(cmp.vm.topics.length).toBe(0);
     });
 });

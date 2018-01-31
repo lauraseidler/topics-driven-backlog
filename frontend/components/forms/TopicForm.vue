@@ -8,19 +8,20 @@
             label-for="topic-title">
 
             <BFormInput 
+                ref="focusInput"
                 id="topic-title"
                 v-model="data.title"
                 required/>
         </BFormGroup>
 
         <BFormGroup
-                label="Link"
-                label-for="topic-url">
+            label="Link"
+            label-for="topic-url">
 
             <BFormInput
-                    id="topic-url"
-                    type="url"
-                    v-model="data.url"/>
+                id="topic-url"
+                type="url"
+                v-model="data.url"/>
         </BFormGroup>
 
         <BButton 

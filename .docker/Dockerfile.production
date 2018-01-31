@@ -42,7 +42,7 @@ RUN set -ex \
        imagemagick-dev \
   && gem install bundler \
   && bundle install --without development test \
-  && yarn \
+  && yarn install --ignore-engines \
   && bundle exec rake webpacker:compile \
   && mkdir nginx-assets \
   && rm -rf node_modules

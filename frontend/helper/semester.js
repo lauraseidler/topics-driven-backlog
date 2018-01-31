@@ -101,7 +101,7 @@ export function next() {
  * @param {string} year
  * @returns {{semesterStart: *, semester: string, year: number, fullString: string, valueString: string}}
  */
-export function info(type, year) {
+export function info(type = WS, year = 2018) {
     return calculateSemester(
         moment()
             .year(year)

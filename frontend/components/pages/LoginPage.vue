@@ -2,7 +2,9 @@
     <section id="login-page">
         <h1>Login</h1>
 
-        <LoginForm v-model="user" @submit="login"/>
+        <LoginForm 
+            v-model="user" 
+            @submit="login"/>
     </section>
 </template>
 
@@ -10,8 +12,8 @@
 import LoginForm from '@/components/forms/LoginForm';
 
 export default {
-    components: { LoginForm },
     name: 'LoginPage',
+    components: { LoginForm },
     data() {
         return {
             user: {},
@@ -30,13 +32,14 @@ export default {
                 // redirect to where the user wanted to go
                 this.$router.push(this.redirectTo);
             } catch (err) {
+                /* istanbul ignore next */
                 this.$notify({
                     title: 'Login failed',
                     text: err.body.message || 'Please check your username and password.',
                     type: 'error',
                 });
             }
-        }
+        },
     },
 };
 </script>

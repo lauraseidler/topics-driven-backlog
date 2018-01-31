@@ -57,15 +57,13 @@ export default {
     props: {
         data: {
             type: Object,
-            default: () => {},
-        },
-    },
-    computed: {
-        course() {
-            return this.$store.getters['courses/byId'](this.data.course_id);
-        },
-        topicsString() {
-            return this.data.topic_ids.map(id => this.$store.getters['topics/byId'](id).title).join(' | ');
+            default: null,
+            validator: function (value) {
+                return value 
+                    && value.name
+                    && value.start_date
+                    && value.end_date;
+            },
         },
     },
     data() {
@@ -75,6 +73,15 @@ export default {
             currentDate: moment().format('YYYY-MM-DD'),
         };
     },
+    computed: {
+        course() {
+            return this.$store.getters['courses/byId'](this.data.course_id);
+        },
+        topicsString() {
+            return this.data.topic_ids.map(id => this.$store.getters['topics/byId'](id).title).join(' | ');
+        },
+    },
+
     methods: {
         /**
          * Start editing process of this sprint
@@ -94,27 +101,41 @@ export default {
          * Save the edited parameters of this sprint
          */
         async saveSprint() {
-            await this.$store.dispatch('sprints/update', {
-                id: this.data.id,
-                parentId: this.data.course_id,
-                ...this.editingData,
-            });
-
-            this.editing = false;
-
-            // TODO handle errors in UI
+            try {
+                await this.$store.dispatch('sprints/update', {
+                    id: this.data.id,
+                    parentId: this.data.course_id,
+                    ...this.editingData,
+                });
+    
+                this.editing = false;
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Sprint update failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
 
         /**
          * Delete this sprint
          */
         async deleteSprint() {
-            await this.$store.dispatch('sprints/remove', {
-                id: this.data.id,
-                parentId: this.data.course_id,
-            });
-
-            // TODO handle errors in UI
+            try {
+                await this.$store.dispatch('sprints/remove', {
+                    id: this.data.id,
+                    parentId: this.data.course_id,
+                });
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Sprint delete failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
     },
 };
