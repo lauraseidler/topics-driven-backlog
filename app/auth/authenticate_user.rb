@@ -15,7 +15,7 @@ class AuthenticateUser
             token: JsonWebToken.encode(user_id: user.id, exp: expires_at),
             ttl: expires_at.to_i
         },
-        user: user
+        user: UserSerializer.new(user, scope: Ability.new(user))
     }
   end
 

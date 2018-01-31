@@ -19,7 +19,6 @@ class StorySerializer < ActiveModel::Serializer
   def permissions
     [
         :read => scope.can?(:read, object),
-        :create => scope.can?(:create, object, object.project),
         :update => scope.can?(:update, object),
         :delete => scope.can?(:delete, object),
     ]

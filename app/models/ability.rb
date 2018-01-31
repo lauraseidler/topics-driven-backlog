@@ -52,7 +52,7 @@ class Ability
       can_read
     end
 
-    can [:create, :update, :delete, :collection], Sprint do |s, course|
+    can [:create, :update, :delete], Sprint do |s, course|
       if course.nil?
         course = s.course
       end

@@ -5,10 +5,8 @@ class SprintSerializer < ActiveModel::Serializer
   def permissions
     [
         :read => scope.can?(:read, object),
-        :create => scope.can?(:create, object, object.course),
         :update => scope.can?(:update, object),
         :delete => scope.can?(:delete, object),
-        :manage_collection => scope.can?(:collection, object, object.course)
     ]
   end
 end

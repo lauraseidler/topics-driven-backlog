@@ -23,7 +23,7 @@ class SprintsController < ApplicationController
 
   # POST /courses/:course_id/sprint-collection
   def create_collection
-    authorize! :collection, Sprint, @course
+    authorize! :create, Sprint, @course
     sprints = create_sprint_collection(
         params[:duration].to_i,
         params[:start_date].to_date,
@@ -34,7 +34,7 @@ class SprintsController < ApplicationController
 
   # PATCH /courses/:course_id/sprint-collection
   def update_collection
-    authorize! :collection, Sprint, @course
+    authorize! :update, Sprint, @course
     sprints = update_sprint_collection(params[:collection])
     json_response(sprints)
   end
