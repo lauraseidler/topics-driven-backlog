@@ -4,11 +4,19 @@ class ProjectSerializer < ActiveModel::Serializer
   # model association
   has_many :stories
 
+  def stories
+    object.stories.select do |story|
+      if scope.can?(:read, story, object)
+        StorySerializer.new(story, scope: scope, root: true, event: object)
+      end
+    end
+  end
+
   def permissions
     [
         :stories => [
             :read => scope.can?(:read, Story, object),
-            :create => scope.can?(:read, Story, object),
+            :create => scope.can?(:create, Story, object),
         ],
         :project => [
             :update => scope.can?(:update, object),
@@ -17,10 +25,4 @@ class ProjectSerializer < ActiveModel::Serializer
     ]
   end
 
-  def user_ids
-    if scope.can?(:read, object)
-      return object.user_ids
-    end
-    []
-  end
 end
