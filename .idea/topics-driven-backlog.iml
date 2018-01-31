@@ -30,6 +30,7 @@
     <orderEntry type="library" scope="PROVIDED" name="diff-lcs (v1.3, Remote:ruby-2.4.2-p198) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="dotenv (v0.7.0, Remote:ruby-2.4.2-p198) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="erubi (v1.7.0, Remote:ruby-2.4.2-p198) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="execjs (v2.7.0, Remote:ruby-2.4.2-p198) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="factory_bot (v4.8.2, Remote:ruby-2.4.2-p198) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="factory_bot_rails (v4.8.2, Remote:ruby-2.4.2-p198) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="faker (v1.8.4, Remote:ruby-2.4.2-p198) [gem]" level="application" />

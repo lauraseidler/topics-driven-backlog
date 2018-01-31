@@ -3,12 +3,14 @@ require 'rails_helper'
 RSpec.describe 'Sprints API' do
 
   let(:user) { create(:user) }
+  let!(:course) { create(:course) }
   before(:each) do
+    course.instructions.build( user_id: user.id, initial_instructor: true )
+    course.save!
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
     allow_any_instance_of(ApplicationController).to receive(:authorize_request).and_return(user)
   end
 
-  let!(:course) { create(:course) }
   let(:course_id) { course.id }
   let!(:sprint_1) {
     create(:sprint, course_id: course.id, start_date: Date.new(2018,11,07), end_date: Date.new(2018,11,17))
