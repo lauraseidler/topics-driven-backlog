@@ -1,9 +1,9 @@
 class ProjectsController < ApplicationController
-  include ProjectsHelper
+  include CanCan::ControllerAdditions
 
   before_action :set_course, only: [:create]
   before_action :set_project, only: [:show, :update, :destroy, :enroll_user, :remove_enrollment]
-  before_action :validate_users, only: [:create, :update]
+  load_and_authorize_resource :except => [:create, :destroy, :enroll_user, :remove_enrollment]
 
   # GET /projects/:id
   def show
@@ -12,12 +12,17 @@ class ProjectsController < ApplicationController
 
   # POST /projects/:id/enrollments
   def enroll_user
-    @project.users << current_user
+    authorize! :enrollment, @project
+
+    if !@project.user_ids.include?(current_user.id)
+      @project.users << current_user
+    end
     json_response(@project, :created)
   end
 
   # POST /courses/:course_id/projects
   def create
+    authorize! :create, Project, @course
     @project = @course.projects.create!(project_params)
     @project.users << current_user
     json_response(@project, :created)
@@ -32,12 +37,14 @@ class ProjectsController < ApplicationController
 
   # DELETE /projects/:id
   def destroy
+    authorize! :delete, @project
     @project.destroy!
     head :no_content
   end
 
   # DELETE /projects/:project_id/enrollment
   def remove_enrollment
+    authorize! :enrollment, @project
     @project.users.delete(current_user)
     head :no_content
   end
@@ -46,7 +53,7 @@ class ProjectsController < ApplicationController
 
   def project_params
     # whitelist params
-    params.permit(:title, :user_ids => [])
+    params.permit(:title)
   end
 
   def set_course

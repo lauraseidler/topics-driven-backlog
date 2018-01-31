@@ -3,11 +3,11 @@ require 'database_cleaner'
 DatabaseCleaner.clean_with(:truncation)
 
 User.create!([
-                 {email: 'user1@example.com', role: User.roles[:student]},
-                 {email: 'user2@example.com', role: User.roles[:student]},
-                 {email: 'user3@example.com', role: User.roles[:student]},
-                 {email: 'user4@example.com', role: User.roles[:instructor]},
-                 {email: 'user5@example.com', role: User.roles[:instructor]},
+                 {email: 'user1@htw-berlin.de', role: User.roles[:student]},
+                 {email: 'user2@htw-berlin.de', role: User.roles[:student]},
+                 {email: 'user3@htw-berlin.de', role: User.roles[:student]},
+                 {email: 'user4@htw-berlin.de', role: User.roles[:instructor]},
+                 {email: 'user5@htw-berlin.de', role: User.roles[:instructor]},
              ])
 
 Course.create!([

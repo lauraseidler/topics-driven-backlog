@@ -1,9 +1,13 @@
 class TopicsController < ApplicationController
+  include CanCan::ControllerAdditions
+
   before_action :set_course, only: [:create]
   before_action :set_topic, only: [:update, :destroy]
+  load_and_authorize_resource :except => [:create, :destroy]
 
   # POST /courses/course_id/topics
   def create
+    authorize! :create, Topic, @course
     @topic = @course.topics.create!(topic_params)
     json_response(@topic, :created)
   end
@@ -17,6 +21,7 @@ class TopicsController < ApplicationController
 
   # DELETE /topics/:id
   def destroy
+    authorize! :delete, Topic
     @topic.destroy!
     head :no_content
   end

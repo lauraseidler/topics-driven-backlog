@@ -1,5 +1,8 @@
 class CoursesController < ApplicationController
+  include CanCan::ControllerAdditions
+
   before_action :set_course, only: [:show, :update, :destroy]
+  load_and_authorize_resource :except => :destroy
 
   # GET /courses
   def index
@@ -28,6 +31,7 @@ class CoursesController < ApplicationController
 
   # DELETE /courses/:id
   def destroy
+    authorize! :delete, @course
     @course.destroy!
     head :no_content
   end
