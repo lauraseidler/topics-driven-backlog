@@ -142,7 +142,7 @@
                 <StoryTable
                     :columns="tableColumns.backlog"
                     :rows="backlog"
-                    :view="sections.nextSprint ? 'planning-backlog' : 'backlog'"
+                    :view="nextSprint && sections.nextSprint ? 'planning-backlog' : 'backlog'"
                     position-field="project_position"
                     :sortable="true"/>
 

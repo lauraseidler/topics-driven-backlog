@@ -1,7 +1,5 @@
 import { mount } from 'vue-test-utils';
 import StoryTable from '@/components/elements/StoryTable';
-import { setTimeout } from 'timers';
-
 
 describe('The StoryTable component', () => {
     let cmp, dispatch = jest.fn(), ths;
