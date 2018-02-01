@@ -14,12 +14,15 @@
 
             <BRow>
                 <BCol lg="4">
-                    <h2>
+                    <router-link 
+                        class="h2" 
+                        :to="`/courses/${course.id}-${slugify(course.title)}`">
+                        
                         {{ course.short_title }} <br>
                         <small class="text-muted">
                             {{ course.title }}
                         </small>
-                    </h2>
+                    </router-link>
                 </BCol>
                 <BCol lg="8">
                     <ul :class="[$style.list, 'list-unstyled', 'mb-5']">
@@ -29,7 +32,7 @@
                             :data="project"/>
 
                         <ProjectItem
-                            v-if="course.allow_enrollment && !isEnrolledToProjectInCourse(course.id)"
+                            v-if="course && course.permissions.projects.create && !isEnrolledToProjectInCourse(course.id)"
                             view="new"
                             :class="$style.new"
                             :data="newProject"
@@ -45,6 +48,7 @@
 import ProjectItem from '@/components/elements/ProjectItem';
 import BRow from '@bootstrap/layout/row';
 import BCol from '@bootstrap/layout/col';
+import { slugify } from '@/helper/util';
 
 export default {
     name: 'ProjectsPage',
@@ -60,12 +64,16 @@ export default {
         },
     },
     methods: {
+        slugify,
+
         projects(courseId) {
             return this.$store.getters['projects/all'](courseId);
         },
 
         isEnrolledToProjectInCourse(courseId) {
-            return this.projects(courseId).filter(p => p.user_ids.indexOf(this.$store.state.user.id) > -1).length > 0;
+            return this.projects(courseId).filter(
+                p => p.user_ids && p.user_ids.indexOf(this.$store.state.user.id) > -1
+            ).length > 0;
         },
     },
 };

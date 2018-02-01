@@ -28,9 +28,9 @@ RSpec.describe 'Stories API', type: :request do
   describe 'GET /stories/:id' do
     before { get "/stories/#{story_id}" }
     let(:expected_permissions) {
-      [
-          'story' => ['update' => true, 'delete' => true]
-      ]
+      {
+          'story' => {'update' => true, 'delete' => true}
+      }
     }
 
     context 'when the record exists' do

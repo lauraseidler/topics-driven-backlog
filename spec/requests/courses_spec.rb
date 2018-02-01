@@ -36,12 +36,12 @@ RSpec.describe 'Courses API', type: :request do
   describe 'GET /courses/:id' do
     before { get "/courses/#{course_id}" }
     let(:expected_permissions) {
-      [
-          'sprints' => ['read' => true, 'create' => true],
-          'topics' => ['read' => true, 'create' => true],
-          'projects' => ['read' => true, 'create' => true],
-          'course' => ['update' => true, 'delete' => true],
-      ]
+      {
+          'sprints' => {'read' => true, 'create' => true},
+          'topics' => {'read' => true, 'create' => true},
+          'projects' => {'read' => true, 'create' => true},
+          'course' => {'update' => true, 'delete' => true},
+      }
     }
 
     context 'when the record exists' do

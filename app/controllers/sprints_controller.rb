@@ -17,14 +17,14 @@ class SprintsController < ApplicationController
 
   # POST /courses/:course_id/sprints
   def create
-    authorize! :create, Sprint, @course
+    authorize! :create_sprints, @course
     @sprint = @course.sprints.create!(sprint_params)
     json_response(@sprint, :created)
   end
 
   # POST /courses/:course_id/sprint-collection
   def create_collection
-    authorize! :create, Sprint, @course
+    authorize! :create_sprints, @course
     sprints = create_sprint_collection(
         params[:duration].to_i,
         params[:start_date].to_date,

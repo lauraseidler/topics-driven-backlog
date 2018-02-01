@@ -32,6 +32,20 @@ describe('CoursePage.test.js', () => {
                                 short_title: 'TEST',
                                 semester_type: 'WS',
                                 semester_year: 2222,
+                                permissions: {
+                                    projects: {
+                                        read: true,
+                                        create: true,
+                                    },
+                                    topics: {
+                                        read: true,
+                                        create: true,
+                                    },
+                                    sprints: {
+                                        read: true,
+                                        create: true,
+                                    },
+                                },
                             }; 
                         },
                         'sprints/all': () => [
