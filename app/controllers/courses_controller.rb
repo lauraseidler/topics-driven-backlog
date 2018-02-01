@@ -1,4 +1,5 @@
 class CoursesController < ApplicationController
+  include ApplicationHelper
   include CanCan::ControllerAdditions
 
   before_action :set_course, only: [:show, :update, :destroy, :add_instructor, :remove_instructor]
@@ -40,6 +41,7 @@ class CoursesController < ApplicationController
   def add_instructor
     authorize! :update, @course
     email_address = course_params[:email]
+    validate_email_address(email_address)
     instructor = User.find_by(email: email_address)
     if instructor.nil?
       instructor = User.create!(email: email_address, role: User.roles[:student])
