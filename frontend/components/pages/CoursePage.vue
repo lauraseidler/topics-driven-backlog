@@ -16,7 +16,41 @@
             <BCard no-body>
                 <BTabs card>
                     <BTab title="Info">
-                        Enrollment for this course is currently {{ course.allow_enrollment ? 'open' : 'closed' }}.
+                        <p>
+                            Enrollment for this course is currently {{ course.allow_enrollment ? 'open' : 'closed' }}.
+                        </p>
+
+                        <template v-if="course.permissions.course.update">
+                            <BRow>
+                                <BCol md="6">
+                                    <h3>Instructors</h3>
+
+                                    <p
+                                        class="mt-2 mb-0"
+                                        v-for="instructor in course.instructors"
+                                        :key="instructor.id">
+                                        {{ instructor.email }}
+
+                                        <BButton
+                                            v-if="instructor.id !== $store.state.user.id"
+                                            type="button"
+                                            size="sm"
+                                            variant="outline-danger"
+                                            v-confirm="{
+                                                action: removeInstructor.bind(this, instructor.id),
+                                                text: 'Are you sure you want to remove this instructor from this course?'
+                                            }">
+                                                <VIcon name="user-times" />
+                                        </BButton>
+
+                                        <span v-else>(you)</span>
+                                    </p>
+                                </BCol>
+                                <BCol md="6">
+                                    <InstructorForm :course-id="course.id"/>
+                                </BCol>
+                            </BRow>
+                        </template>
                     </BTab>
                     <BTab 
                         title="Projects" 
@@ -119,10 +153,13 @@
 </template>
 
 <script>
+import '@icons/user-times';
 import BCard from '@bootstrap/card/card';
 import BTabs from '@bootstrap/tabs/tabs';
 import BTab from '@bootstrap/tabs/tab';
 import BButton from '@bootstrap/button/button';
+import BRow from '@bootstrap/layout/row';
+import BCol from '@bootstrap/layout/col';
 import NotFound from '@/components/elements/NotFound';
 import SprintItem from '@/components/elements/SprintItem';
 import SprintForm from '@/components/forms/SprintForm';
@@ -131,6 +168,8 @@ import ProjectForm from '@/components/forms/ProjectForm';
 import ProjectItem from '@/components/elements/ProjectItem';
 import TopicForm from '@/components/forms/TopicForm';
 import TopicItem from '@/components/elements/TopicItem';
+import InstructorForm from '@/components/forms/InstructorForm';
+import VIcon from 'vue-awesome/components/Icon';
 import { info } from '@/helper/semester';
 
 export default {
@@ -147,6 +186,10 @@ export default {
         BTabs,
         BTab,
         BButton,
+        InstructorForm,
+        BRow,
+        BCol,
+        VIcon,
     },
     data() {
         return {
@@ -297,6 +340,22 @@ export default {
                 /* istanbul ignore next */
                 this.$notify({
                     title: 'Topic creation failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
+        },
+
+        async removeInstructor(userId) {
+            try {
+                await this.$store.dispatch('courses/removeInstructor', {
+                    id: this.course.id,
+                    userId: userId,
+                });
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Course update failed',
                     text: err.body.message,
                     type: 'error',
                 });

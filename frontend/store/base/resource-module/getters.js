@@ -66,7 +66,7 @@ export function byId(settings) {
                 : state.data;
 
             return state.initialised
-                ? data.find(i => i.id === id)
+                ? data.find(i => i && i.id === id)
                 : null;
         };
     };

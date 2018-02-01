@@ -84,8 +84,15 @@ const router = new Router({
             component: LogoutPage,
         },
         {
+            path: '/',
+            name: 'index',
+            meta: {
+                protected: true,
+            },
+        },
+        {
             path: '*',
-            redirect: '/projects',
+            redirect: '/login',
         },
     ],
 });
@@ -99,7 +106,15 @@ router.beforeEach((to, from, next) => {
         store.state.pendingChanges = 0;
     }
 
-    if (!to.meta.protected || store.state.loggedIn) {        
+    if (!to.meta.protected || store.state.loggedIn) {
+        if (to.path === '/' && store.state.loggedIn) {
+            if (store.state.user.role === 0) {
+                return next('/my-projects');
+            } else {
+                return next('/my-courses');
+            }
+        }
+
         return next();
     }
 

@@ -8,7 +8,7 @@ class CourseSerializer < ActiveModel::Serializer
   has_many :projects
 
   def instructors
-    object.instructions
+    object.users
   end
 
   def can_update_course?
