@@ -8,4 +8,10 @@ module ApplicationHelper
     end
   end
 
+  def validate_email_address(email)
+    if !email.include?(DomainDefinition::ORGANISATION_DOMAIN)
+      raise(ActionController::BadRequest, Message.not_domain_email_address(email))
+    end
+  end
+
 end
