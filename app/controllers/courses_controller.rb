@@ -36,7 +36,7 @@ class CoursesController < ApplicationController
     head :no_content
   end
 
-  # POST /courses/:id/instructor
+  # POST /courses/:course_id/instructor
   def add_instructor
     authorize! :update, @course
     email_address = course_params[:instructor]
@@ -48,9 +48,9 @@ class CoursesController < ApplicationController
     json_response(@course, :created)
   end
 
-  # DELETE /courses/:id/instructor
+  # DELETE /courses/course_:id/instructor
   def remove_instructor
-    authorize! :update, @course
+    authorize! :remove_instructor, @course
     user = User.find_by!(email: course_params[:instructor])
     if user.present?
       @course.users.delete(user)
