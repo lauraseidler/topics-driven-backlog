@@ -36,4 +36,15 @@ RSpec.describe Course, type: :model do
     expect(subject.instructions.size).to eq(2)
   end
 
+  it "instructors can be removed" do
+    subject = create(:course)
+    second_instructor = create(:user)
+    subject.instructions.build(user_id: create(:user).id, initial_instructor: true)
+    subject.instructions.build(user_id: second_instructor.id, initial_instructor: false)
+    subject.save!
+    subject.users.delete(second_instructor)
+
+    expect(subject.instructions.size).to eq(1)
+  end
+
 end
