@@ -14,6 +14,12 @@ describe('The ProjectPage component', () => {
                         'projects/byId': () => {
                             return {
                                 id: 1,
+                                permissions: {
+                                    stories: {
+                                        read: true,
+                                        create: true,
+                                    },
+                                },
                             };
                         },
                         'courses/byId': () => {

@@ -19,6 +19,10 @@ export function setOne(settings) {
      */
     return function (state, { parentId, item }) {
         if (settings.parent && parentId) {
+            if (!state.data[parentId]) {
+                Vue.set(state.data, parentId, []);
+            }
+
             const alreadyExists = state.data[parentId].find(i => i.id === item.id);
 
             if (alreadyExists) {

@@ -10,17 +10,17 @@ describe('The projects module', () => {
         expect(template.title).toBe('');
     });
 
-    it('sends enroll request and commits the result', async () => {
+    it('sends enroll request and fetches the course', async () => {
         const mock = mockResponse('/projects/1/enrollments', 'POST');
-        const commit = jest.fn();
+        const dispatch = jest.fn();
 
-        await projectsModule.actions.enroll({ commit }, 1);
+        await projectsModule.actions.enroll({ dispatch }, 1);
 
         expect(mock.correctRequest).toBe(true);
-        expect(commit).toHaveBeenCalled();
+        expect(dispatch).toHaveBeenCalled();
     });
 
-    it('sends disenroll request and fetches the project', async () => {
+    it('sends disenroll request and fetches the course', async () => {
         const mock = mockResponse('/projects/1/enrollment', 'DELETE');
         const dispatch = jest.fn();        
 

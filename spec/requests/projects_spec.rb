@@ -2,20 +2,30 @@ require 'rails_helper'
 
 RSpec.describe 'Projects API' do
 
-  let(:user) { create(:user) }
+  let(:user) { create(:user, role: User.roles[:student]) }
+  let!(:course) { create(:course) }
+  let!(:sprints) { create_list(:sprint, 3, course_id: course.id) }
+  let!(:projects) { create_list(:project, 20, course_id: course.id) }
   before(:each) do
+    projects.each do |project|
+      project.users << user
+    end
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
     allow_any_instance_of(ApplicationController).to receive(:authorize_request).and_return(user)
   end
 
-  let!(:course) { create(:course) }
   let(:course_id) { course.id }
-  let!(:projects) { create_list(:project, 20, course_id: course.id) }
   let(:id) { projects.first.id }
 
   # Test suite for GET /courses/:course_id
   describe 'GET /courses/:course_id with serialized projects' do
     before { get "/courses/#{course_id}" }
+    let(:expected_permissions) {
+      {
+          'stories'=> { 'read' => true, 'create' => true},
+          'project' => {'update' => true, 'delete' => true, 'enroll' => false, 'disenroll' => true}
+      }
+    }
 
     context 'when course exists' do
       it 'returns status code 200' do
@@ -24,6 +34,8 @@ RSpec.describe 'Projects API' do
 
       it 'returns all course projects' do
         expect(json['projects'].size).to eq(20)
+        expect(json['projects'][0]['permissions']).to eq(expected_permissions)
+        expect(json['projects'][0]['planned_sprint_ids']).to eq([])
       end
     end
 

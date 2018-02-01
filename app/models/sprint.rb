@@ -2,6 +2,8 @@ class Sprint < ApplicationRecord
   belongs_to :course
   has_many :stories, dependent: :nullify
   has_and_belongs_to_many :topics, dependent: :nullify
+  has_many :sprint_plannings
+  has_many :projects, :through => :sprint_plannings
 
   validates_presence_of :name, :start_date, :end_date, :course_id
 

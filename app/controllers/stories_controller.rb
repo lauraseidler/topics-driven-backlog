@@ -1,9 +1,13 @@
 class StoriesController < ApplicationController
+  include CanCan::ControllerAdditions
+
+  load_and_authorize_resource :except => [:create]
   before_action :set_project, only: [:create]
   before_action :set_story, only: [:show, :update, :destroy]
 
   # POST /projects/:project_id/stories
   def create
+    authorize! :create, Story, @project
     @story = @project.stories.create!(story_params)
     json_response(@story, :created)
   end

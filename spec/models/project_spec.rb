@@ -28,4 +28,13 @@ RSpec.describe Project, type: :model do
     expect(subject).not_to be_valid
   end
 
+  it "sprint planning can be completed" do
+    course = create(:course)
+    sprint = create(:sprint, course_id: course.id)
+    project = create(:project, course_id: course.id)
+    project_sprint_relation = project.sprint_plannings.build(sprint_id: sprint.id, planned: false)
+    project_sprint_relation.update_attribute(:planned, true)
+    expect(project_sprint_relation.planned).to be(true)
+  end
+
 end
