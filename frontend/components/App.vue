@@ -25,7 +25,7 @@
                             My Projects
                         </BNavItem>
                         <BNavItem 
-                            v-if="$store.state.user.role === 1"
+                            v-if="$store.state.user.role === 1 || isManagingCourses"
                             to="/my-courses">
                             
                             My Courses
@@ -91,6 +91,24 @@ export default {
     },
     data() {
         return {};
+    },
+    computed: {
+        courses() {
+            return this.$store.getters['courses/all'];
+        },
+        isManagingCourses() {
+            if (!this.courses) {
+                return false;
+            }
+
+            for (let i = 0; i < this.courses.length; i++) {
+                if (this.courses[i].permissions.course.update) {
+                    return true;
+                }
+            }
+
+            return false;
+        },
     },
     methods: {
         saveAll() {

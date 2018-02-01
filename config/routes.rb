@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
   resources :courses, only: [:index, :create, :show, :update, :destroy] do
     post 'instructors', to: 'courses#add_instructor'
-    delete 'instructor', to: 'courses#remove_instructor'
+    delete 'instructor/:user_id', to: 'courses#remove_instructor'
     post 'sprint-collection', to: 'sprints#create_collection'
     patch 'sprint-collection', to: 'sprints#update_collection'
     resources :sprints, only: [:create]

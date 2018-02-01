@@ -45,17 +45,18 @@ class CoursesController < ApplicationController
       instructor = User.create!(email: email_address, role: User.roles[:student])
     end
     @course.instructions.build(user_id: instructor.id, initial_instructor: false)
+    @course.save!
     json_response(@course, :created)
   end
 
-  # DELETE /courses/course_:id/instructor
+  # DELETE /courses/course_:id/instructor/:user_id
   def remove_instructor
     authorize! :remove_instructor, @course
-    user = User.find_by!(email: course_params[:email])
+    user = User.find_by!(id: params[:user_id])
     if user.present?
       @course.users.delete(user)
     end
-    head :no_content
+    json_response(@course)
   end
 
   private

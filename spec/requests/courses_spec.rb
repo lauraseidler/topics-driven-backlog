@@ -158,22 +158,17 @@ RSpec.describe 'Courses API', type: :request do
     end
   end
 
-  # Test suite for DELETE /courses/:id/instructor
-  describe 'DELETE /courses/:id/instructor' do
+  # Test suite for DELETE /courses/:id/instructor/:user_id
+  describe 'DELETE /courses/:id/instructor/:user_id' do
     let(:new_instructor) { create(:user) }
-    let(:instructor_attribute) {
-      {
-          email: new_instructor.email.to_s,
-      }
-    }
     before do
       course.instructions.build( user_id: new_instructor.id, initial_instructor: false )
       course.save!
-      delete "/courses/#{course_id}/instructor", params: instructor_attribute
+      delete "/courses/#{course_id}/instructor/#{new_instructor.id}"
     end
 
-    it 'returns status code 204' do
-      expect(response).to have_http_status(204)
+    it 'returns status code 200' do
+      expect(response).to have_http_status(200)
     end
   end
 
