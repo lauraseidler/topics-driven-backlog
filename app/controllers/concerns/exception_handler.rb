@@ -17,6 +17,9 @@ module ExceptionHandler
     rescue_from ExceptionHandler::MissingToken, with: :unauthorized_request
     rescue_from ExceptionHandler::InvalidToken, with: :invalid_token
     rescue_from ExceptionHandler::ExpiredSignature, with: :invalid_token
+    rescue_from CanCan::AccessDenied do
+      unauthorized_request(StandardError.new(:message => Message.not_authorized))
+    end
   end
 
   private

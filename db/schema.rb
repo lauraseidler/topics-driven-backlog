@@ -26,6 +26,15 @@ ActiveRecord::Schema.define(version: 20180123002706) do
     t.boolean "allow_enrollment", default: false
   end
 
+  create_table "instructions", force: :cascade do |t|
+    t.boolean "initial_instructor"
+    t.bigint "user_id"
+    t.bigint "course_id"
+    t.index ["course_id"], name: "index_instructions_on_course_id"
+    t.index ["user_id", "course_id"], name: "index_instructions_on_user_id_and_course_id", unique: true
+    t.index ["user_id"], name: "index_instructions_on_user_id"
+  end
+
   create_table "project_positions", force: :cascade do |t|
     t.integer "position"
     t.bigint "project_id"
@@ -116,6 +125,8 @@ ActiveRecord::Schema.define(version: 20180123002706) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "instructions", "courses", on_delete: :cascade
+  add_foreign_key "instructions", "users"
   add_foreign_key "project_positions", "projects", on_delete: :cascade
   add_foreign_key "project_positions", "stories", on_delete: :cascade
   add_foreign_key "projects", "courses"

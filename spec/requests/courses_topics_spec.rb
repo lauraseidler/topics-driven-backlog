@@ -3,12 +3,14 @@ require 'rails_helper'
 RSpec.describe 'Courses/Topics API' do
 
   let(:user) { create(:user) }
+  let!(:course) { create(:course) }
   before(:each) do
+    course.instructions.build( user_id: user.id, initial_instructor: true )
+    course.save!
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
     allow_any_instance_of(ApplicationController).to receive(:authorize_request).and_return(user)
   end
 
-  let!(:course) { create(:course) }
   let(:course_id) { course.id }
   let!(:topics) { create_list(:topic, 20, course_id: course.id) }
   let(:id) { topics.first.id }
@@ -16,6 +18,11 @@ RSpec.describe 'Courses/Topics API' do
   # Test suite for GET /courses/:course_id
   describe 'GET /courses/:course_id with serialized topics' do
     before { get "/courses/#{course_id}" }
+    let(:expected_permissions) {
+      {
+          'topic' => {'update' => true, 'delete' => true}
+      }
+    }
 
     context 'when course exists' do
       it 'returns status code 200' do
@@ -25,6 +32,7 @@ RSpec.describe 'Courses/Topics API' do
       it 'returns all course topics' do
         expect(json).not_to be_empty
         expect(json['topics'].size).to eq(20)
+        expect(json['topics'][0]['permissions']).to eq(expected_permissions)
       end
     end
 

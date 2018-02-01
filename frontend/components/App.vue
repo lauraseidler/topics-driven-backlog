@@ -18,8 +18,20 @@
                     id="nav-collapse">
                     
                     <BNavbarNav v-if="$store.state.loggedIn">
-                        <BNavItem to="/projects">Projects</BNavItem>
-                        <BNavItem to="/courses">Courses</BNavItem>
+                        <BNavItem
+                            v-if="$store.state.user.role === 0"
+                            to="/my-projects">
+                            
+                            My Projects
+                        </BNavItem>
+                        <BNavItem 
+                            v-if="$store.state.user.role === 1"
+                            to="/my-courses">
+                            
+                            My Courses
+                        </BNavItem>
+                        <BNavItem to="/projects">All Projects</BNavItem>
+                        <BNavItem to="/courses">All Courses</BNavItem>
                         <BNavItem to="/logout">Logout</BNavItem>
                     </BNavbarNav>
 
@@ -84,7 +96,7 @@ export default {
         saveAll() {
             bus.$emit('saveAll');
         },
-    }
+    },
 };
 </script>
 

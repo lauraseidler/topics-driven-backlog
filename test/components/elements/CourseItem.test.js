@@ -16,6 +16,12 @@ describe('The CourseItem component', () => {
                     short_title: 'TEST',
                     semester_type: 'WS',
                     semester_year: 2222,
+                    permissions: {
+                        course: {
+                            update: true,
+                            delete: true,
+                        },
+                    },
                 },
             },
             mocks: {
@@ -43,7 +49,7 @@ describe('The CourseItem component', () => {
 
     it('has a button link to the course page after the text', () => {
         const btn = cmp.find('.card-text + router-link');
-        expect(btn.text()).toBe('View projects, topics and sprints');
+        expect(btn.text()).toBe('View details');
         expect(btn.vnode.data.attrs.to).toBe('/courses/1-test-course');
     });
 
