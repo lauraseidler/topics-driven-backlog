@@ -24,6 +24,7 @@ class ProjectSerializer < ActiveModel::Serializer
             :update => scope.can?(:update, object),
             :delete => scope.can?(:delete, object),
             :enroll => scope.can?(:enroll, object),
+            :disenroll => scope.can?(:disenroll, object),
         }
     }
   end

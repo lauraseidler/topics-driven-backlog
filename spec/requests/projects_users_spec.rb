@@ -21,7 +21,6 @@ RSpec.describe 'Projects API' do
       it 'returns the project' do
         expect(json['title']).to eq(project.title)
         expect(json['course_id']).to eq(course_id)
-        expect(json['user_ids']).to eq([user.id])
       end
 
       it 'returns status code 201' do

@@ -44,7 +44,7 @@ class ProjectsController < ApplicationController
 
   # DELETE /projects/:project_id/enrollment
   def remove_enrollment
-    authorize! :enroll, @project
+    authorize! :disenroll, @project
     @project.users.delete(current_user)
     head :no_content
   end
