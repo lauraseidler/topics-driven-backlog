@@ -254,33 +254,6 @@ RSpec.describe 'Stories API', type: :request do
         expect(json['sprint_id']).to eq(sprint_id)
       end
     end
-
-    context 'assigning a story to a sprint which is already finished' do
-      let(:past_sprint_id) {
-        create(
-            :sprint,
-            :course_id => create(:course).id,
-            :start_date => Date.today - 1.week,
-            :end_date => Date.yesterday
-        ).id
-      }
-      let(:past_sprint_attribute) {{:sprint_id => past_sprint_id}}
-
-      before {patch "/stories/#{story_id}", params: past_sprint_attribute}
-
-      it 'updates the record' do
-        expect(json).not_to be_empty
-        expect(json['sprint_id']).to eq(nil)
-      end
-
-      it 'returns status code 422' do
-        expect(response).to have_http_status(422)
-      end
-
-      it 'returns a not found message' do
-        expect(response.body).to match(/Sprint was finished and cannot be changed/)
-      end
-    end
   end
 
   # Test suite for DELETE /stories/:id
