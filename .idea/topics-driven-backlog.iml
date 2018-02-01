@@ -10,6 +10,7 @@
     </content>
     <orderEntry type="jdk" jdkName="Remote:ruby-2.4.2-p198" jdkType="RUBY_SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Jest" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="actioncable (v5.1.4, Remote:ruby-2.4.2-p198) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="actionmailer (v5.1.4, Remote:ruby-2.4.2-p198) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="actionpack (v5.1.4, Remote:ruby-2.4.2-p198) [gem]" level="application" />
@@ -74,6 +75,5 @@
     <orderEntry type="library" scope="PROVIDED" name="web-console (v3.5.1, Remote:ruby-2.4.2-p198) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="websocket-driver (v0.6.5, Remote:ruby-2.4.2-p198) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="websocket-extensions (v0.1.2, Remote:ruby-2.4.2-p198) [gem]" level="application" />
-    <orderEntry type="library" name="Jest" level="project" />
   </component>
 </module>

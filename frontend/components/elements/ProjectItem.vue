@@ -28,25 +28,25 @@
             :class="['card-body', $style.display]">
 
             <template v-if="!editing">
-                <template v-if="course.allow_enrollment && isEnrolled">
-                    <BButton
-                        size="sm"
-                        variant="outline-danger"
-                        class="float-right ml-1"
-                        v-confirm="{ action: deleteProject, text: 'Are you sure you want to delete this project?' }">
-                        
-                        <VIcon name="trash"/>
-                    </BButton>
+                <BButton
+                    v-if="data.permissions && data.permissions.project.delete"
+                    size="sm"
+                    variant="outline-danger"
+                    class="float-right ml-1"
+                    v-confirm="{ action: deleteProject, text: 'Are you sure you want to delete this project?' }">
+                    
+                    <VIcon name="trash"/>
+                </BButton>
 
-                    <BButton
-                        size="sm"
-                        variant="outline-primary"
-                        class="float-right ml-1"
-                        @click="startEditing">
+                <BButton
+                    v-if="data.permissions && data.permissions.project.update"
+                    size="sm"
+                    variant="outline-primary"
+                    class="float-right ml-1"
+                    @click="startEditing">
 
-                        <VIcon name="pencil"/>
-                    </BButton>
-                </template>
+                    <VIcon name="pencil"/>
+                </BButton>
 
                 <h3 class="card-title h4">
                     <router-link 
@@ -57,22 +57,26 @@
                     </router-link>
 
                     <template v-else> {{ data.title }}</template>
+
+                    <template v-if="displayCourse"> 
+                        <br> <small class="text-muted">{{ course.title }} </small>
+                    </template>
                 </h3>
 
                 <p :class="['card-text', $style.bottom]">
                     <router-link
-                        v-if="isEnrolled"
+                        v-if="data.permissions && data.permissions.stories.read"
                         class="btn btn-primary"
                         :to="baseUrl">View Backlog</router-link>
 
                     <BButton
-                        v-if="course.allow_enrollment && isEnrolled"
+                        v-if="data.permissions && data.permissions.project.enroll && isEnrolled"
                         variant="primary"
                         v-confirm="{ action: disenroll, text: 'Do you really want to leave this project?' }"
                     >Leave project</BButton>
 
                     <BButton
-                        v-if="course.allow_enrollment && !isEnrolledToProjectInCourse"
+                        v-if="data.permissions && data.permissions.project.enroll && !isEnrolled && !isEnrolledToProjectInCourse"
                         variant="primary"
                         @click="enroll"
                     >Join project</BButton>
@@ -115,6 +119,10 @@ export default {
             type: Number,
             default: null,
         },
+        displayCourse: {
+            type: Boolean,
+            default: false,
+        },
     },
     data() {
         return {
@@ -133,7 +141,8 @@ export default {
         },
 
         isEnrolled() {
-            return this.data.user_ids.indexOf(this.$store.state.user.id) > -1;
+            return this.data.user_ids 
+                && this.data.user_ids.indexOf(this.$store.state.user.id) > -1;
         },
 
         projectsInCourse() {
@@ -141,7 +150,9 @@ export default {
         },
 
         isEnrolledToProjectInCourse() {
-            return this.projectsInCourse.filter(p => p.user_ids.indexOf(this.$store.state.user.id) > -1).length;
+            return this.projectsInCourse.filter(
+                p => p.user_ids &&  p.user_ids.indexOf(this.$store.state.user.id) > -1
+            ).length > 0;
         },
     },
     methods: {

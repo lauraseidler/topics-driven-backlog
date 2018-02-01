@@ -3,17 +3,20 @@ require 'rails_helper'
 RSpec.describe 'Sprints/Topics API' do
 
   let(:user) { create(:user) }
+  let!(:course) { create(:course) }
   before(:each) do
+    course.instructions.build( user_id: user.id, initial_instructor: true )
+    course.save!
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
     allow_any_instance_of(ApplicationController).to receive(:authorize_request).and_return(user)
   end
 
-  let!(:course) { create(:course) }
+  let!(:second_course) { create(:course) }
   let!(:sprint) { create(:sprint, course_id: course.id)}
   let!(:sprint_id) { sprint.id }
   let!(:topics) { create_list(:topic, 2, course_id: course.id) }
   let!(:topic_id) { topics.first.id }
-  let!(:invalid_sprint_topic_id) { create(:topic, course_id: create(:course).id).id }
+  let!(:invalid_sprint_topic_id) { create(:topic, course_id: second_course.id).id }
 
   # Test suite for POST /courses/:course_id/sprints
   describe 'POST /courses/:course_id/sprints with defining topics' do

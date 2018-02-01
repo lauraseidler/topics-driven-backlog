@@ -40,7 +40,6 @@ class LdapAuthenticator
       return query_result
     rescue Errno::ECONNREFUSED => e
       Rails.logger.error "LDAP Connection Error: #{e.message}"
-      puts e.message
       raise(ExceptionHandler::AuthenticationServerIsDown, Message.contact_the_admin)
     rescue Exception => e
       Rails.logger.error "LDAP Error: #{e.message}"
