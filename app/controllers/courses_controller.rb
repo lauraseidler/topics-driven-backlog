@@ -2,7 +2,7 @@ class CoursesController < ApplicationController
   include CanCan::ControllerAdditions
 
   before_action :set_course, only: [:show, :update, :destroy, :add_instructor, :remove_instructor]
-  load_and_authorize_resource :except => :destroy
+  load_and_authorize_resource :except => [:destroy, :add_instructor, :remove_instructor]
 
   # GET /courses
   def index
@@ -39,7 +39,7 @@ class CoursesController < ApplicationController
   # POST /courses/:course_id/instructor
   def add_instructor
     authorize! :update, @course
-    email_address = course_params[:instructor]
+    email_address = course_params[:email]
     instructor = User.find_by(email: email_address)
     if instructor.nil?
       instructor = User.create!(email: email_address, role: User.roles[:student])
@@ -51,7 +51,7 @@ class CoursesController < ApplicationController
   # DELETE /courses/course_:id/instructor
   def remove_instructor
     authorize! :remove_instructor, @course
-    user = User.find_by!(email: course_params[:instructor])
+    user = User.find_by!(email: course_params[:email])
     if user.present?
       @course.users.delete(user)
     end
@@ -62,7 +62,7 @@ class CoursesController < ApplicationController
 
   def course_params
     # whitelist params
-    params.permit(:title, :hyperlink, :semester_type, :semester_year, :short_title, :allow_enrollment, :instructor)
+    params.permit(:title, :hyperlink, :semester_type, :semester_year, :short_title, :allow_enrollment, :email)
   end
 
   def set_course

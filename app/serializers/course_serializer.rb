@@ -1,21 +1,26 @@
 class CourseSerializer < ActiveModel::Serializer
   # attributes to be serialized
-  attributes :id, :title, :short_title, :hyperlink, :semester_type, :semester_year, :allow_enrollment, :instructor, :permissions
+  attributes :id, :title, :short_title, :hyperlink, :semester_type, :semester_year, :allow_enrollment, :permissions
+  attribute :instructors, if: :can_update_course?
 
   has_many :sprints, if: :can_read_sprints?
   has_many :topics, if: :can_read_topics?
   has_many :projects
 
-  def instructor
-    object.users
+  def instructors
+    object.instructions
+  end
+
+  def can_update_course?
+    scope.can?(:update, object)
   end
 
   def can_read_sprints?
-    scope.can?(:read, Sprint, object)
+    scope.can?(:read_sprints, object)
   end
 
   def can_read_topics?
-    scope.can?(:read, Topic, object)
+    scope.can?(:read_topics, object)
   end
 
   def permissions
@@ -34,6 +39,7 @@ class CourseSerializer < ActiveModel::Serializer
         :course => {
             :update => scope.can?(:update, object),
             :delete => scope.can?(:delete, object),
+            :remove_instructor => scope.can?(:remove_instructor, object),
         }
     }
   end

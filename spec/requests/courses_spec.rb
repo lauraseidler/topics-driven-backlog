@@ -38,7 +38,7 @@ RSpec.describe 'Courses API', type: :request do
           'sprints' => {'read' => true, 'create' => true},
           'topics' => {'read' => true, 'create' => true},
           'projects' => {'create' => true},
-          'course' => {'update' => true, 'delete' => true},
+          'course' => {'update' => true, 'delete' => true, 'remove_instructor' => false},
       }
     }
 
@@ -52,7 +52,7 @@ RSpec.describe 'Courses API', type: :request do
         expect(json['semester_type']).to eq(course.semester_type)
         expect(json['semester_year']).to eq(course.semester_year)
         expect(json['permissions']).to eq(expected_permissions)
-        expect(json['instructor'].size).to eq(1)
+        expect(json['instructors'].size).to eq(1)
       end
 
       it 'returns status code 200' do
@@ -117,27 +117,26 @@ RSpec.describe 'Courses API', type: :request do
     end
   end
 
-  # Test suite for POST /courses/:id/instructor
-  describe 'POST /courses/:id/instructor to add another instructor to a course' do
+  # Test suite for POST /courses/:id/instructors
+  describe 'POST /courses/:id/instructors to add another instructor to a course' do
     let(:new_instructor) { create(:user) }
     let(:instructor_attribute) {
       {
-          instructor: new_instructor.email.to_s,
-
+          email: new_instructor.email.to_s,
       }
     }
     let(:instructor_attribute_new_user) {
       {
-          instructor: "#{Faker::Internet.user_name}@#{ENV['ORGANISATION_DOMAIN']}",
+          email: "#{Faker::Internet.user_name}@#{ENV['ORGANISATION_DOMAIN']}",
       }
     }
 
     context 'when the user already exists' do
-      before { post "/courses/#{course_id}/instructor", params: instructor_attribute }
+      before { post "/courses/#{course_id}/instructors", params: instructor_attribute }
 
       it 'adds an instructor to a course' do
         expect(json).not_to be_empty
-        expect(json['instructor'].size).to eq(2)
+        expect(json['instructors'].size).to eq(2)
       end
 
       it 'returns status code 201' do
@@ -146,11 +145,11 @@ RSpec.describe 'Courses API', type: :request do
     end
 
     context 'when the user does not exists yet' do
-      before { post "/courses/#{course_id}/instructor", params: instructor_attribute_new_user }
+      before { post "/courses/#{course_id}/instructors", params: instructor_attribute_new_user }
 
       it 'adds an instructor to a course' do
         expect(json).not_to be_empty
-        expect(json['instructor'].size).to eq(2)
+        expect(json['instructors'].size).to eq(2)
       end
 
       it 'returns status code 201' do
@@ -164,12 +163,14 @@ RSpec.describe 'Courses API', type: :request do
     let(:new_instructor) { create(:user) }
     let(:instructor_attribute) {
       {
-          instructor: new_instructor.email.to_s,
-
+          email: new_instructor.email.to_s,
       }
     }
-    before { post "/courses/#{course_id}/instructor", params: instructor_attribute }
-    before { delete "/courses/#{course_id}/instructor", params: instructor_attribute }
+    before do
+      course.instructions.build( user_id: new_instructor.id, initial_instructor: false )
+      course.save!
+      delete "/courses/#{course_id}/instructor", params: instructor_attribute
+    end
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

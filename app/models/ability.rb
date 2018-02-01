@@ -22,7 +22,7 @@ class Ability
       is_instructor(course)
     end
 
-    can [:remove_instructor], Course do |course|
+    can :remove_instructor, Course do |course|
       is_instructor(course) && course.user_ids.size > 1
     end
 

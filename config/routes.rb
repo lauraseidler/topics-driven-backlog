@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   resources :tasks, only: [:index]
 
   resources :courses, only: [:index, :create, :show, :update, :destroy] do
-    post 'instructor', to: 'courses#add_instructor'
+    post 'instructors', to: 'courses#add_instructor'
     delete 'instructor', to: 'courses#remove_instructor'
     post 'sprint-collection', to: 'sprints#create_collection'
     patch 'sprint-collection', to: 'sprints#update_collection'
