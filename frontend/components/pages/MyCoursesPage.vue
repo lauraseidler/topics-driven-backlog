@@ -1,32 +1,19 @@
 <template>
     <section id="courses-page">
-        <h1>Courses</h1>
+        <h1>My Courses</h1>
 
         <ul 
-            v-if="courses.length" 
+            v-if="myCourses.length" 
             class="list-unstyled">
 
             <CourseItem
                 class="mb-2"
-                v-for="course in courses"
+                v-for="course in myCourses"
                 :data="course"
                 :key="course.id"/>
         </ul>
 
         <p v-else>No courses yet.</p>
-
-        <CourseForm
-            ref="courseForm"
-            v-if="showForm"
-            v-model="newCourse"
-            @cancel="showForm = false"
-            @submit="saveCourse"/>
-
-        <BButton
-            v-else-if="$store.state.user.permissions.courses.create"
-            type="button"
-            variant="primary"
-            @click="showForm = true">Add course</BButton>
     </section>
 </template>
 
@@ -56,6 +43,10 @@ export default {
          */
         courses() {
             return this.$store.getters['courses/all'];
+        },
+
+        myCourses() {
+            return this.courses.filter(c => c.permissions.course.update);
         },
     },
     methods: {

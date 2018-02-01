@@ -15,34 +15,32 @@
 
             <BCard no-body>
                 <BTabs card>
-                    <BTab title="Projects">
-                        <ul 
-                            :class="['list-unstyled', $style.list]"
-                            v-if="projects.length">
+                    <BTab title="Info">
+                        Enrollment for this course is currently {{ course.allow_enrollment ? 'open' : 'closed' }}.
+                    </BTab>
+                    <BTab 
+                        title="Projects" 
+                        active>
 
+                        <ul :class="['list-unstyled', $style.list]">
                             <ProjectItem
                                 class="mb-2"
                                 v-for="project in projects"
                                 :data="project"
                                 :key="project.id"/>
+
+                            <ProjectItem
+                                v-if="course.permissions.projects.create && !isEnrolledToProjectInCourse"
+                                view="new"
+                                :class="$style.new"
+                                :data="newProject"
+                                :course-id="course.id"/>
                         </ul>
-
-                        <p v-else>No projects in this course yet.</p>
-
-                        <ProjectForm
-                            ref="projectForm"
-                            v-if="showProjectForm"
-                            v-model="newProject"
-                            @cancel="showProjectForm = false"
-                            @submit="addProject"/>
-
-                        <BButton 
-                            v-else
-                            type="button" 
-                            variant="primary" 
-                            @click="showProjectForm = true">Add project</BButton>
                     </BTab>
-                    <BTab title="Topics">
+                    <BTab 
+                        v-if="course.permissions.topics.read" 
+                        title="Topics">
+
                         <ul
                             class="list-unstyled"
                             v-if="topics.length">
@@ -64,12 +62,15 @@
                             @submit="addTopic"/>
 
                         <BButton
-                            v-else
+                            v-else-if="course.permissions.topics.create"
                             type="button"
                             variant="primary"
                             @click="showTopicForm = true">Add topic</BButton>
                     </BTab>
-                    <BTab title="Sprints">
+                    <BTab
+                        v-if="course.permissions.sprints.read" 
+                        title="Sprints">
+
                         <ul 
                             class="list-unstyled" 
                             v-if="sprints.length">
@@ -200,6 +201,12 @@ export default {
                 ? this.$store.getters['topics/all'](this.course.id)
                 : [];
         },
+
+        isEnrolledToProjectInCourse() {
+            return this.projects.filter(
+                p => p.user_ids && p.user_ids.indexOf(this.$store.state.user.id) > -1
+            ).length > 0;
+        },
     },
     methods: {
         /**
@@ -286,7 +293,7 @@ export default {
                 this.$nextTick(() => {
                     !this.$refs.topicForm || this.$refs.topicForm.$el.reset();
                 });
-            } catch (err) {
+            } catch (err) {                
                 /* istanbul ignore next */
                 this.$notify({
                     title: 'Topic creation failed',
@@ -309,11 +316,20 @@ export default {
 };
 </script>
 
-<style module>
+<style lang="scss" module>
     .list {
         display: grid;
         grid-gap: 8px;
         grid-template-columns: 1fr 1fr 1fr;
         grid-auto-rows: minmax(200px, 1fr);
+    }
+
+    .new {
+        color: rgba(0, 0, 0, .125);
+        border: 1px solid currentColor;
+
+        &:hover {
+            color: rgba(0, 0, 0, .25);
+        }
     }
 </style>

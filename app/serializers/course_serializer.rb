@@ -17,16 +17,15 @@ class CourseSerializer < ActiveModel::Serializer
   def permissions
     {
         :sprints => {
-            :read => scope.can?(:read, Sprint, object),
-            :create => scope.can?(:create, Sprint, object),
+            :read => scope.can?(:read_sprints, object),
+            :create => scope.can?(:create_sprints, object),
         },
         :topics => {
-            :read => scope.can?(:read, Topic, object),
-            :create => scope.can?(:create, Topic, object),
+            :read => scope.can?(:read_topics, object),
+            :create => scope.can?(:create_topics, object),
         },
         :projects => {
-            :read => scope.can?(:read, Project, object),
-            :create => scope.can?(:create, Project, object),
+            :create => scope.can?(:create_projects, object),
         },
         :course => {
             :update => scope.can?(:update, object),

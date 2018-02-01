@@ -10,12 +10,25 @@ describe('CoursesPage.test.js', () => {
             mocks: {
                 $store: {
                     dispatch,
+                    state: {
+                        user: {
+                            permissions: {
+                                courses: {
+                                    create: true,
+                                    read: true,
+                                },
+                            },
+                        },
+                    },
                     getters: {
                         'courses/all': () => [
                             {
                                 title: 'Test course',
                                 semester_type: 'W',
                                 semester_year: 2017,
+                                permissions: {
+
+                                }
                             },
                         ],
                         'courses/template': () => {

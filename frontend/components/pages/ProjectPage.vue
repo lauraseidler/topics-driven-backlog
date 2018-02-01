@@ -155,7 +155,7 @@
                     @submit="save"/>
 
                 <BButton
-                    v-else
+                    v-else-if="project && project.permissions.stories.create"
                     type="button"
                     variant="primary"
                     @click="startNew">Add story</BButton>

@@ -7,22 +7,23 @@ class ProjectSerializer < ActiveModel::Serializer
   has_many :stories, if: :can_read_stories?
 
   def can_read_project?
-    scope.can?(:read, Project, object)
+    scope.can?(:read_fully, object)
   end
 
   def can_read_stories?
-    scope.can?(:read, Story, object)
+    scope.can?(:read_stories, object)
   end
 
   def permissions
     {
         :stories => {
-            :read => scope.can?(:read, Story, object),
-            :create => scope.can?(:create, Story, object),
+            :read => scope.can?(:read_stories, object),
+            :create => scope.can?(:create_stories, object),
         },
         :project => {
             :update => scope.can?(:update, object),
             :delete => scope.can?(:delete, object),
+            :enroll => scope.can?(:enroll, object),
         }
     }
   end
