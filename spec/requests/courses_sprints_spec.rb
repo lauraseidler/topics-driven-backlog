@@ -20,9 +20,9 @@ RSpec.describe 'Courses/Sprints API' do
   describe 'GET /courses/:course_id with serialized sprints' do
     before { get "/courses/#{course_id}" }
     let(:expected_permissions) {
-      [
-          'sprint' => ['update' => true, 'delete' => true]
-      ]
+      {
+          'sprint' => {'update' => true, 'delete' => true}
+      }
     }
 
     context 'when course exists' do

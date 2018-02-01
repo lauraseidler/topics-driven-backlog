@@ -3,6 +3,7 @@
         <div class="card-body">
             <template v-if="!editing">
                 <BButton
+                    v-if="data.permissions.course.update"
                     size="sm"
                     variant="outline-danger"
                     class="float-right ml-1"
@@ -12,6 +13,7 @@
                 </BButton>
 
                 <BButton
+                    v-if="data.permissions.course.delete"
                     size="sm"
                     variant="outline-primary"
                     class="float-right ml-1"
@@ -31,7 +33,7 @@
                 </h5>
 
                 <p
-                    class="card-text mt-2"
+                    class="card-text mt-2 mb-0"
                     v-if="data.hyperlink">
 
                     <a :href="data.hyperlink">{{ data.hyperlink }}</a>
@@ -39,8 +41,8 @@
 
                 <router-link
                     :to="`/courses/${data.id}-${slugify(data.title)}`"
-                    class="btn btn-primary">
-                    View projects, topics and sprints
+                    class="btn btn-primary mt-2">
+                    View details
                 </router-link>
             </template>
 

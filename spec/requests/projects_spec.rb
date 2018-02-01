@@ -20,10 +20,10 @@ RSpec.describe 'Projects API' do
   describe 'GET /courses/:course_id with serialized projects' do
     before { get "/courses/#{course_id}" }
     let(:expected_permissions) {
-      [
-          'stories'=> [ 'read' => true, 'create' => true],
-          'project' => ['update' => true, 'delete' => true]
-      ]
+      {
+          'stories'=> { 'read' => true, 'create' => true},
+          'project' => {'update' => true, 'delete' => true}
+      }
     }
 
     context 'when course exists' do

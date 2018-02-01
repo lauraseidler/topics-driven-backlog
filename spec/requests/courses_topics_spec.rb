@@ -19,9 +19,9 @@ RSpec.describe 'Courses/Topics API' do
   describe 'GET /courses/:course_id with serialized topics' do
     before { get "/courses/#{course_id}" }
     let(:expected_permissions) {
-      [
-          'topic' => ['update' => true, 'delete' => true]
-      ]
+      {
+          'topic' => {'update' => true, 'delete' => true}
+      }
     }
 
     context 'when course exists' do

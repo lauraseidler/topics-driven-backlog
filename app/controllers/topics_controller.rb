@@ -7,7 +7,7 @@ class TopicsController < ApplicationController
 
   # POST /courses/course_id/topics
   def create
-    authorize! :create, Topic, @course
+    authorize! :create_topics, @course
     @topic = @course.topics.create!(topic_params)
     json_response(@topic, :created)
   end

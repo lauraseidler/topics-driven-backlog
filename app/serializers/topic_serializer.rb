@@ -3,11 +3,11 @@ class TopicSerializer < ActiveModel::Serializer
   attributes :id, :title, :url, :course_id, :permissions
 
   def permissions
-    [
-        :topic => [
+    {
+        :topic => {
             :update => scope.can?(:update, object),
             :delete => scope.can?(:delete, object),
-        ]
-    ]
+        }
+    }
   end
 end

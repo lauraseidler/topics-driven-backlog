@@ -50,6 +50,12 @@ describe('StoryItem.test.js', () => {
                     title: 'Test story',
                     points: 5,
                     status: 0,
+                    permissions: {
+                        story: {
+                            update: true,
+                            delete: true,
+                        },
+                    },
                 },
                 view: 'backlog',
                 position: 1,
@@ -65,6 +71,12 @@ describe('StoryItem.test.js', () => {
                     title: 'Test story',
                     points: 5,
                     status: 0,
+                    permissions: {
+                        story: {
+                            update: true,
+                            delete: true,
+                        },
+                    },
                 },
                 view: 'backlog',
             },

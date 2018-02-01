@@ -3,7 +3,7 @@ class ProjectsController < ApplicationController
 
   before_action :set_course, only: [:create]
   before_action :set_project, only: [:show, :update, :destroy, :enroll_user, :remove_enrollment]
-  load_and_authorize_resource :except => [:create, :destroy, :enroll_user, :remove_enrollment]
+  load_and_authorize_resource :except => [:show, :create, :destroy, :enroll_user, :remove_enrollment]
 
   # GET /projects/:id
   def show
@@ -12,7 +12,7 @@ class ProjectsController < ApplicationController
 
   # POST /projects/:id/enrollments
   def enroll_user
-    authorize! :enrollment, @project
+    authorize! :enroll, @project
 
     if !@project.user_ids.include?(current_user.id)
       @project.users << current_user
@@ -22,7 +22,7 @@ class ProjectsController < ApplicationController
 
   # POST /courses/:course_id/projects
   def create
-    authorize! :create, Project, @course
+    authorize! :create_projects, @course
     @project = @course.projects.create!(project_params)
     @project.users << current_user
     json_response(@project, :created)
@@ -44,7 +44,7 @@ class ProjectsController < ApplicationController
 
   # DELETE /projects/:project_id/enrollment
   def remove_enrollment
-    authorize! :enrollment, @project
+    authorize! :enroll, @project
     @project.users.delete(current_user)
     head :no_content
   end
