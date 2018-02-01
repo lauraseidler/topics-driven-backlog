@@ -20,7 +20,7 @@ RSpec.describe 'Projects/Stories API', type: :request do
     let(:expected_permissions) {
       {
           'stories' => {'read' => true, 'create' => true},
-          'project' => {'update' => true, 'delete' => true}
+          'project' => {'update' => true, 'delete' => true, 'enroll' => false, 'disenroll' => true }
       }
     }
 

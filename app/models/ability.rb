@@ -59,7 +59,11 @@ class Ability
     end
 
     can :enroll, Project do |project|
-      enrollment_allowed(project.course)
+      enrollment_allowed(project.course) && !is_member_in_course(project.course)
+    end
+
+    can :disenroll, Project do |project|
+      enrollment_allowed(project.course) && is_member(project)
     end
 
     can [:update, :delete], Project do |project|
