@@ -39,7 +39,7 @@ RSpec.describe 'Courses API', type: :request do
       {
           'sprints' => {'read' => true, 'create' => true},
           'topics' => {'read' => true, 'create' => true},
-          'projects' => {'read' => true, 'create' => true},
+          'projects' => {'create' => true},
           'course' => {'update' => true, 'delete' => true},
       }
     }
