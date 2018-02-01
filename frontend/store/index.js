@@ -44,6 +44,10 @@ export const mutations = {
         localStorage.removeItem('user');
         delete Vue.http.headers.common.Authorization;
     },
+    setUser(state, user) {
+        state.user = user;
+        localStorage.setItem('user', JSON.stringify(state.user));
+    },
 };
 
 export const actions = {
@@ -87,6 +91,21 @@ export const actions = {
         });
 
         dispatch('init');
+    },
+
+    async becomeStudent({ commit }) {
+        try {
+            const res = await Vue.http.post('/become-student');
+            commit('setUser', res.body.user);
+            window.location.reload(true);
+        } catch (err) {
+            /* istanbul ignore next */
+            this.$notify({
+                title: 'Role change failed',
+                text: err.body.message,
+                type: 'error',
+            });
+        }
     },
 };
 
