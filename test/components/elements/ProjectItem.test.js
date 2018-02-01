@@ -17,6 +17,10 @@ describe('The ProjectItem component', () => {
                     return {
                         id: 1,
                         allow_enrollment: true,
+                        projects: {
+                            read: true,
+                            create: true,
+                        },
                     };
                 },
                 'projects/all': () => {
@@ -35,6 +39,12 @@ describe('The ProjectItem component', () => {
                     id: 1,
                     title: 'Test Project',
                     user_ids: [],
+                    permissions: {
+                        project: {
+                            update: true,
+                            delete: true,
+                        },
+                    },
                 },
             },
             mocks,
@@ -73,6 +83,12 @@ describe('The ProjectItem component', () => {
                         id: 1,
                         title: 'Test Project',
                         user_ids: [],
+                        permissions: {
+                            project: {
+                                update: true,
+                                delete: true,
+                            },
+                        },
                     },
                     view: 'new',
                     courseId: 1,
@@ -111,6 +127,12 @@ describe('The ProjectItem component', () => {
                         course_id: 1,
                         title: 'Test Project',
                         user_ids: [1],
+                        permissions: {
+                            project: {
+                                update: true,
+                                delete: true,
+                            },
+                        },
                     },
                 },
                 mocks,
@@ -186,6 +208,12 @@ describe('The ProjectItem component', () => {
                             course_id: 1,
                             title: 'Test Project',
                             user_ids: [1],
+                            permissions: {
+                                project: {
+                                    update: true,
+                                    delete: true,
+                                },
+                            },
                         },
                     },
                     mocks,
@@ -195,6 +223,12 @@ describe('The ProjectItem component', () => {
                     return {
                         id: 1,
                         allow_enrollment: false,
+                        permissions: {
+                            projects: {
+                                read: true,
+                                create: true,
+                            },
+                        },
                     };
                 };
 
@@ -224,6 +258,12 @@ describe('The ProjectItem component', () => {
                             course_id: 1,
                             title: 'Test Project',
                             user_ids: [],
+                            permissions: {
+                                project: {
+                                    update: true,
+                                    delete: true,
+                                },
+                            },
                         },
                     },
                     mocks,

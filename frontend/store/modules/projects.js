@@ -28,9 +28,9 @@ resourceModule.actions['enroll'] = function () {
      * @param {int} projectId
      * @returns {object}
      */
-    return async function ({ commit }, projectId) {
+    return async function ({ dispatch }, projectId) {
         const res = await Vue.http.post(`/projects/${projectId}/enrollments`);
-        commit(mutationTypes.SET_ONE, { parentId: res.body.course_id, item: res.body });
+        dispatch(`courses/${actionTypes.FETCH}`, { id: res.body.course_id }, { root: true });
         return res.body;
     };
 }();
@@ -50,7 +50,7 @@ resourceModule.actions['disenroll'] = function () {
      */
     return async function ({ dispatch }, { projectId, courseId }) {
         const res = await Vue.http.delete(`/projects/${projectId}/enrollment`);
-        dispatch(actionTypes.FETCH, { id: projectId, parentId: courseId });
+        dispatch(`courses/${actionTypes.FETCH}`, { id: courseId }, { root: true });
         return res.body;
     };
 }();

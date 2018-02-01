@@ -8,6 +8,8 @@ import ProjectPage from '@/components/pages/ProjectPage';
 import LoginPage from '@/components/pages/LoginPage';
 import LogoutPage from '@/components/pages/LogoutPage';
 import PrintPage from '@/components/pages/PrintPage';
+import MyProjectsPage from '@/components/pages/MyProjectsPage';
+import MyCoursesPage from '@/components/pages/MyCoursesPage';
 
 import store from '@/store';
 
@@ -15,6 +17,14 @@ Vue.use(Router);
 
 const router = new Router({
     routes: [
+        {
+            path: '/my-projects',
+            name: 'my-projects',
+            component: MyProjectsPage,
+            meta: {
+                protected: true,
+            },
+        },
         {
             path: '/projects',
             name: 'projects',
@@ -43,6 +53,14 @@ const router = new Router({
             path: '/courses/:id-(.*)',
             name: 'course',
             component: CoursePage,
+            meta: {
+                protected: true,
+            },
+        },
+        {
+            path: '/my-courses',
+            name: 'my-courses',
+            component: MyCoursesPage,
             meta: {
                 protected: true,
             },

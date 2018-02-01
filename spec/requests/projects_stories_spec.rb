@@ -18,10 +18,10 @@ RSpec.describe 'Projects/Stories API', type: :request do
   describe 'GET /projects/:project_id with serialized stories' do
     before { get "/projects/#{project_id}" }
     let(:expected_permissions) {
-      [
-          'stories' => ['read' => true, 'create' => true],
-          'project' => ['update' => true, 'delete' => true]
-      ]
+      {
+          'stories' => {'read' => true, 'create' => true},
+          'project' => {'update' => true, 'delete' => true}
+      }
     }
 
     it 'returns stories' do

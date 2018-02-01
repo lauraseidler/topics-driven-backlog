@@ -143,6 +143,7 @@
 
             <td v-if="isView(['backlog', 'planning-backlog', 'planning-sprint'])">
                 <BButton 
+                    v-if="data.permissions.story.update"
                     size="sm" 
                     variant="outline-primary"
                     title="Edit"
@@ -154,6 +155,7 @@
                 <br>
 
                 <BButton 
+                    v-if="data.permissions.story.delete"
                     size="sm" 
                     variant="outline-danger"
                     title="Delete"

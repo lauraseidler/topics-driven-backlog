@@ -32,9 +32,9 @@ RSpec.describe 'Authentication', type: :request do
     context 'When request is valid' do
       before { post '/get-token', params: valid_credentials, headers: headers }
       let(:expected_permissions) {
-        [
-            'courses' => ['read' => true, 'create' => true]
-        ]
+        {
+            'courses' => {'read' => true, 'create' => true}
+        }
       }
 
       it 'returns an authentication token' do
@@ -43,7 +43,6 @@ RSpec.describe 'Authentication', type: :request do
         expect(json['user']['email']).to eq(user.email)
         expect(json['user']['id']).to eq(user.id)
         expect(json['user']['role']).to eq(user.role)
-        expect(json['user']['courses'].size).to eq(1)
         expect(json['user']['permissions']).to eq(expected_permissions)
       end
     end

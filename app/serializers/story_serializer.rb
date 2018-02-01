@@ -17,11 +17,11 @@ class StorySerializer < ActiveModel::Serializer
   end
 
   def permissions
-    [
-        :story => [
+    {
+        :story => {
             :update => scope.can?(:update, object),
             :delete => scope.can?(:delete, object),
-        ]
-    ]
+        }
+    }
   end
 end
