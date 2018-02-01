@@ -129,7 +129,6 @@ RSpec.describe 'Courses API', type: :request do
     let(:instructor_attribute_new_user) {
       {
           instructor: "#{Faker::Internet.user_name}@#{ENV['ORGANISATION_DOMAIN']}",
-
       }
     }
 
@@ -137,7 +136,6 @@ RSpec.describe 'Courses API', type: :request do
       before { post "/courses/#{course_id}/instructor", params: instructor_attribute }
 
       it 'adds an instructor to a course' do
-        print(json)
         expect(json).not_to be_empty
         expect(json['instructor'].size).to eq(2)
       end
@@ -158,6 +156,23 @@ RSpec.describe 'Courses API', type: :request do
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
       end
+    end
+  end
+
+  # Test suite for DELETE /courses/:id/instructor
+  describe 'DELETE /courses/:id/instructor' do
+    let(:new_instructor) { create(:user) }
+    let(:instructor_attribute) {
+      {
+          instructor: new_instructor.email.to_s,
+
+      }
+    }
+    before { post "/courses/#{course_id}/instructor", params: instructor_attribute }
+    before { delete "/courses/#{course_id}/instructor", params: instructor_attribute }
+
+    it 'returns status code 204' do
+      expect(response).to have_http_status(204)
     end
   end
 

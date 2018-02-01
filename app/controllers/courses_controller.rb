@@ -53,7 +53,7 @@ class CoursesController < ApplicationController
     authorize! :update, @course
     user = User.find_by!(email: course_params[:instructor])
     if user.present?
-      @course.instructions.delete(user)
+      @course.users.delete(user)
     end
     head :no_content
   end
