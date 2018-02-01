@@ -38,6 +38,7 @@ class CoursesController < ApplicationController
 
   # POST /courses/:id/instructor
   def add_instructor
+    authorize! :update, @course
     email_address = course_params[:instructor]
     instructor = User.find_by(email: email_address)
     if instructor.nil?
@@ -49,6 +50,7 @@ class CoursesController < ApplicationController
 
   # DELETE /courses/:id/instructor
   def remove_instructor
+    authorize! :update, @course
     user = User.find_by!(email: course_params[:instructor])
     if user.present?
       @course.instructions.delete(user)
@@ -64,7 +66,11 @@ class CoursesController < ApplicationController
   end
 
   def set_course
-    @course = Course.find_by!(id: params[:id])
+    if params[:course_id].present?
+      @course = Course.find_by!(id: params[:course_id])
+    else
+      @course = Course.find_by!(id: params[:id])
+    end
   end
 
 end

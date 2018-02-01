@@ -18,11 +18,9 @@ RSpec.describe 'Courses API', type: :request do
 
   # Test suite for GET /courses
   describe 'GET /courses' do
-    # make HTTP get request before each example
     before { get '/courses' }
 
     it 'returns courses' do
-      # Note `json` is a custom helper to parse JSON responses
       expect(json).not_to be_empty
       expect(json.size).to eq(10)
     end
@@ -54,6 +52,7 @@ RSpec.describe 'Courses API', type: :request do
         expect(json['semester_type']).to eq(course.semester_type)
         expect(json['semester_year']).to eq(course.semester_year)
         expect(json['permissions']).to eq(expected_permissions)
+        expect(json['instructor'].size).to eq(1)
       end
 
       it 'returns status code 200' do
@@ -114,6 +113,50 @@ RSpec.describe 'Courses API', type: :request do
       it 'returns a validation failure message' do
         expect(response.body)
             .to match(/Validation failed: Semester year must be in format YYYY, Semester type must be `S` or `W`/)
+      end
+    end
+  end
+
+  # Test suite for POST /courses/:id/instructor
+  describe 'POST /courses/:id/instructor to add another instructor to a course' do
+    let(:new_instructor) { create(:user) }
+    let(:instructor_attribute) {
+      {
+          instructor: new_instructor.email.to_s,
+
+      }
+    }
+    let(:instructor_attribute_new_user) {
+      {
+          instructor: "#{Faker::Internet.user_name}@#{ENV['ORGANISATION_DOMAIN']}",
+
+      }
+    }
+
+    context 'when the user already exists' do
+      before { post "/courses/#{course_id}/instructor", params: instructor_attribute }
+
+      it 'adds an instructor to a course' do
+        print(json)
+        expect(json).not_to be_empty
+        expect(json['instructor'].size).to eq(2)
+      end
+
+      it 'returns status code 201' do
+        expect(response).to have_http_status(201)
+      end
+    end
+
+    context 'when the user does not exists yet' do
+      before { post "/courses/#{course_id}/instructor", params: instructor_attribute_new_user }
+
+      it 'adds an instructor to a course' do
+        expect(json).not_to be_empty
+        expect(json['instructor'].size).to eq(2)
+      end
+
+      it 'returns status code 201' do
+        expect(response).to have_http_status(201)
       end
     end
   end
