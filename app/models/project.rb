@@ -2,6 +2,8 @@ class Project < ApplicationRecord
   belongs_to :course
   has_many :stories, dependent: :destroy
   has_and_belongs_to_many :users
+  has_many :sprint_plannings
+  has_many :sprints, :through => :sprint_plannings
 
   validates_presence_of :title, :course_id
   validates :title, uniqueness: { scope: :course_id }

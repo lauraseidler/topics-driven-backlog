@@ -18,6 +18,7 @@ module SprintsHelper
       start_date = end_date + 1.days
     end
 
+    create_sprint_plannings(sprints, @course)
     sprints
   end
 
@@ -124,5 +125,15 @@ module SprintsHelper
         'End date cannot be in the past'
       end
     end
+  end
+
+  def create_sprint_plannings(sprints, course)
+    projects = course.projects
+    projects.each do |project|
+      sprints.each do |sprint|
+        project.sprint_plannings.create(sprint_id: sprint.id, planned: false)
+      end
+    end
+
   end
 end

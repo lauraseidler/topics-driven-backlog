@@ -24,6 +24,9 @@ class ProjectsController < ApplicationController
   def create
     authorize! :create_projects, @course
     @project = @course.projects.create!(project_params)
+    @course.sprints.each do |sprint|
+      @project.sprint_plannings.create(sprint_id: sprint.id, planned: false)
+    end
     @project.users << current_user
     json_response(@project, :created)
   end
