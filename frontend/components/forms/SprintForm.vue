@@ -32,13 +32,24 @@
             label-for="sprint-end-date">
 
             <BFormInput 
-                id="sprint-end-date" 
+                id="sprint-end-date"
+                :min="data.start_date"
                 type="date"
                 v-model="data.end_date"
                 placeholder="YYYY-MM-DD"
-                required
-                :min="data.start_date"/>
+                required/>
         </BFormGroup>
+
+        <div
+            class="alert alert-warning"
+            v-if="data.end_date <= $store.state.currentDate">
+            <h4>Attention, sprint is in the past!</h4>
+
+            <p class="mb-0">
+                The dates you entered are in the past, which is usually not what you want. If you <em>are</em> intending
+                to create a sprint in the past, you can safely ignore this warning.
+            </p>
+        </div>
 
         <BFormGroup
             label="Topics"
