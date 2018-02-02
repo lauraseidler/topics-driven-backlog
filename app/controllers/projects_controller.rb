@@ -2,8 +2,8 @@ class ProjectsController < ApplicationController
   include CanCan::ControllerAdditions
 
   before_action :set_course, only: [:create]
-  before_action :set_project, only: [:show, :update, :destroy, :enroll_user, :remove_enrollment]
-  load_and_authorize_resource :except => [:show, :create, :destroy, :enroll_user, :remove_enrollment]
+  before_action :set_project, only: [:show, :update, :destroy, :enroll_user, :remove_enrollment, :complete_sprint]
+  load_and_authorize_resource :except => [:show, :create, :destroy, :enroll_user, :remove_enrollment, :complete_sprint]
 
   # GET /projects/:id
   def show
@@ -35,6 +35,15 @@ class ProjectsController < ApplicationController
   # PATCH /projects/:id
   def update
     @project.update_attributes!(project_params)
+    json_response(@project)
+  end
+
+  # PUT /project/:project_id/sprint-planning-complete/:sprint_id
+  # PATCH /project/:project_id/sprint-planning-complete/:sprint_id
+  def complete_sprint
+    authorize! :update, @project
+    sprint_planning = @project.sprint_plannings.find_by!(sprint_id: params[:sprint_id])
+    sprint_planning.update_attribute(:planned, true)
     json_response(@project)
   end
 
