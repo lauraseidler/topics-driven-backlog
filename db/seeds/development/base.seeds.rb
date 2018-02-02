@@ -36,6 +36,21 @@ Project.create!([
                     {title: "CourseR:​ ​ Course​ ​ Retrospective", course_id: 3, user_ids: [2]},
                 ])
 
+SprintPlanning.create!([
+                            {project_id: 1, sprint_id: 1, planned: false},
+                            {project_id: 1, sprint_id: 2, planned: false},
+                            {project_id: 1, sprint_id: 3, planned: false},
+                            {project_id: 1, sprint_id: 4, planned: false},
+                            {project_id: 1, sprint_id: 5, planned: false},
+                            {project_id: 1, sprint_id: 6, planned: false},
+                            {project_id: 2, sprint_id: 1, planned: false},
+                            {project_id: 3, sprint_id: 2, planned: false},
+                            {project_id: 2, sprint_id: 3, planned: false},
+                            {project_id: 2, sprint_id: 4, planned: false},
+                            {project_id: 2, sprint_id: 5, planned: false},
+                            {project_id: 2, sprint_id: 6, planned: false},
+                        ])
+
 # Project 1
 Story.create!([
                   {title: "Auf​ der​​ Hauptseite​​ werden​  alle​ ​Spiele​ ​angezeigt. Neue​ ​Spiele​ ​hinzufügen​ / ​löschen​ ​und​ ​editieren",
