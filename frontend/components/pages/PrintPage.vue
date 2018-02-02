@@ -219,7 +219,7 @@ export default {
             }
 
             if (this.chosenSprint === null) {
-                return this.$store.getters['sprints/current'](this.course.id)
+                return this.$store.getters['sprints/current'](this.course.id, this.project.id)
             }
 
             return this.$store.getters['sprints/byId'](this.pastSprints[this.chosenSprint - 1].id);
@@ -233,7 +233,7 @@ export default {
             return this.course
                 ? this.chosenSprint !== null
                     ? this.$store.getters['sprints/byId'](this.pastSprints[this.chosenSprint].id)
-                    : this.$store.getters['sprints/next'](this.course.id)
+                    : this.$store.getters['sprints/next'](this.course.id, this.project.id)
                 : null;
         },
 
@@ -243,7 +243,7 @@ export default {
          */
         pastSprints() {
             return this.course
-                ? this.$store.getters['sprints/past'](this.course.id)
+                ? this.$store.getters['sprints/past'](this.course.id, this.project.id)
                 : [];
         },
     },

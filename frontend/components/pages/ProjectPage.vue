@@ -102,11 +102,26 @@
         <CollapsingSection v-model="sections.nextSprint">
             <template slot="headline">
                 <h2>Next sprint</h2>
+
+
             </template>
 
             <template slot="content">
                 <template v-if="nextSprint">
                     <h3 class="h5">
+                        <BButton
+                            v-if="nextSprint && project.planned_sprint_ids.indexOf(nextSprint.id) < 0"
+                            class="float-right mb-3"
+                            size="sm"
+                            type="button"
+                            variant="primary"
+                            v-confirm="{
+                                action: planningComplete,
+                                text: 'This action is irreversible. While you will continue to be able to change the scope of this sprint if/while it is still in the future, the sprint will advance to the next sprint stage automatically when the time comes, and you will no longer be able to make changes. Proceed?'
+                            }">
+                        
+                            Mark sprint planning complete
+                        </BButton>
                         {{ nextSprint.name }}
                         <small class="text-muted">({{ nextSprint.start_date | displayDate }} - {{ nextSprint.end_date | displayDate }})</small>
                     </h3>
@@ -248,8 +263,8 @@ export default {
          * @returns {object}
          */
         currentSprint() {
-            return this.course
-                ? this.$store.getters['sprints/current'](this.course.id)
+            return this.course && this.project
+                ? this.$store.getters['sprints/current'](this.course.id, this.project.id)
                 : null;
         },
 
@@ -258,8 +273,8 @@ export default {
          * @returns {object}
          */
         nextSprint() {
-            return this.course
-                ? this.$store.getters['sprints/next'](this.course.id)
+            return this.course && this.project
+                ? this.$store.getters['sprints/next'](this.course.id, this.project.id)
                 : null;
         },
 
@@ -268,8 +283,8 @@ export default {
          * @returns {array}
          */
         pastSprints() {
-            return this.course
-                ? this.$store.getters['sprints/past'](this.course.id)
+            return this.course && this.project
+                ? this.$store.getters['sprints/past'](this.course.id, this.project.id)
                 : [];
         },
 
@@ -342,6 +357,27 @@ export default {
                 /* istanbul ignore next */
                 this.$notify({
                     title: 'Story creation failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
+        },
+
+        async planningComplete() {
+            if (!this.nextSprint) {
+                return;
+            }
+
+            try {
+                await this.$store.dispatch('projects/planningComplete', {
+                    courseId: this.course.id,
+                    projectId: this.project.id,
+                    sprintId: this.nextSprint.id,
+                });
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Sprint update failed',
                     text: err.body.message,
                     type: 'error',
                 });

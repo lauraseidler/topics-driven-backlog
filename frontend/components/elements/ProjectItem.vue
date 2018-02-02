@@ -70,13 +70,13 @@
                         :to="baseUrl">View Backlog</router-link>
 
                     <BButton
-                        v-if="data.permissions && data.permissions.project.enroll && isEnrolled"
+                        v-if="data.permissions && data.permissions.project.disenroll"
                         variant="primary"
                         v-confirm="{ action: disenroll, text: 'Do you really want to leave this project?' }"
                     >Leave project</BButton>
 
                     <BButton
-                        v-if="data.permissions && data.permissions.project.enroll && !isEnrolled && !isEnrolledToProjectInCourse"
+                        v-if="data.permissions && data.permissions.project.enroll"
                         variant="primary"
                         @click="enroll"
                     >Join project</BButton>
