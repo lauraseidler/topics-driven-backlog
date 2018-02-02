@@ -63,8 +63,8 @@ ActiveRecord::Schema.define(version: 20180201222412) do
     t.boolean "planned", default: false
     t.bigint "project_id"
     t.bigint "sprint_id"
-    t.index ["project_id", "sprint_id"], name: "index_sprint_plannings_on_project_id_and_sprint_id", unique: true
     t.index ["project_id"], name: "index_sprint_plannings_on_project_id"
+    t.index ["sprint_id", "project_id"], name: "index_sprint_plannings_on_sprint_id_and_project_id", unique: true
     t.index ["sprint_id"], name: "index_sprint_plannings_on_sprint_id"
   end
 

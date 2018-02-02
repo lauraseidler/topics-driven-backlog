@@ -55,4 +55,24 @@ resourceModule.actions['disenroll'] = function () {
     };
 }();
 
+/**
+ * Add planning complete action
+ * @returns {function}
+ */
+resourceModule.actions['planningComplete'] = function () {
+    /**
+     * Mark given sprint in given project as planned
+     *
+     * @param {object} operations
+     * @param {function} operations.dispatch
+     * @param {int} projectId
+     * @returns {object}
+     */
+    return async function ({ dispatch }, { projectId, courseId, sprintId }) {
+        const res = await Vue.http.patch(`/projects/${projectId}/sprint-planning-complete/${sprintId}`);
+        dispatch(actionTypes.FETCH, { id: projectId, parentId: courseId });
+        return res.body;
+    };
+}();
+
 export default resourceModule;
