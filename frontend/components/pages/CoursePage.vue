@@ -266,6 +266,10 @@ export default {
                 
                 this.$nextTick(() => {
                     !this.$refs.sprintForm || this.$refs.sprintForm.$el.reset();
+
+                    if (this.sprints.length < 1) {
+                        window.location.reload();
+                    }
                 });
             } catch (err) {
                 /* istanbul ignore next */
@@ -291,6 +295,10 @@ export default {
 
                 this.$nextTick(() => {
                     !this.$refs.sprintCollectionForm || this.$refs.sprintCollectionForm.$el.reset();
+
+                    if (this.sprints.length < 1) {
+                        window.location.reload();
+                    }
                 });
             } catch (err) {
                 /* istanbul ignore next */
@@ -313,6 +321,10 @@ export default {
 
                 this.$nextTick(() => {
                     !this.$refs.projectForm || this.$refs.projectForm.$el.reset();
+
+                    if (this.projects.length < 1) {
+                        window.location.reload();
+                    }
                 });
             } catch (err) {
                 /* istanbul ignore next */
@@ -335,6 +347,10 @@ export default {
                 
                 this.$nextTick(() => {
                     !this.$refs.topicForm || this.$refs.topicForm.$el.reset();
+
+                    if (this.topics.length < 1) {
+                        window.location.reload();
+                    }
                 });
             } catch (err) {                
                 /* istanbul ignore next */

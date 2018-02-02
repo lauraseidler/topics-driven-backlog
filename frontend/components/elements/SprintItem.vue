@@ -2,26 +2,26 @@
     <li class="sprint-item card">
         <div class="card-body">
             <template v-if="!editing">
-                <template v-if="data.end_date >= currentDate">
-                    <BButton 
-                        size="sm" 
-                        variant="outline-danger"
-                        class="float-right ml-1"
-                        v-confirm="{ action: deleteSprint, text: 'Are you sure you want to delete this sprint?' }">
+                <BButton
+                    v-if="data.permissions.sprint.delete"
+                    size="sm"
+                    variant="outline-danger"
+                    class="float-right ml-1"
+                    v-confirm="{ action: deleteSprint, text: 'Are you sure you want to delete this sprint?' }">
 
-                        <VIcon name="trash"/>
-                    </BButton>
+                    <VIcon name="trash"/>
+                </BButton>
 
-                    <BButton 
-                        size="sm" 
-                        variant="outline-primary"
-                        class="float-right ml-1"
-                        @click="startEditing">
+                <BButton
+                    v-if="data.permissions.sprint.update"
+                    size="sm"
+                    variant="outline-primary"
+                    class="float-right ml-1"
+                    @click="startEditing">
 
-                        <VIcon name="pencil"/>
-                    </BButton>
-                </template>
-                
+                    <VIcon name="pencil"/>
+                </BButton>
+
                 <h3 class="card-title h5">{{ data.name }}</h3>
 
                 <p class="card-text">

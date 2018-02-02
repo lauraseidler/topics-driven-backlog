@@ -33,7 +33,7 @@ Sprint.create!([
                ])
 Project.create!([
                     {title: "TABLE GAME PORTAL", course_id: 3, user_ids: [1]},
-                    {title: "CourseR:​ ​ Course​ ​ Retrospective", course_id: 3, user_ids: [2]},
+                    {title: "CourseR:​ ​ Course​ ​ Retrospective", course_id: 3, user_ids: [1]},
                 ])
 
 SprintPlanning.create!([
@@ -44,7 +44,7 @@ SprintPlanning.create!([
                             {project_id: 1, sprint_id: 5, planned: false},
                             {project_id: 1, sprint_id: 6, planned: false},
                             {project_id: 2, sprint_id: 1, planned: false},
-                            {project_id: 3, sprint_id: 2, planned: false},
+                            {project_id: 2, sprint_id: 2, planned: false},
                             {project_id: 2, sprint_id: 3, planned: false},
                             {project_id: 2, sprint_id: 4, planned: false},
                             {project_id: 2, sprint_id: 5, planned: false},
