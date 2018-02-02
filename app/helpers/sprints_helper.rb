@@ -128,8 +128,7 @@ module SprintsHelper
   end
 
   def create_sprint_plannings(sprints, course)
-    projects = course.projects
-    projects.each do |project|
+    course.projects.each do |project|
       sprints.each do |sprint|
         project.sprint_plannings.create(sprint_id: sprint.id, planned: false)
       end

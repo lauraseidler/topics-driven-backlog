@@ -30,7 +30,7 @@ class ProjectSerializer < ActiveModel::Serializer
   end
 
   def planned_sprint_ids
-    object.sprint_plannings.where(planned: true).pluck(:id)
+    object.sprint_plannings.where(planned: true).pluck(:sprint_id)
   end
 
 end

@@ -5,10 +5,13 @@ RSpec.describe 'Projects API' do
   let(:user) { create(:user, role: User.roles[:student]) }
   let!(:course) { create(:course) }
   let!(:sprints) { create_list(:sprint, 3, course_id: course.id) }
-  let!(:projects) { create_list(:project, 20, course_id: course.id) }
+  let!(:projects) { create_list(:project, 3, course_id: course.id) }
   before(:each) do
     projects.each do |project|
       project.users << user
+      sprints.each do |sprint|
+        project.sprint_plannings.create(sprint_id: sprint.id, planned: false)
+      end
     end
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
     allow_any_instance_of(ApplicationController).to receive(:authorize_request).and_return(user)
@@ -33,7 +36,7 @@ RSpec.describe 'Projects API' do
       end
 
       it 'returns all course projects' do
-        expect(json['projects'].size).to eq(20)
+        expect(json['projects'].size).to eq(3)
         expect(json['projects'][0]['permissions']).to eq(expected_permissions)
         expect(json['projects'][0]['planned_sprint_ids']).to eq([])
       end
@@ -127,7 +130,6 @@ RSpec.describe 'Projects API' do
 
     context 'when the sprint planning exists' do
       it 'updates the record' do
-        print(json)
         expect(json['planned_sprint_ids']).to eq([completed_sprint_id])
       end
 
