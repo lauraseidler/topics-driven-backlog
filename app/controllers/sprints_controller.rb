@@ -19,6 +19,7 @@ class SprintsController < ApplicationController
   def create
     authorize! :create_sprints, @course
     @sprint = @course.sprints.create!(sprint_params)
+    create_sprint_plannings([@sprint], @course)
     json_response(@sprint, :created)
   end
 

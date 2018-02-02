@@ -1,6 +1,6 @@
 class ProjectSerializer < ActiveModel::Serializer
   # attributes to be serialized
-  attributes :id, :title, :course_id, :permissions
+  attributes :id, :title, :course_id, :permissions, :planned_sprint_ids
   # only render user_ids if user can read project
   attribute :user_ids, if: :can_read_project?
   # render stories if user can read stories
@@ -27,6 +27,10 @@ class ProjectSerializer < ActiveModel::Serializer
             :disenroll => scope.can?(:disenroll, object),
         }
     }
+  end
+
+  def planned_sprint_ids
+    object.sprint_plannings.where(planned: true).pluck(:sprint_id)
   end
 
 end

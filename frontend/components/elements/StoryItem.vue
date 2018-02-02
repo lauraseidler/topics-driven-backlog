@@ -225,7 +225,7 @@ export default {
         },
         nextSprint() {
             return this.project
-                ? this.$store.getters['sprints/next'](this.project.course_id)
+                ? this.$store.getters['sprints/next'](this.project.course_id, this.project.id)
                 : null;
         },
     },
@@ -423,6 +423,7 @@ export default {
     
                 await this.$store.dispatch('projects/fetch', {
                     id: this.project.id,
+                    parentId: this.project.course_id,
                 });
             } catch (err) {
                 /* istanbul ignore next */
