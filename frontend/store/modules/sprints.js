@@ -60,30 +60,44 @@ resourceModule.actions['updateCollection'] = function () {
 }();
 
 resourceModule.getters['current'] = function () {
-    return function (state, getters, rootState)  {
-        return function (courseId) {
+    return function (state, getters, rootState, rootGetters)  {
+        return function (courseId, projectId) {
+            const project = rootGetters['projects/byId'](projectId);
+
             return _.first(
                 getters.all(courseId)
-                    .filter(s => s.start_date <= rootState.currentDate && s.end_date >= rootState.currentDate));
+                    .filter(s =>
+                        s.start_date <= rootState.currentDate
+                        && s.end_date >= rootState.currentDate
+                        && project.planned_sprint_ids.indexOf(s.id) > -1
+                    )
+            );
         };
     };
 }();
 
 resourceModule.getters['next'] = function () {
-    return function (state, getters, rootState)  {
-        return function (courseId) {
+    return function (state, getters, rootState, rootGetters)  {
+        return function (courseId, projectId) {
+            const project = rootGetters['projects/byId'](projectId);
+
             return _.first(
                 getters.all(courseId)
-                    .filter(s => s.start_date > rootState.currentDate));
+                    .filter(s => project.planned_sprint_ids.indexOf(s.id) === -1)
+                    .sort((a, b) => a.start_date.localeCompare(b.start_date))
+            );
         };
     };
 }();
 
 resourceModule.getters['past'] = function () {
-    return function (state, getters, rootState)  {
-        return function (courseId) {
+    return function (state, getters, rootState, rootGetters)  {
+        return function (courseId, projectId) {
+            const project = rootGetters['projects/byId'](projectId);
+
             return getters.all(courseId)
                 .filter(s => s.end_date < rootState.currentDate)
+                .filter(s => project.planned_sprint_ids.indexOf(s.id) > -1)
                 .sort((a, b) => a.start_date.localeCompare(b.start_date));
         };
     };

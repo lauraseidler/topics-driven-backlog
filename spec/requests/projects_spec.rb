@@ -4,10 +4,14 @@ RSpec.describe 'Projects API' do
 
   let(:user) { create(:user, role: User.roles[:student]) }
   let!(:course) { create(:course) }
-  let!(:projects) { create_list(:project, 20, course_id: course.id) }
+  let!(:sprints) { create_list(:sprint, 3, course_id: course.id) }
+  let!(:projects) { create_list(:project, 3, course_id: course.id) }
   before(:each) do
     projects.each do |project|
       project.users << user
+      sprints.each do |sprint|
+        project.sprint_plannings.create(sprint_id: sprint.id, planned: false)
+      end
     end
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
     allow_any_instance_of(ApplicationController).to receive(:authorize_request).and_return(user)
@@ -32,8 +36,9 @@ RSpec.describe 'Projects API' do
       end
 
       it 'returns all course projects' do
-        expect(json['projects'].size).to eq(20)
+        expect(json['projects'].size).to eq(3)
         expect(json['projects'][0]['permissions']).to eq(expected_permissions)
+        expect(json['projects'][0]['planned_sprint_ids']).to eq([])
       end
     end
 
@@ -115,6 +120,24 @@ RSpec.describe 'Projects API' do
         expect(response.body).to match(/Couldn't find Project/)
       end
     end
+  end
+
+  # Test suite for PUT /project/:project_id/sprint-planning-complete/:sprint_id
+  describe 'PUT /project/:project_id/sprint-planning-complete/:sprint_id' do
+    let(:completed_sprint_id) { sprints.first.id }
+
+    before { put "/projects/#{id}/sprint-planning-complete/#{completed_sprint_id}" }
+
+    context 'when the sprint planning exists' do
+      it 'updates the record' do
+        expect(json['planned_sprint_ids']).to eq([completed_sprint_id])
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+    end
+
   end
 
   # Test suite for DELETE /projects/:id
