@@ -68,9 +68,9 @@ resourceModule.actions['planningComplete'] = function () {
      * @param {int} projectId
      * @returns {object}
      */
-    return async function ({ dispatch }, { projectId, courseId, sprintId }) {
+    return async function ({ commit }, { projectId, courseId, sprintId }) {
         const res = await Vue.http.patch(`/projects/${projectId}/sprint-planning-complete/${sprintId}`);
-        dispatch(actionTypes.FETCH, { id: projectId, parentId: courseId });
+        commit(mutationTypes.SET_ONE, { item: res.body, parentId: courseId });
         return res.body;
     };
 }();
