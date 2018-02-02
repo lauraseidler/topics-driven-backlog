@@ -119,6 +119,25 @@ RSpec.describe 'Projects API' do
     end
   end
 
+  # Test suite for PUT /project/:project_id/sprint-planning-complete/:sprint_id
+  describe 'PUT /project/:project_id/sprint-planning-complete/:sprint_id' do
+    let(:completed_sprint_id) { sprints.first.id }
+
+    before { put "/projects/#{id}/sprint-planning-complete/#{completed_sprint_id}" }
+
+    context 'when the sprint planning exists' do
+      it 'updates the record' do
+        print(json)
+        expect(json['planned_sprint_ids']).to eq([completed_sprint_id])
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+    end
+
+  end
+
   # Test suite for DELETE /projects/:id
   describe 'DELETE /projects/:id' do
     before { delete "/projects/#{id}"}

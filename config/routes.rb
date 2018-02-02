@@ -24,6 +24,8 @@ Rails.application.routes.draw do
   resources :projects, only: [:show, :update, :destroy] do
     post 'enrollments', to: 'projects#enroll_user'
     delete 'enrollment', to: 'projects#remove_enrollment'
+    put 'sprint-planning-complete/:sprint_id', to: 'projects#complete_sprint'
+    patch 'sprint-planning-complete/:sprint_id', to: 'projects#complete_sprint'
     resources :stories, only: [:index, :create]
   end
 end
