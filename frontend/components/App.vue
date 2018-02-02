@@ -25,13 +25,22 @@
                             My Projects
                         </BNavItem>
                         <BNavItem 
-                            v-if="$store.state.user.role === 1"
+                            v-if="$store.state.user.role === 1 || isManagingCourses"
                             to="/my-courses">
                             
                             My Courses
                         </BNavItem>
                         <BNavItem to="/projects">All Projects</BNavItem>
-                        <BNavItem to="/courses">All Courses</BNavItem>
+                        <BNavItem to="/courses" class="mr-5">All Courses</BNavItem>
+                        <BNavItem
+                            v-if="$store.state.user.role === 1"
+                            v-confirm="{
+                                action: becomeStudent,
+                                text: 'This will temporarily downgrade your account to a student account. To go back to your usual account, you will have to logout and log back in. Proceed?'
+                            }">
+
+                            Student view
+                        </BNavItem>
                         <BNavItem to="/logout">Logout</BNavItem>
                     </BNavbarNav>
 
@@ -92,9 +101,30 @@ export default {
     data() {
         return {};
     },
+    computed: {
+        courses() {
+            return this.$store.getters['courses/all'];
+        },
+        isManagingCourses() {
+            if (!this.courses) {
+                return false;
+            }
+
+            for (let i = 0; i < this.courses.length; i++) {
+                if (this.courses[i].permissions.course.update) {
+                    return true;
+                }
+            }
+
+            return false;
+        },
+    },
     methods: {
         saveAll() {
             bus.$emit('saveAll');
+        },
+        becomeStudent() {
+            this.$store.dispatch('becomeStudent');
         },
     },
 };

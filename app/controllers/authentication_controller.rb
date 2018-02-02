@@ -7,6 +7,12 @@ class AuthenticationController < ApplicationController
     json_response(AuthenticateUser.new(auth_params[:email],auth_params[:password]).call)
   end
 
+  # POST /become-student
+  def as_student
+    current_user.update_attribute(:role, User.roles[:student])
+    json_response({user: UserSerializer.new(current_user, scope: Ability.new(current_user))})
+  end
+
   private
 
   def auth_params

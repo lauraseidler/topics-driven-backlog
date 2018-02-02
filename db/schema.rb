@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(version: 20180201222412) do
     t.bigint "course_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "planned", default: false
     t.index ["course_id"], name: "index_sprints_on_course_id"
   end
 

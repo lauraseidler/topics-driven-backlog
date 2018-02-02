@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   root to: 'frontend#index'
 
   post 'get-token', to: 'authentication#authenticate'
+  post 'become-student', to: 'authentication#as_student'
 
   resources :stories, only: [:show, :update, :destroy] do
     resources :tasks, only: [:index, :create, :show, :update, :destroy]
@@ -11,6 +12,8 @@ Rails.application.routes.draw do
   resources :tasks, only: [:index]
 
   resources :courses, only: [:index, :create, :show, :update, :destroy] do
+    post 'instructors', to: 'courses#add_instructor'
+    delete 'instructor/:user_id', to: 'courses#remove_instructor'
     post 'sprint-collection', to: 'sprints#create_collection'
     patch 'sprint-collection', to: 'sprints#update_collection'
     resources :sprints, only: [:create]

@@ -3,7 +3,7 @@
         <div class="card-body">
             <template v-if="!editing">
                 <BButton
-                    v-if="data.permissions.course.update"
+                    v-if="data.permissions.course.delete"
                     size="sm"
                     variant="outline-danger"
                     class="float-right ml-1"
@@ -13,7 +13,7 @@
                 </BButton>
 
                 <BButton
-                    v-if="data.permissions.course.delete"
+                    v-if="data.permissions.course.update"
                     size="sm"
                     variant="outline-primary"
                     class="float-right ml-1"
