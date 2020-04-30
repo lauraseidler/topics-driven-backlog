@@ -1,0 +1,27 @@
+name: CI
+
+on: push
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v1
+      - name: docker-compose
+        run: docker-compose -f docker-compose.yml -f .docker/docker-compose.test.yml up -d
+      - name: run postgres
+        run: docker-compose exec -T postgresql netstat -nlp | grep 5432
+      - name: wait for db
+        run: docker-compose exec -T app .docker/wait-for-db.sh
+      - name: create db
+        run: docker-compose exec -T app rake db:create RAILS_ENV=test
+      - name: migrate db
+        run: docker-compose exec -T app rake db:migrate RAILS_ENV=test
+      - name: migrate status
+        run: docker-compose exec -T app rake db:migrate:status RAILS_ENV=test
+      - name: rspec tests
+        run: docker-compose exec -T app rspec spec
+      - name: jest tests
+        run: docker-compose exec -T app ./node_modules/jest-cli/bin/jest.js
