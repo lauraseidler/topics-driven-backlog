@@ -49,13 +49,14 @@ class LdapAuthenticator
 
   def get_user_role(query_result)
     if query_result.size === 1
-      user_groups = query_result[0][:memberof][0].to_s
+      user_groups = query_result[0][:memberof]
+      Rails.logger.info user_groups
 
-      if user_groups.include?("CN=#{DomainDefinition::USER_GROUP_INSTRUCTOR}")
+      if user_groups.find {|item| item.include?("CN=#{DomainDefinition::USER_GROUP_INSTRUCTOR}")}
         return User.roles[:instructor]
       end
 
-      if user_groups.include?("CN=#{DomainDefinition::USER_GROUP_STUDENT}")
+      if user_groups.find {|item| item.include?("CN=#{DomainDefinition::USER_GROUP_STUDENT}")}
         return User.roles[:student]
       end
     end

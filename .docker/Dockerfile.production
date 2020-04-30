@@ -23,7 +23,7 @@ RUN chmod +x .docker/prepare-db.sh
 
 # general dependencies
 RUN set -ex \
-  && apk add --no-cache libpq imagemagick nodejs bash
+  && apk add --no-cache libpq imagemagick nodejs nodejs-npm bash git python
 
 # add everything
 ADD . .

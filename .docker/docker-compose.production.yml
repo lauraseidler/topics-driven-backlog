@@ -16,7 +16,7 @@ services:
 
   app:
     # load image instead of building
-    image: mvuajua/topics-driven-backlog:${TAG}
+    image: glutengo/topics-driven-backlog:${TAG}
     # rename container
     container_name: app
     # load production variables
@@ -31,7 +31,7 @@ services:
       - RAILS_SERVE_STATIC_FILES=true
     # open port for nginx proxy
     ports:
-      - 4000:80
+      - 80:80
     # postgres dependency
     depends_on:
       - postgresql

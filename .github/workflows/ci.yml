@@ -4,7 +4,7 @@ on: push
 
 jobs:
   test:
-    name: test
+    name: Run Test Suite
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -23,5 +23,5 @@ jobs:
         run: docker-compose exec -T app rake db:migrate:status RAILS_ENV=test
       - name: rspec tests
         run: docker-compose exec -T app rspec spec
-      - name: jest tests
-        run: docker-compose exec -T app ./node_modules/jest-cli/bin/jest.js
+      #- name: jest tests
+      #  run: docker-compose exec -T app ./node_modules/jest-cli/bin/jest.js
