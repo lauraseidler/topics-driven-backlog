@@ -21,7 +21,7 @@ services:
       - postgresql
     volumes:
       - .:/usr/src/app
-      - usr/src/app/node_modules
+      - /usr/src/app/node_modules
     ports:
       - 8080:80
       - 3035:3035
