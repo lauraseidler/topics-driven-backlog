@@ -10,7 +10,7 @@ describe('The ProjectItem component', () => {
         $store: {
             state: {
                 user: { id: 1 },
-            },  
+            },
             dispatch,
             getters: {
                 'courses/byId': () => {
@@ -25,7 +25,7 @@ describe('The ProjectItem component', () => {
                 },
                 'projects/all': () => {
                     return [];
-                },  
+                },
             },
         },
         $style: {},
@@ -43,6 +43,10 @@ describe('The ProjectItem component', () => {
                         project: {
                             update: true,
                             delete: true,
+                            enroll: true,
+                        },
+                        stories: {
+                            read: true,
                         },
                     },
                 },
@@ -88,6 +92,9 @@ describe('The ProjectItem component', () => {
                                 update: true,
                                 delete: true,
                             },
+                            stories: {
+                                read: true,
+                            },
                         },
                     },
                     view: 'new',
@@ -131,6 +138,10 @@ describe('The ProjectItem component', () => {
                             project: {
                                 update: true,
                                 delete: true,
+                                disenroll: true,
+                            },
+                            stories: {
+                                read: true,
                             },
                         },
                     },
@@ -170,7 +181,7 @@ describe('The ProjectItem component', () => {
             form = cmp.find('.project-form');
             expect(form).toBeTruthy();
         });
-    
+
         it('dispatches save action when form is submitted', () => {
             form.trigger('submit');
 
@@ -185,13 +196,13 @@ describe('The ProjectItem component', () => {
             const confirmSpy = jest
                 .spyOn(window, 'confirm')
                 .mockImplementation(() => true);
-    
+
             cmp.update();
-    
+
             const deleteButton = cmp.find('.btn-outline-danger');
             expect(deleteButton.find('.fa-icon')).toBeTruthy();
             deleteButton.trigger('click');
-            
+
             expect(confirmSpy).toHaveBeenCalled();
             expect(dispatch).toHaveBeenCalledWith('projects/remove', {
                 id: 1,
@@ -210,8 +221,11 @@ describe('The ProjectItem component', () => {
                             user_ids: [1],
                             permissions: {
                                 project: {
-                                    update: true,
-                                    delete: true,
+                                    update: false,
+                                    delete: false,
+                                },
+                                stories: {
+                                    read: true,
                                 },
                             },
                         },
@@ -228,13 +242,16 @@ describe('The ProjectItem component', () => {
                                 read: true,
                                 create: true,
                             },
+                            stories: {
+                                read: true,
+                            },
                         },
                     };
                 };
 
                 cmp.update();
             });
-    
+
             beforeEach(() => {
                 jest.resetAllMocks();
             });
@@ -263,6 +280,9 @@ describe('The ProjectItem component', () => {
                                     update: true,
                                     delete: true,
                                 },
+                                stories: {
+                                    read: true,
+                                },
                             },
                         },
                     },
@@ -277,7 +297,7 @@ describe('The ProjectItem component', () => {
 
                 cmp.update();
             });
-    
+
             beforeEach(() => {
                 jest.resetAllMocks();
             });
