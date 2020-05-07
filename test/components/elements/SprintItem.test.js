@@ -1,7 +1,6 @@
 import { mount } from 'vue-test-utils';
 import moment from 'moment';
 import SprintItem from '@/components/elements/SprintItem';
-import SprintForm from '@/components/forms/SprintForm';
 import '@/directives/confirm';
 
 // take a date far in the future so validations pass
@@ -23,6 +22,12 @@ describe('The SprintItem component', () => {
                         .add(7, 'days')
                         .format('YYYY-MM-DD'),
                     topic_ids: [1, 2],
+                    permissions: {
+                        sprint: {
+                            update: true,
+                            delete: true,
+                        },
+                    },
                 },
             },
             mocks: {
@@ -32,16 +37,29 @@ describe('The SprintItem component', () => {
                         'courses/byId': () => {
                             return {
                                 id: 1,
+                                permissions: {
+                                    sprint: {
+                                        update: true,
+                                        delete: true,
+                                    },
+                                },
                             };
                         },
                         'topics/byId': () => {
                             return {
                                 title: 'Topic title',
+                                permissions: {
+                                    sprint: {
+                                        update: true,
+                                        delete: true,
+                                    },
+                                },
                             };
                         },
                         'topics/all': () => [],
                         'sprints/all': () => [],
                     },
+                    state: {},
                 },
             },
         });
@@ -55,7 +73,7 @@ describe('The SprintItem component', () => {
         expect(cmp.is('li.card')).toBe(true);
         expect(cmp.findAll('.card-body').length).toBe(1);
     });
-    
+
     it('shows the topics as a string in the text', () => {
         expect(cmp.find('.card-text').text()).toEqual(expect.stringContaining('Topic title | Topic title'));
     });
@@ -70,7 +88,7 @@ describe('The SprintItem component', () => {
         const deleteButton = cmp.find('.btn-outline-danger');
         expect(deleteButton.find('.fa-icon')).toBeTruthy();
         deleteButton.trigger('click');
-        
+
         expect(confirmSpy).toHaveBeenCalled();
         expect(dispatch).toHaveBeenCalled();
     });

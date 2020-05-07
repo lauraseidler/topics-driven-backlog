@@ -24,8 +24,8 @@ describe('CoursePage.test.js', () => {
                         'sprints/template': () => { return {}; },
                         'projects/template': () => { return {}; },
                         'topics/template': () => { return {}; },
-                        'courses/byId': () => { 
-                            return { 
+                        'courses/byId': () => {
+                            return {
                                 id: 1,
                                 title: 'Test course',
                                 hyperlink: 'http://google.com',
@@ -45,8 +45,11 @@ describe('CoursePage.test.js', () => {
                                         read: true,
                                         create: true,
                                     },
+                                    course: {
+                                        update: true,
+                                    },
                                 },
-                            }; 
+                            };
                         },
                         'sprints/all': () => [
                             { id: 1, start_date: '2000-01-02', topic_ids: [] },
