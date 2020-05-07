@@ -5,3 +5,5 @@ services:
     environment:
       - RAILS_ENV=test
       - NODE_ENV=test
+      - LDAP_STUDENT_GROUP=studierende
+      - LDAP_INSTRUCTOR_GROUP=lehrende
