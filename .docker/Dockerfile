@@ -20,7 +20,12 @@ RUN chmod +x .docker/prepare-db.sh
 
 # general dependencies
 RUN set -ex \
-  && apk add --no-cache libpq imagemagick nodejs nodejs-npm bash git python
+  && apk add --no-cache libpq imagemagick bash git
+
+# nodejs fixed to v8
+RUN set -ex \
+  && apk add  --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.7/main/ nodejs=8.9.3-r1
+
 
 # install yarn
 RUN npm install --global yarn

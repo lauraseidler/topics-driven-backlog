@@ -10,6 +10,8 @@ jobs:
       - name: checkout
         uses: actions/checkout@v1
       - name: docker-compose
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: docker-compose -f docker-compose.yml -f .docker/docker-compose.test.yml up -d
       - name: run postgres
         run: docker-compose exec -T postgresql netstat -nlp | grep 5432
@@ -23,5 +25,7 @@ jobs:
         run: docker-compose exec -T app rake db:migrate:status RAILS_ENV=test
       - name: rspec tests
         run: docker-compose exec -T app rspec spec
-      #- name: jest tests
-      #  run: docker-compose exec -T app ./node_modules/jest-cli/bin/jest.js
+      - name: jest tests
+        run: docker-compose exec -T app ./node_modules/jest-cli/bin/jest.js
+      - name: upload uploading coverage reports
+        run: curl -s https://codecov.io/bash | bash -s -

@@ -7,3 +7,4 @@ services:
       - NODE_ENV=test
       - LDAP_STUDENT_GROUP=studierende
       - LDAP_INSTRUCTOR_GROUP=lehrende
+      - CODECOV_TOKEN

@@ -33,27 +33,35 @@ describe('The sprints module', () => {
     it('calculates correct current, next and past sprints', () => {
         const state = {};
 
+        const projects = [
+          { id: 1, start_date: '2018-01-26', end_date: '2018-01-27' },
+          { id: 2, start_date: '2018-01-28', end_date: '2018-01-29' },
+          { id: 3, start_date: '2018-01-30', end_date: '2018-01-31' },
+          { id: 4, start_date: '2018-02-01', end_date: '2018-02-02' },
+        ];
+
         const getters = {
-            all: () => [
-                { id: 1, start_date: '2018-01-26', end_date: '2018-01-27' },
-                { id: 2, start_date: '2018-01-28', end_date: '2018-01-29' },
-                { id: 3, start_date: '2018-01-30', end_date: '2018-01-31' },
-                { id: 4, start_date: '2018-02-01', end_date: '2018-02-02' },
-            ],
+            all: () => projects,
         };
 
         const rootState = {
             currentDate: '2018-01-30',
         };
 
+        const rootGetters = {
+          'projects/byId'(projectId) {
+            return { id: projectId, planned_sprint_ids: [1, 2, 3] }
+          }
+        };
 
-        const current = sprintsModule.getters.current(state, getters, rootState)();
+
+        const current = sprintsModule.getters.current(state, getters, rootState, rootGetters)();
         expect(current.id).toBe(3);
 
-        const next = sprintsModule.getters.next(state, getters, rootState)();
+        const next = sprintsModule.getters.next(state, getters, rootState, rootGetters)();
         expect(next.id).toBe(4);
 
-        const past = sprintsModule.getters.past(state, getters, rootState)();
+        const past = sprintsModule.getters.past(state, getters, rootState, rootGetters)();
         expect(past.length).toBe(2);
     });
 });
