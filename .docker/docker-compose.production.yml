@@ -28,6 +28,8 @@ services:
       - LDAP_HOST
       - LDAP_PORT
       - LDAP_CONNECTSTRING
+      - LDAP_STUDENT_GROUP
+      - LDAP_INSTRUCTOR_GROUP
       - RAILS_SERVE_STATIC_FILES=true
     # open port for nginx proxy
     ports:

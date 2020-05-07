@@ -17,6 +17,8 @@ services:
             - LDAP_HOST=${LDAP_HOST}
             - LDAP_PORT=${LDAP_PORT}
             - LDAP_CONNECTSTRING=${LDAP_CONNECTSTRING}
+            - LDAP_STUDENT_GROUP=${LDAP_STUDENT_GROUP}
+            - LDAP_INSTRUCTOR_GROUP=${LDAP_INSTRUCTOR_GROUP}
     depends_on:
       - postgresql
     volumes:
