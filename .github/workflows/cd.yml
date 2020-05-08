@@ -1,9 +1,6 @@
 name: CD
 
-on:
-  push:
-    branches:
-      - master
+on: push
 
 jobs:
   push:
@@ -41,7 +38,7 @@ jobs:
           USERNAME: ${{ secrets.SSH_USER }}
           KEY: ${{ secrets.SSH_KEY }}
         with:
-          source: ".docker/docker-compose.production.yml,.docker/variables.production.env"
+          source: ".docker/docker-compose.production.yml,.docker/variables.production.env,.nginx/nginx.conf"
           target: "topics-driven-backlog"
           strip_components: 1
       - name: start application

@@ -32,8 +32,21 @@ services:
       - LDAP_INSTRUCTOR_GROUP
       - RAILS_SERVE_STATIC_FILES=true
     # open port for nginx proxy
-    ports:
-      - 80:80
+    expose:
+      - 80
     # postgres dependency
     depends_on:
       - postgresql
+
+  nginx:
+    image: nginx:1.18
+    container_name: nginx
+    links:
+      - app
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - /etc/letsencrypt/:/etc/letsencrypt/
+    ports:
+      - 80:80
+      - 443:443
+

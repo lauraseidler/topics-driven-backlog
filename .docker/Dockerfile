@@ -26,6 +26,8 @@ RUN set -ex \
 RUN set -ex \
   && apk add  --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.7/main/ nodejs=8.9.3-r1
 
+# https://github.com/npm/npm/issues/20861
+RUN npm config set unsafe-perm true
 
 # install yarn
 RUN npm install --global yarn
