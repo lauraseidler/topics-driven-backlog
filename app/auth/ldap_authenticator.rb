@@ -51,6 +51,7 @@ class LdapAuthenticator
     if query_result.size === 1
       user_groups = query_result[0][:memberof]
       Rails.logger.info user_groups
+      Rails.logger.info DomainDefinition::USER_GROUP_INSTRUCTOR
 
       if user_groups.find {|item| item.include?("CN=#{DomainDefinition::USER_GROUP_INSTRUCTOR}")}
         return User.roles[:instructor]
