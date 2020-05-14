@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   post 'get-token', to: 'authentication#authenticate'
   post 'become-student', to: 'authentication#as_student'
+  post 'become-instructor', to: 'authentication#as_instructor'
 
   resources :stories, only: [:show, :update, :destroy] do
     resources :tasks, only: [:index, :create, :show, :update, :destroy]

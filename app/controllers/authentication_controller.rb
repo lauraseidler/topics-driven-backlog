@@ -9,8 +9,12 @@ class AuthenticationController < ApplicationController
 
   # POST /become-student
   def as_student
-    current_user.update_attribute(:role, User.roles[:student])
-    json_response({user: UserSerializer.new(current_user, scope: Ability.new(current_user))})
+    json_response(DowngradeUser.new(current_user, true).call)
+  end
+
+  # POST /become-instructor
+  def as_instructor
+    json_response(DowngradeUser.new(current_user, false).call)
   end
 
   private

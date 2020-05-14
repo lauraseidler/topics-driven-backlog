@@ -77,7 +77,35 @@ RSpec.describe 'Authentication', type: :request do
         expect(json['user']).not_to be_nil
         expect(json['user']['email']).to eq(user.email)
         expect(json['user']['id']).to eq(user.id)
-        expect(json['user']['role']).to eq(User.roles[:student])
+        expect(json['user']['downgrade']).to eq(true)
+        expect(json['user']['permissions']).to eq(expected_permissions)
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+    end
+
+  end
+
+  # Test suite for POST /become-instructor
+  describe 'POST /become-instructor' do
+    before {
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+      allow_any_instance_of(ApplicationController).to receive(:authorize_request).and_return(user)
+    }
+    context 'When request is valid' do
+      before {post '/become-instructor'}
+      let(:expected_permissions) {
+        {
+          'courses' => {'read' => true, 'create' => true}
+        }
+      }
+      it 'returns the user object' do
+        expect(json['user']).not_to be_nil
+        expect(json['user']['email']).to eq(user.email)
+        expect(json['user']['id']).to eq(user.id)
+        expect(json['user']['downgrade']).to eq(false)
         expect(json['user']['permissions']).to eq(expected_permissions)
       end
 

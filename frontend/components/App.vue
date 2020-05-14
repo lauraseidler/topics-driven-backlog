@@ -1,7 +1,7 @@
 <template>
     <div id="app">
-        <BNavbar 
-            toggleable="md" 
+        <BNavbar
+            toggleable="md"
             type="dark"
             fixed="top"
             variant="primary">
@@ -13,55 +13,64 @@
                     Topics Driven Backlog
                 </BNavbarBrand>
 
-                <BCollapse 
-                    is-nav 
+                <BCollapse
+                    is-nav
                     id="nav-collapse">
-                    
+
                     <BNavbarNav v-if="$store.state.loggedIn">
                         <BNavItem
                             v-if="$store.state.user.role === 0"
                             to="/my-projects">
-                            
+
                             My Projects
                         </BNavItem>
-                        <BNavItem 
+                        <BNavItem
                             v-if="$store.state.user.role === 1 || isManagingCourses"
                             to="/my-courses">
-                            
+
                             My Courses
                         </BNavItem>
                         <BNavItem to="/projects">All Projects</BNavItem>
                         <BNavItem to="/courses" class="mr-5">All Courses</BNavItem>
                         <BNavItem
-                            v-if="$store.state.user.role === 1"
+                            v-if="$store.state.user.role === 1 && !$store.state.user.downgrade"
                             v-confirm="{
                                 action: becomeStudent,
-                                text: 'This will temporarily downgrade your account to a student account. To go back to your usual account, you will have to logout and log back in. Proceed?'
+                                text: 'This will temporarily downgrade your account to a student account. Proceed?'
                             }">
 
                             Student view
                         </BNavItem>
+                      <BNavItem
+                        v-if="$store.state.user.role === 1 && $store.state.user.downgrade"
+                        v-confirm="{
+                                action: becomeInstructor,
+                                text: 'This will upgrade your account to an instructor again. Proceed?'
+                            }">
+
+                        Instructor view
+                      </BNavItem>
                         <BNavItem to="/logout">Logout</BNavItem>
                     </BNavbarNav>
 
                     <BNavbarNav class="ml-auto">
                         <BNavItem>
-                            <BButton 
-                                v-if="$store.state.pendingChanges > 0" 
-                                @click="saveAll" 
-                                type="button" 
+                            <BButton
+                                v-if="$store.state.pendingChanges > 0"
+                                @click="saveAll"
+                                type="button"
                                 variant="white">
-                                
+
                                 Save all
                             </BButton>
                         </BNavItem>
                         <BNavItem
-                            href="https://www.htw-berlin.de" 
+                            href="https://www.htw-berlin.de"
                             target="_blank">
 
-                            <img 
-                                src="~images/logo-htw.png" 
-                                alt="HTW Berlin" 
+                            <img
+                                src="~images/logo-htw.png"
+                                alt="HTW Berlin"
                                 class="d-inline-block align-top">
                         </BNavItem>
                     </BNavbarNav>
@@ -125,6 +134,9 @@ export default {
         },
         becomeStudent() {
             this.$store.dispatch('becomeStudent');
+        },
+        becomeInstructor() {
+            this.$store.dispatch('becomeInstructor');
         },
     },
 };
