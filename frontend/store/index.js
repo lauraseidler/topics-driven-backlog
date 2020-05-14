@@ -69,7 +69,7 @@ export const actions = {
 
             // init modules
             dispatch('courses/init', {});
-        } else {            
+        } else {
             // switch to logged out state
             commit('logout');
         }
@@ -96,6 +96,21 @@ export const actions = {
     async becomeStudent({ commit }) {
         try {
             const res = await Vue.http.post('/become-student');
+            commit('setUser', res.body.user);
+            window.location.reload(true);
+        } catch (err) {
+            /* istanbul ignore next */
+            this.$notify({
+                title: 'Role change failed',
+                text: err.body.message,
+                type: 'error',
+            });
+        }
+    },
+
+    async becomeInstructor({ commit }) {
+        try {
+            const res = await Vue.http.post('/become-instructor');
             commit('setUser', res.body.user);
             window.location.reload(true);
         } catch (err) {

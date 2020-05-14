@@ -1,9 +1,10 @@
 class Ability
   include CanCan::Ability
 
-  def initialize(user)
+  def initialize(user, downgrade=false)
     @user = user
     @user_id = user.id
+    @downgrade = downgrade
 
     return unless user.present?
 
@@ -88,9 +89,15 @@ class Ability
     can :create_stories, Project do |project|
       is_member(project)
     end
-    
+
     can :manage, Story do |story|
       is_member(story.project)
+    end
+
+    # DOWNGRADE
+
+    def is_downgrade
+      return @downgrade
     end
 
   end
@@ -98,7 +105,7 @@ class Ability
   private
 
   def has_instructor_role
-    @user.role === User.roles[:instructor]
+    @user.role === User.roles[:instructor] && !@downgrade
   end
 
   def is_instructor(course)
@@ -125,4 +132,5 @@ class Ability
   def enrollment_allowed(course)
     course.allow_enrollment
   end
+
 end
