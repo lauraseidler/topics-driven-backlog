@@ -57,7 +57,7 @@ export const actions = {
      * @param {function} commit
      * @param {function} dispatch
      */
-    init({ state, commit, dispatch }) {
+    init({ state, commit }) {
         const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
         const jwt = localStorage.getItem('jwt') ? JSON.parse(localStorage.getItem('jwt')) : null;
 
@@ -66,9 +66,6 @@ export const actions = {
         if (user && jwt && jwt.token && jwt.ttl && jwt.ttl > moment().unix()) {
             // switch to logged in state
             commit('login', { user, jwt });
-
-            // init modules
-            dispatch('courses/init', {});
         } else {
             // switch to logged out state
             commit('logout');
@@ -89,8 +86,6 @@ export const actions = {
             user: res.body.user,
             jwt: res.body.auth_token,
         });
-
-        dispatch('init');
     },
 
     async becomeStudent({ commit }) {
