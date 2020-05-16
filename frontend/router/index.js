@@ -97,7 +97,8 @@ const router = new Router({
     ],
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+
     if (store.state.pendingChanges > 0) {
         if (!confirm('You have unsaved changes. Proceed?')) {
             return;
@@ -107,6 +108,9 @@ router.beforeEach((to, from, next) => {
     }
 
     if (!to.meta.protected || store.state.loggedIn) {
+        if (store.state.loggedIn) {
+            await store.dispatch('courses/init', {});
+        }
         if (to.path === '/' && store.state.loggedIn) {
             if (store.state.user.role === 0) {
                 return next('/my-projects');
@@ -114,9 +118,9 @@ router.beforeEach((to, from, next) => {
                 return next('/my-courses');
             }
         }
-
         return next();
     }
+
 
     return next(`/login?redirectTo=${to.path}`);
 });

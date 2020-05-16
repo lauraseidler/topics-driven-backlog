@@ -21,6 +21,9 @@ describe('application.test.js', () => {
 
     beforeAll(() => {
         cmp = document.getElementById('app').__vue__;
+        jest
+            .spyOn(cmp.$store, 'dispatch')
+            .mockImplementation(() => Promise.resolve(true));
     });
 
     it('logs warning about development mode', () => {
@@ -50,7 +53,7 @@ describe('application.test.js', () => {
         cmp.$store.state.loggedIn = true;
         cmp.$store.state.jwt = { ttl: moment().subtract(1, 'days').unix() };
 
-        cmp.$router.push('/courses');
+        await cmp.$router.push('/courses');
 
         try {
             await cmp.$http.get('/courses');
