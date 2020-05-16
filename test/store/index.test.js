@@ -56,13 +56,4 @@ describe('index.test.js', () => {
 
         expect(commit).toHaveBeenCalled();
     });
-
-    it('dispatches init action after login', async () => {
-        const dispatch = jest.fn();
-        const commit = jest.fn();
-
-        mockResponse('/get-token', 'POST');
-        await actions.login({ commit, dispatch });
-        expect(dispatch).toHaveBeenCalledWith('init');
-    });
 });
