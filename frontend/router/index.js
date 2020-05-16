@@ -115,7 +115,9 @@ router.beforeEach(async (to, from, next) => {
                 return next('/my-courses');
             }
         }
-        await store.dispatch('courses/init', {});
+        if (store.state.loggedIn) {
+            await store.dispatch('courses/init', {});
+        }
         return next();
     }
 
