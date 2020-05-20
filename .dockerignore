@@ -6,3 +6,7 @@
 /db/*.sqlite
 /public/uploads
 .git
+
+# node modules
+node_modules
+npm-debug.log
