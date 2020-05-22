@@ -23,7 +23,7 @@ RUN chmod +x .docker/prepare-db.sh
 
 # general dependencies
 RUN set -ex \
-  && apk add --no-cache libpq imagemagick bash git
+  && apk add --no-cache libpq bash git
 
 # nodejs fixed to v8
 RUN set -ex \
@@ -46,13 +46,13 @@ RUN set -ex \
        tzdata \
        build-base \
        postgresql-dev \
-       imagemagick-dev \
   && gem install bundler \
   && bundle install --without development test \
-  && yarn install --ignore-engines \
+  && yarn install --ignore-engines --pure-lockfile \
   && bundle exec rake webpacker:compile \
   && mkdir nginx-assets \
-  && rm -rf node_modules
+  && rm -rf node_modules \
+  && yarn cache clean
 
 # start puma server only
 CMD rails s --port 80 --binding 0.0.0.0
