@@ -1,3 +1,0 @@
----
-ansible_user: "deployer"
-application_port: 4000
