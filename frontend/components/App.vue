@@ -177,7 +177,6 @@ $font-family-sans-serif: HTWBerlin, Verdana, Arial, sans-serif;
 $headings-font-weight: 700;
 
 @import '~bootstrap/scss/bootstrap';
-// @import "~bootstrap-vue/dist/bootstrap-vue.css"; // necessary?
 
 
 body {
@@ -240,4 +239,5 @@ body {
         display: none;
     }
 }
+
 </style>

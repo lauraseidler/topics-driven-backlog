@@ -4,8 +4,8 @@
             My Projects
         </h1>
 
-        <ul 
-            :class="[$style.list, 'list-unstyled', 'mb-5']" 
+        <ul
+            :class="[$style.list, 'list-unstyled', 'mb-5']"
             v-if="myProjects.length">
 
             <ProjectItem
@@ -65,11 +65,12 @@ export default {
 </script>
 
 <style lang="scss" module>
+    @import "../../style/mixins.scss";
+
     .list {
         display: grid;
         grid-gap: 8px;
         grid-template-columns: 1fr 1fr ;
-        grid-auto-rows: minmax(200px, 1fr);
     }
 
     .new {
@@ -80,4 +81,10 @@ export default {
             color: rgba(0, 0, 0, .25);
         }
     }
+
+  @include mobile {
+    .list {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>

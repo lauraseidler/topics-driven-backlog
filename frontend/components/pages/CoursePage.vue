@@ -52,8 +52,8 @@
                             </BRow>
                         </template>
                     </BTab>
-                    <BTab 
-                        title="Projects" 
+                    <BTab
+                        title="Projects"
                         active>
 
                         <ul :class="['list-unstyled', $style.list]">
@@ -71,8 +71,8 @@
                                 :course-id="course.id"/>
                         </ul>
                     </BTab>
-                    <BTab 
-                        v-if="course.permissions.topics.read" 
+                    <BTab
+                        v-if="course.permissions.topics.read"
                         title="Topics">
 
                         <ul
@@ -102,46 +102,46 @@
                             @click="showTopicForm = true">Add topic</BButton>
                     </BTab>
                     <BTab
-                        v-if="course.permissions.sprints.read" 
+                        v-if="course.permissions.sprints.read"
                         title="Sprints">
 
-                        <ul 
-                            class="list-unstyled" 
+                        <ul
+                            class="list-unstyled"
                             v-if="sprints.length">
 
-                            <SprintItem 
-                                class="mb-2" 
-                                v-for="sprint in sprints" 
-                                :data="sprint" 
+                            <SprintItem
+                                class="mb-2"
+                                v-for="sprint in sprints"
+                                :data="sprint"
                                 :key="sprint.id"/>
                         </ul>
 
                         <p v-else>No sprints in this course yet.</p>
 
-                        <SprintForm 
+                        <SprintForm
                             ref="sprintForm"
                             v-if="showSprintForm"
                             :course="course"
-                            v-model="newSprint" 
-                            @cancel="showSprintForm = false" 
+                            v-model="newSprint"
+                            @cancel="showSprintForm = false"
                             @submit="addSprint"/>
 
-                        <SprintCollectionForm 
+                        <SprintCollectionForm
                             ref="sprintCollectionForm"
-                            v-else-if="showCollectionForm" 
+                            v-else-if="showCollectionForm"
                             v-model="newCollection"
                             @cancel="showCollectionForm = false"
                             @submit="addCollection"/>
 
                         <template v-else>
-                            <BButton 
-                                type="button" 
-                                variant="primary" 
+                            <BButton
+                                type="button"
+                                variant="primary"
                                 @click="showSprintForm = true">Add sprint</BButton>
-                            
-                            <BButton 
-                                type="button" 
-                                variant="primary" 
+
+                            <BButton
+                                type="button"
+                                variant="primary"
                                 @click="showCollectionForm = true">Add multiple sprints</BButton>
                         </template>
                     </BTab>
@@ -225,7 +225,7 @@ export default {
                 : [];
         },
 
-        /** 
+        /**
          * Projects in course
          * @returns {array}
          */
@@ -261,9 +261,9 @@ export default {
                     parentId: this.course.id,
                     ...this.newSprint,
                 });
-    
+
                 this.newSprint = this.$store.getters['sprints/template']();
-                
+
                 this.$nextTick(() => {
                     !this.$refs.sprintForm || this.$refs.sprintForm.$el.reset();
 
@@ -290,7 +290,7 @@ export default {
                     parentId: this.course.id,
                     collection: this.newCollection,
                 });
-    
+
                 this.newCollection = {};
 
                 this.$nextTick(() => {
@@ -342,9 +342,9 @@ export default {
                     parentId: this.course.id,
                     ...this.newTopic,
                 });
-    
-                this.newTopic = this.$store.getters['topics/template']();      
-                
+
+                this.newTopic = this.$store.getters['topics/template']();
+
                 this.$nextTick(() => {
                     !this.$refs.topicForm || this.$refs.topicForm.$el.reset();
 
@@ -352,7 +352,7 @@ export default {
                         window.location.reload();
                     }
                 });
-            } catch (err) {                
+            } catch (err) {
                 /* istanbul ignore next */
                 this.$notify({
                     title: 'Topic creation failed',
@@ -392,11 +392,18 @@ export default {
 </script>
 
 <style lang="scss" module>
+    @import "../../style/mixins.scss";
+
     .list {
         display: grid;
         grid-gap: 8px;
         grid-template-columns: 1fr 1fr 1fr;
         grid-auto-rows: minmax(200px, 1fr);
+
+        @include mobile() {
+            grid-template-columns: 1fr;
+            grid-auto-rows: 1fr;
+        }
     }
 
     .new {
