@@ -14,10 +14,10 @@
 
             <BRow>
                 <BCol lg="4">
-                    <router-link 
-                        class="h2" 
+                    <router-link
+                        class="h2"
                         :to="`/courses/${course.id}-${slugify(course.title)}`">
-                        
+
                         {{ course.short_title }} <br>
                         <small class="text-muted">
                             {{ course.title }}
@@ -80,16 +80,25 @@ export default {
 </script>
 
 <style lang="scss" module>
+    @import "../../style/mixins.scss";
+
     .list {
         display: grid;
         grid-gap: 8px;
         grid-template-columns: 1fr 1fr ;
         grid-auto-rows: minmax(200px, 1fr);
+        padding: 8px 0;
+
+        @include mobile() {
+            grid-template-columns: 1fr;
+            grid-auto-rows: 1fr;
+        }
     }
 
     .new {
         color: rgba(0, 0, 0, .125);
         border: 1px solid currentColor;
+        padding: 8px 0;
 
         &:hover {
             color: rgba(0, 0, 0, .25);
