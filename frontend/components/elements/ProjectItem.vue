@@ -264,12 +264,6 @@ export default {
         position: relative;
     }
 
-    .bottom {
-        position: absolute;
-        left: 20px;
-        bottom: 20px;
-    }
-
     .full {
         height: 100%;
         width: 100%;
