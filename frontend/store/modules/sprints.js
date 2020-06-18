@@ -32,7 +32,7 @@ resourceModule.actions['createCollection'] = function () {
      */
     return async function ({ commit }, { parentId, collection }) {
         const res = await Vue.http.post(`/courses/${parentId}/sprint-collection`, collection);
-        commit(mutationTypes.SET_ALL, { parentId, items: res.body });
+        commit(mutationTypes.ADD_ALL, { parentId, items: res.body });
         return res.body;
     };
 }();

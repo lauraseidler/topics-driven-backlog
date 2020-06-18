@@ -85,6 +85,34 @@ export function setAll(settings) {
 }
 
 /**
+ * Generate mutation for adding multiple items.
+ *
+ * @param {object} settings
+ * @returns {function}
+ */
+export function addAll(settings) {
+    /**
+     * Add an array of items to the data of store or parent (by ID).
+     *
+     * @param {object} state
+     * @param {object} payload
+     * @param {int=} payload.parentId
+     * @param {array} payload.items
+     */
+    return function (state, { parentId, items }) {
+        // if resource has parent and id is set, add the data to the given data
+        // else configuration is incorrect
+        if (settings.parent && parentId) {
+            const oldItems = state.data[parentId] || [];
+            Vue.set(state.data, parentId, [...oldItems, ...items]);
+            Vue.set(state.initialised, parentId, true);
+        } else {
+            throw new Error('Incorrect resource module configuration!');
+        }
+    };
+}
+
+/**
  * Generate mutation to remove an item.
  *
  * @param {object} settings
