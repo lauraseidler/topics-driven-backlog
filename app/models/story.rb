@@ -17,12 +17,14 @@ class Story < ApplicationRecord
   private
 
   def set_identifier
-    project = Project.find_by!(id: project_id)
-    last_story = project.stories.last
-    if last_story.nil?
-      self.identifier = 'S-1'
-    else
-      self.identifier = last_story.identifier.next
+    if self.identifier.nil?
+      project = Project.find_by!(id: project_id)
+      last_story = project.stories.last
+      if last_story.nil?
+        self.identifier = 'S-1'
+      else
+        self.identifier = last_story.identifier.next
+      end
     end
   end
 
