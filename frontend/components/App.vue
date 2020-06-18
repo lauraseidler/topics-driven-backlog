@@ -31,7 +31,13 @@
                             My Courses
                         </BNavItem>
                         <BNavItem to="/projects">All Projects</BNavItem>
-                        <BNavItem to="/courses" class="mr-5">All Courses</BNavItem>
+                        <BNavItem to="/courses">All Courses</BNavItem>
+                        <BNavItem
+                            href="https://github.com/glutengo/topics-driven-backlog/issues/new"
+                            target="_blank"
+                            class="mr-5">
+                            Report Issue
+                        </BNavItem>
                         <BNavItem
                             v-if="$store.state.user.role === 1 && !$store.state.user.downgrade"
                             v-confirm="{
@@ -41,15 +47,15 @@
 
                             Student view
                         </BNavItem>
-                      <BNavItem
-                        v-if="$store.state.user.role === 1 && $store.state.user.downgrade"
-                        v-confirm="{
+                        <BNavItem
+                            v-if="$store.state.user.role === 1 && $store.state.user.downgrade"
+                            v-confirm="{
                                 action: becomeInstructor,
                                 text: 'This will upgrade your account to an instructor again. Proceed?'
                             }">
 
-                        Instructor view
-                      </BNavItem>
+                            Instructor view
+                        </BNavItem>
                         <BNavItem to="/logout">Logout</BNavItem>
                     </BNavbarNav>
 
@@ -86,158 +92,158 @@
 </template>
 
 <script>
-import BNavbar from '@bootstrap/navbar/navbar';
-import BContainer from '@bootstrap/layout/container';
-import BNavbarToggle from '@bootstrap/navbar/navbar-toggle';
-import BNavbarBrand from '@bootstrap/navbar/navbar-brand';
-import BCollapse from '@bootstrap/collapse/collapse';
-import BNavbarNav from '@bootstrap/navbar/navbar-nav';
-import BNavItem from '@bootstrap/nav/nav-item';
-import BButton from '@bootstrap/button/button';
-import bus from '@/helper/bus';
+    import BNavbar from '@bootstrap/navbar/navbar';
+    import BContainer from '@bootstrap/layout/container';
+    import BNavbarToggle from '@bootstrap/navbar/navbar-toggle';
+    import BNavbarBrand from '@bootstrap/navbar/navbar-brand';
+    import BCollapse from '@bootstrap/collapse/collapse';
+    import BNavbarNav from '@bootstrap/navbar/navbar-nav';
+    import BNavItem from '@bootstrap/nav/nav-item';
+    import BButton from '@bootstrap/button/button';
+    import bus from '@/helper/bus';
 
-export default {
-    components: {
-        BNavbar,
-        BContainer,
-        BNavbarToggle,
-        BNavbarBrand,
-        BCollapse,
-        BNavbarNav,
-        BNavItem,
-        BButton,
-    },
-    data() {
-        return {};
-    },
-    computed: {
-        courses() {
-            return this.$store.getters['courses/all'];
+    export default {
+        components: {
+            BNavbar,
+            BContainer,
+            BNavbarToggle,
+            BNavbarBrand,
+            BCollapse,
+            BNavbarNav,
+            BNavItem,
+            BButton,
         },
-        isManagingCourses() {
-            if (!this.courses) {
-                return false;
-            }
-
-            for (let i = 0; i < this.courses.length; i++) {
-                if (this.courses[i].permissions.course.update) {
-                    return true;
+        data() {
+            return {};
+        },
+        computed: {
+            courses() {
+                return this.$store.getters['courses/all'];
+            },
+            isManagingCourses() {
+                if (!this.courses) {
+                    return false;
                 }
-            }
 
-            return false;
+                for (let i = 0; i < this.courses.length; i++) {
+                    if (this.courses[i].permissions.course.update) {
+                        return true;
+                    }
+                }
+
+                return false;
+            },
         },
-    },
-    methods: {
-        saveAll() {
-            bus.$emit('saveAll');
+        methods: {
+            saveAll() {
+                bus.$emit('saveAll');
+            },
+            becomeStudent() {
+                this.$store.dispatch('becomeStudent');
+            },
+            becomeInstructor() {
+                this.$store.dispatch('becomeInstructor');
+            },
         },
-        becomeStudent() {
-            this.$store.dispatch('becomeStudent');
-        },
-        becomeInstructor() {
-            this.$store.dispatch('becomeInstructor');
-        },
-    },
-};
+    };
 </script>
 
 <style lang="scss">
-@font-face {
-    font-family: 'HTWBerlin';
-    src: url('~fonts/HTWBerlinWeb-Regular.woff') format('woff');
-    font-weight: 300;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'HTWBerlin';
-    src: url('~fonts/HTWBerlinWeb-Bold.woff') format('woff');
-    font-weight: 700;
-    font-style: normal;
-}
-
-$blue: #0082d1;
-$indigo: #124e78;
-$purple: #c200fb;
-$pink: #ba274a;
-$red: #9a031e;
-$orange: #ff5f00;
-$yellow: #ffca3a;
-$green: #76b900;
-$teal: #06d6a0;
-$cyan: #6daedb;
-
-$primary: $green;
-$secondary: $blue;
-
-$enable-rounded: true;
-
-$font-family-sans-serif: HTWBerlin, Verdana, Arial, sans-serif;
-$headings-font-weight: 700;
-
-@import '~bootstrap/scss/bootstrap';
-
-
-body {
-    padding-top: 77px;
-}
-
-.link-unstyled {
-    color: inherit;
-    text-decoration: inherit;
-
-    &:hover {
-        color: $primary;
-        text-decoration: none;
-    }
-}
-
-.b-dropdown-minimal {
-    .btn {
-        padding: 0;
+    @font-face {
+        font-family: 'HTWBerlin';
+        src: url('~fonts/HTWBerlinWeb-Regular.woff') format('woff');
+        font-weight: 300;
+        font-style: normal;
     }
 
-    .dropdown-item {
-        padding-left: 5px;
-        padding-right: 5px;
+    @font-face {
+        font-family: 'HTWBerlin';
+        src: url('~fonts/HTWBerlinWeb-Bold.woff') format('woff');
+        font-weight: 700;
+        font-style: normal;
     }
-}
 
-.fa-icon {
-    vertical-align: sub;
-}
+    $blue: #0082d1;
+    $indigo: #124e78;
+    $purple: #c200fb;
+    $pink: #ba274a;
+    $red: #9a031e;
+    $orange: #ff5f00;
+    $yellow: #ffca3a;
+    $green: #76b900;
+    $teal: #06d6a0;
+    $cyan: #6daedb;
 
-.btn .fa-icon + span {
-    display: inline-block;
-    margin-left: 3px;
-}
+    $primary: $green;
+    $secondary: $blue;
 
-.is-disabled {
-    opacity: 0.5;
-}
+    $enable-rounded: true;
 
-.vue-notification {
-    font-size: 16px;
-}
+    $font-family-sans-serif: HTWBerlin, Verdana, Arial, sans-serif;
+    $headings-font-weight: 700;
 
-.w-auto {
-    width: auto !important;
-}
+    @import '~bootstrap/scss/bootstrap';
 
-@media print {
-
-    .hidden-print {
-        display: none !important;
-    }
 
     body {
-        padding-top: 0;
+        padding-top: 77px;
     }
 
-    .navbar {
-        display: none;
+    .link-unstyled {
+        color: inherit;
+        text-decoration: inherit;
+
+        &:hover {
+            color: $primary;
+            text-decoration: none;
+        }
     }
-}
+
+    .b-dropdown-minimal {
+        .btn {
+            padding: 0;
+        }
+
+        .dropdown-item {
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+    }
+
+    .fa-icon {
+        vertical-align: sub;
+    }
+
+    .btn .fa-icon + span {
+        display: inline-block;
+        margin-left: 3px;
+    }
+
+    .is-disabled {
+        opacity: 0.5;
+    }
+
+    .vue-notification {
+        font-size: 16px;
+    }
+
+    .w-auto {
+        width: auto !important;
+    }
+
+    @media print {
+
+        .hidden-print {
+            display: none !important;
+        }
+
+        body {
+            padding-top: 0;
+        }
+
+        .navbar {
+            display: none;
+        }
+    }
 
 </style>
