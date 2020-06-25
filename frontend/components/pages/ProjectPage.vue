@@ -43,6 +43,19 @@
                             <h3 class="h5">
                                 {{ sprint.name }}
                                 <small class="text-muted">({{ sprint.start_date | displayDate }} - {{ sprint.end_date | displayDate }})</small>
+                                <BButton
+                                    v-if="canOpenSprint()"
+                                    class="float-right mb-3"
+                                    size="sm"
+                                    type="button"
+                                    variant="outline-primary"
+                                    v-confirm="{
+                                        action: () => planningOpen(sprint.id),
+                                        text: 'Do you want to make this sprint plannable again? It will moved to the next sprint section. The sprint previously marked as next sprint will become visible again once the planning for this sprint is marked complete again'
+                                }">
+
+                                    Open sprint
+                                </BButton>
                             </h3>
 
                             <StoryTable
@@ -79,6 +92,19 @@
                     <h3 class="h5">
                         {{ currentSprint.name }}
                         <small class="text-muted">({{ currentSprint.start_date | displayDate }} - {{ currentSprint.end_date | displayDate }})</small>
+                        <BButton
+                            v-if="canOpenSprint()"
+                            class="float-right mb-3"
+                            size="sm"
+                            type="button"
+                            variant="outline-primary"
+                            v-confirm="{
+                                        action: () => planningOpen(currentSprint.id),
+                                        text: 'Do you want to make this sprint plannable again? It will moved to the next sprint section. The sprint previously marked as next sprint will become visible again once the planning for this sprint is marked complete again'
+                                }">
+
+                            Open sprint
+                        </BButton>
                     </h3>
 
                     <StoryTable
@@ -394,6 +420,27 @@ export default {
             this.showForm = false;
             this.$store.commit('resolvePendingChange');
             bus.$off('saveAll', this.save);
+        },
+
+        canOpenSprint() {
+            return this.$store.state.user.role === 1;
+        },
+
+        async planningOpen(sprintId) {
+            try {
+                await this.$store.dispatch('projects/planningOpen', {
+                    courseId: this.course.id,
+                    projectId: this.project.id,
+                    sprintId: sprintId,
+                });
+            } catch (err) {
+                /* istanbul ignore next */
+                this.$notify({
+                    title: 'Sprint update failed',
+                    text: err.body.message,
+                    type: 'error',
+                });
+            }
         },
     },
 };

@@ -56,6 +56,9 @@ describe('The ProjectPage component', () => {
                             { id: 2, title: 'Test topic 2' },
                         ],
                     },
+                    state: {
+                        user: { role: 0 },
+                    },
                 },
                 $route: {
                     params: { id: 1 },

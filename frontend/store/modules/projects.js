@@ -75,4 +75,24 @@ resourceModule.actions['planningComplete'] = function () {
     };
 }();
 
+/**
+ * Add planning open action
+ * @returns {function}
+ */
+resourceModule.actions['planningOpen'] = function () {
+    /**
+     * Mark given sprint in given project as open
+     *
+     * @param {object} operations
+     * @param {function} operations.dispatch
+     * @param {int} projectId
+     * @returns {object}
+     */
+    return async function ({ commit }, { projectId, courseId, sprintId }) {
+        const res = await Vue.http.patch(`/projects/${projectId}/sprint-planning-open/${sprintId}`);
+        commit(mutationTypes.SET_ONE, { item: res.body, parentId: courseId });
+        return res.body;
+    };
+}();
+
 export default resourceModule;
