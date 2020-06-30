@@ -233,7 +233,7 @@ describe('StoryItem.test.js', () => {
         cmp.vm.move({ keyCode: 38, preventDefault: stub });
         cmp.vm.move({ keyCode: 40, preventDefault: stub });
 
-        expect(stub).not.toHaveBeenCalled();    
+        expect(stub).not.toHaveBeenCalled();
     });
 
     it('shows backlog page', () => {
@@ -253,7 +253,7 @@ describe('StoryItem.test.js', () => {
         props.view = 'planning-sprint';
         simpleCmp.setProps(props);
 
-        expect(simpleCmp.findAll('td').length).toBe(6);
+        expect(simpleCmp.findAll('td').length).toBe(7);
     });
 
     it('shows planning-backlog page', () => {

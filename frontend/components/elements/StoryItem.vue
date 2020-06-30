@@ -115,10 +115,10 @@
                 {{ statusMap[data.status].name }}
             </td>
 
-            <td v-if="isView('sprint')">
-                <BDropdown 
-                    variant="link" 
-                    no-caret 
+            <td v-if="isView(['sprint', 'planning-sprint'])">
+                <BDropdown
+                    variant="link"
+                    no-caret
                     class="b-dropdown-minimal">
 
                     <template slot="button-content">
