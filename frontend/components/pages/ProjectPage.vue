@@ -251,7 +251,7 @@ export default {
                     { field: 'title', name: 'Story' },
                     { field: 'topic', name: 'Topic' },
                     { field: 'points', name: 'Story points' },
-                    { name: '' },
+                    { field: 'status', name: 'Status' },
                 ],
                 backlog: [
                     { field: 'project_position', name: 'Position' },
