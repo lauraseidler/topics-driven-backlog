@@ -44,15 +44,7 @@ class Story < ApplicationRecord
   end
 
   def update_sprint_position
-    if sprint_id_in_database.present?
-      if sprint_id.present?
-        sprint_position = SprintPosition.find_by(sprint_id: sprint_id_in_database, story_id: self.id)
-        sprint_position.sprint_id = sprint_id
-        sprint_position.set_list_position(0)
-        sprint_position.save!
-        sprint_position.move_to_bottom
-      end
-    else
+    unless sprint_id_in_database.present?
       create_sprint_position
     end
   end
