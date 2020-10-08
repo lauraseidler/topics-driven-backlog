@@ -8,7 +8,7 @@ class Story < ApplicationRecord
 
   before_validation :update_sprint_position, on: :update
   before_validation :set_status
-  before_save :set_identifier, on: :create
+  before_create :set_identifier, on: :create
   after_commit :create_project_position, on: :create
   after_commit :create_sprint_position, on: :create
 
@@ -19,7 +19,7 @@ class Story < ApplicationRecord
   def set_identifier
     if self.identifier.nil?
       project = Project.find_by!(id: project_id)
-      last_story = project.stories.last
+      last_story = project.stories.order('created_at').last
       if last_story.nil?
         self.identifier = 'S-1'
       else
@@ -44,15 +44,7 @@ class Story < ApplicationRecord
   end
 
   def update_sprint_position
-    if sprint_id_in_database.present?
-      if sprint_id.present?
-        sprint_position = SprintPosition.find_by(sprint_id: sprint_id_in_database, story_id: self.id)
-        sprint_position.sprint_id = sprint_id
-        sprint_position.set_list_position(0)
-        sprint_position.save!
-        sprint_position.move_to_bottom
-      end
-    else
+    unless sprint_id_in_database.present?
       create_sprint_position
     end
   end
